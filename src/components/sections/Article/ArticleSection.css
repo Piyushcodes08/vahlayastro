@@ -1,13 +1,17 @@
 .article-section {
   width: 100%;
-  background-color: var(--color-brand-cream);
+  background: transparent;
   overflow: hidden;
+  position: relative;
 }
+
 
 .article-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 60px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Slider Container */
@@ -178,7 +182,7 @@
 .article-title {
   font-family: 'Batangas', sans-serif;
   font-size: 1.2rem;
-  color: var(--color-brand-red);
+  color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: center;

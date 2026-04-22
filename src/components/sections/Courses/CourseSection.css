@@ -5,13 +5,17 @@
   --closed: 5.5rem;
   --open: 32rem;
   --accent: #dd2727;
-   background-color: #ffead3;
-   padding: 0px 0;
+  background: transparent;
+  padding: 0px 0;
+  position: relative;
 }
+
 
 .slider-wrapper {
   width: 100%;
   padding: 40px 0;
+  position: relative;
+  z-index: 1;
 }
 
 .head {
@@ -28,23 +32,24 @@
 
 .subtitle-poppins {
   font-family: 'Poppins', sans-serif;
-  color: #444;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .nav-btn {
   width: 3.2rem;
   height: 3.2rem;
-  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  background: white;
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .nav-btn:hover:not(:disabled) {

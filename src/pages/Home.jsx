@@ -3,6 +3,7 @@ import About from '../components/sections/About/About';
 import CourseSection from '../components/sections/Courses/CourseSection';
 import Header from '../components/sections/Header/Header';
 import ArticleSection from '../components/sections/Article/ArticleSection';
+import Numerology from '../components/sections/Numerology/Numerology';
 
 const Home = () => {
     return (
@@ -15,6 +16,7 @@ const Home = () => {
                 <Hero />
                 <About />
                 <CourseSection />
+                <Numerology />
                 <ArticleSection />
             </main>
         </>

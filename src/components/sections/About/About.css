@@ -1,11 +1,10 @@
-
 .project-hero {
     position: sticky;
     top: 0;
     z-index: 0;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    background-color: var(--color-brand-cream);
+    background-color: transparent;
     padding: 60px 0px;
 }
 
@@ -40,6 +39,7 @@
     from {
         transform: translateY(0) scale(1);
     }
+
     to {
         transform: translateY(-20vw) scale(1.5);
     }
@@ -49,7 +49,7 @@ article {
     padding: 50px 0 0;
     position: relative;
     z-index: 1;
-    background-color: var(--color-brand-cream);
+    background-color: transparent;
 }
 
 /* About Us Section Styles */
@@ -57,9 +57,11 @@ article {
     padding: 40px 0;
     margin: 0 auto;
     width: 100%;
-    background-color: var(--color-brand-cream);
+    background-color: transparent;
     overflow: hidden;
+    position: relative;
 }
+
 
 .about-container {
     max-width: 1400px;
@@ -69,6 +71,8 @@ article {
     align-items: center;
     gap: 60px;
     padding: 0 60px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Image Grid Styling */
@@ -85,7 +89,7 @@ article {
     overflow: hidden;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .about-img-wrapper img {
@@ -127,16 +131,16 @@ article {
 
 .about-description {
     font-size: 1.05rem;
-    color: #485460;
+    color: rgba(255, 255, 255, 0.82);
     line-height: 1.7;
     margin: 0;
 }
 
 /* Legacy Section Support (Restored for Safety) */
 .header-section {
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 0 50px;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0 50px;
 }
 
 .header-section h1 {
@@ -146,10 +150,10 @@ article {
 }
 
 .header-section p {
-  color: #374151;
-  font-size: 16px;
-  line-height: 1.5;
-  padding: 20px 0;
+    color: #374151;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 20px 0;
 }
 
 .content-section {
@@ -167,28 +171,34 @@ article {
         grid-template-columns: 1fr;
         gap: 80px;
     }
+
     .about-img-wrapper {
         height: 300px;
     }
 }
 
 @media(max-width: 767px) {
-  .project-hero {
-   margin-top: 30px !important;
-   padding:0px !important;
-}
+    .project-hero {
+        margin-top: 30px !important;
+        padding: 0px !important;
+    }
+
     .about-section {
         padding: 50px 0;
     }
+
     .about-container {
         padding: 0 15px;
     }
+
     .about-img-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .about-img-wrapper {
         height: 200px;
     }
+
     .about-title {
         font-size: 2.5rem;
     }
