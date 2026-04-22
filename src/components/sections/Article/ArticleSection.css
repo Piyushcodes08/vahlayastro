@@ -1,0 +1,218 @@
+.article-section {
+  width: 100%;
+  background-color: var(--color-brand-cream);
+  overflow: hidden;
+}
+
+.article-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+/* Slider Container */
+.article-slider-container {
+  width: 100%;
+  overflow: visible;  
+  position: relative;
+
+  margin-top: 20px;
+}
+
+.article-track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.article-slide {
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.article-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Article/Book 3D structure - KEPT EXACTLY THE SAME */
+.article-wrapper {
+  cursor: pointer;
+  display: block;
+  width: 250px;
+  height: 350px;
+  position: relative;
+  background: #fdf2d0;
+  z-index: 10;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1), 0 10px 25px rgba(0,0,0,0.2);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  perspective: 1500px; /* Slightly increased for smoother carousel feel */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.article-wrapper:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 20px 45px rgba(0,0,0,0.3);
+  z-index: 50; /* Bring to front on hover */
+}
+
+/* Cover Image - KEPT EXACTLY THE SAME */
+.article-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: left center;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: relative;
+  z-index: 5;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.article-wrapper:hover .article-cover {
+  transform: rotateY(-110deg);
+}
+
+/* Inner page content style */
+.article-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  background: #fdf2d0; /* Matches the pages color */
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 4; /* Below .article-cover (5) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.3s; /* Delay fade in slightly */
+}
+
+.article-wrapper:hover .article-inner {
+  opacity: 1; /* Reveal content when hovered */
+}
+
+.article-inner-title {
+  font-family: 'Batangas', sans-serif;
+  font-size: 1.1rem;
+  color: var(--color-brand-red);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.article-inner-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  color: #333;
+  line-height: 1.4;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  /* Add line clamping to prevent overflow */
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-read-more {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-brand-red);
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  width: max-content;
+}
+
+.article-read-more:hover {
+  background-color: #b51c1c;
+}
+
+/* Page layers (simulating thickness) - KEPT EXACTLY THE SAME */
+.article-wrapper::before,
+.article-wrapper::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: -1;
+}
+
+.article-wrapper::before {
+  left: -3px;
+  z-index: 2;
+}
+
+.article-wrapper::after {
+  left: -6px;
+  z-index: 1;
+}
+
+/* Article/Book Title - KEPT EXACTLY THE SAME */
+.article-title {
+  font-family: 'Batangas', sans-serif;
+  font-size: 1.2rem;
+  color: var(--color-brand-red);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  max-width: 220px;
+  line-height: 1.3;
+  margin-top: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .article-slide {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-section {
+    padding: 50px 0;
+  }
+  .article-container {
+    padding: 0 15px;
+  }
+  .article-wrapper {
+    width: 200px;
+    height: 280px;
+  }
+  
+  .article-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-wrapper {
+    width: 180px;
+    height: 250px;
+  }
+}

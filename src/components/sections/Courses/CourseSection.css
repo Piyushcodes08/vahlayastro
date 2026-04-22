@@ -1,0 +1,307 @@
+.course-section-container {
+  width: 100%;
+  --gap: 1.25rem;
+  --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --closed: 5.5rem;
+  --open: 32rem;
+  --accent: #dd2727;
+   background-color: #ffead3;
+   padding: 0px 0;
+}
+
+.slider-wrapper {
+  width: 100%;
+  padding: 40px 0;
+}
+
+.head {
+  max-width: 1400px;
+  margin: auto;
+  padding:0px 60px;
+  align-items: center;
+}
+
+.title-batangas {
+  font-family: 'Batangas', sans-serif;
+  color: #dd2727;
+}
+
+.subtitle-poppins {
+  font-family: 'Poppins', sans-serif;
+  color: #444;
+}
+
+.nav-btn {
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  background: white;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.slider {
+  max-width: 1400px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.track {
+  display: flex;
+  gap: var(--gap);
+  align-items: flex-start;
+  justify-content: center;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 20px 40px  60px;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  position: relative;
+  flex: 1 0 var(--closed);
+  height: 26rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: flex-basis var(--speed), transform var(--speed), box-shadow var(--speed);
+  border: 4px solid white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.project-card[active] {
+  flex-basis: var(--open);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.project-card__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85);
+  transition: filter 0.3s, transform var(--speed);
+}
+
+/* Dark overlay for better text visibility */
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.4) 100%);
+  z-index: 1;
+  transition: opacity 0.3s;
+}
+
+.project-card[active]::after {
+  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+}
+
+.project-card:hover .project-card__bg {
+  transform: scale(1.1);
+}
+
+.project-card__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  z-index: 2;
+}
+
+.project-card__title {
+  color: #fff;
+  font-family: 'Batangas', sans-serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  text-align: start;
+  max-height: 90%;
+  padding: 10px 0;
+  overflow: hidden;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+}
+
+.project-card__thumb,
+.project-card__desc,
+.project-card__btn {
+  display: none;
+}
+
+/* Styles for the expanded active card */
+.project-card[active] .project-card__content {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  background: rgba(0,0,0,0.3);
+}
+
+.project-card[active] .project-card__title {
+  writing-mode: horizontal-tb;
+  transform: none;
+  font-size: 1.85rem; /* Reduced to fit better */
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.project-card[active] .project-card__thumb,
+.project-card[active] .project-card__desc,
+.project-card[active] .project-card__btn {
+  display: block;
+}
+
+.project-card__text-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.project-card__thumb {
+  width: 160px;
+  height: 240px;
+  border-radius: 1rem;
+  object-fit: cover;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border: 3px solid rgba(255,255,255,0.2);
+}
+
+.project-card__desc {
+  color: rgba(255,255,255,0.9);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  /* max-width: 90%; */
+}
+
+.project-card__btn {
+  align-self: flex-start;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 99px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+}
+
+.project-card__btn:hover {
+  background: #fff;
+  color: #dd2727;
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(255, 107, 53, 0.4);
+}
+
+.dots {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dot.active {
+  background: var(--accent);
+  transform: scale(1.4);
+  width: 25px;
+  border-radius: 5px;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --open: 26rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .slider-wrapper {
+    padding: 50px 15px;
+  }
+  .head {
+    padding: 0 0 20px 0;
+  }
+  .track {
+    flex-direction: column;
+    scroll-snap-type: y mandatory;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0; /* Remove default track padding to let cards stretch */
+    gap: 15px;
+  }
+  .project-card {
+    height: auto;
+    min-height: 80px;
+    width: 100%;
+    margin-bottom: 0;
+    flex: 0 0 auto;
+  }
+  .project-card[active] {
+    min-height: 350px;
+  }
+  .project-card__title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 1.2rem;
+    padding: 0;
+  }
+  .project-card[active] .project-card__content {
+    flex-direction: column;
+    padding: 15px;
+    text-align: center;
+  }
+  .project-card__thumb {
+    width: 100px;
+    height: 100px;
+  }
+}

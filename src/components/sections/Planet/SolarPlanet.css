@@ -1,0 +1,786 @@
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   ROOT
+═══════════════════════════════════════════ */
+.root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+.hdr {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  width: 100%;
+}
+
+.hdr-main {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 12px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.hdr-sub {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  transition: color 0.4s;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL-JAIL WRAPPER
+   Height = 1 screen per planet so the page has
+   enough scroll distance for all 9 planets.
+═══════════════════════════════════════════ */
+.planet-scroll-jail {
+  height: calc(100dvh * 9);
+  /* 9 planets */
+  position: relative;
+}
+
+/* solar-page */
+.solar-page {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  z-index: 2;
+}
+
+.solar-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 100dvh;
+  background-image: url("../../../assets/img/image.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* Removed background-attachment: fixed; for GPU compostiting on mobile */
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar {
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.sb-item {
+  display: flex;
+  align-items: flex-start;
+  /* Align with top of circle */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+.sb-icon-wrapper {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s;
+  flex-shrink: 0;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.sb-mini-planet {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.4s;
+}
+
+.sb-line {
+  width: 30px;
+  height: 2px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 12px;
+  transition: background-color 0.4s;
+}
+
+.sb-item:not(.active) .sb-line {
+  background-color: transparent !important;
+}
+
+.sb-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+
+.sb-name {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  transition: color 0.4s;
+}
+
+.sb-au {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  transition: color 0.4s;
+}
+
+/* ═══════════════════════════════════════════
+   3D SCENE (Vertical Scroll Layout)
+═══════════════════════════════════════════ */
+.planet-scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2500px;
+  height: 2500px;
+  margin-top: -1250px;
+  margin-left: -1250px;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+/* The active planet occupies center foreground */
+.planet-scene.active {
+  transform: translateY(65vh) scale(1.1) translateZ(0);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* The previous planet sits small and receded top center */
+.planet-scene.prev {
+  transform: translateY(4vh) scale(0.35) translateZ(0);
+  opacity: 0.7;
+  z-index: 5;
+}
+
+/* The next planet is staged large and blurry below the screen */
+.planet-scene.next {
+  transform: translateY(95vh) scale(0.6) translateZ(0);
+  opacity: 0;
+  z-index: 15;
+}
+
+.planet-scene.hidden-before {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateY(-150vh) scale(0) translateZ(0);
+}
+
+.planet-scene.hidden-after {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateY(150vh) scale(0) translateZ(0);
+}
+
+/* ═══════════════════════════════════════════
+   PLANET SPHERE
+═══════════════════════════════════════════ */
+.planet-sphere {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background-size: 2600px 1300px;
+  background-position: 0px center;
+  background-repeat: repeat-x;
+  z-index: 2;
+  animation: rotateSphere 120s linear infinite;
+  /* Slightly slower rotation for premium feel */
+  box-shadow:
+    0 -500px 150px black inset,
+    0 0px 50px rgba(234, 205, 199, 0.45) inset;
+
+
+  /* Only animate opacity — transform on sphere is static (translate -50%,-50%) */
+  /* Animating transform here fights the parent's movement and causes jhatke */
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -50%) translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planet-sphere {
+    animation: none;
+  }
+}
+
+.planet-scene:not(.active) .planet-sphere {
+  animation-play-state: paused;
+}
+
+@keyframes rotateSphere {
+  0% {
+    background-position-x: 0px;
+  }
+
+  100% {
+    background-position-x: 2600px;
+  }
+}
+
+/* Extra overlay to ensure bottom half is completely blacked out as in screenshot */
+.planet-shadow-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(0);
+  border-radius: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle at 50% 10%, transparent 60%, rgba(0, 0, 0, 0.98) 75%, #03040a 100%) !important;
+  z-index: 3;
+  will-change: opacity;
+}
+
+/* ═══════════════════════════════════════════
+   RINGS (Premium 3D-Style)
+═══════════════════════════════════════════ */
+.planet-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.saturn-rings {
+  width: 2200px;
+  height: 500px;
+  /* Multi-layered radial gradient for A/B/C rings and Cassini Division */
+  background: radial-gradient(ellipse at center,
+      transparent 62%,
+      rgba(201, 185, 154, 0.1) 63%,
+      rgba(201, 185, 154, 0.4) 66%,
+      rgba(255, 255, 255, 0.1) 67%,
+      transparent 68%,
+      /* Cassini Division */
+      rgba(201, 185, 154, 0.3) 70%,
+      rgba(201, 185, 154, 0.5) 78%,
+      rgba(255, 255, 255, 0.2) 82%,
+      transparent 85%);
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+  filter: drop-shadow(0 0 20px rgba(201, 185, 154, 0.2));
+}
+
+.uranus-rings {
+  width: 2000px;
+  height: 20px;
+  /* Thin edge-on or vertical feel */
+  transform: translate(-50%, -50%) rotate(90deg);
+  /* Uranus rotates on its side */
+  background: radial-gradient(ellipse at center,
+      transparent 68%,
+      rgba(141, 205, 216, 0.2) 72%,
+      rgba(255, 255, 255, 0.4) 75%,
+      rgba(141, 205, 216, 0.1) 78%,
+      transparent 82%);
+  filter: blur(1px);
+}
+
+/* ═══════════════════════════════════════════
+   TOP INFO LAYER (Prev Planet)
+═══════════════════════════════════════════ */
+.top-labels {
+  position: absolute;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  pointer-events: none;
+  transition: opacity 0.8s, filter 0.8s;
+  white-space: nowrap;
+}
+
+.top-block {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  text-align: center;
+  opacity: 0;
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  visibility: hidden;
+}
+
+.top-block.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.top-block.exit {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.top-block.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
+.tb-type {
+  font-size: 16px;
+  letter-spacing: 6px;
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+
+.tb-name {
+  font-size: 18px;
+  letter-spacing: 8px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ═══════════════════════════════════════════
+   MAIN INFO LAYER (Active Planet)
+═══════════════════════════════════════════ */
+.main-labels {
+  position: absolute;
+  bottom: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  pointer-events: none;
+  width: 100%;
+}
+
+.main-block {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 40px);
+  width: 700px;
+  max-width: 90vw;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-block.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.main-block.exit-up {
+  opacity: 0;
+  transform: translate(-50%, -40px);
+}
+
+.main-block.exit-down {
+  opacity: 0;
+  transform: translate(-50%, 40px);
+}
+
+.mb-type {
+  font-size: 18px;
+  letter-spacing: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #2b2828 !important;
+}
+
+.mb-name {
+  font-size: 42px;
+  letter-spacing: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  margin-left: 20px;
+  text-shadow: 0px 4px 50px rgba(0, 0, 0, 0.8);
+}
+
+.mb-desc {
+  font-size: 14px;
+  letter-spacing: 3px;
+  line-height: 2.4;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  margin-bottom: 15px;
+  padding: 0 10px;
+  text-align: center;
+  max-width: 500px;
+}
+
+.mb-more {
+  font-size: 13px;
+  letter-spacing: 5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  border-bottom: 1px solid;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  color: #ffffff !important;
+}
+
+.mb-more:hover {
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE (TABLET)
+═══════════════════════════════════════════ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+
+  .planet-scene.active {
+    transform: translateY(50vh) scale(1);
+  }
+
+  .planet-scene.prev {
+    transform: translateY(-5vh) scale(0.4);
+  }
+
+  .top-labels {
+    top: 20vh;
+  }
+
+  .main-labels {
+    bottom: 10vh;
+  }
+
+  .main-block.active {
+    max-width: 80vw;
+  }
+
+  .mb-name {
+    font-size: 36px;
+    letter-spacing: 15px;
+    margin-left: 15px;
+  }
+
+  .mb-type {
+    font-size: 16px;
+    letter-spacing: 8px;
+  }
+
+  .mb-desc {
+    font-size: 14px;
+    line-height: 2.2;
+    padding: 0 40px;
+  }
+
+  .hdr {
+    top: 25px;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE (MOBILE)
+═══════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+
+  /* Mobile transition: must match JS throttle (950ms). Slightly faster than desktop. */
+  .planet-scene {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* === Vertical layout: Header > Prev Planet > Active Planet > Info === */
+  /* Active planet: anchored in lower half */
+  .planet-scene.active {
+    transform: translateY(35dvh) scale(0.42) translateZ(0);
+  }
+
+  /* Prev planet: compact, sitting near top */
+  .planet-scene.prev {
+    transform: translateY(5dvh) scale(0.22) translateZ(0);
+    opacity: 0.85;
+  }
+
+  /* Next planet: hidden below, ready to animate in */
+  .planet-scene.next {
+    transform: translateY(90dvh) scale(0.22) translateZ(0);
+    opacity: 0;
+  }
+
+  /* === Label for prev planet: pinned between header and planet === */
+  .top-labels {
+    position: absolute;
+    top: 26dvh;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* === Main info block: bottom of screen === */
+  .main-labels {
+    bottom: 7dvh;
+  }
+
+  .main-block.active {
+    max-width: 83vw !important;
+  }
+
+  .mb-name {
+    font-size: 26px;
+    letter-spacing: 10px;
+    margin-left: 10px;
+  }
+
+  .mb-type {
+    font-size: 13px;
+    letter-spacing: 5px;
+  }
+
+  .mb-desc {
+    font-size: 13px;
+    line-height: 2.1;
+    padding: 0 8px;
+    margin-top: 4px;
+  }
+
+  .mb-more {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  /* === Header: tight to top === */
+  .hdr {
+    top: 2dvh;
+    transform: translateX(-50%) scale(0.85);
+  }
+
+  .hdr-main {
+    font-size: 13px;
+    letter-spacing: 8px;
+  }
+
+  .hdr-sub {
+    font-size: 17px;
+    letter-spacing: 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   DETAILS PANEL (New Feature)
+═══════════════════════════════════════════ */
+.details-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  contain: layout style;
+}
+
+.details-panel.open {
+  pointer-events: auto;
+}
+
+.details-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 4, 10, 0.4);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.details-panel.open .details-overlay {
+  opacity: 1;
+}
+
+.details-content {
+  position: relative;
+  width: 600px;
+  max-width: 90vw;
+  height: 100vh;
+  background: rgba(3, 4, 10, 0.85);
+  backdrop-filter: blur(25px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  transform: translateX(100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Momentum scrolling for iOS */
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  content-visibility: auto;
+}
+
+.details-panel.open .details-content {
+  transform: translateX(0);
+}
+
+.details-back {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.details-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.details-planet-img {
+  width: 70%;
+  height: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 50px rgba(0, 0, 0, 0.5));
+  mask-image: radial-gradient(circle at 50% 30%, black 50%, transparent 90%);
+}
+
+.details-name-wrap {
+  margin-bottom: 50px;
+}
+
+.details-type {
+  font-size: 10px;
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.details-name {
+  font-size: 56px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: inline-block;
+  color: white;
+}
+
+.details-au {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.details-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 100px;
+}
+
+.fact-item {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.fact-id {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.fact-text-wrap {
+  flex: 1;
+  padding-top: 5px;
+}
+
+.fact-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.fact-text {
+  font-size: 12px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Body Scroll Lock Utility */
+body.no-scroll {
+  overflow: hidden !important;
+}
+
+@media (max-width: 480px) {
+  .details-content {
+    width: 100%;
+    padding: 25px 25px 50px 25px;
+    /* Added 50px bottom padding */
+  }
+}
