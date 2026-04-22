@@ -62,8 +62,8 @@
 }
 
 .numerology-input option {
-  background: #1a1a2e;
-  color: white;
+ background: rgba(255, 255, 255, 0.08);
+  color: #dd2727;
 }
 
 .numerology-error {

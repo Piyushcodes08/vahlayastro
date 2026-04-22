@@ -25,28 +25,17 @@ body {
 }
 
 .hero {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     position: relative;
-    background-image: url('../../../assets/img/image.webp');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: transparent;
     color: white;
     overflow: hidden;
 }
 
-.hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
-    z-index: 0;
-}
 
 .hero::after {
     content: "";
@@ -73,10 +62,9 @@ body {
 }
 
 .hero-content {
+    padding: 30px 60px;
     position: relative;
-    z-index: 2;
-    padding: 0 60px;
-    padding-top: 50px;
+    z-index: 1;
 }
 
 /* ============= FLIPPING TEXT ============= */
