@@ -172,8 +172,8 @@ const Numerology = () => {
 
   return (
     <section className="numerology-section" id="numerology">
-      <div className="numerology-container">
-        <div className='flex flex-col text-center md:text-left gap-1 pb-10 w-1/2'>
+      <div className="section-container">
+        <div className='flex flex-col text-center md:text-left gap-1 pb-8 max-w-3xl'>
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight leading-tight">
             Decode Your Cosmic Numbers
           </h2>

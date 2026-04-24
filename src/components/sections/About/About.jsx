@@ -9,9 +9,10 @@ const About = () => {
     const { title, images, paragraphs, buttonText } = aboutData;
 
     return (
-        <div className="container mx-auto px-3 md:px-6 lg:px-4">
+        <div className="section-container">
             <div className="project-hero">
                 <video src={heroVideo} autoPlay muted loop playsInline></video>
+                {/* <img src="./src/assets/img/cow.webp" alt="" /> */}
             </div>
             <article>
                 <section className="about-section">

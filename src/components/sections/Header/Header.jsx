@@ -13,7 +13,7 @@ const Header = () => {
 
     return (
         <header 
-            className="fixed top-0 left-0 right-0 bg-transparent z-1000 transition-all duration-500 bg text-white"
+            className="sticky left-0 right-0 bg-transparent z-1000 transition-all duration-500 bg text-white"
         >
             <nav className="max-w-[1440px] mx-auto flex justify-between items-center px-6 md:px-12">
                 
@@ -22,7 +22,7 @@ const Header = () => {
                     <img 
                         src={logo} 
                         alt="Vahlay Astro Logo" 
-                        className="transition-all duration-500 object-contain hover:scale-105 h-16 w-16 md:h-[84px] md:w-[84px]"
+                        className="tran sition-all duration-500 object-contain hover:scale-105 h-16 w-16 md:h-[84px] md:w-[84px]"
                     />
                 </a>
 

@@ -13,68 +13,19 @@
 
 .slider-wrapper {
   width: 100%;
-  padding: 40px 0;
+  padding: 100px 0;
   position: relative;
   z-index: 1;
 }
 
-.head {
-  max-width: 1400px;
-  margin: auto;
-  padding: 0px 60px;
-  align-items: center;
-}
+/* Removed redundant .head override to allow global index.css padding to apply */
 
-.title-batangas {
-  font-family: 'Batangas', sans-serif;
-  color: #dd2727;
-}
-
-.subtitle-poppins {
-  font-family: 'Poppins', sans-serif;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.nav-btn {
-  width: 3.2rem;
-  height: 3.2rem;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  color: white;
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.nav-btn:hover:not(:disabled) {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.nav-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
 
 .slider {
   max-width: 1400px;
-  margin: auto;
-  overflow: hidden;
+  margin: auto;     
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-}
 
 .track {
   display: flex;
@@ -83,7 +34,6 @@
   justify-content: center;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding: 20px 40px 60px;
 }
 
 .track::-webkit-scrollbar {
@@ -274,10 +224,6 @@
 @media (max-width: 767px) {
   .slider-wrapper {
     padding: 50px 15px;
-  }
-
-  .head {
-    padding: 0 0 20px 0;
   }
 
   .track {

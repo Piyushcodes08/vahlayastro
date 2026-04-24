@@ -89,42 +89,44 @@ const Slider = ({ items, title, subTitle }) => {
 
   return (
     <div className="slider-wrapper">
-      <SliderHeader 
-        title={title} 
-        subTitle={subTitle} 
-        onNext={() => go(1)} 
-        onPrev={() => go(-1)}
-        isPrevDisabled={activeIndex === 0}
-        isNextDisabled={activeIndex === items.length - 1}
-      />
+      <div className="section-container">
+        <SliderHeader 
+          title={title} 
+          subTitle={subTitle} 
+          onNext={() => go(1)} 
+          onPrev={() => go(-1)}
+          isPrevDisabled={activeIndex === 0}
+          isNextDisabled={activeIndex === items.length - 1}
+        />
 
-      <div className="slider" ref={sliderRef}>
-        <div 
-          className="track" 
-          ref={trackRef}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {items.map((item, index) => (
-            <SliderCard 
-              key={item.id}
-              course={item}
-              isActive={index === activeIndex}
-              onClick={() => activate(index, true)}
-              onMouseEnter={() => {
-                 if (window.matchMedia("(hover:hover)").matches) activate(index, true);
-              }}
-            />
-          ))}
+        <div className="slider" ref={sliderRef}>
+          <div 
+            className="track" 
+            ref={trackRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {items.map((item, index) => (
+              <SliderCard 
+                key={item.id}
+                course={item}
+                isActive={index === activeIndex}
+                onClick={() => activate(index, true)}
+                onMouseEnter={() => {
+                   if (window.matchMedia("(hover:hover)").matches) activate(index, true);
+                }}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      <SliderDots 
-        count={items.length} 
-        activeIndex={activeIndex} 
-        onDotClick={(i) => activate(i, true)}
-        hidden={isMobile}
-      />
+        <SliderDots 
+          count={items.length} 
+          activeIndex={activeIndex} 
+          onDotClick={(i) => activate(i, true)}
+          hidden={isMobile}
+        />
+      </div>
     </div>
   );
 };

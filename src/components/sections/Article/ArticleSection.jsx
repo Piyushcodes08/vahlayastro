@@ -111,7 +111,7 @@ const ArticleSection = () => {
       onMouseEnter={stopAutoPlay}
       onMouseLeave={startAutoPlay}
     >
-      <div className="article-container">
+      <div className="section-container">
         <SliderHeader 
           title="Featured Articles" 
           subTitle="Explore our latest insights and sacred wisdom."

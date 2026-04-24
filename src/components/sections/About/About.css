@@ -5,7 +5,7 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background-color: transparent;
-    padding: 60px 0px;
+    padding: 0px 0px;
 }
 
 .project-hero video {
@@ -46,7 +46,6 @@
 }
 
 article {
-    padding: 50px 0 0;
     position: relative;
     z-index: 1;
     background-color: transparent;
@@ -54,26 +53,25 @@ article {
 
 /* About Us Section Styles */
 .about-section {
-    padding: 40px 0;
-    margin: 0 auto;
+
+    /* margin: 0 auto; */
     width: 100%;
     background-color: transparent;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
 }
 
 
 .about-container {
-    max-width: 1400px;
-    margin: 0 auto;
+    height: 100dvh;
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     align-items: center;
     gap: 60px;
-    padding: 60px 60px;
+    padding: 0; /* Handled by section-container */
     position: relative;
     z-index: 1;
-   background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 100%); 
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 /* Image Grid Styling */

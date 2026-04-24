@@ -10,7 +10,7 @@ const Home = () => {
     return (
         <>
             {/* Sentinel for Header IntersectionObserver */}
-            <div id="top-sentinel" className="absolute top-0 left-0 w-full h-[1px] pointer-events-none z-[-1]" />
+            <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
             
             <Header />
             <main>

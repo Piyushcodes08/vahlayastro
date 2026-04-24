@@ -1,20 +1,14 @@
 .numerology-section {
   position: relative;
-  padding: 60px 0;
+  padding: 40px 0;
+  /* Reduced from 60px */
   background: transparent;
   color: white !important;
   overflow: hidden;
 }
 
 
-.numerology-container {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 60px;
-}
+/* Redundant .numerology-container styles removed in favor of global .section-container */
 
 .numerology-form-card,
 .numerology-intro-card,
@@ -25,11 +19,13 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  /* Reduced from 40px */
 }
 
 .numerology-form-card {
-  padding: 40px;
+  padding: 30px;
+  /* Reduced from 40px */
   text-align: center;
 }
 
@@ -62,7 +58,7 @@
 }
 
 .numerology-input option {
- background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   color: #dd2727;
 }
 
@@ -74,7 +70,8 @@
 }
 
 .numerology-intro-card {
-  padding: 40px;
+  padding: 30px;
+  /* Reduced from 40px */
 }
 
 .numerology-intro-card h3 {
@@ -136,7 +133,8 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  padding: 30px;
+  padding: 24px;
+  /* Reduced from 30px */
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -193,7 +191,8 @@
 }
 
 .loshu-wrapper {
-  padding: 40px;
+  padding: 30px;
+  /* Reduced from 40px */
 }
 
 .loshu-header {
@@ -286,24 +285,17 @@
   margin: 0;
 }
 
-@media (max-width: 1024px) {
-  .numerology-container {
-    padding: 0 30px;
-  }
+/* Removed redundant media query padding overrides */
 
   .numerology-mini-grid,
   .numerology-cards {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+
 
 @media (max-width: 768px) {
   .numerology-section {
-    padding: 40px 0;
-  }
-
-  .numerology-container {
-    padding: 0 15px;
+    padding: 60px 0;
   }
 
   .numerology-form-card,

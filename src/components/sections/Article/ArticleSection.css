@@ -6,18 +6,12 @@
 }
 
 
-.article-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 60px;
-  position: relative;
-  z-index: 1;
-}
+/* Redundant .article-container styles removed in favor of global .section-container */
 
 /* Slider Container */
 .article-slider-container {
   width: 100%;
-  overflow: visible;  
+  overflow: visible;
   position: relative;
 
   margin-top: 20px;
@@ -53,17 +47,19 @@
   position: relative;
   background: #fdf2d0;
   z-index: 10;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1), 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 10px 25px rgba(0, 0, 0, 0.2);
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  perspective: 1500px; /* Slightly increased for smoother carousel feel */
+  perspective: 1500px;
+  /* Slightly increased for smoother carousel feel */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .article-wrapper:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 20px 45px rgba(0,0,0,0.3);
-  z-index: 50; /* Bring to front on hover */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 20px 45px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  /* Bring to front on hover */
 }
 
 /* Cover Image - KEPT EXACTLY THE SAME */
@@ -77,7 +73,7 @@
   border-bottom-right-radius: 5px;
   position: relative;
   z-index: 5;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .article-wrapper:hover .article-cover {
@@ -92,10 +88,12 @@
   width: 100%;
   height: 100%;
   padding: 1.5rem;
-  background: #fdf2d0; /* Matches the pages color */
+  background: #fdf2d0;
+  /* Matches the pages color */
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  z-index: 4; /* Below .article-cover (5) */
+  z-index: 4;
+  /* Below .article-cover (5) */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,11 +101,13 @@
   text-align: center;
   box-sizing: border-box;
   opacity: 0;
-  transition: opacity 0.3s ease 0.3s; /* Delay fade in slightly */
+  transition: opacity 0.3s ease 0.3s;
+  /* Delay fade in slightly */
 }
 
 .article-wrapper:hover .article-inner {
-  opacity: 1; /* Reveal content when hovered */
+  opacity: 1;
+  /* Reveal content when hovered */
 }
 
 .article-inner-title {
@@ -201,14 +201,16 @@
   .article-section {
     padding: 50px 0;
   }
+
   .article-container {
     padding: 0 15px;
   }
+
   .article-wrapper {
     width: 200px;
     height: 280px;
   }
-  
+
   .article-title {
     font-size: 1rem;
   }
