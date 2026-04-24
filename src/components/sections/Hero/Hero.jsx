@@ -1,14 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import useParticles from '../../../hooks/useParticles';
 import Button from '../../ui/Button/Button';
+import AppointmentModal from '../../modals/AppointmentModal/AppointmentModal';
 import { heroData } from '../../../data/heroData';
 import './Hero.css';
 
 const Hero = () => {
     const canvasRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Initialize particles animation using the custom hook
     useParticles(canvasRef);
+    
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     // Text splitting natively handled via React instead of raw manipulation
     const { title, intro, description, buttonText } = heroData;
@@ -58,10 +62,18 @@ const Hero = () => {
                 <p className="subtitle !pb-5">
                     {description}
                 </p>
-                <Button variant="primary">
+                <Button 
+                    variant="primary"
+                    onClick={toggleModal}
+                >
                     {buttonText}
                 </Button>
             </div>
+
+            <AppointmentModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+            />
         </section>
     );
 };

@@ -5,6 +5,7 @@ import Header from '../components/sections/Header/Header';
 import ArticleSection from '../components/sections/Article/ArticleSection';
 import Numerology from '../components/sections/Numerology/Numerology';
 import Testimonials from '../components/sections/Testimonials/Testimonials';
+import Partners from '../components/sections/Partners/Partners';
 
 const Home = () => {
     return (
@@ -20,6 +21,7 @@ const Home = () => {
                 <Numerology />
                 <ArticleSection />
                 <Testimonials />
+                <Partners/>
             </main>
         </>
     );
