@@ -1,13 +1,9 @@
 .partners-section {
   position: relative;
-  min-height: 100vh;
- padding: 0 24px 100px 24px;
+  width: 100%;
   overflow: hidden;
-  background:transparent;
+  background: transparent;
   color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .partner-bg {
@@ -50,7 +46,6 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1180px;
   text-align: center;
 }
 
@@ -188,11 +183,6 @@
 }
 
 @media (max-width: 768px) {
-  .partners-section {
-    padding: 80px 18px;
-    min-height: auto;
-  }
-
   .partners-header .subtitle-poppins {
     font-size: 15px;
     margin-bottom: 34px;

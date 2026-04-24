@@ -37,21 +37,7 @@ body {
 }
 
 
-.hero::after {
-    content: "";
-    height: 100%;
-    width: 400px;
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: url('../../../assets/img/hero-absolute.png') center/cover no-repeat;
-    color: white;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 10;
-}
+
 
 /* ============= canvas ============= */
 #canvas {
@@ -62,7 +48,9 @@ body {
 }
 
 .hero-content {
-    padding: 30px 60px;
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 100px 24px;
     position: relative;
     z-index: 1;
 }

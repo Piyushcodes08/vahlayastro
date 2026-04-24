@@ -13,7 +13,7 @@
 
 .slider-wrapper {
   width: 100%;
-  padding: 100px 0;
+  padding: 0;
   position: relative;
   z-index: 1;
 }
@@ -22,8 +22,9 @@
 
 
 .slider {
-  max-width: 1400px;
-  margin: auto;     
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
 }
 
 

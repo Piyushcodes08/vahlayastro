@@ -28,7 +28,7 @@ const ArticleSection = () => {
       if (window.innerWidth < 640) setVisibleItems(1);
       else if (window.innerWidth < 1024) setVisibleItems(2);
       else if (window.innerWidth < 1280) setVisibleItems(3);
-      else setVisibleItems(4);
+      else setVisibleItems(3);
     };
 
     handleResize();
@@ -106,36 +106,36 @@ const ArticleSection = () => {
   };
 
   return (
-    <section 
+    <section
       className="article-section"
       onMouseEnter={stopAutoPlay}
       onMouseLeave={startAutoPlay}
     >
       <div className="section-container">
-        <SliderHeader 
-          title="Featured Articles" 
+        <SliderHeader
+          title="Featured Articles"
           subTitle="Explore our latest insights and sacred wisdom."
-          onNext={nextSlide} 
-          onPrev={prevSlide} 
-          isPrevDisabled={false} 
-          isNextDisabled={false} 
+          onNext={nextSlide}
+          onPrev={prevSlide}
+          isPrevDisabled={false}
+          isNextDisabled={false}
         />
-        
-        <div 
+
+        <div
           className="article-slider-container"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <div 
-            className="article-track" 
-            style={{ 
+          <div
+            className="article-track"
+            style={{
               transform: getTranslateX(),
               transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none'
             }}
           >
             {clonedData.map((article, index) => (
-              <div 
-                key={`${article.id}-${index}`} 
+              <div
+                key={`${article.id}-${index}`}
                 className="article-slide"
                 style={{ flex: `0 0 ${100 / visibleItems}%` }}
               >
@@ -148,10 +148,10 @@ const ArticleSection = () => {
                       <a href="#" className="article-read-more">Read More</a>
                     </div>
                     {/* Cover — rotates open on hover */}
-                    <img 
-                      src={article.img} 
-                      alt={article.title} 
-                      className="article-cover" 
+                    <img
+                      src={article.img}
+                      alt={article.title}
+                      className="article-cover"
                       loading="lazy"
                     />
                   </div>

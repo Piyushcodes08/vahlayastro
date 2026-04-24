@@ -11,7 +11,7 @@
 /* Slider Container */
 .article-slider-container {
   width: 100%;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
 
   margin-top: 20px;
@@ -199,11 +199,11 @@
 
 @media (max-width: 767px) {
   .article-section {
-    padding: 50px 0;
+    padding: 0;
   }
 
   .article-container {
-    padding: 0 15px;
+    padding: 0 24px;
   }
 
   .article-wrapper {

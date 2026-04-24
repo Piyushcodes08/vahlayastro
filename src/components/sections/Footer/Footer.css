@@ -1,0 +1,221 @@
+.footer-section {
+    width: 100%;
+    position: relative;
+    background: #110303; /* Deep dark cocoa background */
+    color: #fff;
+    overflow: hidden;
+    /* Simulate the zodiac wheel pattern if possible or just use a focus gradient */
+    background: radial-gradient(circle at center, rgba(221, 39, 39, 0.1) 0%, #110303 70%);
+}
+
+.footer-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../../../assets/img/image.webp'); /* Reuse global bg if available */
+    opacity: 0.1;
+    background-size: cover;
+    pointer-events: none;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr 1fr 1.2fr;
+    gap: 50px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand {
+    font-size: 1.8rem;
+    color: #dd2727;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.footer-desc, .footer-mission {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 20px;
+    max-width: 90%;
+}
+
+.footer-login-btn {
+    background: #fff;
+    color: #dd2727;
+    border: none;
+    padding: 10px 35px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-login-btn:hover {
+    background: #dd2727;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(221, 39, 39, 0.3);
+}
+
+.footer-col-title {
+    font-size: 1.4rem;
+    color: #dd2727;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 14px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #dd2727;
+    padding-left: 5px;
+}
+
+.footer-contact-info p {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-contact-info strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.location-title {
+    font-size: 1.25rem;
+    color: #dd2727;
+    margin: 30px 0 15px;
+    text-transform: uppercase;
+}
+
+.footer-address {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.footer-map-container {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.footer-bottom {
+    padding: 40px 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-social-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.social-icon:hover {
+    background: #dd2727;
+    border-color: #dd2727;
+    transform: translateY(-5px);
+}
+
+.footer-copyright {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1) rotate(10deg);
+    background-color: #1ebe57;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .footer-desc, .footer-mission {
+        margin: 0 auto 20px;
+    }
+    
+    .footer-links a:hover {
+        padding-left: 0;
+    }
+    
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}

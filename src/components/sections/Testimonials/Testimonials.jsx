@@ -169,10 +169,7 @@ const Testimonials = () => {
                                 style={{ flex: `0 0 ${100 / visibleItems}%` }}
                             >
                                 <div className="testimonial-card">
-                                    <div
-                                        className="testimonial-img"
-                                        style={{ backgroundImage: `url(${item.image})` }}
-                                    />
+                                   
                                     <p className="testimonial-text">{item.text}</p>
                                     <h3 className="testimonial-title">{item.name}</h3>
                                     <div className="review-stars">★★★★★</div>
