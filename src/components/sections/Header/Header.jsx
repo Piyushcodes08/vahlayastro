@@ -13,9 +13,9 @@ const Header = () => {
 
     return (
         <header 
-            className="sticky  bg-transparent z-1000 transition-all duration-500 text-white"
+            className="fixed top-0 left-0 right-0 w-full bg-transparent z-1000 transition-all duration-500 text-white"
         >
-            <nav className="max-w-[1170px] mx-auto flex justify-between items-center px-6 md:px-12 py-4">
+            <nav className="max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 py-4">
                 
                 {/* Logo Section */}
                 <a href="#" className="flex items-center">

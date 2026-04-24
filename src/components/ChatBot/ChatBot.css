@@ -200,13 +200,14 @@
     }
     
     .chatbot-wrapper {
-        bottom: 100px;
-        right: 20px;
+        bottom: 90px;
+        right: 15px;
     }
     
     .chat-window {
-        width: calc(100vw - 40px);
-        max-height: 500px;
-        bottom: 70px;
+        width: calc(100vw - 30px);
+        max-height: 400px;
+        bottom: 60px;
+        right: 0px;
     }
 }

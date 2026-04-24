@@ -124,5 +124,16 @@ body {
     }
     .hero-content {
         padding: 50px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: clamp(2rem, 12vw, 3.8rem);
+    }
+    .subtitle {
+        font-size: 14px;
+        line-height: 1.5;
     }
 }

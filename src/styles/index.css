@@ -89,6 +89,12 @@ h6 {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .section-container {
+    padding: 50px 15px;
+  }
+}
+
 /* Shared Slider Header & Navigation Styles */
 .head {
   display: flex;
