@@ -19,7 +19,7 @@
 }
 
 .modal-container {
-    background: rgba(26, 11, 11, 0.85); /* Deep cosmic dark */
+    background: #2f0707ed;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 28px;
     width: 90%;

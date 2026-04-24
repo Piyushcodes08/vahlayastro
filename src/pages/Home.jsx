@@ -16,12 +16,12 @@ const Home = () => {
             <Header />
             <main>
                 <Hero />
-                <About />
                 <CourseSection />
-                <Numerology />
                 <ArticleSection />
+                <About />
+                <Numerology />
                 <Testimonials />
-                <Partners/>
+                <Partners />
             </main>
         </>
     );
