@@ -1,6 +1,9 @@
 import Button from "../Button/Button"; 
+import { useNavigate } from "react-router-dom";
 
 const SliderCard = ({ course, isActive, onClick, onMouseEnter, cardRef }) => {
+  const navigate = useNavigate();
+
   return (
     <article 
       className="project-card" 
@@ -19,6 +22,10 @@ const SliderCard = ({ course, isActive, onClick, onMouseEnter, cardRef }) => {
           <Button 
             variant="secondary" 
             className="project-card__btn !mt-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate('/appointment');
+            }}
           >
             Enroll Now
           </Button>

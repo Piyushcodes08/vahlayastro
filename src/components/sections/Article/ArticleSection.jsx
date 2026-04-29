@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import SliderHeader from '../../ui/Slider/SliderHeader';
 import { articlesData } from '../../../data/articleData';
 import './ArticleSection.css';
@@ -145,7 +146,7 @@ const ArticleSection = () => {
                     <div className="article-inner">
                       <h4 className="article-inner-title">{article.title}</h4>
                       <p className="article-inner-desc">{article.description}</p>
-                      <a href="#" className="article-read-more">Read More</a>
+                      <Link to={`/articles/${article.id}`} className="article-read-more">Read More</Link>
                     </div>
                     {/* Cover — rotates open on hover */}
                     <img

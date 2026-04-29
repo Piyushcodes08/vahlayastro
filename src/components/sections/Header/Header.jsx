@@ -1,41 +1,43 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from "../../../assets/img/vahlay_astro logo.png";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
-        { name: "Home", href: "#" },
-        { name: "About", href: "#" },
-        { name: "Articles", href: "#" },
-        { name: "Courses", href: "#" },
+        { name: "Home", href: "/" },
+        { name: "About", href: "/about" },
+        { name: "Services", href: "/services" },
+        { name: "Courses", href: "/courses" },
+        { name: "Articles", href: "/articles" },
     ];
 
     return (
         <header 
-            className="fixed top-0 left-0 right-0 w-full bg-transparent z-1000 transition-all duration-500 text-white"
+            className="sticky left-0 right-0 w-full bg-transparent z-1000 transition-all duration-500 text-white"
         >
-            <nav className="max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 py-4">
+            <nav className="max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 py-1">
                 
                 {/* Logo Section */}
-                <a href="#" className="flex items-center">
+                <Link to="/" className="flex items-center">
                     <img 
                         src={logo} 
                         alt="Vahlay Astro Logo" 
                         className="tran sition-all duration-500 object-contain hover:scale-105 h-16 w-16 md:h-[84px] md:w-[84px]"
                     />
-                </a>
+                </Link>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden md:flex items-center gap-8 ">
                     {navLinks.map((link) => (
                         <li key={link.name}>
-                            <a 
-                                href={link.href} 
+                            <Link 
+                                to={link.href} 
                                 className="text-sm lg:text-base font-semibold uppercase tracking-widest transition-all duration-300 hover:text-[#dd2727]"
                             >
                                 {link.name}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
@@ -43,12 +45,12 @@ const Header = () => {
                 {/* CTA Button & Mobile Toggle */}
                 <div className="flex items-center gap-4">
                     <div className="hidden md:block">
-                        <a
-                            href="#"
+                        <Link
+                            to="/contact"
                             className="px-8 py-3 rounded-full font-bold text-sm lg:text-base uppercase tracking-wider transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727]"
                         >
                             Contact us
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Hamburger Menu Toggle */}
@@ -70,22 +72,22 @@ const Header = () => {
                     }`}
                 >
                     {navLinks.map((link) => (
-                        <a 
+                        <Link 
                             key={`mobile_${link.name}`}
-                            href={link.href} 
+                            to={link.href} 
                             onClick={() => setIsOpen(false)}
                             className="text-3xl font-bold uppercase tracking-widest hover:text-[#dd2727] transition-colors"
                         >
                             {link.name}
-                        </a>
+                        </Link>
                     ))}
-                    <a 
-                        href="#" 
+                    <Link 
+                        to="/contact" 
                         onClick={() => setIsOpen(false)}
-                        className="mt-6 bg-[#dd2727] text-white px-12 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-white hover:text-[#dd2727] transition-all"
+                        className="mt-6 bg-[#dd2727] text-white px-6 py-2 rounded-full font-bold uppercase tracking-widest hover:bg-white hover:text-[#dd2727] transition-all"
                     >
                         Contact us
-                    </a>
+                    </Link>
                 </div>
 
             </nav>

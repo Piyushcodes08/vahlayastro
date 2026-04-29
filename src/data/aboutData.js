@@ -1,7 +1,7 @@
 // Standardized data for the About section
 import about1 from '../assets/img/about-1.webp';
 import about2 from '../assets/img/about-2.webp';
-import about3 from '../assets/img/about-3.webp'; 
+import about3 from '../assets/img/about-3.webp';
 import about4 from '../assets/img/about-4.webp';
 
 export const aboutData = {
@@ -18,5 +18,3 @@ export const aboutData = {
     ],
     buttonText: "Read More"
 };
-
-

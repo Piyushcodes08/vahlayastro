@@ -1,4 +1,5 @@
 import React from 'react';
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 
 const SliderHeader = ({ title, subTitle, onNext, onPrev, isPrevDisabled, isNextDisabled }) => {
   return (
@@ -11,22 +12,22 @@ const SliderHeader = ({ title, subTitle, onNext, onPrev, isPrevDisabled, isNextD
          {subTitle}
         </p>
       </div>
-      <div className="controls">
+      <div className="controls flex items-center gap-4">
         <button 
-          className="nav-btn" 
+          className="nav-btn flex items-center justify-center" 
           onClick={onPrev} 
           disabled={isPrevDisabled} 
           aria-label="Previous"
         >
-          ‹
+          <HiChevronLeft size={24} />
         </button>
         <button 
-          className="nav-btn" 
+          className="nav-btn flex items-center justify-center" 
           onClick={onNext} 
           disabled={isNextDisabled} 
           aria-label="Next"
         >
-          ›
+          <HiChevronRight size={24} />
         </button>
       </div>
     </div>

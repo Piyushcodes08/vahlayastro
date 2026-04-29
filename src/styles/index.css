@@ -4,6 +4,9 @@
 @theme {
   --color-brand-red: #dd2727;
   --color-brand-cream: #ffead3;
+  --spacing-section: 120px;
+  --spacing-section-mobile: 80px;
+  --container-max-width: 1170px;
 }
 
 :root {
@@ -83,15 +86,15 @@ h6 {
 
 /* Standard Section Container - Ensures all sections align perfectly */
 .section-container {
-  max-width: 1170px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 100px 24px;
+  padding: var(--spacing-section) 24px;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .section-container {
-    padding: 50px 15px;
+    padding: var(--spacing-section-mobile) 15px;
   }
 }
 

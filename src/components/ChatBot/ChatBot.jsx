@@ -75,7 +75,7 @@ const ChatBot = () => {
 
         <div className="chat-messages">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`message-bubble ${msg.type}`}>
+            <div key={idx} className={`message-bubble  ${msg.type}`}>
               {msg.text}
             </div>
           ))}

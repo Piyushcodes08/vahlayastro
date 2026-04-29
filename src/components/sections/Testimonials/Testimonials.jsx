@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
+import { FaStar } from "react-icons/fa";
 import SliderHeader from "../../ui/Slider/SliderHeader";
 import "./Testimonials.css";
 
@@ -172,7 +173,11 @@ const Testimonials = () => {
                                    
                                     <p className="testimonial-text">{item.text}</p>
                                     <h3 className="testimonial-title">{item.name}</h3>
-                                    <div className="review-stars">★★★★★</div>
+                                    <div className="review-stars flex gap-1 justify-center mt-4">
+                                        {[...Array(5)].map((_, i) => (
+                                            <FaStar key={i} className="text-yellow-400" />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         ))}
