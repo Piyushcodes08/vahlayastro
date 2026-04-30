@@ -9,6 +9,10 @@
   --container-max-width: 1170px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --spacing: 0.25rem;
 }
@@ -46,7 +50,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 100%);
   z-index: 0;
   pointer-events: none;
 }
@@ -112,7 +116,7 @@ h6 {
 
 .subtitle-poppins {
   font-family: 'Poppins', sans-serif;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .controls {
@@ -155,3 +159,23 @@ h6 {
     padding: 0 0 20px 0;
   }
 }
+/* Support for Old Project Auth/Admin Pages */
+.bg-backgroundImage {
+  background-image: url('../assets/img/image.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }

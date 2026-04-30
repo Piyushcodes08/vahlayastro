@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { coursesData } from '../../../data/coursesData';
+import { useCourses } from '../../../context/CoursesContext';
 import './CourseSection.css';
 
 const CourseSection = () => {
+  const { slugMap, loading } = useCourses();
   const [activeCard, setActiveCard] = useState(0);
+
+  const coursesData = React.useMemo(() => Object.values(slugMap), [slugMap]);
+
+  if (loading) {
+    return (
+      <div className="py-20 flex items-center justify-center">
+        <div className="text-[#dd2727] text-xl font-bold animate-pulse uppercase tracking-[0.3em]">
+          Aligning Stars...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="course-section-container">
@@ -30,7 +43,7 @@ const CourseSection = () => {
                   onMouseEnter={() => setActiveCard(index)}
                 >
                   <img
-                    src={course.bgImage}
+                    src={course.imageUrl || course.bgImage}
                     alt={course.title}
                     className="project-card__bg"
                   />
@@ -42,11 +55,14 @@ const CourseSection = () => {
                     {activeCard === index && (
                       <div className="project-card__active-layout">
                         <img
-                          src={course.bgImage}
+                          src={course.imageUrl || course.bgImage}
                           alt={course.title}
                           className="project-card__thumb"
                         />
-                        <Link to="/contact" className="project-card__btn-circle">
+                        <Link 
+                          to={course.type === 'free' ? `/enrollfree/${course.id}/${course.type}` : `/enroll/${course.id}/${course.type}`} 
+                          className="project-card__btn-circle text-center flex flex-col items-center justify-center"
+                        >
                           Enroll <br /> Now
                         </Link>
                       </div>

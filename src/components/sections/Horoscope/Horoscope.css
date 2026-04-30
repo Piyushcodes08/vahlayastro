@@ -1,0 +1,328 @@
+.horoscope-section {
+  position: relative;
+  width: 100%;
+  padding: 100px 24px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.horoscope-section * {
+  box-sizing: border-box;
+}
+
+.horoscope-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #dd2727 50%, #b0a10291 50%);
+  filter: blur(80px);
+  opacity: 0.7;
+  transform: scale(1.1);
+  z-index: -1;
+}
+
+.horoscope-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1440px;
+}
+
+
+
+.quote-row {
+  width: 100%;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+}
+
+.quote-column {
+  position: absolute;
+  padding: 0 !important;
+  overflow: hidden;
+  transition: all 0.45s ease;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.horoscope-float {
+  animation: horoscopeFloat 5s ease-in-out infinite alternate;
+}
+
+@keyframes horoscopeFloat {
+  from {
+    transform: translate3d(-8px, -10px, 0);
+  }
+  to {
+    transform: translate3d(8px, 10px, 0);
+  }
+}
+
+.col-active {
+  width: 33.33% !important;
+  min-width: 430px;
+  height: auto !important;
+  transform: translate(-50%, -50%) !important;
+  top: 55% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
+  border-radius: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.37);
+  overflow: hidden;
+  z-index: 5;
+  cursor: default;
+  animation: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.col-inner {
+  position: relative;
+  width: 100%;
+  max-width: 130px;
+  overflow: hidden;
+}
+
+.col-active .col-inner {
+  max-width: 100%;
+}
+
+.author-meta {
+  width: 100%;
+  position: relative;
+  border: none;
+}
+
+.col-active .author-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.43);
+}
+
+.image-cover {
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 100%;
+  z-index: 1;
+}
+
+.col-active .image-cover {
+  position: relative;
+  width: 30%;
+  max-width: 140px;
+  border-radius: 1.3rem 0 1.3rem 0;
+}
+
+.image-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.author-info {
+  width: 70%;
+  padding: 10px 16px;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.col-active .author-info {
+  visibility: visible;
+}
+
+.author-info .author-name,
+.author-info .person-title {
+  transform: translateX(-100%);
+  transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.show .author-info .author-name,
+.show .author-info .person-title {
+  transform: translateX(0);
+}
+
+.show .author-info .person-title {
+  transition-delay: 0.2s;
+}
+
+.person-name {
+  font-size: 21px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 5px;
+}
+
+.person-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.quote-wrapper {
+  position: relative;
+  width: 100%;
+  color: #494949;
+  padding: 24px 18px;
+  text-align: center;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.col-active .quote-wrapper {
+  visibility: visible;
+}
+
+.box-text-inner {
+  max-width: 400px;
+  margin: auto;
+  color: #000;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.quote-wrapper .quote-symbol {
+  font-size: 12vw;
+  line-height: 1em;
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  z-index: 1;
+  transition: 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+  color: #000;
+}
+
+.quote-wrapper .quote-symbol:first-child {
+  left: 0;
+  text-align: right;
+}
+
+.quote-wrapper .quote-symbol:last-child {
+  right: 0;
+  text-align: left;
+}
+
+.show .quote-wrapper .quote-symbol:first-child {
+  left: -50%;
+}
+
+.show .quote-wrapper .quote-symbol:last-child {
+  right: -50%;
+}
+
+.arrow {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 82%;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s ease;
+}
+
+.arrow:hover {
+  transform: scale(1.12);
+  background-color: #ffb36b;
+}
+
+.left-arrow {
+  left: 30px;
+  clip-path: polygon(40% 0%, 40% 20%, 100% 33%, 100% 67%, 40% 80%, 40% 100%, 0% 50%);
+}
+
+.right-arrow {
+  right: 30px;
+  clip-path: polygon(0 33%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0 67%);
+}
+
+@media (max-width: 1080px) {
+  .quote-row {
+    min-height: 560px;
+  }
+
+  .col-active {
+    width: 55% !important;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 840px) {
+  .col-active {
+    width: 75% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .horoscope-section {
+    padding: 80px 18px;
+    min-height: 100vh;
+  }
+
+  .quote-row {
+    min-height: 520px;
+  }
+
+  .quote-column {
+    width: 90% !important;
+    top: 50% !important;
+    left: 50% !important;
+    opacity: 0;
+    transform: translate(-50%, -50%) !important;
+    height: auto !important;
+    z-index: 0;
+  }
+
+  .col-active {
+    opacity: 1;
+    z-index: 5;
+    width: 90% !important;
+  }
+
+  .col-inner {
+    max-width: 100%;
+  }
+
+  .author-meta {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.43);
+  }
+
+  .image-cover {
+    position: relative;
+    width: 30%;
+    max-width: 120px;
+    border-radius: 1.3rem 0 1.3rem 0;
+  }
+
+  .author-info,
+  .quote-wrapper {
+    visibility: visible;
+  }
+
+  .quote-wrapper .quote-symbol {
+    font-size: 28vh;
+  }
+
+  .arrow {
+    top: auto;
+    bottom: 20px;
+  }
+}

@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this to your global CSS (index.css or App.css) */
+html {
+  scroll-behavior: smooth;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Batangas';
+  src: url('/fonts/Batangas Bold 700.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Add some fallback fonts for better performance */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Raindrop animation background */
+.raindrop-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.raindrop-background::before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  /* Start above the section */
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, rgba(230, 173, 173, 0.6) 30%, transparent 60%);
+  animation: raindrop-fall 5s linear infinite;
+}
+
+@keyframes raindrop-fall {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100vh);
+    /* Move downwards */
+  }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.animate-fade-in.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-fade-in.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-fade-in.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animate-fade-in.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.animate-fade-in.delay-900 {
+  animation-delay: 0.9s;
+}
+
+@layer utilities {
+  @keyframes oscillate {
+    0% {
+      transform: rotate(-80deg);
+    }
+
+    50% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(-80deg);
+    }
+  }
+
+  .animate-oscillate {
+    animation: oscillate 10s ease-in-out infinite;
+  }
+}
+
+@keyframes scroll-up {
+  0% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+
+.animate-scroll-slow {
+  animation: scroll-up 50s linear infinite;
+}
+
+.animate-scroll-medium {
+  animation: scroll-up 40s linear infinite;
+}
+
+.animate-scroll-fast {
+  animation: scroll-up 30s linear infinite;
+}
+
+
+@keyframes tailwind-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    /* fast down */
+  }
+
+  50% {
+    transform: translateY(-25%);
+    /* bounce height */
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    /* slow up */
+  }
+}
+
+.bounce-hover:hover {
+  animation: tailwind-bounce 1s infinite;
+}
+
+
+
+
+
+
+
+
+/* Make sure the Google Translate dropdown appears */
+.goog-te-gadget-simple {
+  @apply bg-white text-black px-4 py-2 rounded-md shadow-md border border-gray-300 cursor-pointer hover:bg-gray-100;
+}
+
+/* Hide Google Branding but keep the trigger visible */
+.goog-logo-link,
+.goog-te-gadget .goog-te-gadget-simple > img,
+.goog-te-banner-frame {
+  @apply hidden;
+}
+
+/* Fix dropdown visibility */
+.goog-te-gadget select {
+  @apply bg-transparent border-none text-black cursor-pointer;
+}
+
+/* Hide unwanted Google icons */
+.goog-te-gadget img {
+  @apply hidden;
+}

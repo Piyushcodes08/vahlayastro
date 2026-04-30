@@ -1,28 +1,38 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import SliderHeader from '../../ui/Slider/SliderHeader';
-import { articlesData } from '../../../data/articleData';
+import { useArticles } from '../../../context/ArticlesContext';
 import './ArticleSection.css';
 
 const ArticleSection = () => {
+  const { slugMap, loading } = useArticles();
+  const articlesData = React.useMemo(() => Object.values(slugMap).reverse(), [slugMap]);
+  
   // We clone items for seamless loop: items at end added to start, items at start added to end
-  const [currentIndex, setCurrentIndex] = useState(4); // Start at index of first real item
+  const [currentIndex, setCurrentIndex] = useState(4); 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [visibleItems, setVisibleItems] = useState(4);
   const sliderRef = useRef(null);
-  const autoPlayRef = useRef(null);
   const touchStartRef = useRef(0);
   const isMovingRef = useRef(false);
 
   // Extend data for seamless cloning
-  // Prepend last 4 items, Append first 4 items
-  const clonedData = [
-    ...articlesData.slice(-4),
-    ...articlesData,
-    ...articlesData.slice(0, 4)
-  ];
+  const clonedData = React.useMemo(() => {
+    if (articlesData.length === 0) return [];
+    return [
+      ...articlesData.slice(-4),
+      ...articlesData,
+      ...articlesData.slice(0, 4)
+    ];
+  }, [articlesData]);
 
   const totalRealItems = articlesData.length;
+
+  useEffect(() => {
+    if (totalRealItems > 0 && currentIndex === 0) {
+        setCurrentIndex(4);
+    }
+  }, [totalRealItems, currentIndex]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,25 +80,9 @@ const ArticleSection = () => {
     }
   }, [currentIndex, totalRealItems, moveToIndex]);
 
-  // Auto-play
-  const startAutoPlay = useCallback(() => {
-    stopAutoPlay();
-    autoPlayRef.current = setInterval(nextSlide, 4000);
-  }, [nextSlide]);
-
-  const stopAutoPlay = useCallback(() => {
-    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-  }, []);
-
-  useEffect(() => {
-    startAutoPlay();
-    return () => stopAutoPlay();
-  }, [startAutoPlay, stopAutoPlay]);
-
   // Touch Handling
   const handleTouchStart = (e) => {
     touchStartRef.current = e.touches[0].clientX;
-    stopAutoPlay();
   };
 
   const handleTouchEnd = (e) => {
@@ -98,7 +92,6 @@ const ArticleSection = () => {
       if (diff > 0) nextSlide();
       else prevSlide();
     }
-    startAutoPlay();
   };
 
   const getTranslateX = () => {
@@ -106,12 +99,21 @@ const ArticleSection = () => {
     return `translateX(-${percentage}%)`;
   };
 
+  // Early returns must happen AFTER all hooks are called!
+  if (loading) {
+    return (
+      <div className="py-20 flex items-center justify-center">
+        <div className="text-[#dd2727] text-xl font-bold animate-pulse uppercase tracking-[0.3em]">
+          Reading Scrolls...
+        </div>
+      </div>
+    );
+  }
+  
+  if (totalRealItems === 0) return null;
+
   return (
-    <section
-      className="article-section"
-      onMouseEnter={stopAutoPlay}
-      onMouseLeave={startAutoPlay}
-    >
+    <section className="article-section">
       <div className="section-container">
         <SliderHeader
           title="Featured Articles"
@@ -150,7 +152,7 @@ const ArticleSection = () => {
                     </div>
                     {/* Cover — rotates open on hover */}
                     <img
-                      src={article.img}
+                      src={article.imageUrl || article.img}
                       alt={article.title}
                       className="article-cover"
                       loading="lazy"

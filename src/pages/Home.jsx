@@ -8,6 +8,7 @@ import Testimonials from '../components/sections/Testimonials/Testimonials';
 import Partners from '../components/sections/Partners/Partners';
 import Contact from '../components/sections/Contact/Contact';
 import Footer from '../components/sections/Footer/Footer';
+import Horoscope from '../components/sections/Horoscope/Horoscope';
 
 const Home = () => {
     return (
@@ -22,6 +23,7 @@ const Home = () => {
                 <ArticleSection />
                 <About />
                 <Numerology />
+                <Horoscope/>
                 <Testimonials />
                 <Partners />
                 <Contact />

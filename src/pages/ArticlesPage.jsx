@@ -2,11 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/sections/Header/Header';
 import Footer from '../components/sections/Footer/Footer';
-import { articlesData } from '../data/articleData';
+import { useArticles } from '../context/ArticlesContext';
 import '../components/sections/Article/ArticleSection.css';
 
 const ArticlesPage = () => {
+    const { slugMap, loading } = useArticles();
     const [searchQuery, setSearchQuery] = useState('');
+
+    const articlesData = useMemo(() => Object.values(slugMap).reverse(), [slugMap]);
 
     // Filter articles based on search query
     const filteredArticles = useMemo(() => {
@@ -14,10 +17,20 @@ const ArticlesPage = () => {
         
         const query = searchQuery.toLowerCase();
         return articlesData.filter(article => 
-            article.title.toLowerCase().includes(query) || 
-            article.description.toLowerCase().includes(query)
+            article.title?.toLowerCase().includes(query) || 
+            article.description?.toLowerCase().includes(query)
         );
-    }, [searchQuery]);
+    }, [searchQuery, articlesData]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-black">
+                <div className="text-[#dd2727] text-2xl font-bold animate-pulse uppercase tracking-widest">
+                    Consulting Stars...
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -70,7 +83,7 @@ const ArticlesPage = () => {
                                                     <Link to={`/articles/${article.id || index}`} className="article-read-more">Read More</Link>
                                                 </div>
                                                 <img
-                                                    src={article.img}
+                                                    src={article.imageUrl || article.img}
                                                     alt={article.title}
                                                     className="article-cover"
                                                     loading="lazy"
@@ -180,3 +193,4 @@ const ArticlesPage = () => {
 };
 
 export default ArticlesPage;
+

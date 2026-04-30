@@ -92,16 +92,16 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="footer-social-icons">
-             <a href="#" className="social-icon">
+             <a href="#" className="social-icon" aria-label="Follow us on Facebook">
                <FaFacebookF size={18} />
              </a>
-             <a href="#" className="social-icon">
+             <a href="#" className="social-icon" aria-label="Follow us on X (Twitter)">
                <FaXTwitter size={18} />
              </a>
-             <a href="#" className="social-icon">
+             <a href="#" className="social-icon" aria-label="Follow us on Instagram">
                <FaInstagram size={18} />
              </a>
-             <a href="#" className="social-icon">
+             <a href="#" className="social-icon" aria-label="Subscribe to our YouTube channel">
                <FaYoutube size={18} />
              </a>
           </div>
@@ -117,6 +117,7 @@ const Footer = () => {
         className="whatsapp-float" 
         target="_blank" 
         rel="noopener noreferrer"
+        aria-label="Contact us on WhatsApp"
       >
         <FaWhatsapp size={30} />
       </a>

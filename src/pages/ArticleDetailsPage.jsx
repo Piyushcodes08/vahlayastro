@@ -1,12 +1,28 @@
-
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/sections/Header/Header';
 import Footer from '../components/sections/Footer/Footer';
-import { articlesData } from '../data/articleData';
+import { useArticles } from '../context/ArticlesContext';
 
 const ArticleDetailsPage = () => {
     const { id } = useParams();
-    const article = articlesData.find(a => a.id === parseInt(id));
+    const { slugMap, loading } = useArticles();
+    
+    // Find article by ID or Slug
+    const article = React.useMemo(() => {
+        const values = Object.values(slugMap);
+        return values.find(a => a.id === id || a.slug === id);
+    }, [id, slugMap]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-black">
+                <div className="text-[#dd2727] text-2xl font-bold animate-pulse">
+                    Decoding Celestial Message...
+                </div>
+            </div>
+        );
+    }
 
     if (!article) {
         return (
@@ -40,7 +56,7 @@ const ArticleDetailsPage = () => {
                 <section className="max-w-[1170px] mx-auto px-4 pb-20">
                     <article className="max-w-4xl mx-auto">
                         <div className="w-full h-64 md:h-[500px] rounded-[2rem] overflow-hidden mb-12 border border-white/10 bg-white/5 flex items-center justify-center shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-                            <img src={article.img} alt={article.title} className="w-full h-full object-cover" />
+                            <img src={article.imageUrl || article.img} alt={article.title} className="w-full h-full object-cover" />
                         </div>
 
                         <h1 className="title-batangas text-5xl md:text-7xl mb-8 leading-tight">
@@ -50,9 +66,9 @@ const ArticleDetailsPage = () => {
                         <div className="flex items-center gap-4 mb-12 pb-8 border-b border-white/10">
                             <span className="text-[#dd2727] font-bold text-lg">Vahlay Astro</span>
                             <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
-                            <span className="subtitle-poppins text-white/60">April 28, 2026</span>
+                            <span className="subtitle-poppins text-white/60">{article.data || "Sacred Date"}</span>
                             <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
-                            <span className="subtitle-poppins text-white/60">5 min read</span>
+                            <span className="subtitle-poppins text-white/60">{article.author || "By Celestial Guide"}</span>
                         </div>
 
                         <div className="subtitle-poppins text-white/80 space-y-10 text-lg md:text-xl leading-relaxed">
@@ -61,7 +77,7 @@ const ArticleDetailsPage = () => {
                             </p>
                             
                             <div className="whitespace-pre-wrap">
-                                {article.content}
+                                {article.content || article.denglish || article.dhindi || "No content available for this article."}
                             </div>
 
                             <div className="p-10 my-16 border-l-4 border-[#dd2727] bg-white/5 backdrop-blur-lg rounded-r-[2rem] italic text-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] text-white">
@@ -81,3 +97,4 @@ const ArticleDetailsPage = () => {
 };
 
 export default ArticleDetailsPage;
+

@@ -5,6 +5,17 @@
   padding:100px 0px;
 }
 
+.about-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #dd2727 50%, #b0a10291 50%);
+  filter: blur(80px);
+  opacity: 0.7;
+  transform: scale(1.1);
+  z-index: -1;
+}
+
 .about-container {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
@@ -83,7 +94,7 @@
 .about-title {
   font-size: clamp(2.8rem, 6vw, 3.5rem);
   line-height: 1.05;
-  color: #fff;
+  color: #dd2727;
   margin: 0;
   font-weight: 900;
   font-family: 'Batangas', sans-serif;
@@ -104,10 +115,6 @@
   line-height: 1.8;
   margin: 0;
   max-width: 550px;
-}
-
-.about-btn-wrapper {
-  margin-top: 1rem;
 }
 
 /* Tablet */
@@ -160,6 +167,7 @@
 
   .about-title {
     font-size: 2.5rem;
+    padding-bottom: 15px !important;
   }
 
   .about-description {

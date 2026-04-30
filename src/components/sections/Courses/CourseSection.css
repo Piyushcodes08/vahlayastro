@@ -10,6 +10,17 @@
   position: relative;
 }
 
+.course-section-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #dd2727 50%, #b0a10291 50%);
+  filter: blur(80px);
+  opacity: 0.7;
+  transform: scale(1.1);
+  z-index: -1;
+}
+    
 .slider-wrapper {
   width: 100%;
   padding: 0;
@@ -54,7 +65,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.8);
+  filter: brightness(0.95);
   transition: filter 0.3s, transform var(--speed);
 }
 
@@ -62,12 +73,12 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 100%);
   z-index: 1;
 }
 
 .project-card[active]::after {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 100%);
 }
 
 .project-card:hover .project-card__bg {
@@ -93,7 +104,7 @@
   line-height: 1;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 25px rgba(221, 39, 39, 0.8), 2px 2px 10px rgba(0, 0, 0, 0.8);
   transition: all var(--speed);
 }
 
