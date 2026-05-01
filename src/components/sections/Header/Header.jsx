@@ -65,6 +65,21 @@ const Header = () => {
                 {/* CTA Button & Mobile Toggle */}
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-4">
+                        {user ? (
+                            <button
+                                onClick={handleLogout}
+                                className="ml-2 px-6 py-2 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="ml-2 px-6 py-2 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                            >
+                                Login
+                            </Link>
+                        )}
                         <Link
                             to="/contact"
                              className="ml-2 px-6 py-2 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
@@ -103,6 +118,22 @@ const Header = () => {
                     ))}
                     
                     <div className="flex flex-col items-center gap-6 mt-4">
+                        {user ? (
+                            <button
+                                onClick={() => { setIsOpen(false); handleLogout(); }}
+                                className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <Link
+                                to="/login"
+                                onClick={() => setIsOpen(false)}
+                                className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                            >
+                                Login
+                            </Link>
+                        )}
                         <Link 
                             to="/contact" 
                             onClick={() => setIsOpen(false)}
