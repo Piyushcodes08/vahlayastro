@@ -3,6 +3,7 @@ import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import SliderHeader from "../../ui/Slider/SliderHeader";
+import SliderControls from "../../ui/Slider/SliderControls";
 import "./Testimonials.css";
 
 // Fallback data — shown while loading or if no reviews are in Firebase
@@ -284,6 +285,13 @@ const Testimonials = () => {
             ))}
           </div>
         </div>
+
+        <SliderControls
+          onNext={nextSlide}
+          onPrev={prevSlide}
+          isPrevDisabled={false}
+          isNextDisabled={false}
+        />
       </div>
     </section>
   );

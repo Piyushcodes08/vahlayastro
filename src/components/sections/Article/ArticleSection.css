@@ -63,11 +63,11 @@
   /* Bring to front on hover */
 }
 
-/* Cover Image - KEPT EXACTLY THE SAME */
-.article-cover {
+/* Cover Container - Now rotates instead of just the image */
+.article-cover-container {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background: #fdf2d0;
   transform-origin: left center;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   border-top-right-radius: 5px;
@@ -75,10 +75,79 @@
   position: relative;
   z-index: 5;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #ccc; /* Proper grey border for the book cover */
+  border-left: 4px solid #aaa; /* Thicker left border for the spine */
 }
 
-.article-wrapper:hover .article-cover {
+/* Spine crease effect */
+.article-cover-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 15px;
+  background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.3) 30%, transparent 100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.article-wrapper:hover .article-cover-container {
   transform: rotateY(-110deg);
+}
+
+/* Cover Image - 16:9 Aspect Ratio */
+.article-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: none; /* Transition handled by parent */
+  border-bottom: 1px solid #ccc; /* Separator between image and text */
+}
+
+/* Cover Content - Takes remaining space */
+.article-cover-content {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.article-cover-title {
+  font-family: 'Batangas', sans-serif;
+  font-size: 1.1rem;
+  color: #dd2727;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-cover-author {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 600;
+  margin: 0;
+}
+
+.article-cover-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
 }
 
 /* Inner page content style */
@@ -117,6 +186,8 @@
   color: var(--color-brand-red);
   margin-bottom: 0.5rem;
   line-height: 1.2;
+  text-align: center;
+  width: 100%;
 }
 
 .article-inner-desc {
@@ -124,14 +195,49 @@
   font-size: 0.8rem;
   color: #333;
   line-height: 1.4;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
+  margin-bottom: 0.5rem;
+  text-align: center;
   /* Add line clamping to prevent overflow */
   display: -webkit-box;
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  width: 100%;
+}
+
+.article-inner-hindi-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+}
+
+.article-inner-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.article-inner-author {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  color: #dd2727;
+  font-weight: 600;
+}
+
+.article-inner-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  color: #888;
 }
 
 .article-read-more {

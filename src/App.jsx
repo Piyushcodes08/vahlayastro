@@ -6,19 +6,22 @@ import ScrollToTop from './components/ScrollToTop';
 import GlobalBackground from './components/GlobalBackground';
 import { CoursesProvider } from './context/CoursesContext';
 import { ArticlesProvider } from './context/ArticlesContext';
+import { HelmetProvider } from 'react-helmet-async';
 import './App.css';
 
 const App = () => {
   return (
     <Router>
-        <CoursesProvider>
-            <ArticlesProvider>
-                <ScrollToTop />
-                <GlobalBackground />
-                <AppRoutes />
-                <ChatBot />
-            </ArticlesProvider>
-        </CoursesProvider>
+        <HelmetProvider>
+            <CoursesProvider>
+                <ArticlesProvider>
+                    <ScrollToTop />
+                    <GlobalBackground />
+                    <AppRoutes />
+                    <ChatBot />
+                </ArticlesProvider>
+            </CoursesProvider>
+        </HelmetProvider>
     </Router>
   );
 };

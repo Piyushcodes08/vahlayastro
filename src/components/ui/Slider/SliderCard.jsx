@@ -24,7 +24,7 @@ const SliderCard = ({ course, isActive, onClick, onMouseEnter, cardRef }) => {
             className="project-card__btn !mt-2"
             onClick={(e) => {
               e.stopPropagation();
-              navigate('/appointment');
+              navigate('/login');
             }}
           >
             Enroll Now

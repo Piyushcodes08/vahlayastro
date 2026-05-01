@@ -76,7 +76,7 @@ const Login = () => {
         navigate("/admin");
       } else {
         alert("Login successful!");
-        navigate("/courses");
+        navigate("/dashboard");
       }
     } catch (err) {
       setError("Failed to log in. Please check your credentials.");
@@ -93,8 +93,24 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      alert(`Welcome, ${user.displayName}!`);
-      navigate("/");
+
+      const usersCollection = collection(db, "users");
+      const usersSnapshot = await getDocs(usersCollection);
+
+      let isAdminUser = false;
+      usersSnapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (userData.email === user.email && userData.isAdmin) {
+          isAdminUser = true;
+        }
+      });
+
+      alert(`Welcome, ${user.displayName || 'User'}!`);
+      if (isAdminUser) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       setError("Failed to log in with Google. Please try again.");
     } finally {

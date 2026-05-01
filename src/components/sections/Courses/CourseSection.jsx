@@ -23,7 +23,7 @@ const CourseSection = () => {
     <section className="course-section-container">
       <div className="section-container">
         {/* Section Header */}
-        <div className="flex flex-col gap-2 mb-12 text-center md:text-left">
+        <div className="flex flex-col gap-2 mb-12 text-center">
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight">
             Our Sacred Courses
           </h2>
@@ -60,7 +60,7 @@ const CourseSection = () => {
                           className="project-card__thumb"
                         />
                         <Link 
-                          to={course.type === 'free' ? `/enrollfree/${course.id}/${course.type}` : `/enroll/${course.id}/${course.type}`} 
+                          to="/login"
                           className="project-card__btn-circle text-center flex flex-col items-center justify-center"
                         >
                           Enroll <br /> Now

@@ -82,16 +82,21 @@
     margin-bottom: 14px;
 }
 
-.footer-links a {
+.footer-links a, .footer-link-btn {
     color: rgba(255, 255, 255, 0.65);
     text-decoration: none;
     font-size: 0.95rem;
     transition: all 0.3s ease;
     display: inline-block;
     position: relative;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-.footer-links a:hover {
+.footer-links a:hover, .footer-link-btn:hover {
     color: #fff;
     transform: translateX(5px);
 }

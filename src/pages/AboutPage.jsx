@@ -11,8 +11,8 @@ const AboutPage = () => {
             <Header />
 
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-            
-                
+
+
 
                 {/* Refined Minimalist Premium Banner */}
                 <section className="relative w-full py-10 md:py-16 flex items-center justify-center overflow-hidden border-b border-white/5 bg-transparent">
@@ -23,7 +23,7 @@ const AboutPage = () => {
                                 Our Journey & Mission
                             </span>
                         </div>
-                        
+
                         {/* Bold White Title */}
                         <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-6 leading-[1.1]">
                             Welcome to <br /> Vahlay Astro
@@ -31,7 +31,7 @@ const AboutPage = () => {
 
                         {/* Red Subtitle */}
                         <p className="subtitle-poppins text-lg text-[#dd2727] max-w-2xl mx-auto leading-relaxed font-bold drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-                            Discover the celestial wisdom that guides your path to success, 
+                            Discover the celestial wisdom that guides your path to success,
                             harmony, and spiritual enlightenment.
                         </p>
 
@@ -49,9 +49,9 @@ const AboutPage = () => {
                     <div className="grid md:grid-cols-2 gap-12 items-center">
 
                         <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)] flex items-center justify-center">
-                            <img 
-                                src={aboutuspg} 
-                                alt="Who We Are" 
+                            <img
+                                src={aboutuspg}
+                                alt="Who We Are"
                                 className="h-[300px] md:h-full object-cover"
                             />
                         </div>
@@ -158,7 +158,7 @@ const AboutPage = () => {
                                 {
                                     title: "Consultation",
                                     desc: "Personalized guidance for major life decisions.",
-                                    link: "/services"
+                                    link: "/consulting"
                                 },
                                 {
                                     title: "Books",
@@ -180,7 +180,7 @@ const AboutPage = () => {
                                         </p>
                                     </div>
                                     <span className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#dd2727] group-hover:text-white transition-colors duration-300">
-                                        Read More 
+                                        Read More
                                         <LuArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                                     </span>
                                 </Link>

@@ -9,7 +9,28 @@ const ArticlesPage = () => {
     const { slugMap, loading } = useArticles();
     const [searchQuery, setSearchQuery] = useState('');
 
-    const articlesData = useMemo(() => Object.values(slugMap).reverse(), [slugMap]);
+    const articlesData = useMemo(() => {
+        return Object.values(slugMap).sort((a, b) => {
+            let dateA = 0;
+            let dateB = 0;
+            if (a.createdAt && a.createdAt.seconds) {
+                dateA = a.createdAt.seconds * 1000;
+            } else if (a.rawDate) {
+                dateA = new Date(a.rawDate).getTime();
+            } else if (a.data) {
+                dateA = new Date(a.data).getTime();
+            }
+
+            if (b.createdAt && b.createdAt.seconds) {
+                dateB = b.createdAt.seconds * 1000;
+            } else if (b.rawDate) {
+                dateB = new Date(b.rawDate).getTime();
+            } else if (b.data) {
+                dateB = new Date(b.data).getTime();
+            }
+            return dateB - dateA;
+        });
+    }, [slugMap]);
 
     // Filter articles based on search query
     const filteredArticles = useMemo(() => {
@@ -77,19 +98,31 @@ const ArticlesPage = () => {
                                     {filteredArticles.map((article, index) => (
                                         <div className="article-item" key={article.id || index}>
                                             <div className="article-wrapper">
+                                                {/* Inner page content — revealed when cover opens */}
                                                 <div className="article-inner">
                                                     <h4 className="article-inner-title">{article.title}</h4>
-                                                    <p className="article-inner-desc">{article.description}</p>
+                                                    {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
+                                                    <div className="article-inner-meta">
+                                                        {article.author && <span className="article-inner-author">By {article.author}</span>}
+                                                        {article.data && <span className="article-inner-date">{article.data}</span>}
+                                                    </div>
                                                     <Link to={`/articles/${article.id || index}`} className="article-read-more">Read More</Link>
                                                 </div>
-                                                <img
-                                                    src={article.imageUrl || article.img}
-                                                    alt={article.title}
-                                                    className="article-cover"
-                                                    loading="lazy"
-                                                />
+                                                {/* Cover — rotates open on hover */}
+                                                <div className="article-cover-container">
+                                                    <img
+                                                        src={article.imageUrl || article.img}
+                                                        alt={article.title}
+                                                        className="article-cover"
+                                                        loading="lazy"
+                                                    />
+                                                    <div className="article-cover-content">
+                                                        <h4 className="article-cover-title">{article.title}</h4>
+                                                        {article.author && <p className="article-cover-author">By {article.author}</p>}
+                                                        {article.data && <p className="article-cover-date">{article.data}</p>}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h3 className="article-title">{article.title}</h3>
                                         </div>
                                     ))}
                                 </div>

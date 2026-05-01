@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../ui/Button/Button";
+import { Link } from "react-router-dom";
 import { aboutData } from "../../../data/aboutData";
 import "./About.css";
 
@@ -39,7 +40,9 @@ const About = () => {
               </div>
 
               <div className="about-btn-wrapper">
-                <Button variant="secondary">{buttonText}</Button>
+                <Link to="/about">
+                  <Button variant="secondary">{buttonText}</Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,13 +1,11 @@
-import React, { useRef, useState } from 'react';
-
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/Button/Button';
-import AppointmentModal from '../../modals/AppointmentModal/AppointmentModal';
 import { heroData } from '../../../data/heroData';
 import './Hero.css';
 
 const Hero = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const navigate = useNavigate();
 
     const { title, intro, description, buttonText } = heroData;
 
@@ -25,16 +23,11 @@ const Hero = () => {
                 </p>
                 <Button 
                     variant="primary"
-                    onClick={toggleModal}
+                    onClick={() => navigate('/appointment')}
                 >
                     {buttonText}
                 </Button>
             </div>
-
-            <AppointmentModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-            />
         </section>
     );
 };

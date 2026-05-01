@@ -225,32 +225,7 @@
   right: -50%;
 }
 
-.arrow {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  top: 82%;
-  border: none;
-  background-color: #ffffff;
-  cursor: pointer;
-  z-index: 10;
-  transition: 0.3s ease;
-}
-
-.arrow:hover {
-  transform: scale(1.12);
-  background-color: #ffb36b;
-}
-
-.left-arrow {
-  left: 30px;
-  clip-path: polygon(40% 0%, 40% 20%, 100% 33%, 100% 67%, 40% 80%, 40% 100%, 0% 50%);
-}
-
-.right-arrow {
-  right: 30px;
-  clip-path: polygon(0 33%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0 67%);
-}
+/* Arrows removed from CSS, handled by JSX/Tailwind */
 
 @media (max-width: 1080px) {
   .quote-row {

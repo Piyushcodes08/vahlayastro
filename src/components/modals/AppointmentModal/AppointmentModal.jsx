@@ -5,7 +5,7 @@ import Button from '../../ui/Button/Button';
 import './AppointmentModal.css';
 
 const AppointmentModal = ({ isOpen, onClose }) => {
-    const [view, setView] = useState('CHOICE'); // CHOICE, SIGNUP, LOGIN, BOOKING
+    const [view, setView] = useState('BOOKING'); // BOOKING
     const [isLoading, setIsLoading] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [availableData, setAvailableData] = useState([]);
@@ -31,7 +31,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     // Reset view when modal opens
     useEffect(() => {
         if (isOpen) {
-            setView('CHOICE');
+            setView('BOOKING');
             setIsMounted(true);
             document.body.style.overflow = 'hidden';
             fetchAvailableData();

@@ -173,7 +173,7 @@ const Numerology = () => {
   return (
     <section className="numerology-section" id="numerology">
       <div className="section-container">
-        <div className='flex flex-col text-center md:text-left gap-1 pb-8 max-w-3xl'>
+        <div className='flex flex-col text-center gap-1 pb-8 mx-auto max-w-3xl'>
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight leading-tight">
             Decode Your Cosmic Numbers
           </h2>

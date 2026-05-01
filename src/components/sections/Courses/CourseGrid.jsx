@@ -58,7 +58,7 @@ const CourseGrid = () => {
 
                 <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
                   <Link 
-                    to={course.type === 'free' ? `/enrollfree/${course.id}/${course.type}` : `/enroll/${course.id}/${course.type}`} 
+                    to="/login"
                     className="inline-flex items-center gap-2 text-[#dd2727] font-bold uppercase tracking-[0.2em] text-[10px] group/link py-1 hover:text-white transition-colors duration-300"
                   >
                     Enroll Now

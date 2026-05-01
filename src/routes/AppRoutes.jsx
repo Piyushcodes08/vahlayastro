@@ -20,35 +20,55 @@ import ForgetPassword from '../components/auth/ForgetPassword';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Unauthorized from '../pages/Unauthorized';
 
-// Old Project Admin Pages
-import AdminArticle from '../old folder/AstroFrontend-main/src/components/pages/AdminArticle';
-import AdminCourseOrder from '../old folder/AstroFrontend-main/src/components/pages/AdminCourseOrder';
-import AdminContact from '../old folder/AstroFrontend-main/src/components/pages/AdminContact';
-import AdminQuestion from '../old folder/AstroFrontend-main/src/components/pages/AdminQuestion';
-import AdminCalendar from '../old folder/AstroFrontend-main/src/components/pages/AdminCalendar';
-import AdminSubscribeCourseList from '../old folder/AstroFrontend-main/src/components/pages/AdminSubscribeCourseList';
-import AdminInquiries from '../old folder/AstroFrontend-main/src/components/pages/AdminInquiry';
-import AdminPaymentList from '../old folder/AstroFrontend-main/src/components/pages/AdminPaymentList';
-import AdminVedioOrder from '../old folder/AstroFrontend-main/src/components/pages/AdminVedioOrder';
-import AdminTitleArrange from '../old folder/AstroFrontend-main/src/components/pages/AdminTitleArrange';
-import AddCourse from '../old folder/AstroFrontend-main/src/components/pages/AddCourse';
-import AddModule from '../old folder/AstroFrontend-main/src/components/pages/AddModule';
-import Upload from '../old folder/AstroFrontend-main/src/components/pages/Upload';
-import AddMeeting from '../old folder/AstroFrontend-main/src/components/pages/AddMeeting';
-import AdminLiveSession from '../old folder/AstroFrontend-main/src/components/pages/LiveSession/Adminlivesession';
+// ── Legacy Pages (Admin) ── from src/legacy/ (old folder se copy kiya, safe to delete old folder)
+import AdminArticle from '../legacy/pages/AdminArticle';
+import AdminCourseOrder from '../legacy/pages/AdminCourseOrder';
+import AdminContact from '../legacy/pages/AdminContact';
+import AdminQuestion from '../legacy/pages/AdminQuestion';
+import AdminCalendar from '../legacy/pages/AdminCalendar';
+import AdminSubscribeCourseList from '../legacy/pages/AdminSubscribeCourseList';
+import AdminInquiries from '../legacy/pages/AdminInquiry';
+import AdminPaymentList from '../legacy/pages/AdminPaymentList';
+import AdminVedioOrder from '../legacy/pages/AdminVedioOrder';
+import AdminTitleArrange from '../legacy/pages/AdminTitleArrange';
+import AddCourse from '../legacy/pages/AddCourse';
+import AddModule from '../legacy/pages/AddModule';
+import Upload from '../legacy/pages/Upload';
+import AddMeeting from '../legacy/pages/AddMeeting';
+import AdminLiveSession from '../legacy/pages/LiveSession/Adminlivesession';
+import AddEmi from '../legacy/Emi/AddEmi';
+import EmiUserList from '../legacy/Emi/EmiUserList';
+import EmiDetails from '../legacy/Emi/EmiDetails';
 
-// Old Project User Pages
-import Dashboard from '../old folder/AstroFrontend-main/src/components/pages/Dashboard';
-import Profile from '../old folder/AstroFrontend-main/src/components/pages/Profile';
-import EnrolledCourses from '../old folder/AstroFrontend-main/src/components/pages/EnrolledCourses';
-import Startlearning from '../old folder/AstroFrontend-main/src/components/pages/Startleraning';
-import VedioDetail from '../old folder/AstroFrontend-main/src/components/pages/VedioDetail';
-import Enroll from '../old folder/AstroFrontend-main/src/components/pages/Enroll';
-import EnrollFree from '../old folder/AstroFrontend-main/src/components/pages/EnrollFree';
-import SuccessPage from '../old folder/AstroFrontend-main/src/components/pages/SuccessPage';
-import Meetings from '../old folder/AstroFrontend-main/src/components/pages/Meetings';
-import StudentLiveSession from '../old folder/AstroFrontend-main/src/components/pages/LiveSession/StudentLiveSession';
-import PayEmi from '../old folder/AstroFrontend-main/src/components/Emi/PayEmi';
+// ── Legacy Pages (User) ──
+import Dashboard from '../legacy/pages/Dashboard';
+import Profile from '../legacy/pages/Profile';
+import EnrolledCourses from '../legacy/pages/EnrolledCourses';
+import Startlearning from '../legacy/pages/Startleraning';
+import VedioDetail from '../legacy/pages/VedioDetail';
+import Enroll from '../legacy/pages/Enroll';
+import EnrollFree from '../legacy/pages/EnrollFree';
+import SuccessPage from '../legacy/pages/SuccessPage';
+import Meetings from '../legacy/pages/Meetings';
+import StudentLiveSession from '../legacy/pages/LiveSession/StudentLiveSession';
+import JitsiIframe from '../legacy/pages/LiveSession/JitsiIframe';
+import PayEmi from '../legacy/Emi/PayEmi';
+import Finalize from '../legacy/Emi/Finalize';
+import Notifications from '../legacy/Emi/Notification';
+import Payment from '../legacy/Emi/Payment';
+import PaymentGuide from '../legacy/pages/PaymentGuide';
+import CourseDetail from '../legacy/pages/CourseDetail';
+import ConsultingPage from '../pages/ConsultingPage';
+
+// ── Additional Legacy Sub-pages ──
+import BhagavadGita from '../legacy/pages/courses/BhagavadGita';
+import Narad from '../legacy/pages/courses/Narad';
+import Paidcourse1 from '../legacy/pages/courses/paidcourse1';
+import Calendar from '../legacy/pages/Calender';
+import Calendar2 from '../legacy/pages/Calender2';
+import Copartners from '../legacy/pages/Copartners';
+import NewUser from '../legacy/pages/NewUser';
+import OldUser from '../legacy/pages/OldUser';
 
 const AppRoutes = () => {
     return (
@@ -57,15 +77,31 @@ const AppRoutes = () => {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:courseType/:slug" element={<CourseDetail />} />
+            <Route path="/consulting" element={<ConsultingPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:id" element={<ArticleDetailsPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/appointment" element={<AppointmentPage />} />
+            <Route path="/appointment" element={<ProtectedRoute><AppointmentPage /></ProtectedRoute>} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms" element={<TermsConditionsPage />} />
-            
+            <Route path="/paymentguide" element={<PaymentGuide />} />
+            <Route path="/finalize" element={<Finalize />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/pay/:courseId/:emiNumber/:planId/:encodedEmail" element={<Payment />} />
+
+            {/* Additional Legacy Routes */}
+            <Route path="/bhagavad-gita" element={<BhagavadGita />} />
+            <Route path="/narad" element={<Narad />} />
+            <Route path="/paidcourse1" element={<Paidcourse1 />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/calendar2" element={<Calendar2 />} />
+            <Route path="/copartners" element={<Copartners />} />
+            <Route path="/newuser" element={<NewUser />} />
+            <Route path="/olduser" element={<OldUser />} />
+
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
@@ -82,6 +118,7 @@ const AppRoutes = () => {
             <Route path="/enrollfree/:courseId/:courseType" element={<ProtectedRoute><EnrollFree /></ProtectedRoute>} />
             <Route path="/submission-success" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
             <Route path="/studentlivesession" element={<ProtectedRoute><StudentLiveSession /></ProtectedRoute>} />
+            <Route path="/JitsiIframe" element={<ProtectedRoute><JitsiIframe /></ProtectedRoute>} />
             <Route path="/payemi" element={<ProtectedRoute><PayEmi /></ProtectedRoute>} />
             <Route path="/:courseName/meetings" element={<ProtectedRoute><Meetings /></ProtectedRoute>} />
 
@@ -101,6 +138,9 @@ const AppRoutes = () => {
             <Route path="/admin/upload" element={<ProtectedRoute adminOnly={true}><Upload /></ProtectedRoute>} />
             <Route path="/admin/addmeeting" element={<ProtectedRoute adminOnly={true}><AddMeeting /></ProtectedRoute>} />
             <Route path="/admin/adminlivesession" element={<ProtectedRoute adminOnly={true}><AdminLiveSession /></ProtectedRoute>} />
+            <Route path="/admin/addemi" element={<ProtectedRoute adminOnly={true}><AddEmi /></ProtectedRoute>} />
+            <Route path="/admin/emailuserlist" element={<ProtectedRoute adminOnly={true}><EmiUserList /></ProtectedRoute>} />
+            <Route path="/admin/emailuserlist/:email" element={<ProtectedRoute adminOnly={true}><EmiDetails /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
