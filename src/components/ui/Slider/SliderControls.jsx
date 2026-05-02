@@ -10,8 +10,8 @@ const SliderControls = ({ onNext, onPrev, isPrevDisabled, isNextDisabled }) => {
         disabled={isPrevDisabled} 
         aria-label="Previous"
         style={{
-          width: '56px',
-          height: '56px',
+          width: '40px',
+          height: '40px',
           borderRadius: '50%',
           border: '1px solid rgba(255,255,255,0.2)',
           background: 'rgba(255,255,255,0.05)',
@@ -28,8 +28,8 @@ const SliderControls = ({ onNext, onPrev, isPrevDisabled, isNextDisabled }) => {
         disabled={isNextDisabled} 
         aria-label="Next"
         style={{
-          width: '56px',
-          height: '56px',
+          width: '40px',
+          height: '40px',
           borderRadius: '50%',
           border: '1px solid rgba(255,255,255,0.2)',
           background: 'rgba(255,255,255,0.05)',

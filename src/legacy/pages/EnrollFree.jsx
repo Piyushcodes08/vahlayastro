@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../firebaseConfig";
 import { doc, setDoc, updateDoc, arrayUnion, getDoc, collection, getDocs } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReCAPTCHA from 'react-google-recaptcha';
+import { auth } from "../../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const EnrollPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const { courseId } = useParams();
+  const [selectedCourse, setSelectedCourse] = useState(courseId || "");
   const [courses, setCourses] = useState([]);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email || "");
+        setName(user.displayName || "");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (courseId) {
+      setSelectedCourse(courseId);
+    }
+  }, [courseId]);
 
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -81,7 +102,10 @@ const EnrollPage = () => {
   };
 
   return (
-    <div className="bg-red-500 text-white p-4 rounded-lg max-w-lg mx-auto min-h-screen text-sm   m-6 ">
+    <>
+      <Header />
+      <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
+      <div className="bg-red-500 text-white p-4 rounded-lg max-w-lg mx-auto min-h-screen text-sm   m-6 ">
       <h2 className="text-xl md:text-4xl  font-semibold text-center mb-6">Enroll Now</h2>
       <p className="text-center mb-6">
         Join our <span className="font-bold text-white">Astrology</span> course and begin your journey into the world of astrology!
@@ -132,7 +156,8 @@ const EnrollPage = () => {
             id="course"
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="px-4 py-2 rounded-lg bg-white text-red-500"
+            disabled={!!courseId}
+            className={`px-4 py-2 rounded-lg bg-white text-red-500 ${courseId ? 'opacity-70 cursor-not-allowed' : ''}`}
             required
           >
             <option value="">Select a course</option>
@@ -157,6 +182,8 @@ const EnrollPage = () => {
         </button>
       </form>
     </div>
+    <Footer />
+    </>
   );
 };
 

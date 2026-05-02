@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link, Routes, Route } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import EnrollCourse from "./EnrolledCourses";
 
-const Dashboard = () => {
+const Aside = () => {
   const [user, setUser] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile sidebar toggle
-  const [loading, setLoading] = useState(true); // Prevent flickering while loading
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     profilePic: "",
     fullName: "NA",
@@ -39,17 +38,12 @@ const Dashboard = () => {
   }, [sidebarOpen]);
 
   useEffect(() => {
-    const auth = getAuth();
     const currentUser = auth.currentUser;
-
     if (currentUser) {
       setUser(currentUser);
-
-      // Fetch user profile from Firestore
       const fetchProfile = async () => {
         const userDocRef = doc(db, "students", currentUser.uid);
         const userDoc = await getDoc(userDocRef);
-
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setFormData({
@@ -60,26 +54,14 @@ const Dashboard = () => {
             dob: userData.dob || "NA",
             email: currentUser.email || "NA",
           });
-        } else {
-          // If user profile doesn't exist, set default values
-          setFormData({
-            profilePic: "",
-            fullName: "NA",
-            fathersName: "NA",
-            mothersName: "NA",
-            dob: "NA",
-            email: currentUser.email || "NA",
-          });
         }
-
-        setLoading(false); // Stop loading once the profile is fetched
+        setLoading(false);
       };
-
       fetchProfile();
     } else {
-      setLoading(false); // If no user is logged in, stop loading
+      setLoading(false);
     }
-  }, [db]);
+  }, [db, auth]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -92,14 +74,12 @@ const Dashboard = () => {
     return () => unsubscribe();
   }, [auth, navigate]);
 
- 
-
   return (
-    <div className="flex flex-col md:flex-row md:min-h-screen  bg-gray-100">
+    <>
       {/* Mobile Sidebar Toggle Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="md:hidden fixed top-24 left-4 text-white p-2 rounded z-51"
+        className="md:hidden fixed top-24 left-4 text-white p-2 rounded z-[60]"
       >
         <img
          src="https://cdn-icons-png.flaticon.com/512/14025/14025507.png" 
@@ -107,29 +87,28 @@ const Dashboard = () => {
          className="h-8"
          />
       </button>
+
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-[55] md:hidden"
         ></div>
       )}
 
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={` p-4 fixed md:relative z-50  inset-y-0 left-0 bg-red-600 text-white shadow-lg transform transition-transform duration-300 ${
+        className={`p-4 fixed md:relative z-50 inset-y-0 left-0 bg-red-600 text-white shadow-lg transform transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:w-64 w-4/5 `}
+        } md:translate-x-0 md:w-64 w-4/5 flex-shrink-0`}
       >
-        <div className="flex justify-between items-center mb-4">
-        </div>
-
         <div className="p-6 flex flex-col items-center">
           <img
-            src={formData.profilePic}
+            src='/assets/vahlay_astro.png'
             alt="Profile"
-            className="w-24 h-24 rounded-full border-4 border-gray-300 shadow-md object-cover"            />
-          <h2 className="text-lg font-bold">{formData.fullName}</h2>
+            className="w-28 h-28 rounded-full object-cover" 
+          />
+          <h2 className="text-lg font-bold mt-2">{formData.fullName}</h2>
           <button
             onClick={() => setSidebarOpen(false)}
             className="text-2xl font-bold absolute top-4 right-4 md:hidden"
@@ -140,42 +119,30 @@ const Dashboard = () => {
         <nav className="p-4">
           <ul className="space-y-4">
             <li>
-              <Link
-                to="/profile"
-                className="block p-3 bg-red-500 hover:bg-red-400 rounded transition"
-              >
+              <Link to="/profile" className="block p-3 bg-red-500 hover:bg-red-400 rounded transition font-medium">
                 My Profile
               </Link>
             </li>
             <li>
-              <Link
-                to="/enrolledcourse"
-                className="block p-3 bg-red-500 hover:bg-red-400 rounded transition"
-              >
+              <Link to="/enrolledcourse" className="block p-3 bg-red-500 hover:bg-red-400 rounded transition font-medium">
                 Enrolled Courses
               </Link>
             </li>
             <li>
-              <Link
-                to="/courses"
-                className="block p-3 bg-red-500 hover:bg-red-400 rounded transition"
-              >
+              <Link to="/courses" className="block p-3 bg-red-500 hover:bg-red-400 rounded transition font-medium">
                 Add Courses
               </Link>
             </li>
             <li>
-              <Link
-                to="/finalize"
-                className="block p-3 bg-red-500 hover:bg-red-400 rounded transition"
-              >
+              <Link to="/finalize" className="block p-3 bg-red-500 hover:bg-red-400 rounded transition font-medium">
                 Payments
               </Link>
             </li>
           </ul>
         </nav>
       </aside>
-    </div>
+    </>
   );
 };
 
-export default Dashboard;
+export default Aside;

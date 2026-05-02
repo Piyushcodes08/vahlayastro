@@ -7,6 +7,7 @@ import { app } from "../../firebaseConfig"; // Firebase configuration file
 import {  updateProfile } from "firebase/auth";
 
 import Aside from "./Aside";
+import Header from "../../components/sections/Header/Header";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -129,10 +130,12 @@ const handleSave = async () => {
   }
 
   return (
-    <div className="flex  min-h-screen">
-      <Aside />
-
-      <main className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 ">
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] bg-gray-50">
+        <Aside />
+        <main className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 ">
        
 
         <div className="bg-gradient-to-r from-red-600 to-orange-100 p-6 text-white rounded-lg shadow-md">
@@ -282,7 +285,8 @@ const handleSave = async () => {
           </div>
         )}
       </main>
-    </div>
+      </div>
+    </>
   );
 };
 

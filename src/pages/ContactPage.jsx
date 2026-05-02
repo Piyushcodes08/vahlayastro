@@ -27,10 +27,8 @@ const ContactPage = () => {
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
                 {/* Header Spacer */}
-                <div className="pt-24"></div>
-
                 {/* Contact Hero Banner (Classic & Premium Style) */}
-                <section className="relative w-full flex items-center justify-center overflow-hidden bg-transparent">
+                <section className="relative w-full min-h-[50vh] pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden bg-transparent">
                     <div className="relative z-10 max-w-4xl w-full mx-4 text-center">
                         {/* Red Pill Label */}
                         <div className="inline-block mb-6 px-8 py-2 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5">
@@ -38,9 +36,9 @@ const ContactPage = () => {
                                 Connectivity & Support
                             </span>
                         </div>
-                        
+
                         {/* Bold White Title */}
-                        <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-6 leading-[1.1]">
+                        <h1 className="title-batangas text-6xl text-white font-black mb-6 leading-[1.1]">
                             Get in Touch <br /> with the Universe
                         </h1>
 
@@ -57,7 +55,7 @@ const ContactPage = () => {
                         </div>
                     </div>
                 </section>
-                
+
                 <Contact />
 
                 <section className="max-w-[1170px] mx-auto px-4 py-12">
@@ -72,8 +70,8 @@ const ContactPage = () => {
                             </p>
                         </div>
                         <div className="space-y-6">
-                            <a 
-                                href="tel:+917949217538" 
+                            <a
+                                href="tel:+917949217538"
                                 className="flex items-center gap-6 bg-white/5 backdrop-blur-lg p-6 rounded-3xl border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group"
                             >
                                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#dd2727]/40 to-orange-500/20 border border-[#dd2727]/30 flex items-center justify-center text-white text-2xl shadow-[0_0_15px_rgba(221,39,39,0.3)] group-hover:scale-110 transition-transform duration-500">
@@ -84,9 +82,9 @@ const ContactPage = () => {
                                     <p className="title-batangas text-xl text-white group-hover:text-[#dd2727] transition-colors">+91 79 4921 7538</p>
                                 </div>
                             </a>
-                            
-                            <a 
-                                href="mailto:contact@vahlayastro.com" 
+
+                            <a
+                                href="mailto:contact@vahlayastro.com"
                                 className="flex items-center gap-6 bg-white/5 backdrop-blur-lg p-6 rounded-3xl border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group"
                             >
                                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#dd2727]/40 to-orange-500/20 border border-[#dd2727]/30 flex items-center justify-center text-white text-2xl shadow-[0_0_15px_rgba(221,39,39,0.3)] group-hover:scale-110 transition-transform duration-500">

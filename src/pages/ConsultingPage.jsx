@@ -83,7 +83,7 @@ const ConsultingPage = () => {
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
 
                 {/* ── Hero Banner ───────────────────────────────────────── */}
-                <section className="relative pt-40 pb-24 px-4 text-center overflow-hidden">
+                <section className="relative w-full min-h-[50vh] pt-32 pb-16 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
                     {/* Glowing orbs */}
                     <div
                         className="absolute top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
@@ -113,7 +113,7 @@ const ConsultingPage = () => {
                         </span>
 
                         <h1
-                            className="title-batangas text-5xl md:text-7xl mb-6 leading-tight"
+                            className="title-batangas text-6xl mb-6 leading-tight"
                             style={{ color: '#fff' }}
                         >
                             Empower Your Life with{' '}

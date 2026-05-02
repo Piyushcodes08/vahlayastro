@@ -15,7 +15,7 @@ const AboutPage = () => {
 
 
                 {/* Refined Minimalist Premium Banner */}
-                <section className="relative w-full py-10 md:py-16 flex items-center justify-center overflow-hidden border-b border-white/5 bg-transparent">
+                <section className="relative w-full min-h-[50vh] pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden border-b border-white/5 bg-transparent">
                     <div className="relative z-10 max-w-4xl w-full mx-4 text-center">
                         {/* Red Pill Label */}
                         <div className="inline-block mb-2 px-8 py-2 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5">
@@ -25,7 +25,7 @@ const AboutPage = () => {
                         </div>
 
                         {/* Bold White Title */}
-                        <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-6 leading-[1.1]">
+                        <h1 className="title-batangas text-6xl text-white font-black mb-6 leading-[1.1]">
                             Welcome to <br /> Vahlay Astro
                         </h1>
 
@@ -83,66 +83,7 @@ const AboutPage = () => {
                 </section>
 
                 {/* 2. Ambition & Vision */}
-                <section className="max-w-[1170px] mx-auto px-4 py-8">
-                    <div className="grid md:grid-cols-2 gap-8">
-                        {[
-                            {
-                                title: "Our Ambition",
-                                desc: "To empower individuals to live with awareness, harmony, and purpose by unlocking the timeless wisdom of astrology.",
-                            },
-                            {
-                                title: "Our Vision",
-                                desc: "To become a trusted spiritual and astrological partner for people seeking clarity, transformation, and cosmic alignment.",
-                            },
-                        ].map((item, idx) => (
-                            <div
-                                key={idx}
-                                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 text-center shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:scale-[1.02] transition-all duration-500"
-                            >
-                                <h3 className="title-batangas text-3xl mb-4 text-[#dd2727]">
-                                    {item.title}
-                                </h3>
-                                <p className="subtitle-poppins text-white/75 leading-relaxed">
-                                    {item.desc}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* 3. Core Values */}
-                <section className="max-w-[1170px] mx-auto px-4 py-12">
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-16">
-                        <h2 className="title-batangas text-4xl md:text-5xl text-center mb-12 text-white">
-                            Core Values
-                        </h2>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[
-                                { title: "Integrity", desc: "Transparency and honesty in all guidance.", icon: <LuShieldCheck /> },
-                                { title: "Empathy", desc: "Deep understanding of every client’s journey.", icon: <LuHeart /> },
-                                { title: "Innovation", desc: "Modernizing ancient cosmic wisdom.", icon: <LuLightbulb /> },
-                                { title: "Excellence", desc: "Delivering premium spiritual experiences.", icon: <LuTrophy /> },
-                            ].map((val, idx) => (
-                                <div
-                                    key={idx}
-                                    className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-3xl p-8 text-center hover:border-[#dd2727]/40 transition-all duration-500 flex flex-col items-center"
-                                >
-                                    <div className="text-5xl mb-6  text-white">{val.icon}</div>
-                                    <h4 className="title-batangas text-2xl mb-2 text-white">
-                                        {val.title}
-                                    </h4>
-                                    <p className="subtitle-poppins text-sm text-white/70 leading-relaxed">
-                                        {val.desc}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* 4. Services */}
-                <section className="max-w-[1170px] mx-auto px-4 py-12 text-center">
+                 <section className="max-w-[1170px] mx-auto px-4 py-12 text-center">
                     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-14">
                         <h2 className="title-batangas text-4xl mb-12 text-[#dd2727]">
                             Services We Offer
@@ -184,6 +125,67 @@ const AboutPage = () => {
                                         <LuArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                                     </span>
                                 </Link>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+                
+
+                {/* 3. Core Values */}
+                    <section className="max-w-[1170px] mx-auto px-4 py-8">
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {[
+                            {
+                                title: "Our Ambition",
+                                desc: "To empower individuals to live with awareness, harmony, and purpose by unlocking the timeless wisdom of astrology.",
+                            },
+                            {
+                                title: "Our Vision",
+                                desc: "To become a trusted spiritual and astrological partner for people seeking clarity, transformation, and cosmic alignment.",
+                            },
+                        ].map((item, idx) => (
+                            <div
+                                key={idx}
+                                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 text-center shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:scale-[1.02] transition-all duration-500"
+                            >
+                                <h3 className="title-batangas text-3xl mb-4 text-[#dd2727]">
+                                    {item.title}
+                                </h3>
+                                <p className="subtitle-poppins text-white/75 leading-relaxed">
+                                    {item.desc}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+               
+
+                {/* 4. Services */}
+            <section className="max-w-[1170px] mx-auto px-4 py-12">
+                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-16">
+                        <h2 className="title-batangas text-4xl md:text-5xl text-center mb-12 text-white">
+                            Core Values
+                        </h2>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                                { title: "Integrity", desc: "Transparency and honesty in all guidance.", icon: <LuShieldCheck /> },
+                                { title: "Empathy", desc: "Deep understanding of every client’s journey.", icon: <LuHeart /> },
+                                { title: "Innovation", desc: "Modernizing ancient cosmic wisdom.", icon: <LuLightbulb /> },
+                                { title: "Excellence", desc: "Delivering premium spiritual experiences.", icon: <LuTrophy /> },
+                            ].map((val, idx) => (
+                                <div
+                                    key={idx}
+                                    className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-3xl p-8 text-center hover:border-[#dd2727]/40 transition-all duration-500 flex flex-col items-center"
+                                >
+                                    <div className="text-5xl mb-6  text-white">{val.icon}</div>
+                                    <h4 className="title-batangas text-2xl mb-2 text-white">
+                                        {val.title}
+                                    </h4>
+                                    <p className="subtitle-poppins text-sm text-white/70 leading-relaxed">
+                                        {val.desc}
+                                    </p>
+                                </div>
                             ))}
                         </div>
                     </div>

@@ -3,7 +3,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import Header from "../sections/Header/Header";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,8 @@ const SignUp = () => {
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo");
 
   const navigate = useNavigate();
 
@@ -30,7 +33,7 @@ const SignUp = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       alert(`Welcome, ${user.displayName}!`);
-      navigate('/');
+      navigate(redirectTo || '/');
     } catch (error) {
       setError("Failed to log in with Google. Please try again.");
     } finally {
@@ -91,14 +94,17 @@ const SignUp = () => {
       await sendEmailVerification(user);
 
       alert("Sign-up successful! Please check your email for verification.");
-      navigate("/login");
+      navigate(redirectTo ? `/login?redirectTo=${encodeURIComponent(redirectTo)}` : "/login");
     } catch (error) {
       setError("Failed to sign up. " + error.message);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-backgroundImage">
+    <>
+      <Header />
+      <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
+      <div className="flex items-center justify-center min-h-screen bg-backgroundImage">
       <div className="bg-black bg-opacity-60 p-8 rounded-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-white mb-6">Sign Up</h2>
 
@@ -187,10 +193,11 @@ const SignUp = () => {
         </button>
 
         <p className="text-center text-gray-300 mt-4">
-          Already have an account? <Link to="/login" className="text-white underline">Login</Link>
+          Already have an account? <Link to={redirectTo ? `/login?redirectTo=${encodeURIComponent(redirectTo)}` : "/login"} className="text-white underline">Login</Link>
         </p>
       </div>
     </div>
+    </>
   );
 };
 

@@ -16,13 +16,13 @@ const TestimonialsPage = () => {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/20 blur-[180px] rounded-full pointer-events-none"></div>
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-400/10 blur-[180px] rounded-full pointer-events-none"></div>
 
-                <div className="pt-32 pb-8 text-center px-4">
-                    <h1 className="title-batangas text-5xl md:text-7xl mb-6 text-white">Client Success Stories</h1>
+                <div className="relative w-full min-h-[40vh] pt-32 pb-16 flex flex-col items-center justify-center text-center px-4">
+                    <h1 className="title-batangas text-6xl mb-6 text-white">Client Success Stories</h1>
                     <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
                         Read about the transformative experiences our clients have had through our astrological guidance.
                     </p>
                 </div>
-                
+
                 <Testimonials />
 
                 <section className="max-w-[1170px] mx-auto px-4 py-20 text-center">

@@ -13,6 +13,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Aside from "../pages/Aside";
+import Header from "../../components/sections/Header/Header";
 
 const EMIDetails = () => {
   const [userEmail, setUserEmail] = useState(null);
@@ -491,16 +492,12 @@ const EMIDetails = () => {
   }, [payments, emiPlans]);
 
   return (
-    <div
-      className="flex flex-col md:flex-row h-screen min-h-screen "
-      style={{
-        maxHeight: "60vh", // Set the maximum height for the scrollable container
-        overflowY: "auto", // Enable vertical scrolling
-        paddingRight: "10px", // Optional: Adds space to prevent the scrollbar from overlapping content
-      }}
-    >
-      <Aside />
-      <div className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 overflow-x-auto">
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] bg-gray-50">
+        <Aside />
+        <div className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 overflow-x-auto">
         <h2 className="text-2xl font-bold mb-4 text-red-600">
           EMI Details for {userEmail}
         </h2>
@@ -579,7 +576,8 @@ const EMIDetails = () => {
 
         <PaymentModal />
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

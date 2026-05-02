@@ -10,8 +10,8 @@ const ServicesPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                <div className="pt-32 pb-16 text-center px-4">
-                    <h1 className="title-batangas text-5xl md:text-7xl mb-6 text-white">Our Premium Services</h1>
+                <div className="relative w-full min-h-[40vh] pt-32 pb-16 flex flex-col items-center justify-center text-center px-4">
+                    <h1 className="title-batangas text-6xl mb-6 text-white">Our Premium Services</h1>
                     <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
                         Personalized astrological guidance, spiritual counseling, and cosmic remedies tailored for your life's journey.
                     </p>
@@ -20,33 +20,33 @@ const ServicesPage = () => {
                 <section className="max-w-[1170px] mx-auto px-4 py-12">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[
-                            { 
-                                title: "Personalized Astrological Guidance", 
+                            {
+                                title: "Personalized Astrological Guidance",
                                 desc: "Dive deep into your unique astrological chart for clarity on relationships, career, and personal growth.",
                                 img: "/src/assets/img/foundation.webp"
                             },
-                            { 
-                                title: "Life Path and Destiny Consultation", 
+                            {
+                                title: "Life Path and Destiny Consultation",
                                 desc: "Unlock your life's purpose, navigate challenges, and seize opportunities by exploring your unique astrological blueprint.",
                                 img: "/src/assets/img/self.webp"
                             },
-                            { 
-                                title: "Career and Success Consultation", 
+                            {
+                                title: "Career and Success Consultation",
                                 desc: "Identify your ideal career path, unlock potential, and align your work with the strengths in your astrological chart.",
                                 img: "/src/assets/img/about-1.webp"
                             },
-                            { 
-                                title: "Relationship Compatibility Reading", 
+                            {
+                                title: "Relationship Compatibility Reading",
                                 desc: "Analyze relationship dynamics for better communication and harmony.",
                                 img: "/src/assets/img/about-2.webp"
                             },
-                            { 
-                                title: "Remedial Astrology Consultation", 
+                            {
+                                title: "Remedial Astrology Consultation",
                                 desc: "Address planetary imbalances with proven astrological remedies.",
                                 img: "/src/assets/img/about-3.webp"
                             },
-                            { 
-                                title: "Ongoing Support and Guidance", 
+                            {
+                                title: "Ongoing Support and Guidance",
                                 desc: "Stay aligned with personalized follow-up sessions and continuous support.",
                                 img: "/src/assets/img/about-4.webp"
                             }
@@ -84,16 +84,16 @@ const ServicesPage = () => {
                             { title: "Consultation", img: "/src/assets/img/consulting.webp", link: "/contact" },
                             { title: "Articles", img: "/src/assets/img/books.webp", link: "/articles" }
                         ].map((item, idx) => (
-                            <Link 
+                            <Link
                                 key={idx}
-                                to={item.link} 
+                                to={item.link}
                                 className="bg-white/[0.08] backdrop-blur-xl rounded-[2rem] overflow-hidden border border-[#dd2727]/20 hover:-translate-y-3 hover:border-[#dd2727]/70 shadow-[0_10px_40px_rgba(221,39,39,0.15)] hover:shadow-[0_25px_70px_rgba(221,39,39,0.4)] transition-all duration-500 group block ring-1 ring-transparent hover:ring-[#dd2727]/30"
                             >
                                 <div className="aspect-[3/2] overflow-hidden relative">
-                                    <img 
-                                        src={item.img} 
-                                        alt={item.title} 
-                                        className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" 
+                                    <img
+                                        src={item.img}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                                 </div>
@@ -114,7 +114,7 @@ const ServicesPage = () => {
                     <div className=" border border-white/10 rounded-[2rem] p-12 text-center shadow-[0_15px_60px_rgba(221,39,39,0.35)]">
                         <h2 className="title-batangas text-3xl md:text-5xl mb-6 text-white">Need Personal Guidance?</h2>
                         <p className="subtitle-poppins text-white/90 text-lg mb-10 max-w-xl mx-auto">Book a one-on-one session with our expert astrologers and transform your life today.</p>
-                        <Link to="/contact" className="inline-block bg-white/10 backdrop-blur-lg border border-white/20 text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#dd2727]">
+                        <Link to="/appointment" className="inline-block bg-white/10 backdrop-blur-lg border border-white/20 text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#dd2727]">
                             Schedule Appointment
                         </Link>
                     </div>

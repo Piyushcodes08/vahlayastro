@@ -241,22 +241,30 @@
 }
 
 .article-read-more {
-  display: inline-block;
-  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.2rem;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #fff;
-  background-color: var(--color-brand-red);
-  padding: 0.5rem 1rem;
-  border-radius: 3px;
+  color: #dd2727;
   text-transform: uppercase;
-  transition: background-color 0.3s ease;
-  width: max-content;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.article-read-more:hover {
-  background-color: #b51c1c;
+.article-read-more::after {
+  content: '→';
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+
+
+.article-read-more:hover::after {
+  transform: translateX(5px);
 }
 
 /* Page layers (simulating thickness) - KEPT EXACTLY THE SAME */

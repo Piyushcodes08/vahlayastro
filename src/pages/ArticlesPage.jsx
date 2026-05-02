@@ -35,10 +35,10 @@ const ArticlesPage = () => {
     // Filter articles based on search query
     const filteredArticles = useMemo(() => {
         if (!searchQuery.trim()) return articlesData;
-        
+
         const query = searchQuery.toLowerCase();
-        return articlesData.filter(article => 
-            article.title?.toLowerCase().includes(query) || 
+        return articlesData.filter(article =>
+            article.title?.toLowerCase().includes(query) ||
             article.description?.toLowerCase().includes(query)
         );
     }, [searchQuery, articlesData]);
@@ -57,8 +57,8 @@ const ArticlesPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                 {/* Articles Hero Banner (Classic & Premium Style - Perfected Spacing) */}
-                <section className="relative w-full pt-10 pb-4 md:pt-16 md:pb-16 lg:pt-10 lg:pb-10 flex items-center justify-center overflow-hidden bg-transparent border-b border-white/5 min-h-[50vh]">
+                {/* Articles Hero Banner (Classic & Premium Style - Perfected Spacing) */}
+                <section className="relative w-full min-h-[50vh] pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden bg-transparent border-b border-white/5">
                     <div className="relative z-10 max-w-5xl w-full mx-4 text-center">
                         {/* Red Pill Label */}
                         <div className="inline-block mb-8 px-10 py-2.5 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
@@ -66,15 +66,15 @@ const ArticlesPage = () => {
                                 Sacred Insights
                             </span>
                         </div>
-                        
+
                         {/* Bold White Title */}
-                        <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-8 leading-[1.1] tracking-tight">
+                        <h1 className="title-batangas text-6xl text-white font-black mb-8 leading-[1.1] tracking-tight">
                             Cosmic Insights <br /> & Wisdom
                         </h1>
 
                         {/* Red Subtitle */}
                         <p className="subtitle-poppins text-lg text-[#dd2727] max-w-2xl mx-auto leading-relaxed  drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
-                            Explore our collection of sacred articles and astrological guidance <br className="hidden md:block" /> 
+                            Explore our collection of sacred articles and astrological guidance <br className="hidden md:block" />
                             to navigate your journey through the infinite stars.
                         </p>
 
@@ -86,11 +86,11 @@ const ArticlesPage = () => {
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Main Content Area with Sidebar */}
                 <section className="max-w-[1300px] mx-auto px-4 py-20">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                        
+
                         {/* Article Grid (Main Content) */}
                         <div className="lg:col-span-9">
                             {filteredArticles.length > 0 ? (
@@ -130,7 +130,7 @@ const ArticlesPage = () => {
                                 <div className="text-center py-20 bg-white/5 border border-white/10 rounded-[3rem] backdrop-blur-xl">
                                     <h3 className="title-batangas text-3xl mb-4 text-white">No Wisdom Found</h3>
                                     <p className="subtitle-poppins text-white/60">Try searching with different celestial keywords.</p>
-                                    <button 
+                                    <button
                                         onClick={() => setSearchQuery('')}
                                         className="mt-8 text-[#dd2727] font-bold uppercase tracking-widest hover:text-white transition-colors"
                                     >
@@ -142,16 +142,16 @@ const ArticlesPage = () => {
 
                         {/* Sidebar */}
                         <aside className="lg:col-span-3 space-y-12">
-                            
+
                             {/* Search Widget */}
                             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-4 shadow-xl">
                                 <h4 className="title-batangas text-xl mb-6 text-white border-b border-white/10 pb-4">Search Wisdom</h4>
                                 <div className="relative">
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder="Search topics..." 
+                                        placeholder="Search topics..."
                                         className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#dd2727]/50 subtitle-poppins text-sm transition-all"
                                     />
                                     <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#dd2727]">
@@ -208,9 +208,9 @@ const ArticlesPage = () => {
                             Subscribe to our newsletter to receive the latest astrological insights and exclusive offers directly in your inbox.
                         </p>
                         <form className="flex flex-col md:flex-row gap-4 justify-center max-w-2xl mx-auto" onSubmit={(e) => e.preventDefault()}>
-                            <input 
-                                type="email" 
-                                placeholder="Enter your email address" 
+                            <input
+                                type="email"
+                                placeholder="Enter your email address"
                                 className="px-8 py-5 rounded-full bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#dd2727]/50 flex-grow subtitle-poppins transition-all"
                             />
                             <button className="px-12 py-5 rounded-full font-bold uppercase tracking-widest transition-all duration-500 bg-white text-black hover:bg-[#dd2727] hover:text-white shadow-xl">

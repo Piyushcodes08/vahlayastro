@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db, storage } from "../../firebaseConfig";
 import Admin from "./Admin";
+import Header from "../../components/sections/Header/Header";
 import {
   collection,
   getDocs,
@@ -170,7 +171,11 @@ const AdminArticles = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
+    <>
+      <div className="bg-black">
+        <Header />
+      </div>
+      <div className="flex flex-col md:flex-row min-h-screen bg-white">
       {/* Sidebar - Always visible on desktop and mobile */}
       <div className="w-full md:w-1/6 bg-white shadow-md">
         <Admin />
@@ -387,6 +392,7 @@ const AdminArticles = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

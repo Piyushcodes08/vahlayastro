@@ -60,7 +60,7 @@ const CourseSection = () => {
                           className="project-card__thumb"
                         />
                         <Link 
-                          to="/login"
+                          to={`/courses/${course.type === 'free' ? 'free' : 'paid'}/${course.slug}`}
                           className="project-card__btn-circle text-center flex flex-col items-center justify-center"
                         >
                           Enroll <br /> Now

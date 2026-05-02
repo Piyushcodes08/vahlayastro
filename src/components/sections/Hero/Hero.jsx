@@ -21,12 +21,14 @@ const Hero = () => {
                 <p className="subtitle !pb-5">
                     {description}
                 </p>
-                <Button 
-                    variant="primary"
-                    onClick={() => navigate('/appointment')}
-                >
-                    {buttonText}
-                </Button>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                    <Button 
+                        variant="primary"
+                        onClick={() => navigate('/appointment')}
+                    >
+                        {buttonText}
+                    </Button>
+                </div>
             </div>
         </section>
     );

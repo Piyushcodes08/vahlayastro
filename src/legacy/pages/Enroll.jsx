@@ -15,6 +15,8 @@ import PhoneInput from "./PhoneInput"; // Import the component
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import InquiryHandler from "./Inquiryhandler"; // Import the new component
 import PaymentGuide from "./PaymentGuide";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 
 
@@ -42,7 +44,7 @@ const Enrollment = () => {
   const [selectedCountry, setSelectedCountry] = useState("+91"); // Default India
 
 
-  const { courseId, courseType } = useParams();
+  const { courseType, courseId } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
   const sortedCountries = countryData.sort((a, b) =>
     a.name.localeCompare(b.name)
@@ -108,7 +110,11 @@ const Enrollment = () => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user.email);
-        setFormData((prev) => ({ ...prev, email: user.email }));
+        setFormData((prev) => ({ 
+          ...prev, 
+          email: user.email,
+          name: user.displayName || prev.name 
+        }));
       } else {
         setCurrentUser(null);
       }
@@ -360,7 +366,10 @@ const Enrollment = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-100 via-white to-orange-100 py-16 text-sm">
+    <>
+      <Header />
+      <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
+      <div className="min-h-screen bg-gradient-to-b from-red-100 via-white to-orange-100 py-16 text-sm">
 
       <div className="min-h-screen flex justify-center items-center">
         <div className="bg-white border border-red-600 rounded-xl shadow-lg max-w-lg w-full p-8">
@@ -649,6 +658,8 @@ const Enrollment = () => {
       <PaymentGuide  />
       </div>
     </div>
+    <Footer />
+    </>
     
   );
 };

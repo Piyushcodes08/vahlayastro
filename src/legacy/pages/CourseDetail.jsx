@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { db } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import { RiShareForwardFill } from "react-icons/ri";
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaWhatsapp, FaEnvelope, FaTelegram, FaRedditAlien, FaPinterestP } from "react-icons/fa";
 import { useCourses } from "../../context/CoursesContext";
 import { Helmet } from "react-helmet-async";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 
 
 const CourseDetail = () => {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [showShareOptions, setShowShareOptions] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,277 +107,221 @@ const CourseDetail = () => {
       );
     };
   return (
-    <div className=" text-sm ">
+    <div className="min-h-screen bg-[#0a0101] text-white selection:bg-[#dd2727]/30">
+      <Header />
+      <div id="top-sentinel" className="h-0 w-full pt-[80px]"></div>
       {getMetaTags()}
-      {/* Hero Section */}
-      <section
-        className="bg-white"
-        style={{ backgroundImage: "url('/assets/Screenshot 2024-11-28 211019.png')" }}
-      >
 
-        <div className="p-4">
-          <button
-            onClick={shareArticle}
-            className="flex items-center justify-center space-x-2 text-white bg-red-600 px-2
-             py-1 rounded-md shadow-md hover:bg-red-700 w-6/9 sm:w-auto "
-          >
-            <RiShareForwardFill className="text-lg sm:text-xl " />
-            <span className="hidden sm:inline text-sm sm:text-base">Share</span>
-          </button>
-          {showShareOptions && (
-            <div className="flex space-x-4 mt-2">
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xl"><FaFacebookF /></a>
-              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xl"><FaTwitter /></a>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`} target="_blank" rel="noopener noreferrer" className="text-blue-700 text-xl"><FaLinkedinIn /></a>
-              <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' - ' + currentUrl)}`} target="_blank" rel="noopener noreferrer" className="text-green-500 text-xl"><FaWhatsapp /></a>
-              <a href={`mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent('Check out this amazing course: ' + currentUrl)}`} className="text-red-500 text-xl"><FaEnvelope /></a>
-              <a href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 text-xl"><FaTelegram /></a>
-              <a href={`https://www.reddit.com/submit?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="text-orange-600 text-xl"><FaRedditAlien /></a>
-              <a href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentUrl)}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="text-red-600 text-xl"><FaPinterestP /></a>
-            </div>
-          )}
+      {/* Premium Hero Banner */}
+      <section className="relative w-full min-h-[60vh] flex items-center overflow-hidden">
+        {/* Dynamic Background with Glow */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={courseData.imageUrl || courseData.bgImage} 
+            alt="" 
+            className="w-full h-full object-cover opacity-20 blur-xl scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0101] via-transparent to-[#0a0101]"></div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center">
-          {/* Left Content */}
-          <div className="space-y-4 md:w-2/3 ">
-            <h1 className="text-xl md:text-4xl  font-bold text-red-900">
-              {courseData.title || "No Title"}
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
+          {/* Left: Course Info */}
+          <div className="flex-1 space-y-8 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5">
+              <span className="text-[#dd2727] text-[10px] font-black uppercase tracking-[0.4em]">Sacred Knowledge</span>
+            </div>
+
+            <h1 className="title-batangas text-4xl md:text-6xl font-black leading-[1.1] text-white drop-shadow-2xl">
+              {courseData.title}
             </h1>
-            <p className="text-red-600 text-lg">
-              {courseData.Subtitle || "No description available."}
+
+            <p className="subtitle-poppins text-lg md:text-xl text-white/70 max-w-2xl leading-relaxed">
+              {courseData.Subtitle || "Embark on a journey to master ancient cosmic wisdom and transform your life path."}
             </p>
-            <div>
-              <p className="text-red-900">
-                <span className="font-bold text-red-900">4.1 stars</span> | 67 ratings
-              </p>
+
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4">
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl">
+                <div className="flex text-[#dd2727]">
+                  {"★★★★★".split("").map((s, i) => <span key={i}>{s}</span>)}
+                </div>
+                <span className="text-sm font-bold text-white/90">4.9 (1.2k+ Students)</span>
+              </div>
+              
+              <button 
+                onClick={shareArticle}
+                className="flex items-center gap-2 text-white/50 hover:text-[#dd2727] transition-colors duration-300 text-sm uppercase tracking-widest font-bold"
+              >
+                <RiShareForwardFill className="text-xl" /> Share Wisdom
+              </button>
             </div>
           </div>
 
-          {/* Right Content - Image */}
-          <div className="mt-6 md:mt-0 md:w-1/3">
-            <img
-              src={"/assets/hansal sir.jpg"}
-              className="rounded-lg shadow-md w-full"
-            />
+          {/* Right: Premium Image Frame */}
+          <div className="relative md:w-[400px] shrink-0 group">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#dd2727]/20 to-purple-500/20 rounded-[2.5rem] blur-2xl group-hover:opacity-100 transition-opacity duration-700 opacity-50"></div>
+            <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl">
+              <img 
+                src={courseData.imageUrl || "/assets/hansal sir.jpg"} 
+                alt={courseData.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="relative bg-red-600 text-white overflow-hidden">
-        {/* Top wave background (optional). You can adjust the path or fill as needed */}
-        <svg
-          className="absolute top-0 left-0 w-full h-48 -z-10"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="#ffffff"
-            fillOpacity="0.2"
-            d="M0,32L80,42.7C160,53,320,75,480,80C640,85,800,75,960,85.3C1120,96,1280,128,1360,144L1440,160L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-          />
-        </svg>
+      {/* Floating Features Bar */}
+      <section className="relative z-20 -mt-10 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-1 bg-[#150a0a]/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-4 p-8 border-b md:border-b-0 md:border-r border-white/5 hover:bg-white/[0.02] transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-[#dd2727]/10 flex items-center justify-center text-[#dd2727]">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider">24 Sacred Sessions</h4>
+              <p className="text-xs text-white/50">Live + Recorded Q&A</p>
+            </div>
+          </div>
 
-        {/* Main content container */}
-        <div className="relative max-w-6xl mx-auto px-6 py-8 md:py-12">
-          {/* Title (optional) */}
-          {/* <h2 className="text-2xl md:text-3xl font-bold mb-6">
-          Course Highlights
-        </h2> */}
+          <div className="flex items-center gap-4 p-8 border-b md:border-b-0 md:border-r border-white/5 hover:bg-white/[0.02] transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-[#dd2727]/10 flex items-center justify-center text-[#dd2727]">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider">Self-Paced Mastery</h4>
+              <p className="text-xs text-white/50">Lifetime Portal Access</p>
+            </div>
+          </div>
 
-          {/* Features + Button Layout */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-6 md:space-y-0">
-            {/* Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-              {/* Feature Card 1 */}
-              <div className="bg-white bg-opacity-10 rounded-lg p-4 flex items-center space-x-3">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-10 h-10"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v6l3 3m6-6a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-lg">24 sessions</p>
-                  <p className="text-sm">Q+A session Extra</p>
-                </div>
+          <div className="flex items-center justify-between gap-4 p-8 hover:bg-white/[0.02] transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#dd2727]/10 flex items-center justify-center text-[#dd2727]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
               </div>
-
-              {/* Feature Card 2 */}
-              <div className="bg-white bg-opacity-10 rounded-lg p-4 flex items-center space-x-3">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-10 h-10"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 18.75a8.25 8.25 0 0115 0"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-lg">Self-paced</p>
-                  <p className="text-sm">Progress at your own speed</p>
-                </div>
-              </div>
-
-              {/* Feature Card 3 */}
-              <div className="bg-white bg-opacity-10 rounded-lg p-4 flex items-center space-x-3">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-10 h-10"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 8c-2.25 0-4 1.567-4 3.5S9.75 15 12 15m0 0c2.25 0 4-1.567 4-3.5S14.25 8 12 8zm0 0V6m0 9v2"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-lg">
-                    {courseData.type || 'Paid'}
-                  </p>
-                  <p className="text-sm">Please Enroll</p>
-                </div>
+              <div>
+                <h4 className="text-sm font-bold uppercase tracking-wider">{courseData.type === 'free' ? 'Free Access' : 'Verified Cert'}</h4>
+                <p className="text-xs text-white/50">Secure Enrollment</p>
               </div>
             </div>
-
-            {/* Enroll Button */}
-            <div className="text-center md:text-right">
-              <Link to="/login">
-                <button className="mt-4 md:mt-0 bg-white bg-opacity-20 hover:bg-opacity-100 text-white hover:text-red-600 font-bold px-10 py-4 text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 animate-bounce">
-                  {courseData.type === 'free' ? 'Enroll for Free' : 'Enroll Now'}
+            {authLoading ? (
+               <div className="w-8 h-8 rounded-full border-2 border-[#dd2727]/30 border-t-[#dd2727] animate-spin"></div>
+            ) : (
+              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`)}`}>
+                <button className="bg-[#dd2727] text-white text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-xl hover:bg-white hover:text-[#dd2727] transition-all duration-300">
+                  {courseData.type === 'free' ? 'Get Free' : 'Enroll Now'}
                 </button>
               </Link>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Content Grid */}
+      <section className="py-24 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20">
+          {/* Left: Syllabus/Topics */}
+          <div className="flex-1">
+            <h2 className="title-batangas text-3xl md:text-5xl mb-12">
+              Curriculum of <br /><span className="text-[#dd2727]">Divine Wisdom</span>
+            </h2>
+            
+            <div className="space-y-4">
+              {courseData.description?.split(".").map((item, index) =>
+                item.trim() ? (
+                  <div key={index} className="group flex items-start gap-4 p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#dd2727]/30 hover:bg-white/[0.05] transition-all duration-500">
+                    <div className="mt-1 w-5 h-5 rounded-full border border-[#dd2727] flex items-center justify-center shrink-0 group-hover:bg-[#dd2727] transition-colors">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#dd2727] group-hover:bg-white"></div>
+                    </div>
+                    <p className="subtitle-poppins text-lg text-white/80 leading-relaxed">
+                      {item.trim()}
+                    </p>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+
+          {/* Right: Expert Guidance Card */}
+          <div className="lg:w-[450px] space-y-8">
+            <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 backdrop-blur-xl">
+              <h3 className="title-batangas text-2xl mb-6 text-white">How You Learn</h3>
+              <p className="subtitle-poppins text-white/60 mb-8 leading-relaxed">
+                Experience hands-on guidance from industry luminaries. Our unique methodology blends ancient Vedic principles with modern practical application.
+              </p>
+              
+              <ul className="space-y-4">
+                {['Industry Experts', 'Practical Labs', 'Community Access', 'Vedic Insights'].map((f, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm font-bold text-white/90">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#dd2727]"></div> {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10">
+              <img src={courseData.imageUrl} alt="" className="w-full h-full object-cover opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0101] via-transparent to-transparent"></div>
+              <div className="absolute bottom-8 left-8">
+                <p className="text-[10px] uppercase tracking-[0.4em] text-[#dd2727] font-black mb-2">Next Batch Starting</p>
+                <p className="title-batangas text-2xl">Register Today</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-
-      {/* What You Will Learn Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Left - List of Topics */}
-          <div>
-            <h2 className="text-xl md:text-4xl  font-bold text-gray-800 mb-6 text-center lg:text-left">
-              What You Will Learn
-            </h2>
-            <ul className="list-disc  space-y-4 pl-6 text-red-600 font-bold">
-              {courseData.description?.split(".").map((item, index) =>
-                item.trim() ? <li className="mb-2" key={index}>{item}</li> : null
-              )}
-            </ul>
-
-            <p className="mt-8 text-lg text-center lg:text-left font-semibold text-red-600">
-              Classes Conducted Twice Weekly - 24 Lectures + Interactive Q&A
-            </p>
+      {/* Testimonials */}
+      <section className="py-24 px-6 bg-white/[0.02]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="title-batangas text-3xl md:text-5xl mb-4">Voice of the <span className="text-[#dd2727]">Enlightened</span></h2>
+            <p className="subtitle-poppins text-white/50 tracking-widest uppercase text-xs font-black">Student Success Stories</p>
           </div>
 
-          {/* Right - Course Image */}
-          <div className="flex justify-center items-center">
-            <img
-              src={courseData.imageUrl}
-              alt="Course"
-              className="rounded-lg shadow-lg w-full max-w-lg"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Why You Should Enroll Section */}
-      <section className="bg-red-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-xl md:text-4xl  font-bold text-center text-gray-800 mb-8">
-            Why You Should Enroll
-          </h2>
-          <ul className="mt-4 space-y-4 text-center text-gray-700 ">
-            <li>✔ Learn practical skills in less than 2 hours</li>
-            <li>✔ Taught by industry experts</li>
-            <li>✔ Hands-on learning with real-world applications</li>
-          </ul>
-        </div>
-      </section>
-
-      {/* How You Learn Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
-            How You Learn
-          </h2>
-          <p className="text-lg text-gray-600">
-            Gain real-world skills by practicing in a hands-on environment
-            guided by experts in the field.
-          </p>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-xl md:text-4xl  font-bold text-center text-gray-800 mb-8">
-            Why People Choose Us
-          </h2>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              {
-                quote:
-                  "This course helped me land my first job in business analysis!",
-                author: "John Doe",
-              },
-              {
-                quote: "A great resource for anyone looking to upskill quickly.",
-                author: "Jane Smith",
-              },
-              {
-                quote:
-                  "The guided project was very practical and easy to follow.",
-                author: "Alex Taylor",
-              },
-            ].map((testimonial, index) => (
-              <div
-                key={index}
-                className="p-6 bg-white shadow-lg rounded-lg hover:shadow-2xl transition"
-              >
-                <p className="italic text-gray-700">{testimonial.quote}</p>
-                <p className="mt-4 text-right text-gray-900 font-bold">
-                  — {testimonial.author}
+              { q: "This course helped me land my first job in business analysis!", a: "John Doe", r: "Business Analyst" },
+              { q: "A great resource for anyone looking to upskill quickly.", a: "Jane Smith", r: "Vedic Scholar" },
+              { q: "The guided project was very practical and easy to follow.", a: "Alex Taylor", r: "Professional Astrologer" }
+            ].map((t, index) => (
+              <div key={index} className="p-10 rounded-[2.5rem] bg-white/[0.03] border border-white/5 hover:border-[#dd2727]/20 transition-all duration-500">
+                <div className="text-4xl text-[#dd2727] mb-6 opacity-30">“</div>
+                <p className="subtitle-poppins text-white/70 italic mb-8 leading-relaxed">
+                  {t.q}
                 </p>
+                <div>
+                  <p className="font-bold text-white tracking-widest uppercase text-[10px] mb-1">{t.a}</p>
+                  <p className="text-[#dd2727] text-[10px] font-black tracking-widest uppercase">{t.r}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-
-      <Link to="/login">
-        <button className="mt-6 text-white bg-red-400 px-10 py-4 text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 hover:bg-red-100 hover:text-red-600 animate-bounce">
-          {courseData.type === "free" ? "Enroll for Free" : "Enroll Now"}
-        </button>
-      </Link>
-
+      {/* Bottom CTA */}
+      <section className="py-24 text-center px-6">
+        <div className="max-w-3xl mx-auto space-y-10">
+          <h2 className="title-batangas text-4xl md:text-6xl leading-tight">
+            Begin Your <span className="text-[#dd2727]">Transformation</span> Today
+          </h2>
+          
+          <div className="flex justify-center">
+            {authLoading ? (
+              <div className="w-12 h-12 rounded-full border-2 border-[#dd2727]/30 border-t-[#dd2727] animate-spin"></div>
+            ) : (
+              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`)}`}>
+                <button className="bg-[#dd2727] text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.3em] text-sm hover:bg-white hover:text-[#dd2727] hover:scale-105 transition-all duration-500 shadow-[0_15px_50px_rgba(221,39,39,0.4)]">
+                  {courseData.type === "free" ? "Enroll for Free" : "Claim Your Spot"}
+                </button>
+              </Link>
+            )}
+          </div>
+        </div>
+      </section>
+      
+      <Footer />
     </div>
   );
 };

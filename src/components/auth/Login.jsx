@@ -9,8 +9,9 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState } from "react";
+import Header from "../sections/Header/Header";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +19,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const redirectTo = searchParams.get("redirectTo") || location.state?.from?.pathname;
 
   const navigate = useNavigate();
 
@@ -76,7 +80,7 @@ const Login = () => {
         navigate("/admin");
       } else {
         alert("Login successful!");
-        navigate("/dashboard");
+        navigate(redirectTo || "/dashboard");
       }
     } catch (err) {
       setError("Failed to log in. Please check your credentials.");
@@ -109,7 +113,7 @@ const Login = () => {
       if (isAdminUser) {
         navigate("/admin");
       } else {
-        navigate("/dashboard");
+        navigate(redirectTo || "/dashboard");
       }
     } catch (error) {
       setError("Failed to log in with Google. Please try again.");
@@ -119,7 +123,10 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-backgroundImage">
+    <>
+      <Header />
+      <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
+      <div className="flex items-center justify-center min-h-screen bg-backgroundImage">
       <div className="bg-black bg-opacity-60 p-8 rounded-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-white mb-6">Log In</h2>
 
@@ -177,7 +184,7 @@ const Login = () => {
 
         <p className="text-center text-gray-300 mt-4">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-white underline">
+          <Link to={redirectTo ? `/signup?redirectTo=${encodeURIComponent(redirectTo)}` : "/signup"} className="text-white underline">
             Sign Up
           </Link>
         </p>
@@ -200,6 +207,7 @@ const Login = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 

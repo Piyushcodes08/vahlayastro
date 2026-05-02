@@ -114,8 +114,8 @@ const AppRoutes = () => {
             <Route path="/enrolledcourse" element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
             <Route path="/course/:courseName" element={<ProtectedRoute><Startlearning /></ProtectedRoute>} />
             <Route path="/course/:courseName/video/:videoId" element={<ProtectedRoute><VedioDetail /></ProtectedRoute>} />
-            <Route path="/enroll/:courseId/:courseType" element={<ProtectedRoute><Enroll /></ProtectedRoute>} />
-            <Route path="/enrollfree/:courseId/:courseType" element={<ProtectedRoute><EnrollFree /></ProtectedRoute>} />
+            <Route path="/enroll/:courseType/:courseId" element={<ProtectedRoute><Enroll /></ProtectedRoute>} />
+            <Route path="/enrollfree/:courseId" element={<ProtectedRoute><EnrollFree /></ProtectedRoute>} />
             <Route path="/submission-success" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
             <Route path="/studentlivesession" element={<ProtectedRoute><StudentLiveSession /></ProtectedRoute>} />
             <Route path="/JitsiIframe" element={<ProtectedRoute><JitsiIframe /></ProtectedRoute>} />

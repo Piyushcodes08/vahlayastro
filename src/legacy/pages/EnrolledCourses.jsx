@@ -14,6 +14,7 @@ import { db, storage } from "../../firebaseConfig"; // Firebase configuration fi
 import ActiveLink from "./ActiveLink"; // Custom Link component
 import { PieChart, Pie, Cell } from "recharts";
 import Aside from "./Aside";
+import Header from "../../components/sections/Header/Header";
 
 const EnrollCourse = () => {
   const [user, setUser] = useState(null);
@@ -333,7 +334,10 @@ const EnrollCourse = () => {
     );
   }
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] bg-gray-50">
       {/* Sidebar */}
       <Aside />
       {/* Main Content */}
@@ -625,7 +629,8 @@ const EnrollCourse = () => {
           ))}
         </div>
       </main>
-    </div>
+      </div>
+    </>
   );
 };
 

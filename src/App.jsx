@@ -12,16 +12,16 @@ import './App.css';
 const App = () => {
   return (
     <Router>
-        <HelmetProvider>
-            <CoursesProvider>
-                <ArticlesProvider>
-                    <ScrollToTop />
-                    <GlobalBackground />
-                    <AppRoutes />
-                    <ChatBot />
-                </ArticlesProvider>
-            </CoursesProvider>
-        </HelmetProvider>
+      <HelmetProvider>
+        <CoursesProvider>
+          <ArticlesProvider>
+            <ScrollToTop />
+            <GlobalBackground />
+            <AppRoutes />
+            <ChatBot />
+          </ArticlesProvider>
+        </CoursesProvider>
+      </HelmetProvider>
     </Router>
   );
 };
