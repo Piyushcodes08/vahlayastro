@@ -15,6 +15,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import Header from "../../components/sections/Header/Header";
 
 
 const PayPalButtonWrapper = ({ amountInUSD, formData, selectedPlan, onSuccess, onError, onCancel }) => (
@@ -374,228 +375,210 @@ const UserEmi = () => {
 
 
   return (
-    <div className="m-auto my-20 min-h-screen">
-      <div className="p-6 max-w-4xl mx-auto bg-white shadow rounded border border-red-200">
-        <h2 className="text-2xl font-bold mb-4 text-red-600">Verify Details</h2>
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold text-gray-700">Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-600"
-            placeholder="Enter your name"
-            required
-            readOnly
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold text-gray-700">Email</label>
-          <input
-            type="text"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-600"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold text-gray-700">Phone</label>
-          <input
-            type="text"
-            value={formData.phone}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-600 bg-gray-100"
-            readOnly // User cannot edit
-          />
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="min-h-screen bg-[#0a0a0a] text-white pt-[120px] pb-20 px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] w-full max-w-2xl mx-auto shadow-[0_0_50px_rgba(221,39,39,0.15)]">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white uppercase tracking-tight">
+            Cosmic <span className="text-[#dd2727]">EMI Verification</span>
+          </h2>
+          <p className="text-center text-gray-400 mb-10 text-sm font-medium uppercase tracking-widest">Confirm your details to proceed with the celestial payment plan.</p>
+          
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Celestial Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  placeholder="Enter your name"
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Cosmic Email</label>
+                <input
+                  type="text"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+            </div>
 
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold text-gray-700">Selected Course</label>
-          <select
-            value={selectedCourse}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-600 bg-gray-100"
-            disabled // Disable Editing
-          >
-            <option value="">{selectedCourse ? selectedCourse : "Loading..."}</option>
-          </select>
-        </div>
-        {selectedCourse && (
-          <>
-            <h3 className="text-lg font-semibold mb-2 text-red-600">Available EMI Plans</h3>
-            <div className="space-y-4">
-              {emiPlans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className={`p-4 rounded shadow cursor-pointer transition-colors duration-200 ${selectedPlan?.id === plan.id
-                    ? "bg-orange-200 border border-red-300"
-                    : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  onClick={() => setSelectedPlan(plan)}
-                >
-                  <h4 className="font-semibold text-gray-700">{plan.duration} Months</h4>
-                  <p className="text-gray-600">Amount: ₹{plan.amount} /Per Month</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Contact Frequency</label>
+                <input
+                  type="text"
+                  value={formData.phone}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-gray-400 cursor-not-allowed"
+                  readOnly
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Selected Course</label>
+                <div className="relative">
+                  <select
+                    value={selectedCourse}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white appearance-none cursor-not-allowed"
+                    disabled
+                  >
+                    <option value="">{selectedCourse ? selectedCourse : "Awaiting selection..."}</option>
+                  </select>
                 </div>
-              ))}
+              </div>
             </div>
-          </>
-        )}
-        <button
-          onClick={handleRazorpayPayment}
-          disabled={!selectedPlan || !formData.name || !formData.phone}
-          className={`mt-4 w-full py-2 px-4 rounded transition-colors duration-200 ${selectedPlan && formData.name && formData.phone
-            ? "bg-red-600 text-white hover:bg-red-700"
-            : "bg-gray-400 text-white cursor-not-allowed"
-            }`}
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <svg
-                className="animate-spin h-5 w-5  text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+
+            {selectedCourse && (
+              <div className="mt-10 pt-8 border-t border-white/10">
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-[#dd2727] rounded-full animate-pulse"></span>
+                  Divine Installment Plans
+                </h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {emiPlans.map((plan) => (
+                    <div
+                      key={plan.id}
+                      className={`relative group p-6 rounded-2xl cursor-pointer transition-all border ${
+                        selectedPlan?.id === plan.id
+                          ? "bg-[#dd2727]/10 border-[#dd2727] shadow-[0_0_20px_rgba(221,39,39,0.2)]"
+                          : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10"
+                      }`}
+                      onClick={() => setSelectedPlan(plan)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-bold text-white text-lg">{plan.duration} Months</h4>
+                          <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Celestial Installment</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xl font-bold text-white">₹{plan.amount}</p>
+                          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">per month</p>
+                        </div>
+                      </div>
+                      {selectedPlan?.id === plan.id && (
+                        <div className="absolute -top-2 -right-2 bg-[#dd2727] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">Selected</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="pt-10 space-y-4">
+              <button
+                onClick={handleRazorpayPayment}
+                disabled={!selectedPlan || !formData.name || !formData.phone || isLoading}
+                className={`w-full py-5 rounded-2xl font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${
+                  selectedPlan && formData.name && formData.phone && !isLoading
+                    ? "bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white hover:scale-[1.02] shadow-[0_0_25px_rgba(221,39,39,0.3)]"
+                    : "bg-white/10 text-gray-500 cursor-not-allowed border border-white/5"
+                }`}
               >
-                <circle className="opacity-25 " cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path
-                  className="opacity-75 "
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                ></path>
-              </svg>
-              <p className=" mx-2">Processing...</p>
-            </div>
-          ) : (
-            "Pay with Razorpay"
-          )}
-        </button>
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    Processing...
+                  </>
+                ) : (
+                  "Pay with Razorpay"
+                )}
+              </button>
 
-        <div className="mt-4">
-          <button
-            onClick={async () => {
-              const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+              <button
+                onClick={async () => {
+                  const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+                  if (!PAYPAL_CLIENT_ID) {
+                    alert("PayPal Client ID is missing. Please set it in the .env file.");
+                    return;
+                  }
+                  try {
+                    const conversionRate = await fetchUSDConversionRate();
+                    const amountInUSD = (selectedPlan.amount * conversionRate).toFixed(2);
+                    if (!amountInUSD || amountInUSD <= 0) {
+                      alert("Invalid amount for payment. Please try again.");
+                      return;
+                    }
+                    const paypalScriptUrl = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
+                    await new Promise((resolve, reject) => {
+                      const script = document.createElement("script");
+                      script.src = paypalScriptUrl;
+                      script.onload = resolve;
+                      script.onerror = reject;
+                      document.body.appendChild(script);
+                    });
 
-              if (!PAYPAL_CLIENT_ID) {
-                alert("PayPal Client ID is missing. Please set it in the .env file.");
-                return;
-              }
-
-              try {
-                // Fetch USD conversion rate and calculate the amounts
-                const conversionRate = await fetchUSDConversionRate();
-                const amountInUSD = (selectedPlan.amount * conversionRate).toFixed(2);
-
-                if (!amountInUSD || amountInUSD <= 0) {
-                  alert("Invalid amount for payment. Please try again.");
-                  return;
-                }
-
-                const paypalScriptUrl = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
-
-                // Dynamically load PayPal SDK
-                await new Promise((resolve, reject) => {
-                  const script = document.createElement("script");
-                  script.src = paypalScriptUrl;
-                  script.onload = resolve;
-                  script.onerror = reject;
-                  document.body.appendChild(script);
-                });
-
-                // Render PayPal Buttons
-                window.paypal
-                  .Buttons({
-                    createOrder: (data, actions) => {
-                      return actions.order.create({
-                        purchase_units: [
-                          {
-                            amount: {
-                              currency_code: "USD",
-                              value: amountInUSD, // Payment amount in USD
-                            },
-                          },
-                        ],
-                      });
-                    },
-                    onApprove: async (data, actions) => {
-                      try {
-                        const details = await actions.order.capture(); // Capture PayPal order
-                        const transactionId = details.id; // Extract transaction ID
-                        const payerName = details.payer.name.given_name;
-
-                        alert(`Transaction completed by ${payerName}`);
-
-                        // Backend call to verify payment and send emails
-                        const backendResponse = await fetch("https://backend-7e8f.onrender.com/api/emi/paypal/success", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            paymentId: details.id, // PayPal transaction ID
-                            userDetails: formData, // User data
-                            courseId: selectedCourse, // Selected course ID
-                            amount: selectedPlan.amount // Plan amount in INR
-                          }),
+                    window.paypal.Buttons({
+                      createOrder: (data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [{ amount: { currency_code: "USD", value: amountInUSD } }],
                         });
-
-                        if (backendResponse.ok) {
-
-                          // Update Firebase with payment details
-                          await addDoc(collection(db, "payments"), {
-                            userId: currentUser,
-                            courseId: selectedCourse,
-                            planId: selectedPlan.id,
-                            amount: selectedPlan.amount,
-                            transactionId,
-                            status: "paid",
-                            timestamp: new Date(),
+                      },
+                      onApprove: async (data, actions) => {
+                        try {
+                          const details = await actions.order.capture();
+                          const transactionId = details.id;
+                          const backendResponse = await fetch("https://backend-7e8f.onrender.com/api/emi/paypal/success", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              paymentId: details.id,
+                              userDetails: formData,
+                              courseId: selectedCourse,
+                              amount: selectedPlan.amount
+                            }),
                           });
 
-
-                          // Update subscriptions in Firebase
-                          await updateFirebaseSubscription();
-
-                          alert("Payment successful! Thank you.");
-                          navigate("/dashboard");
-                        } else {
-                          const errorData = await backendResponse.json();
-                          alert(`Payment verification failed: ${errorData.error || "Unknown error"}.`);
+                          if (backendResponse.ok) {
+                            await addDoc(collection(db, "payments"), {
+                              userId: currentUser,
+                              courseId: selectedCourse,
+                              planId: selectedPlan.id,
+                              amount: selectedPlan.amount,
+                              transactionId,
+                              status: "paid",
+                              timestamp: new Date(),
+                            });
+                            await updateFirebaseSubscription();
+                            alert("Payment successful! Thank you.");
+                            navigate("/dashboard");
+                          }
+                        } catch (error) {
+                          alert("An error occurred during the payment process.");
                         }
-                      } catch (error) {
-                        alert("An error occurred during the payment process. Please try again.");
-                      }
-                    },
+                      },
+                      onCancel: () => alert("Payment was cancelled."),
+                      onError: (err) => alert("An error occurred during the payment process."),
+                    }).render("#paypal-button-container");
+                  } catch (error) {
+                    alert("An error occurred while initializing PayPal.");
+                  }
+                }}
+                disabled={!selectedPlan || !formData.name || !formData.phone}
+                className={`w-full py-5 rounded-2xl font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${
+                  selectedPlan && formData.name && formData.phone
+                    ? "bg-[#0070ba] text-white hover:scale-[1.02] shadow-[0_0_25px_rgba(0,112,186,0.3)]"
+                    : "bg-white/10 text-gray-500 cursor-not-allowed border border-white/5"
+                }`}
+              >
+                Pay with PayPal
+              </button>
 
-
-                    onCancel: () => {
-                      alert("Payment was cancelled. Please try again.");
-                    },
-                    onError: (err) => {
-                      alert("An error occurred during the payment process. Please try again.");
-                    },
-                  })
-                  .render("#paypal-button-container"); // Render PayPal buttons dynamically
-              } catch (error) {
-                alert("An error occurred while initializing PayPal. Please try again.");
-              }
-            }}
-            disabled={!selectedPlan || !formData.name || !formData.phone}
-            className={`mt-4 w-full py-2 px-4 rounded transition-colors duration-200 ${selectedPlan && formData.name && formData.phone
-              ? "bg-red-600 text-white hover:bg-red-700"
-              : "bg-gray-400 text-white cursor-not-allowed"
-              }`}
-          >
-            Pay with PayPal
-          </button>
-
-          {/* Placeholder for dynamically rendered PayPal button */}
-          <div className="flex items-center justify-center w-full h-auto">
-            <div id="paypal-button-container" className="mt-4 flex items-center justify-center  ">  </div>
+              <div id="paypal-button-container" className="mt-4 empty:hidden"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
-
 
 export default UserEmi;
 

@@ -3,13 +3,18 @@ import { auth, db } from '../../../firebaseConfig';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const location = useLocation();
+
+    // Check if we are on admin or dashboard-related pages
+    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/finalize', '/admin', '/course'].some(path => location.pathname.startsWith(path));
+    const showBg = scrolled || alwaysShowBg;
 
     useEffect(() => {
         const handleScroll = (e) => {
@@ -75,37 +80,37 @@ const Header = () => {
     return (
     <header
   className={`fixed top-0 left-0 right-0 z-[1000] w-full text-white transition-all duration-500 overflow-hidden ${
-    scrolled
-      ? "shadow-[0_10px_30px_rgba(0,0,0,0.8)] border-b border-white/20"
-      : "bg-transparent"
-  }`}
->
-  {/* Premium Custom Glowing Background when scrolled */}
-  <div
-    className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-700 ${
-      scrolled ? "opacity-[0.9]" : "opacity-0"
-    }`}
-    style={{
-      background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
-      filter: "blur(80px)",
-      transform: "scale(1.1)",
-    }}
-  />
+        showBg
+          ? "border-b border-white/10 bg-black/40 backdrop-blur-lg"
+          : "bg-transparent"
+      }`}
+    >
+  {/* Premium Custom Glowing Background */}
+      <div
+    className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 ${
+      showBg ? "opacity-[0.75]" : "opacity-0"
+        }`}
+        style={{
+          background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
+      filter: "blur(100px)",
+      transform: "scale(1.2)",
+        }}
+      />
             
             {/* Add a subtle dark overlay so the text remains perfectly readable over the bright glow */}
-            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 -z-10 ${scrolled ? 'bg-black/40' : 'bg-transparent'}`} />
+            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 -z-10 ${showBg ? 'bg-black/40' : 'bg-transparent'}`} />
 
-            <nav className={`max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 transition-all duration-500 relative ${scrolled ? 'py-1' : 'py-1'}`}>
-                
-                {/* Logo Section */}
-                <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
-                        <img 
-                            src={logo} 
-                            alt="Vahlay Astro Logo" 
-                            loading="lazy"
-                            className={`transition-all duration-500 object-contain hover:scale-105 ${scrolled ? 'h-12 w-12 md:h-14 md:w-14' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
-                        />
-                    </Link>
+            <nav className={`max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 transition-all duration-500 relative ${showBg ? 'py-1' : 'py-1'}`}>
+          
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
+              <img 
+                  src={logo} 
+                  alt="Vahlay Astro Logo" 
+                  loading="lazy"
+                            className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-12 w-12 md:h-14 md:w-14' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
+              />
+          </Link>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden lg:flex items-center gap-6 xl:gap-8 ">
@@ -127,7 +132,7 @@ const Header = () => {
                             <>
                                 <Link
                                     to={isAdmin ? "/admin" : "/dashboard"}
-                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px] hover:text-[#dd2727] uppercase tracking-[0.2em] transition-all duration-500 text-white"
                                 >
                                     {isAdmin ? "Admin" : "Dashboard"}
                                 </Link>

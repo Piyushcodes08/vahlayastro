@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Button from '../../ui/Button/Button';
+import ReCAPTCHA from "react-google-recaptcha";
 import './AppointmentModal.css';
 
 const AppointmentModal = ({ isOpen, onClose }) => {
@@ -9,6 +10,10 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [availableData, setAvailableData] = useState([]);
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const recaptchaRef = useRef(null);
+
+    const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
     
     const [formData, setFormData] = useState({
         firstName: "",
@@ -77,8 +82,17 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, handleKeyDown]);
 
+    const onCaptchaChange = (token) => {
+        setCaptchaToken(token);
+    };
+
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
+        if (!captchaToken) {
+            alert("Please verify that you are not a robot.");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -89,7 +103,8 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 access_key: accessKey,
                 ...formData,
                 dob: `${formData.day}-${formData.month}-${formData.year}`,
-                birthTime: `${formData.hour}:${formData.minute} ${formData.period}`
+                birthTime: `${formData.hour}:${formData.minute} ${formData.period}`,
+                captchaVerified: true
             };
 
             const response = await fetch(formEndpoint, {
@@ -100,6 +115,8 @@ const AppointmentModal = ({ isOpen, onClose }) => {
 
             if (response.ok) {
                 alert("Appointment scheduled successfully! Our astrologer will contact you soon.");
+                setCaptchaToken(null);
+                if (recaptchaRef.current) recaptchaRef.current.reset();
                 onClose();
             } else {
                 throw new Error("Failed to submit the form.");
@@ -280,8 +297,17 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                                 </div>
                             </div>
 
+                            <div className="recaptcha-container my-4 flex justify-center">
+                                <ReCAPTCHA
+                                    ref={recaptchaRef}
+                                    sitekey={recaptchaSiteKey}
+                                    onChange={onCaptchaChange}
+                                    theme="dark"
+                                />
+                            </div>
+
                             <div className="form-actions mt-25">
-                                <Button type="submit" variant="secondary" className="submit-btn" disabled={isLoading}>
+                                <Button type="submit" variant="secondary" className="submit-btn" disabled={isLoading || !captchaToken}>
                                     {isLoading ? 'Submitting...' : 'Submit'}
                                 </Button>
                             </div>

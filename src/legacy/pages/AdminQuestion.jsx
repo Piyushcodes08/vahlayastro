@@ -13,18 +13,21 @@ import {
 import { db } from "../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Admin from "./Admin"
+import Header from "../../components/sections/Header/Header";
+
+import Aside from "./Aside";
 
 const QandAAdminPanel = () => {
   // --- Course Selection State ---
-  const [courses, setCourses] = useState([]); // combined free and paid courses
-  const [selectedCourse, setSelectedCourse] = useState(""); // course name selected by admin
+  const [courses, setCourses] = useState([]); 
+  const [selectedCourse, setSelectedCourse] = useState(""); 
 
   // --- Q&A Items State ---
   const [qandaItems, setQandaItems] = useState([]);
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
-  const [videoFile, setVideoFile] = useState(null); // video file to upload
-  const [existingVideoUrl, setExistingVideoUrl] = useState(""); // when editing and no new file is chosen
+  const [videoFile, setVideoFile] = useState(null); 
+  const [existingVideoUrl, setExistingVideoUrl] = useState(""); 
   const [editingId, setEditingId] = useState(null);
   const [videoUploadMessage, setVideoUploadMessage] = useState("");
 
@@ -37,12 +40,8 @@ const QandAAdminPanel = () => {
 
   const storage = getStorage();
 
-  // ---------------------------
-  // Fetch Courses from Firestore
-  // ---------------------------
   const fetchCourses = async () => {
     try {
-      // Get free courses
       const freeCoursesSnapshot = await getDocs(collection(db, "freeCourses"));
       const freeCourses = freeCoursesSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -50,7 +49,6 @@ const QandAAdminPanel = () => {
         type: "free",
       }));
 
-      // Get paid courses
       const paidCoursesSnapshot = await getDocs(collection(db, "paidCourses"));
       const paidCourses = paidCoursesSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -68,9 +66,6 @@ const QandAAdminPanel = () => {
     fetchCourses();
   }, []);
 
-  // ---------------------------
-  // Fetch Q&A Items for Selected Course
-  // ---------------------------
   const fetchQandAItems = async () => {
     if (!selectedCourse) return;
     try {
@@ -84,9 +79,6 @@ const QandAAdminPanel = () => {
     }
   };
 
-  // ---------------------------
-  // Fetch Comments for Selected Course
-  // ---------------------------
   const fetchComments = async () => {
     if (!selectedCourse) return;
     try {
@@ -100,7 +92,6 @@ const QandAAdminPanel = () => {
     }
   };
 
-  // Refetch Q&A items and comments when the selected course changes.
   useEffect(() => {
     if (selectedCourse) {
       fetchQandAItems();
@@ -111,50 +102,33 @@ const QandAAdminPanel = () => {
     }
   }, [selectedCourse]);
 
-  // ---------------------------
-  // Handle Q&A Item Submission (Create/Update)
-  // ---------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title) {
-      alert("Please fill out the Title.");
-      return;
-    }
-    if (!selectedCourse) {
-      alert("Please select a course first.");
-      return;
-    }
+    if (!title) return alert("Please fill out the Title.");
+    if (!selectedCourse) return alert("Please select a course first.");
+    
     try {
       let videoUrl = "";
-      // If a new video file is chosen, upload it
       if (videoFile) {
         setVideoUploadMessage("Uploading video...");
-        const storageRef = ref(
-          storage,
-          `qandaVideos/${Date.now()}_${videoFile.name}`
-        );
+        const storageRef = ref(storage, `qandaVideos/${Date.now()}_${videoFile.name}`);
         const snapshot = await uploadBytes(storageRef, videoFile);
         videoUrl = await getDownloadURL(snapshot.ref);
         setVideoUploadMessage("Video uploaded successfully!");
       } else if (editingId) {
-        // If editing and no new file is chosen, use the existing video URL
         videoUrl = existingVideoUrl;
       }
 
-      // Prepare Q&A item data with courseName field
       const qandaData = { title, subTitle, videoUrl, courseName: selectedCourse };
 
       if (editingId) {
-        // Update existing Q&A item
-        const itemRef = doc(db, "questionAndAnswer", editingId);
-        await updateDoc(itemRef, qandaData);
+        await updateDoc(doc(db, "questionAndAnswer", editingId), qandaData);
         setEditingId(null);
         setExistingVideoUrl("");
       } else {
-        // Create a new Q&A item
         await addDoc(collection(db, "questionAndAnswer"), qandaData);
       }
-      // Clear form fields and refresh list
+      
       setTitle("");
       setSubTitle("");
       setVideoFile(null);
@@ -162,49 +136,39 @@ const QandAAdminPanel = () => {
       fetchQandAItems();
     } catch (error) {
       console.error("Error saving Q&A item:", error);
-      alert("Error saving the item. Please try again.");
+      alert("Error saving the item.");
     }
   };
 
-  // Set the form for editing an existing Q&A item
   const handleEdit = (item) => {
     setEditingId(item.id);
     setTitle(item.title);
     setSubTitle(item.subTitle || "");
     setExistingVideoUrl(item.videoUrl || "");
     setVideoFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Delete a Q&A item
   const handleDelete = async (id) => {
+    if (!window.confirm("Delete this Q&A item?")) return;
     try {
       await deleteDoc(doc(db, "questionAndAnswer", id));
       fetchQandAItems();
     } catch (error) {
       console.error("Error deleting Q&A item:", error);
-      alert("Error deleting the item. Please try again.");
     }
   };
 
-  // ---------------------------
-  // Handle Comment Submission (Create/Update)
-  // ---------------------------
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!commentName || !commentText) {
-      alert("Please fill out both Name and Comment.");
-      return;
-    }
-    if (!selectedCourse) {
-      alert("Please select a course first.");
-      return;
-    }
+    if (!commentName || !commentText) return alert("Please fill out both Name and Comment.");
+    if (!selectedCourse) return alert("Please select a course first.");
+    
     try {
       setCommentStatusMessage("Saving comment...");
-      const commentData = { name: commentName, comment: commentText, courseName: selectedCourse };
+      const commentData = { userName: commentName, comment: commentText, courseName: selectedCourse };
       if (editingCommentId) {
-        const commentRef = doc(db, "Comments_Vahaly_Astro", editingCommentId);
-        await updateDoc(commentRef, commentData);
+        await updateDoc(doc(db, "Comments_Vahaly_Astro", editingCommentId), commentData);
         setEditingCommentId(null);
       } else {
         await addDoc(collection(db, "Comments_Vahaly_Astro"), commentData);
@@ -216,257 +180,169 @@ const QandAAdminPanel = () => {
       fetchComments();
     } catch (error) {
       console.error("Error saving comment:", error);
-      alert("Error saving the comment. Please try again.");
     }
   };
 
-  // Set the form for editing an existing comment
   const handleEditComment = (comm) => {
     setEditingCommentId(comm.id);
     setCommentName(comm.userName);
     setCommentText(comm.comment);
+    window.scrollTo({ top: 500, behavior: 'smooth' });
   };
 
-  // Delete a comment
   const handleDeleteComment = async (id) => {
+    if (!window.confirm("Delete this comment?")) return;
     try {
       await deleteDoc(doc(db, "Comments_Vahaly_Astro", id));
       fetchComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
-      alert("Error deleting the comment. Please try again.");
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Sidebar - Visible always */}
-      <div className=" bg-white shadow-md">
-        <Admin />
-      </div>
-     
-      <div className="w-full md:w-3/4 px-4 sm:px-6 py-16 md:py-8 mx-auto">
-     <h2 className="text-3xl font-bold text-red-600 mb-8 text-center">
-        Q&A Admin Panel
-      </h2>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+        <Aside />
 
-      {/* Course Selection Dropdown */}
-      <div className="mb-8">
-        <label className="block text-lg font-semibold text-red-600 mb-2">
-          Select Course:
-        </label>
-        <select
-          value={selectedCourse}
-          onChange={(e) => setSelectedCourse(e.target.value)}
-          className="w-full p-2 border border-red-600 rounded focus:outline-none"
-        >
-          <option value="">-- Select a Course --</option>
-          {courses.map((course) => (
-            <option key={course.id} value={course.courseName}>
-              {course.courseName} ({course.type})
-            </option>
-          ))}
-        </select>
-      </div>
+        <main className="flex-1 p-4 md:p-8">
+          <div className="space-y-10">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight uppercase">
+                Q&A <span className="text-[#dd2727]">Management</span>
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">Moderate inquiries and organize educational responses</p>
+            </div>
+            
+            <select
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+              className="w-full md:w-64 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
+            >
+              <option value="" className="bg-[#1a1a1a]">-- Select Course --</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.courseName} className="bg-[#1a1a1a]">
+                  {course.courseName} ({course.type})
+                </option>
+              ))}
+            </select>
+          </header>
 
-      {/* Q&A Items Section */}
-      <div className="mb-12 bg-white shadow rounded p-6">
-        <h3 className="text-2xl font-bold text-red-600 mb-4">
-          Manage Q&A Items
-        </h3>
-        {selectedCourse ? (
-          <>
-            <form onSubmit={handleSubmit} className="mb-6 space-y-4">
-              <div>
-                <label className="block text-red-600 font-semibold mb-1">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full p-2 border border-red-600 rounded focus:outline-none"
-                  placeholder="Enter title"
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Q&A Section */}
+            <section className="space-y-6">
+              <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
+                <h3 className="text-lg font-bold uppercase tracking-widest text-[#dd2727] mb-6 flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Interactive Items
+                </h3>
+                
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
+                    placeholder="Inquiry Title"
+                  />
+                  <input
+                    type="text"
+                    value={subTitle}
+                    onChange={(e) => setSubTitle(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
+                    placeholder="Short Context / Subtitle"
+                  />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={(e) => setVideoFile(e.target.files[0])}
+                      className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
+                    />
+                    {editingId && existingVideoUrl && (
+                      <p className="text-[10px] text-[#b0a102] font-bold uppercase mt-2">Current video active</p>
+                    )}
+                  </div>
+                  <button type="submit" className="w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] py-4 rounded-xl font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg">
+                    {editingId ? "Update Q&A" : "Create Q&A"}
+                  </button>
+                </form>
               </div>
-              <div>
-                <label className="block text-red-600 font-semibold mb-1">
-                  Sub Title
-                </label>
-                <input
-                  type="text"
-                  value={subTitle}
-                  onChange={(e) => setSubTitle(e.target.value)}
-                  className="w-full p-2 border border-red-600 rounded focus:outline-none"
-                  placeholder="Enter sub title"
-                />
-              </div>
-              <div>
-                <label className="block text-red-600 font-semibold mb-1">
-                  {editingId
-                    ? "Replace Video File (Optional)"
-                    : "Upload Video File"}
-                </label>
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setVideoFile(e.target.files[0])}
-                  className="w-full p-2 border border-red-600 rounded focus:outline-none"
-                />
-                {editingId && existingVideoUrl && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    Current video is available. Upload a new file to replace it.
-                  </p>
-                )}
-                {videoUploadMessage && (
-                  <p className="text-sm text-green-600 mt-1">
-                    {videoUploadMessage}
-                  </p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
-              >
-                {editingId ? "Update Q&A Item" : "Add Q&A Item"}
-              </button>
-            </form>
 
-            <h4 className="text-xl font-semibold text-red-600 mb-3">
-              Existing Q&A Items
-            </h4>
-            {qandaItems.length > 0 ? (
-              <ul className="space-y-4">
+              <div className="space-y-4">
                 {qandaItems.map((item) => (
-                  <li
-                    key={item.id}
-                    className="p-4 border border-red-600 rounded flex flex-col md:flex-row justify-between items-start md:items-center bg-white"
-                  >
-                    <div className="mb-2 md:mb-0">
-                      <p className="font-bold text-red-600">{item.title}</p>
-                      {item.subTitle && (
-                        <p className="text-gray-700 italic">{item.subTitle}</p>
-                      )}
-                      {item.videoUrl && (
-                        <video
-                          src={item.videoUrl}
-                          controls
-                          className="w-full max-w-xs mt-2 rounded"
-                        />
-                      )}
+                  <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 transition-all group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-white tracking-wide">{item.title}</h4>
+                        <p className="text-xs text-gray-500 mt-1">{item.subTitle}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => handleEdit(item)} className="p-2 bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                        <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-500/10 rounded-lg text-red-500 hover:bg-red-500 hover:text-white transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </li>
+                    {item.videoUrl && (
+                      <div className="aspect-video rounded-xl overflow-hidden border border-white/5">
+                        <video src={item.videoUrl} controls className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
                 ))}
-              </ul>
-            ) : (
-              <p>No Q&A items found for this course.</p>
-            )}
-          </>
-        ) : (
-          <p className="text-center text-gray-600">
-            Please select a course to manage its Q&A items.
-          </p>
-        )}
-      </div>
-
-      {/* Comments Section */}
-      <div className="mb-12 bg-white shadow rounded p-6">
-        <h3 className="text-2xl font-bold text-red-600 mb-4">Manage Comments</h3>
-        {selectedCourse ? (
-          <>
-            <form onSubmit={handleCommentSubmit} className="mb-6 space-y-4">
-              <div>
-                <label className="block text-red-600 font-semibold mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={commentName}
-                  onChange={(e) => setCommentName(e.target.value)}
-                  className="w-full p-2 border border-red-600 rounded focus:outline-none"
-                  placeholder="Enter name"
-                />
               </div>
-              <div>
-                <label className="block text-red-600 font-semibold mb-1">
-                  Comment
-                </label>
-                <textarea
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  className="w-full p-2 border border-red-600 rounded focus:outline-none"
-                  placeholder="Enter comment"
-                  rows="3"
-                ></textarea>
-              </div>
-              {commentStatusMessage && (
-                <p className="text-sm text-green-600">{commentStatusMessage}</p>
-              )}
-              <button
-                type="submit"
-                className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
-              >
-                {editingCommentId ? "Update Comment" : "Add Comment"}
-              </button>
-            </form>
+            </section>
 
-            <h4 className="text-xl font-semibold text-red-600 mb-3">
-              Existing Comments
-            </h4>
-            {comments.length > 0 ? (
-              <ul className="space-y-4">
+            {/* Comments Section */}
+            <section className="space-y-6">
+              <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
+                <h3 className="text-lg font-bold uppercase tracking-widest text-[#b0a102] mb-6 flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                  Client Testimonials
+                </h3>
+                
+                <form onSubmit={handleCommentSubmit} className="space-y-4">
+                  <input
+                    type="text"
+                    value={commentName}
+                    onChange={(e) => setCommentName(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all"
+                    placeholder="Display Name"
+                  />
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all h-24"
+                    placeholder="Share the experience..."
+                  />
+                  <button type="submit" className="w-full border border-[#b0a102]/30 bg-[#b0a102]/10 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-[#b0a102] hover:text-black transition-all">
+                    {editingCommentId ? "Update Review" : "Post Review"}
+                  </button>
+                </form>
+              </div>
+
+              <div className="space-y-4">
                 {comments.map((comm) => (
-                  <li
-                    key={comm.id}
-                    className="p-4 border border-red-600 rounded flex flex-col md:flex-row justify-between items-start md:items-center bg-white"
-                  >
-                    <div className="mb-2 md:mb-0">
-                      <p className="font-bold text-red-600">{comm.userName}</p>
-                      <p className="text-gray-800">{comm.comment}</p>
+                  <div key={comm.id} className="bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 transition-all flex justify-between items-start">
+                    <div className="flex-1 pr-4">
+                      <p className="text-xs font-bold text-[#b0a102] uppercase tracking-widest mb-1">{comm.userName}</p>
+                      <p className="text-sm text-gray-300 leading-relaxed italic">"{comm.comment}"</p>
                     </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEditComment(comm)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteComment(comm.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                      >
-                        Delete
-                      </button>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleEditComment(comm)} className="p-2 bg-white/5 rounded-lg text-gray-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      <button onClick={() => handleDeleteComment(comm.id)} className="p-2 bg-red-500/10 rounded-lg text-red-500 hover:bg-red-500 hover:text-white transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                     </div>
-                  </li>
+                  </div>
                 ))}
-              </ul>
-            ) : (
-              <p>No comments found for this course.</p>
-            )}
-          </>
-        ) : (
-          <p className="text-center text-gray-600">
-            Please select a course to manage its comments.
-          </p>
-        )}
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
       </div>
-     </div>
-    </div>
+    </>
   );
 };
 

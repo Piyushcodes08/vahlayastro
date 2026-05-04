@@ -126,7 +126,7 @@ const Login = () => {
     <>
       <Header />
       <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
-      <div className="flex items-center justify-center min-h-screen bg-backgroundImage">
+      <div className="flex items-center justify-center min-h-screen">
       <div className="bg-black bg-opacity-60 p-8 rounded-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-white mb-6">Log In</h2>
 

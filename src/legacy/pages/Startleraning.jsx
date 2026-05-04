@@ -25,6 +25,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Aside from '../pages/Aside'
+import Header from "../../components/sections/Header/Header";
 
 const PersonalCourse = () => {
   const { courseName } = useParams();
@@ -565,24 +566,27 @@ const PersonalCourse = () => {
    * -----------------------
    */
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      {/* SIDEBAR */}
-      <Aside />
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10">
+        {/* SIDEBAR */}
+        <Aside />
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 p-4 lg:p-6">
+      <main className="flex-1 p-4 md:p-8">
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
         {/* Course Name */}
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-red-600 text-center">
-          {courseName}
+        <h1 className="text-3xl md:text-5xl font-bold mb-8 text-white text-center border-b border-white/10 pb-6 uppercase tracking-wider">
+          <span className="text-[#dd2727]">{courseName}</span>
         </h1>
 
         {/* Live Session Marquee */}
         {meetings.length > 0 && (
           <Link to={`/${courseName}/meetings`}>
-            <div className="bg-orange-100 p-2 mb-4 rounded">
-
+            <div className="bg-gradient-to-r from-[#dd2727]/20 to-[#b0a102]/20 border border-[#dd2727]/30 text-white p-4 mb-8 rounded-xl hover:bg-[#dd2727]/30 transition-all text-center font-bold uppercase tracking-wider animate-pulse flex items-center justify-center shadow-[0_0_15px_rgba(221,39,39,0.2)]">
+              <span className="w-2 h-2 rounded-full bg-red-500 mr-2 animate-ping"></span>
               Click Here to join Live Session for {courseName}
-
             </div>
           </Link>
         )}
@@ -594,85 +598,84 @@ const PersonalCourse = () => {
 
         {/* Upcoming EMI Payments */}
         {upcomingEMIs.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <h3 className="text-lg font-semibold text-red-600 mb-2">
-              Upcoming EMI Payments
+          <div className="mb-8 p-6 bg-black/20 border border-[#dd2727]/30 rounded-2xl shadow-[0_0_20px_rgba(221,39,39,0.1)]">
+            <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4 flex items-center">
+               <span className="text-[#dd2727] mr-2">⚠</span> Upcoming EMI Payments
             </h3>
+            <div className="space-y-4">
             {upcomingEMIs.map((emi, index) => (
-              <div key={index} className="p-3 bg-red-50 rounded mb-2">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-semibold">Course: {emi.courseId}</h4>
-                    <p>EMI #{emi.emiNumber} Due</p>
-                    <p className="text-sm text-gray-600">
-                      Due Date: {emi.dueDate.toLocaleDateString()}
+              <div key={index} className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="flex flex-col">
+                    <h4 className="font-bold text-white text-lg">Course: <span className="text-[#dd2727]">{emi.courseId}</span></h4>
+                    <p className="text-gray-300 font-medium mt-1">EMI #{emi.emiNumber} Due</p>
+                    <p className="text-sm text-gray-400 uppercase tracking-wider mt-1">
+                      Due Date: <span className="text-gray-200">{emi.dueDate.toLocaleDateString()}</span>
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex flex-col items-start md:items-end w-full md:w-auto">
                     <p
-                      className={`text-lg ${emi.daysRemaining <= 3 ? "text-red-500" : "text-green-600"
+                      className={`text-lg font-bold ${emi.daysRemaining <= 3 ? "text-[#dd2727]" : "text-green-400"
                         }`}
                     >
                       {emi.daysRemaining} days left
                     </p>
-                    <p className="font-bold">₹{emi.amountDue}</p>
+                    <p className="text-2xl font-bold text-white mt-1">₹{emi.amountDue}</p>
+                    <Link
+                      to={`/finalize`}
+                      className="mt-4 px-8 py-2 rounded-lg bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)] w-full md:w-auto text-center"
+                    >
+                      Pay Now
+                    </Link>
                   </div>
-                </div>
-                <Link
-                  to={`/finalize`}
-                  className="mt-2 block w-auto bg-red-600 text-white py-2 text-center rounded hover:bg-red-700"
-                >
-                  Pay Now
-                </Link>
               </div>
             ))}
+            </div>
           </div>
         )}
 
         {/* Top Row: Validity, Progress, Modules, Study Materials */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 md:px-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {/* Subscription Validity (Paid Courses) */}
           {courseType !== "free" && (
-            <div className="bg-pink-100 p-4 rounded-lg shadow-md flex flex-col items-center">
-              <h3 className="text-lg font-semibold text-red-600 mb-2">
-                Subscription Validity
+            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
+              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
+                Subscription
               </h3>
               {typeof validityPercentage === "string" && validityPercentage === "Lifetime Access" ? (
-                <p className="text-center text-xl text-red-700">Lifetime Access</p>
+                <div className="flex-1 flex items-center justify-center">
+                  <p className="text-center text-2xl font-bold text-[#b0a102] drop-shadow-[0_0_10px_rgba(176,161,2,0.5)]">Lifetime<br/>Access</p>
+                </div>
               ) : validityPercentage === "0" ? (
-                <p className="text-center text-xl text-red-700">Expired</p>
+                <div className="flex-1 flex items-center justify-center">
+                  <p className="text-center text-2xl font-bold text-[#dd2727] drop-shadow-[0_0_10px_rgba(221,39,39,0.5)]">Expired</p>
+                </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-center" style={{ width: "140px", height: "140px" }}>
+                  <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
                     <PieChart
                       data={[
                         {
                           title: "Remaining",
                           value: parseInt(validityPercentage) || 0,
-                          color: "#FF5252",
+                          color: "#dd2727",
                         },
                         {
                           title: "Expired",
                           value: 100 - (parseInt(validityPercentage) || 0),
-                          color: "#FCECEC", // a lighter shade of pink
+                          color: "rgba(255,255,255,0.1)",
                         },
                       ]}
-                      lineWidth={25}
+                      lineWidth={20}
                       rounded
                       animate
                       style={{ height: "140px", width: "140px" }}
-                      label={({ dataEntry }) => dataEntry.value > 0 ? `${dataEntry.value}%` : null}
-                      labelStyle={{
-                        fontSize: "10px",
-                        fill: "#000",
-                        fontWeight: "bold",
-
-                      }}
-                      labelPosition={20}
                     />
+                    <div className="absolute inset-0 flex items-center justify-center flex-col">
+                      <span className="text-2xl font-bold text-white">{validityPercentage || 0}%</span>
+                    </div>
                   </div>
-                  <p className="text-center mt-2 text-red-700">
-                    {validityPercentage || 0}% Validity Remaining
+                  <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
+                    Validity Remaining
                   </p>
                 </>
               )}
@@ -680,98 +683,94 @@ const PersonalCourse = () => {
           )}
 
           {/* Course Progress */}
-          <div className="bg-pink-100 p-4 rounded-lg shadow-md flex flex-col items-center">
-            <h3 className="text-lg font-semibold text-red-600 mb-2">
+          <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
+            <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
               Course Progress
             </h3>
             {courseType !== "free" ? (
               <>
-                <div className="flex items-center justify-center" style={{ width: "140px", height: "140px" }}>
+                <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
                   <PieChart
                     data={[
-                      { title: "Watched", value: watchedPercentage, color: "#FF5252" },
-                      { title: "Remaining", value: 100 - watchedPercentage, color: "#FCECEC" },
+                      { title: "Watched", value: watchedPercentage, color: "#b0a102" },
+                      { title: "Remaining", value: 100 - watchedPercentage, color: "rgba(255,255,255,0.1)" },
                     ]}
-                    lineWidth={25}
+                    lineWidth={20}
                     rounded
                     animate
                     style={{ height: "140px", width: "140px" }}
-                    label={({ dataEntry }) => dataEntry.value > 0 ? `${dataEntry.value}%` : null}
-                    labelStyle={{
-                      fontSize: "10px",
-                      fill: "#000",
-                      fontWeight: "bold",
-                    }}
-                    labelPosition={20}
                   />
+                  <div className="absolute inset-0 flex items-center justify-center flex-col">
+                      <span className="text-2xl font-bold text-white">{watchedPercentage}%</span>
+                  </div>
                 </div>
-                <p className="text-center mt-2 text-red-700">
-                  {watchedVideos.length}/{totalVideos} Videos Watched ({watchedPercentage}%)
+                <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
+                  {watchedVideos.length}/{totalVideos} Videos Watched
                 </p>
               </>
             ) : (
-              <p className="text-center text-red-700 mt-4">
-                Progress tracking is not available for free courses.
-              </p>
+              <div className="flex-1 flex items-center justify-center p-4">
+                <p className="text-center text-gray-400 italic">
+                  Progress tracking is not available for free courses.
+                </p>
+              </div>
             )}
           </div>
 
           {/* Modules Covered (Paid Courses) */}
           {courseType !== "free" && totalModules > 0 && (
-            <div className="bg-pink-100 p-4 rounded-lg shadow-md flex flex-col items-center">
-              <h3 className="text-lg font-semibold text-red-600 mb-2">
+            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
+              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
                 Modules Covered
               </h3>
-              <div className="flex items-center justify-center" style={{ width: "140px", height: "140px" }}>
+              <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
                 <PieChart
                   data={[
-                    { title: "Covered", value: modulesCovered, color: "#FF5252" },
+                    { title: "Covered", value: modulesCovered, color: "#dd2727" },
                     {
                       title: "Remaining",
                       value: totalModules - modulesCovered,
-                      color: "#FCECEC",
+                      color: "rgba(255,255,255,0.1)",
                     },
                   ]}
-                  lineWidth={25}
+                  lineWidth={20}
                   rounded
                   animate
                   style={{ height: "140px", width: "140px" }}
-                  label={({ dataEntry }) => dataEntry.value > 0 ? `${dataEntry.value}%` : null}
-                  labelStyle={{
-                    fontSize: "10px",
-                    fill: "#000",
-                    fontWeight: "bold",
-                  }}
-                  labelPosition={20}
                 />
+                 <div className="absolute inset-0 flex items-center justify-center flex-col">
+                      <span className="text-2xl font-bold text-white">{modulesCoveredPercentage}%</span>
+                  </div>
               </div>
-              <p className="text-center mt-2 text-red-700">
-                {modulesCovered}/{totalModules} Modules Covered ({modulesCoveredPercentage}%)
+              <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
+                {modulesCovered}/{totalModules} Modules Covered
               </p>
             </div>
           )}
 
           {/* Study Materials */}
           {studyMaterials.length > 0 && (
-            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col">
-              <h3 className="text-lg font-semibold text-center text-red-600 mb-2">
+            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col hover:border-white/20 transition-all">
+              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
                 Study Materials
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-3 overflow-y-auto max-h-[160px] custom-scrollbar pr-2">
                 {studyMaterials.map((material) => (
                   <div
                     key={material.id}
-                    className="p-2 bg-gray-100 rounded shadow flex flex-col items-start"
+                    className="p-3 bg-white/5 border border-white/5 rounded-xl flex flex-col items-start hover:bg-white/10 transition-colors"
                   >
-                    <h4 className="text-gray-700 font-semibold mb-1">
+                    <h4 className="text-white font-medium mb-2 text-sm">
                       {material.title}
                     </h4>
                     <a
                       href={material.url}
                       download
-                      className="text-white bg-blue-500 px-4 py-1 rounded hover:bg-blue-600 text-sm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold uppercase tracking-wider text-white bg-white/10 border border-white/20 px-4 py-1.5 rounded-lg hover:bg-[#dd2727] hover:border-[#dd2727] transition-all shadow-md w-full text-center"
                     >
-                      Download
+                      Download PDF
                     </a>
                   </div>
                 ))}
@@ -782,8 +781,10 @@ const PersonalCourse = () => {
 
 
        {/* COURSE VIDEOS */}
-              <div className="px-2 md:px-6 mb-8">
-                <h2 className="text-xl font-bold text-red-600 mb-4">Course Videos</h2>
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">
+                  Course <span className="text-[#dd2727]">Videos</span>
+                </h2>
                 {Object.keys(groupedVideos).reverse().map((title, index) => {
                   // Initialize navigation refs
                   if (!swiperNavRefs.current[index]) {
@@ -796,15 +797,18 @@ const PersonalCourse = () => {
                   const { prev, next } = swiperNavRefs.current[index];
       
                   return (
-                    <div key={index} className="mb-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
+                    <div key={index} className="mb-10 p-6 bg-black/20 border border-white/10 rounded-2xl">
+                      <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span className="w-2 h-8 bg-[#dd2727] rounded-full inline-block"></span>
+                        {title}
+                      </h3>
       
                       {/* Swiper Container */}
-                      <div className="relative">
+                      <div className="relative group px-8">
                         {/* Left Nav */}
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10">
+                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button ref={prev}>
-                            <FaChevronLeft className="text-red-600 w-8 h-8 bg-white rounded-full p-1 shadow" />
+                            <FaChevronLeft className="text-white w-10 h-10 bg-black/50 border border-white/20 rounded-full p-2 backdrop-blur hover:bg-[#dd2727] transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]" />
                           </button>
                         </div>
       
@@ -818,30 +822,45 @@ const PersonalCourse = () => {
                             swiper.params.navigation.prevEl = prev.current;
                             swiper.params.navigation.nextEl = next.current;
                           }}
-                          pagination={{ clickable: true }}
-                          spaceBetween={10}
+                          pagination={{ clickable: true, dynamicBullets: true }}
+                          spaceBetween={20}
                           slidesPerView={1}
                           breakpoints={{
                             640: { slidesPerView: 2 },
-                            1024: { slidesPerView: 4 },
+                            1024: { slidesPerView: 3 },
+                            1280: { slidesPerView: 4 },
                           }}
-                          className="max-w-7xl"
+                          className="w-full pb-10"
                         >
                           {groupedVideos[title].map((video) => (
-                            <SwiperSlide key={video.id} className="mb-8">
-                              <div className="bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105 mb-6px">
-                                <Link to={`/course/${courseName}/video/${video.id}`}>
-                                  <video
-                                    src={video.url}
-                                    controls
-                                    className="w-full h-40 bg-black rounded"
-                                    controlsList="nodownload"
-                                    onEnded={() => handleMarkAsWatched(video.id)}
-                                  />
-                                  <div className="p-3">
-                                    <p className="text-red-700 font-semibold text-sm truncate">
+                            <SwiperSlide key={video.id} className="h-auto">
+                              <div className="bg-white/5 border border-white/10 shadow-lg rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(221,39,39,0.15)] hover:border-white/20 h-full flex flex-col group/card">
+                                <Link to={`/course/${courseName}/video/${video.id}`} className="flex flex-col h-full">
+                                  <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-white/10">
+                                    <video
+                                      src={video.url}
+                                      className="w-full h-full object-cover opacity-80 group-hover/card:opacity-100 transition-opacity"
+                                      controlsList="nodownload"
+                                      onEnded={() => handleMarkAsWatched(video.id)}
+                                      muted
+                                    />
+                                    {/* Play icon overlay */}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
+                                      <div className="w-12 h-12 rounded-full bg-[#dd2727]/80 flex items-center justify-center shadow-[0_0_20px_rgba(221,39,39,0.5)]">
+                                        <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="p-4 flex-1 flex flex-col">
+                                    <p className="text-white font-bold text-sm line-clamp-2 group-hover/card:text-[#dd2727] transition-colors">
                                       {video.description}
                                     </p>
+                                    {watchedVideos.includes(video.id) && (
+                                       <span className="mt-auto pt-3 inline-flex items-center text-xs font-bold text-green-400 uppercase tracking-wider">
+                                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                          Watched
+                                       </span>
+                                    )}
                                   </div>
                                 </Link>
                               </div>
@@ -850,29 +869,28 @@ const PersonalCourse = () => {
                         </Swiper>
       
                         {/* Right Nav */}
-                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10">
+                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button ref={next}>
-                            <FaChevronRight className="text-red-600 w-8 h-8 bg-white rounded-full p-1 shadow" />
+                            <FaChevronRight className="text-white w-10 h-10 bg-black/50 border border-white/20 rounded-full p-2 backdrop-blur hover:bg-[#dd2727] transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]" />
                           </button>
                         </div>
                       </div>
                     </div>
                   );
                 })}
-      
               </div>
       
 
 
         {/* Q&A SECTION */}
-        <div className="px-2 md:px-6 mb-8">
+        <div className="mb-8">
           <QandASection courseName={courseName} />
         </div>
 
-
+        </div>
       </main>
     </div>
-
+    </>
   );
 };
 

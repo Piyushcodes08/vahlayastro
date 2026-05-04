@@ -328,8 +328,11 @@ const EnrollCourse = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center ">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-500"></div>
+      <div className="min-h-screen bg-transparent flex items-center justify-center py-10 px-4">
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 text-center max-w-sm w-full">
+          <div className="w-12 h-12 border-4 border-[#dd2727] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-300 font-medium tracking-wider animate-pulse">LOADING COURSES...</p>
+        </div>
       </div>
     );
   }
@@ -337,26 +340,27 @@ const EnrollCourse = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] bg-gray-50">
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 premium-container">
       {/* Sidebar */}
       <Aside />
       {/* Main Content */}
-      <main className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 overflow-x-auto">
-        <h2 className="text-2xl font-semibold text-red-600 mb-4">
-          Your Courses
-        </h2>
+      <main className="flex-1 p-4 md:p-8">
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 border-b border-white/10 pb-6">
+            Your <span className="text-[#dd2727]">Courses</span>
+          </h2>
 
         {/* Show message if no courses are enrolled */}
         {courses.length === 0 ? (
-          <div className="text-center p-8 bg-red-50 border border-red-200 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-gray-800">
+          <div className="text-center p-12 bg-white/5 border border-white/10 rounded-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4">
               You are not enrolled in any courses yet.
             </h3>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-400 mb-8">
               Explore our courses and start your learning journey today.
             </p>
             <Link to="/courses">
-              <button className="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(221,39,39,0.3)]">
                 Browse Courses
               </button>
             </Link>
@@ -364,27 +368,27 @@ const EnrollCourse = () => {
         ) : (
           <>
             {/* Mobile: Grid View */}
-            <div className="grid gap-4 md:hidden">
+            <div className="grid gap-6 md:hidden">
               {courses.map((course, index) => (
                 <div
                   key={index}
-                  className="border p-4 rounded-lg bg-red-50 shadow-sm"
+                  className="border border-white/10 p-6 rounded-2xl bg-white/5 hover:border-white/20 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]"
                 >
-                  <h3 className="text-lg font-semibold text-gray-700">
+                  <h3 className="text-xl font-bold text-white mb-2">
                     {course.name}
                   </h3>
-                  <p className="text-sm text-gray-600">Type: {course.type}</p>
-                  <p className="text-sm text-gray-600">
-                    Enrolled: {course.enrolled ? "Yes" : "No"}
+                  <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">Type: <span className="text-white font-medium">{course.type}</span></p>
+                  <p className="text-sm text-gray-400 uppercase tracking-wider mb-4">
+                    Enrolled: <span className={course.enrolled ? "text-green-400" : "text-red-400"}>{course.enrolled ? "Yes" : "No"}</span>
                   </p>
                   {course.type === "Paid" && (
-                    <div className="mt-2 flex items-center space-x-2">
+                    <div className="mt-4 mb-4 flex items-center space-x-4 bg-black/40 p-4 rounded-xl border border-white/5">
                       <MiniPieChart
                         usedDays={course.usedDays}
                         daysLeft={course.daysLeft}
                       />
-                      <span className="text-sm text-gray-600">
-                        Left: {course.daysLeft}d
+                      <span className="text-sm text-gray-300 font-medium tracking-wider">
+                        VALIDITY LEFT: <span className="text-white">{course.daysLeft} DAYS</span>
                       </span>
                     </div>
                   )}
@@ -392,7 +396,7 @@ const EnrollCourse = () => {
                     onClick={() =>
                       navigate(`/course/${encodeURIComponent(course.name)}`)
                     }
-                    className="mt-4 bg-red-500 hover:bg-red-400 text-white py-1 px-3 rounded"
+                    className="mt-2 w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white py-3 rounded-xl font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)]"
                   >
                     Start Learning
                   </button>
@@ -401,61 +405,53 @@ const EnrollCourse = () => {
             </div>
 
             {/* Desktop: Table View */}
-            <div className="hidden md:block">
-              <table className="w-full bg-white rounded">
+            <div className="hidden md:block overflow-x-auto pb-4">
+              <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-red-100 text-left">
-                    <th className="py-3 px-4 font-medium text-gray-600">
-                      Course Name
-                    </th>
-                    <th className="py-3 px-4 font-medium text-gray-600">
-                      Type
-                    </th>
-                    <th className="py-3 px-4 font-medium text-gray-600">
-                      Enrolled
-                    </th>
-                    <th className="py-3 px-4 font-medium text-gray-600">
-                      Validity
-                    </th>
-                    <th className="py-3 px-4 font-medium text-gray-600">
-                      Action
-                    </th>
+                  <tr className="border-b border-white/10">
+                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Course Name</th>
+                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Type</th>
+                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Enrolled</th>
+                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Validity</th>
+                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-white/5">
                   {courses.map((course, index) => (
                     <tr
                       key={index}
-                      className="border-t hover:bg-red-50 bg-white transition-shadow"
+                      className="hover:bg-white/5 transition-colors group"
                     >
-                      <td className="py-3 px-4 text-gray-700">{course.name}</td>
-                      <td className="py-3 px-4 text-gray-700">{course.type}</td>
-                      <td className="py-3 px-4 text-gray-700">
-                        {course.enrolled ? "Yes" : "No"}
+                      <td className="py-5 px-6 text-white font-medium text-lg">{course.name}</td>
+                      <td className="py-5 px-6 text-gray-300">{course.type}</td>
+                      <td className="py-5 px-6">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${course.enrolled ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                          {course.enrolled ? "YES" : "NO"}
+                        </span>
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-5 px-6">
                         {course.type === "Paid" ? (
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-3">
                             <MiniPieChart
                               usedDays={course.usedDays}
                               daysLeft={course.daysLeft}
                             />
-                            <span className="text-sm text-gray-600">
-                              Left: {course.daysLeft}d
+                            <span className="text-sm text-gray-300">
+                              Left: <span className="text-white font-bold">{course.daysLeft}d</span>
                             </span>
                           </div>
                         ) : (
-                          <span className="text-sm text-gray-500">N/A</span>
+                          <span className="text-sm text-gray-500 font-medium">LIFETIME</span>
                         )}
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-5 px-6 text-right">
                         <button
                           onClick={() =>
                             navigate(
                               `/course/${encodeURIComponent(course.name)}`
                             )
                           }
-                          className="bg-red-500 hover:bg-red-400 text-white py-1 px-3 rounded"
+                          className="bg-white/5 border border-white/10 hover:border-[#dd2727] hover:bg-[#dd2727]/20 text-white py-2 px-6 rounded-xl font-bold uppercase tracking-wider text-xs transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transform md:translate-x-2 md:group-hover:translate-x-0"
                         >
                           Start Learning
                         </button>
@@ -469,73 +465,80 @@ const EnrollCourse = () => {
         )}
 
         {/* Video Sessions Section */}
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold">Video Sessions</h2>
+        <div className="mt-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-white/10 pb-4">Video <span className="text-[#dd2727]">Sessions</span></h2>
           {Object.entries(groupedVideos).map(([title, modules]) => (
-            <div key={title} className="mb-6">
-              <h3 className="text-lg font-bold mb-2">{title}</h3>
+            <div key={title} className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 bg-white/5 px-4 py-2 rounded-lg border-l-4 border-[#dd2727]">{title}</h3>
               {modules.map((module) => (
-                <div key={module.id} className="p-4 border rounded mb-4 ml-4">
-                  <div className="flex flex-col md:flex-row justify-between">
+                <div key={module.id} className="p-6 border border-white/10 rounded-2xl mb-4 ml-0 md:ml-6 bg-black/20 hover:bg-white/5 transition-colors">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div>
-                      <h4 className="font-bold">
-                        {module.description?.substring(0, 40)}...
+                      <h4 className="font-bold text-lg text-white mb-2">
+                        {module.description?.substring(0, 60)}...
                       </h4>
                       <a
                         href={module.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
+                        className="text-[#dd2727] hover:text-white font-medium uppercase tracking-wider text-sm flex items-center gap-2 transition-colors"
                       >
-                        View
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg>
+                        Watch Video
                       </a>
                     </div>
-                    <div className="mt-2 md:mt-0">
+                    <div className="mt-4 md:mt-0 flex gap-2 w-full md:w-auto">
                       <button
                         onClick={() => setEditVideo(module)}
-                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                        className="flex-1 md:flex-none bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(module.id, "videos")}
-                        className="bg-red-500 text-white px-2 py-1 rounded"
+                        className="flex-1 md:flex-none bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
                       >
                         Delete
                       </button>
                     </div>
                   </div>
                   {editVideo && editVideo.id === module.id && (
-                    <div className="mt-4 p-4 bg-gray-100 rounded">
-                      <label className="block font-medium">
-                        Edit Video Title
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue={module.title}
-                        onChange={(e) => (module.title = e.target.value)}
-                        className="w-full p-2 border rounded mb-2"
-                      />
+                    <div className="mt-6 p-6 bg-black/40 border border-white/10 rounded-xl space-y-4">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                          Edit Video Title
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={module.title}
+                          onChange={(e) => (module.title = e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
+                        />
+                      </div>
 
-                      <label className="block font-medium">
-                        Edit Video Description
-                      </label>
-                      <textarea
-                        defaultValue={module.description}
-                        onChange={(e) => (module.description = e.target.value)}
-                        className="w-full p-2 border rounded mb-2"
-                      />
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                          Edit Video Description
+                        </label>
+                        <textarea
+                          defaultValue={module.description}
+                          onChange={(e) => (module.description = e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
+                        />
+                      </div>
 
-                      <label className="block font-medium">
-                        Upload New Video (Optional)
-                      </label>
-                      <input
-                        type="file"
-                        onChange={(e) => (module.newFile = e.target.files[0])}
-                        className="mb-2"
-                      />
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                          Upload New Video (Optional)
+                        </label>
+                        <input
+                          type="file"
+                          onChange={(e) => (module.newFile = e.target.files[0])}
+                          className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer"
+                        />
+                      </div>
 
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-4 pt-4 border-t border-white/10">
                         <button
                           onClick={() =>
                             handleEdit(
@@ -546,13 +549,13 @@ const EnrollCourse = () => {
                               "videos"
                             )
                           }
-                          className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                          className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:shadow-[0_0_15px_rgba(22,163,74,0.4)] transition-all"
                         >
                           Save
                         </button>
                         <button
                           onClick={() => setEditVideo(null)}
-                          className="bg-red-500 text-white px-4 py-2 rounded w-full"
+                          className="bg-white/5 border border-white/10 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:bg-white/10 transition-all"
                         >
                           Cancel
                         </button>
@@ -566,67 +569,84 @@ const EnrollCourse = () => {
         </div>
 
         {/* Study Materials Section */}
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold">Study Materials</h2>
+        <div className="mt-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-white/10 pb-4">Study <span className="text-[#dd2727]">Materials</span></h2>
           {studyMaterials.map((material) => (
-            <div key={material.id} className="p-4 border rounded mb-4">
-              <div className="flex flex-col md:flex-row justify-between">
+            <div key={material.id} className="p-6 border border-white/10 rounded-2xl mb-4 bg-black/20 hover:bg-white/5 transition-colors">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
-                  <h3 className="font-bold">{material.title}</h3>
+                  <h3 className="font-bold text-lg text-white mb-2">{material.title}</h3>
                   <a
                     href={material.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
+                    className="text-[#dd2727] hover:text-white font-medium uppercase tracking-wider text-sm flex items-center gap-2 transition-colors"
                   >
-                    View
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>
+                    View Document
                   </a>
                 </div>
-                <div className="mt-2 md:mt-0">
+                <div className="mt-4 md:mt-0 flex gap-2 w-full md:w-auto">
                   <button
                     onClick={() => setEditMaterial(material)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                    className="flex-1 md:flex-none bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(material.id, "materials")}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
+                    className="flex-1 md:flex-none bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
                   >
                     Delete
                   </button>
                 </div>
               </div>
               {editMaterial && editMaterial.id === material.id && (
-                <div className="mt-4">
-                  <input
-                    type="text"
-                    defaultValue={material.title}
-                    onChange={(e) => (material.title = e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                  />
-                  <input
-                    type="file"
-                    onChange={(e) => (material.newFile = e.target.files[0])}
-                    className="mb-2"
-                  />
-                  <button
-                    onClick={() =>
-                      handleEdit(
-                        material.id,
-                        material.title,
-                        material.newFile,
-                        "materials"
-                      )
-                    }
-                    className="bg-green-500 text-white px-4 py-2 rounded w-full"
-                  >
-                    Save
-                  </button>
+                <div className="mt-6 p-6 bg-black/40 border border-white/10 rounded-xl space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Edit Material Title</label>
+                    <input
+                      type="text"
+                      defaultValue={material.title}
+                      onChange={(e) => (material.title = e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Upload New File (Optional)</label>
+                    <input
+                      type="file"
+                      onChange={(e) => (material.newFile = e.target.files[0])}
+                      className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer"
+                    />
+                  </div>
+                  <div className="flex space-x-4 pt-4 border-t border-white/10">
+                    <button
+                      onClick={() =>
+                        handleEdit(
+                          material.id,
+                          material.title,
+                          "", // no desc for materials
+                          material.newFile,
+                          "materials"
+                        )
+                      }
+                      className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:shadow-[0_0_15px_rgba(22,163,74,0.4)] transition-all"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setEditMaterial(null)}
+                      className="bg-white/5 border border-white/10 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:bg-white/10 transition-all"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
           ))}
+        </div>
         </div>
       </main>
       </div>

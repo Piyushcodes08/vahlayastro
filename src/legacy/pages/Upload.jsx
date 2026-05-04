@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+import Aside from "./Aside";
+
 const AdminPortal = () => {
     const [courses, setCourses] = useState([]); // List of courses
     const [selectedCourse, setSelectedCourse] = useState(""); // Selected course
@@ -19,7 +21,6 @@ const AdminPortal = () => {
     const [materialTitle, setMaterialTitle] = useState(""); // Study material title
     const [selectedMaterial, setSelectedMaterial] = useState(null); // Selected study material
     const [materialUploadProgress, setMaterialUploadProgress] = useState(0); // Material upload progress
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     // Fetch courses from Firestore
     useEffect(() => {
@@ -30,14 +31,14 @@ const AdminPortal = () => {
 
                 const freeCourses = freeCoursesSnapshot.docs.map((doc) => ({
                     id: doc.id,
-                    title: doc.data().title || `Untitled (ID: ${doc.id})`, // Handle missing title
+                    title: doc.data().title || `Untitled (ID: ${doc.id})`,
                 }));
                 const paidCourses = paidCoursesSnapshot.docs.map((doc) => ({
                     id: doc.id,
-                    title: doc.data().title || `Untitled (ID: ${doc.id})`, // Handle missing title
+                    title: doc.data().title || `Untitled (ID: ${doc.id})`,
                 }));
 
-                setCourses([...freeCourses, ...paidCourses]); // Combine free and paid courses
+                setCourses([...freeCourses, ...paidCourses]);
             } catch (error) {
                 console.error("Error fetching courses:", error);
             }
@@ -127,152 +128,132 @@ const AdminPortal = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen bg-white">
-            {/* Sidebar/Aside Section */}
-            {/* Sidebar/Aside Section */}
-            <aside
-                className={`w-full h-screen md:w-1/6 bg-red-600 text-white p-4 shadow-lg transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-                    } md:relative fixed top-0 left-0 z-10`}
-            >
-                {/* Header */}
-                <div className="flex justify-between items-center mb-4 md:mb-0">
-                    <h1 className="text-2xl font-bold">Admin Portal</h1>
-                    <button
-                        onClick={() => setIsSidebarOpen(false)}
-                        className="md:hidden text-2xl font-bold"
-                    >
-                        ✖
-                    </button>
-                </div>
+        <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] text-white">
+            <Aside />
 
-                {/* Navigation Links */}
-                <nav className="my-">
-                    <ul className="space-y-4">
-                        <li>
-                            <Link
-                                to="/admin#articles"
-                                onClick={() => setIsSidebarOpen(false)}
-                                className="p-2 hover:bg-red-100"
+            <main className="flex-1 p-4 md:p-8 pt-20">
+                <div className="max-w-4xl mx-auto space-y-10">
+                    <header>
+                        <h2 className="text-3xl font-bold tracking-tight uppercase">
+                            Content <span className="text-[#dd2727]">Uploader</span>
+                        </h2>
+                        <p className="text-gray-400 text-sm mt-1">Upload cosmic videos and study materials</p>
+                    </header>
+
+                    {/* Select Course Card */}
+                    <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Select Target Course</label>
+                        <select
+                            value={selectedCourse}
+                            onChange={(e) => setSelectedCourse(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
+                        >
+                            <option value="" className="bg-[#1a1a1a]">-- Choose a Course --</option>
+                            {courses.map((course) => (
+                                <option key={course.id} value={course.id} className="bg-[#1a1a1a]">
+                                    {course.title}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Upload Video Card */}
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl flex flex-col">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="bg-[#dd2727]/10 p-3 rounded-xl text-[#dd2727]">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                </div>
+                                <h3 className="text-lg font-bold uppercase tracking-widest">Video <span className="text-[#dd2727]">Module</span></h3>
+                            </div>
+                            
+                            <div className="space-y-4 flex-1">
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Introduction to Kundalini"
+                                    value={videoTitle}
+                                    onChange={(e) => setVideoTitle(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
+                                />
+                                <div className="relative group">
+                                    <input
+                                        type="file"
+                                        accept="video/*"
+                                        onChange={(e) => setSelectedVideo(e.target.files[0])}
+                                        className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
+                                    />
+                                </div>
+                            </div>
+
+                            {videoUploadProgress > 0 && (
+                                <div className="mt-6 space-y-2">
+                                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        <span>Progress</span>
+                                        <span>{videoUploadProgress.toFixed(0)}%</span>
+                                    </div>
+                                    <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-[#dd2727] h-full transition-all duration-300" style={{ width: `${videoUploadProgress}%` }}></div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <button
+                                onClick={handleVideoUpload}
+                                disabled={videoUploadProgress > 0 && videoUploadProgress < 100}
+                                className="w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] py-4 rounded-xl font-bold uppercase tracking-widest mt-6 hover:shadow-[0_0_20px_rgba(221,39,39,0.3)] transition-all disabled:opacity-50"
                             >
-                                Articles
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/admin#addcourses"
-                                onClick={() => setIsSidebarOpen(false)}
-                                className="p-2 hover:bg-red-100"
+                                {videoUploadProgress > 0 && videoUploadProgress < 100 ? "Uploading..." : "Upload Video"}
+                            </button>
+                        </div>
+
+                        {/* Upload Study Material Card */}
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl flex flex-col">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="bg-[#b0a102]/10 p-3 rounded-xl text-[#b0a102]">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                </div>
+                                <h3 className="text-lg font-bold uppercase tracking-widest">Study <span className="text-[#b0a102]">Material</span></h3>
+                            </div>
+                            
+                            <div className="space-y-4 flex-1">
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Planet Positions PDF"
+                                    value={materialTitle}
+                                    onChange={(e) => setMaterialTitle(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all"
+                                />
+                                <input
+                                    type="file"
+                                    onChange={(e) => setSelectedMaterial(e.target.files[0])}
+                                    className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
+                                />
+                            </div>
+
+                            {materialUploadProgress > 0 && (
+                                <div className="mt-6 space-y-2">
+                                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        <span>Progress</span>
+                                        <span>{materialUploadProgress.toFixed(0)}%</span>
+                                    </div>
+                                    <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-[#b0a102] h-full transition-all duration-300" style={{ width: `${materialUploadProgress}%` }}></div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <button
+                                onClick={handleMaterialUpload}
+                                disabled={materialUploadProgress > 0 && materialUploadProgress < 100}
+                                className="w-full border border-[#b0a102]/30 bg-[#b0a102]/10 py-4 rounded-xl font-bold uppercase tracking-widest mt-6 hover:bg-[#b0a102] hover:text-black transition-all disabled:opacity-50"
                             >
-                                Add Courses
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/admin#calendar"
-                                onClick={() => setIsSidebarOpen(false)}
-                                className="p-2 hover:bg-red-100"
-                            >
-                                Calendar
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/admin#uploadmaterials"
-                                onClick={() => setIsSidebarOpen(false)}
-                                className="p-2 hover:bg-red-100"
-                            >
-                                Upload Materials
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
-
-
-            {/* Main Content Section */}
-            <div className="flex-1 p-8 bg-gray-50">
-                <button
-                    onClick={() => setIsSidebarOpen(true)}
-                    className="md:hidden bg-red-500 text-white p-2 rounded flex items-center"
-                >
-                    ☰
-                </button>
-                <h1 className="text-3xl font-bold text-red-600 mb-6">Admin Dashboard</h1>
-
-                {/* Select Course */}
-                <div className="mb-8">
-                    <label className="block text-lg font-semibold text-red-600 mb-2">Select Course:</label>
-                    <select
-                        value={selectedCourse}
-                        onChange={(e) => setSelectedCourse(e.target.value)}
-                        className="w-full p-3 border rounded"
-                    >
-                        <option value="">-- Select a Course --</option>
-                        {courses.map((course) => (
-                            <option key={course.id} value={course.id}>
-                                {course.title}
-                            </option>
-                        ))}
-                    </select>
+                                {materialUploadProgress > 0 && materialUploadProgress < 100 ? "Uploading..." : "Upload Material"}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                {/* Upload Video */}
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold text-red-600 mb-4">Upload Video Module</h2>
-                    <input
-                        type="text"
-                        placeholder="Video Title"
-                        value={videoTitle}
-                        onChange={(e) => setVideoTitle(e.target.value)}
-                        className="w-full p-3 border rounded mb-4"
-                    />
-                    <input
-                        type="file"
-                        onChange={(e) => setSelectedVideo(e.target.files[0])}
-                        className="mb-4"
-                    />
-                    <button
-                        onClick={handleVideoUpload}
-                        className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500"
-                    >
-                        Upload Video
-                    </button>
-                    {videoUploadProgress > 0 && (
-                        <p className="text-sm text-gray-700 mt-2">
-                            Uploading: {videoUploadProgress.toFixed(0)}%
-                        </p>
-                    )}
-                </div>
-
-                {/* Upload Study Material */}
-                <div>
-                    <h2 className="text-xl font-bold text-red-600 mb-4">Upload Study Material</h2>
-                    <input
-                        type="text"
-                        placeholder="Material Title"
-                        value={materialTitle}
-                        onChange={(e) => setMaterialTitle(e.target.value)}
-                        className="w-full p-3 border rounded mb-4"
-                    />
-                    <input
-                        type="file"
-                        onChange={(e) => setSelectedMaterial(e.target.files[0])}
-                        className="mb-4"
-                    />
-                    <button
-                        onClick={handleMaterialUpload}
-                        className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500"
-                    >
-                        Upload Material
-                    </button>
-                    {materialUploadProgress > 0 && (
-                        <p className="text-sm text-gray-700 mt-2">
-                            Uploading: {materialUploadProgress.toFixed(0)}%
-                        </p>
-                    )}
-                </div>
-            </div>
-        </div >
+            </main>
+        </div>
     );
 };
 

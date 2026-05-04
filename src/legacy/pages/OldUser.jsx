@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom";
+import Header from "../../components/sections/Header/Header";
 import { getAuth, onAuthStateChanged } from "firebase/auth"; // Firebase Authentication
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { app } from "../../firebaseConfig"; // Firebase configuration file
@@ -160,269 +161,247 @@ const OldUserAppointment = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg min-h-screen">
-  <h2 className="text-2xl font-semibold text-center text-gray-800">
-    Old User Appointment
-  </h2>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="min-h-screen bg-[#0a0a0a] text-white pt-[120px] pb-20 px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] w-full max-w-4xl mx-auto shadow-[0_0_50px_rgba(221,39,39,0.15)]">
+          <h1 className="text-3xl md:text-5xl font-bold text-center mb-2 text-white uppercase tracking-tight">
+            Recurring <span className="text-[#dd2727]">Guidance</span>
+          </h1>
+          <p className="text-center text-gray-400 mb-12 text-sm font-medium uppercase tracking-widest">Continue your journey through the celestial realms</p>
 
-  <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-    {/* Name Fields */}
-    <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-      <div className="w-full md:w-1/2">
-        <label className="block text-sm font-medium text-gray-700">
-          First Name
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="First Name"
-        />
-        {errors.firstName && (
-          <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-        )}
-      </div>
-      <div className="w-full md:w-1/2">
-        <label className="block text-sm font-medium text-gray-700">
-          Last Name
-        </label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="Last Name"
-        />
-        {errors.lastName && (
-          <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-        )}
-      </div>
-    </div>
+          <form onSubmit={handleSubmit} className="space-y-12">
+            {/* Name Fields */}
+            <div className="space-y-8">
+              <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] border-b border-white/10 pb-4 flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#dd2727] rounded-full animate-pulse"></span>
+                Celestial Identity
+              </h3>
 
-    {/* Date of Birth Fields */}
-    <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">Day</label>
-        <input
-          type="number"
-          name="dobDay"
-          value={formData.dobDay}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="DD"
-        />
-        {errors.dobDay && (
-          <p className="text-red-500 text-sm mt-1">{errors.dobDay}</p>
-        )}
-      </div>
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">Month</label>
-        <input
-          type="number"
-          name="dobMonth"
-          value={formData.dobMonth}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="MM"
-        />
-        {errors.dobMonth && (
-          <p className="text-red-500 text-sm mt-1">{errors.dobMonth}</p>
-        )}
-      </div>
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">Year</label>
-        <input
-          type="number"
-          name="dobYear"
-          value={formData.dobYear}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="YYYY"
-        />
-        {errors.dobYear && (
-          <p className="text-red-500 text-sm mt-1">{errors.dobYear}</p>
-        )}
-      </div>
-    </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                  />
+                  {errors.firstName && <p className="text-[#dd2727] text-[10px] font-bold uppercase mt-1">{errors.firstName}</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                  />
+                  {errors.lastName && <p className="text-[#dd2727] text-[10px] font-bold uppercase mt-1">{errors.lastName}</p>}
+                </div>
+              </div>
 
-    {/* Birth Time Fields */}
-    <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">Hour</label>
-        <input
-          type="number"
-          name="birthHour"
-          value={formData.birthHour}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="HH"
-        />
-        {errors.birthHour && (
-          <p className="text-red-500 text-sm mt-1">{errors.birthHour}</p>
-        )}
-      </div>
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">Minute</label>
-        <input
-          type="number"
-          name="birthMinute"
-          value={formData.birthMinute}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="MM"
-        />
-        {errors.birthMinute && (
-          <p className="text-red-500 text-sm mt-1">{errors.birthMinute}</p>
-        )}
-      </div>
-      <div className="w-full md:w-1/3">
-        <label className="block text-sm font-medium text-gray-700">AM/PM</label>
-        <select
-          name="birthAMPM"
-          value={formData.birthAMPM}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-        >
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
-      </div>
-    </div>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Day</label>
+                  <input
+                    type="number"
+                    name="dobDay"
+                    value={formData.dobDay}
+                    onChange={handleChange}
+                    placeholder="DD"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Month</label>
+                  <input
+                    type="number"
+                    name="dobMonth"
+                    value={formData.dobMonth}
+                    onChange={handleChange}
+                    placeholder="MM"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Year</label>
+                  <input
+                    type="number"
+                    name="dobYear"
+                    value={formData.dobYear}
+                    onChange={handleChange}
+                    placeholder="YYYY"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+              </div>
 
-    {/* Birth Place */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700">
-        Birth Place
-      </label>
-      <input
-        type="text"
-        name="birthPlace"
-        value={formData.birthPlace}
-        onChange={handleChange}
-        className="w-full p-2 border border-gray-300 rounded-md"
-        placeholder="Enter Birth Place"
-      />
-      {errors.birthPlace && (
-        <p className="text-red-500 text-sm mt-1">{errors.birthPlace}</p>
-      )}
-    </div>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Hour</label>
+                  <input
+                    type="number"
+                    name="birthHour"
+                    value={formData.birthHour}
+                    onChange={handleChange}
+                    placeholder="HH"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Minute</label>
+                  <input
+                    type="number"
+                    name="birthMinute"
+                    value={formData.birthMinute}
+                    onChange={handleChange}
+                    placeholder="MM"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">AM/PM</label>
+                  <select
+                    name="birthAMPM"
+                    value={formData.birthAMPM}
+                    onChange={handleChange}
+                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="AM" className="bg-[#0a0a0a]">AM</option>
+                    <option value="PM" className="bg-[#0a0a0a]">PM</option>
+                  </select>
+                </div>
+              </div>
 
-    {/* Phone */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700">
-        Phone Number
-      </label>
-      <input
-        type="text"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        className="w-full p-2 border border-gray-300 rounded-md"
-        placeholder="Enter Phone Number"
-      />
-      {errors.phone && (
-        <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-      )}
-    </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Place</label>
+                <input
+                  type="text"
+                  name="birthPlace"
+                  value={formData.birthPlace}
+                  onChange={handleChange}
+                  placeholder="Enter Birth Place"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                />
+              </div>
+            </div>
 
-    {/* Email */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700">Email</label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full p-2 border border-gray-300 rounded-md"
-        placeholder="Enter Email"
-      />
-      {errors.email && (
-        <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-      )}
-    </div>
+            {/* Contact Details */}
+            <div className="space-y-8 pt-8 border-t border-white/10">
+              <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#b0a102] rounded-full animate-pulse"></span>
+                Celestial Channels
+              </h3>
 
-    {/* Available Date */}
-    <fieldset className="border border-red-300 rounded-lg p-6 mb-6">
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">
-          Available Date
-        </label>
-        <select
-          name="availableDate"
-          value={formData.availableDate}
-          onChange={handleChange}
-          className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-          required
-        >
-          <option value="" disabled>
-            Select a date
-          </option>
-          {availableData.map((item) => (
-            <option key={item.date} value={item.date}>
-              {item.date}
-            </option>
-          ))}
-        </select>
-      </div>
-      {formData.availableDate && (
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            Available Slots
-          </label>
-          <select
-            name="slot"
-            value={formData.slot}
-            onChange={handleChange}
-            className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            required
-          >
-            <option value="" disabled>
-              Select a time slot
-            </option>
-            {availableData
-              .find((item) => item.date === formData.availableDate)
-              ?.timeSlot.map((slot) => (
-                <option key={slot} value={slot}>
-                  {slot}
-                </option>
-              ))}
-          </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Phone</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                  {errors.phone && <p className="text-[#dd2727] text-[10px] font-bold uppercase mt-1">{errors.phone}</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email Address"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                  {errors.email && <p className="text-[#dd2727] text-[10px] font-bold uppercase mt-1">{errors.email}</p>}
+                </div>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 space-y-8">
+                <h4 className="text-xs font-bold text-[#dd2727] uppercase tracking-[0.2em]">Temporal Selection</h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Celestial Date</label>
+                    <select
+                      name="availableDate"
+                      value={formData.availableDate}
+                      onChange={handleChange}
+                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                      required
+                    >
+                      <option value="" disabled className="bg-[#0a0a0a]">Select a Date</option>
+                      {availableData.map((item) => (
+                        <option key={item.date} value={item.date} className="bg-[#0a0a0a]">{item.date}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {formData.availableDate && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Time Slot</label>
+                      <select
+                        name="slot"
+                        value={formData.slot}
+                        onChange={handleChange}
+                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                        required
+                      >
+                        <option value="" disabled className="bg-[#0a0a0a]">Select a Slot</option>
+                        {availableData
+                          .find((item) => item.date === formData.availableDate)
+                          ?.timeSlot.map((slot) => (
+                            <option key={slot} value={slot} className="bg-[#0a0a0a]">{slot}</option>
+                          ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Consultation Intent</label>
+                <textarea
+                  name="consultationDetails"
+                  value={formData.consultationDetails}
+                  onChange={handleChange}
+                  placeholder="What cosmic questions do you seek answers to?"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all h-32 placeholder-gray-600"
+                />
+                {errors.consultationDetails && <p className="text-[#dd2727] text-[10px] font-bold uppercase mt-1">{errors.consultationDetails}</p>}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-6 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.3em] rounded-[1.5rem] hover:scale-[1.02] transition-all shadow-[0_0_30px_rgba(221,39,39,0.4)]"
+            >
+              Align Destinies
+            </button>
+          </form>
+
+          {success && (
+            <div className="mt-8 p-4 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-center font-bold uppercase tracking-widest text-xs">
+              {success}
+            </div>
+          )}
+          {errors.submit && (
+            <div className="mt-8 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-red-400 text-center font-bold uppercase tracking-widest text-xs">
+              {errors.submit}
+            </div>
+          )}
         </div>
-      )}
-    </fieldset>
-
-    {/* Consultation Details */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700">
-        Consultation Details
-      </label>
-      <textarea
-        name="consultationDetails"
-        value={formData.consultationDetails}
-        onChange={handleChange}
-        className="w-full p-2 border border-gray-300 rounded-md"
-        placeholder="Enter Consultation Details"
-      />
-      {errors.consultationDetails && (
-        <p className="text-red-500 text-sm mt-1">{errors.consultationDetails}</p>
-      )}
-    </div>
-
-    {/* Submit Button */}
-    <div className="mt-6">
-      <button
-        type="submit"
-        className="w-full py-2 bg-red-600 text-white font-bold rounded-md hover:bg-red-700 transition"
-      >
-        Submit Appointment
-      </button>
-    </div>
-  </form>
-</div>
-
+      </div>
+    </>
   );
 };
 

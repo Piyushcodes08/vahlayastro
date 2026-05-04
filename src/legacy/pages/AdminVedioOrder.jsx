@@ -4,6 +4,9 @@ import { db } from "../../firebaseConfig";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams, Link } from "react-router-dom";
 import Admin from "./Admin";
+import Header from "../../components/sections/Header/Header";
+
+import Aside from "./Aside";
 
 // Custom dropdown component for course selection
 const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
@@ -13,15 +16,16 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
     courses.find((course) => course.id === selectedCourse)?.title || "Select a Course";
 
   return (
-    <div className="relative mb-8 flex justify-center">
+    <div className="relative mb-10">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-3 border border-gray-300 rounded-lg w-full max-w-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gradient-to-r from-red-700 to-red-900 text-white"
+        className="w-full md:w-80 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between group hover:bg-white/10 transition-all text-white font-bold uppercase tracking-widest text-sm"
       >
-        {selectedTitle}
+        <span>{selectedTitle}</span>
+        <svg className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
       </button>
       {isOpen && (
-        <ul className="absolute mt-1 w-full max-w-xs bg-gradient-to-r from-red-700 to-red-900 text-white rounded-lg shadow-lg z-10">
+        <ul className="absolute mt-2 w-full md:w-80 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
           {courses.map((course) => (
             <li
               key={course.id}
@@ -29,7 +33,7 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
                 setSelectedCourse(course.id);
                 setIsOpen(false);
               }}
-              className="p-3 cursor-pointer hover:bg-red-800"
+              className="px-6 py-4 cursor-pointer hover:bg-white/5 text-sm font-medium transition-colors border-b border-white/5 last:border-0"
             >
               {course.title}
             </li>
@@ -43,7 +47,7 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
 const AdminVideoManager = () => {
   const { courseName } = useParams();
   const [videos, setVideos] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState([]);
   const [pendingChanges, setPendingChanges] = useState([]);
@@ -176,12 +180,13 @@ const AdminVideoManager = () => {
       alert("All changes saved successfully!");
     } catch (error) {
       console.error("Error saving changes:", error);
-      alert("Failed to save changes. Please try again.");
+      alert("Failed to save changes.");
     }
   };
 
   // Delete video handler
   const handleDeleteVideo = async (videoId, title) => {
+    if (!window.confirm("Are you sure you want to delete this lesson?")) return;
     try {
       await deleteDoc(doc(db, `videos_${selectedCourse}`, videoId));
 
@@ -195,88 +200,119 @@ const AdminVideoManager = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="bg-white shadow-md  w-1/6 md:w-64">
-        <Admin />
-      </div>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+        <Aside />
 
-      {/* Main Content */}
-      <div className="flex-1 md:p-6 py-16 p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Course Video Management</h1>
-          {pendingChanges.length > 0 && (
-            <button
-              onClick={handleSaveChanges}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg shadow-md transition-all flex items-center gap-2"
-            >
-              💾 Save Changes ({pendingChanges.length})
-            </button>
-          )}
-        </div>
+        <main className="flex-1 p-4 md:p-8">
+          <div className="space-y-8">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight uppercase">
+                Video <span className="text-[#dd2727]">Sequencing</span>
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">Drag and drop lessons to structure your course curriculum</p>
+            </div>
+            
+            {pendingChanges.length > 0 && (
+              <button
+                onClick={handleSaveChanges}
+                className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] px-8 py-4 rounded-2xl font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-xl"
+              >
+                Save Changes ({pendingChanges.length})
+              </button>
+            )}
+          </header>
 
-        {/* Course Selection using custom dropdown */}
-        <CourseDropdown
-          courses={courses}
-          selectedCourse={selectedCourse}
-          setSelectedCourse={setSelectedCourse}
-        />
+          <CourseDropdown
+            courses={courses}
+            selectedCourse={selectedCourse}
+            setSelectedCourse={setSelectedCourse}
+          />
 
-        {/* Video List */}
-        {selectedCourse && (
-          <DragDropContext onDragEnd={handleDragEnd}>
+          {loading ? (
             <div className="space-y-6">
-              {Object.keys(videos).map((title) => (
-                <div
-                  key={title}
-                  className="bg-white p-5 rounded-lg shadow-md border border-gray-200"
-                >
-                  <h3 className="text-xl font-semibold text-gray-700 mb-3">{title}</h3>
-                  <Droppable droppableId={title}>
-                    {(provided) => (
-                      <ul
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="space-y-3"
-                      >
-                        {videos[title].map((video, index) => (
-                          <Draggable key={video.id} draggableId={video.id} index={index}>
-                            {(provided) => (
-                              <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className="flex justify-between items-center bg-gray-50 p-4 rounded-md shadow-sm border border-gray-300 hover:shadow-md transition-all"
-                              >
-                                <div>
-                                  <span className="font-medium text-gray-800">
-                                    {video.description}
-                                  </span>
-                                  <span className="text-gray-500 ml-2 text-sm">
-                                    (Order: {video.order + 1})
-                                  </span>
-                                </div>
-                                <button
-                                  onClick={() => handleDeleteVideo(video.id, title)}
-                                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md shadow-md transition-all"
-                                >
-                                  Delete
-                                </button>
-                              </li>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </ul>
-                    )}
-                  </Droppable>
-                </div>
+              {[1, 2].map(i => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-3xl p-6 h-64 animate-pulse"></div>
               ))}
             </div>
-          </DragDropContext>
-        )}
+          ) : selectedCourse ? (
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <div className="space-y-8">
+                {Object.keys(videos).length > 0 ? (
+                  Object.keys(videos).map((title) => (
+                    <div
+                      key={title}
+                      className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8"
+                    >
+                      <h3 className="text-lg font-bold text-[#b0a102] uppercase tracking-widest mb-6 flex items-center gap-3">
+                        <svg className="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 01-2-2m0 0V5a2 2 0 012-2h6.5L21 7v2"/></svg>
+                        {title}
+                      </h3>
+                      
+                      <Droppable droppableId={title}>
+                        {(provided) => (
+                          <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="space-y-4"
+                          >
+                            {videos[title].map((video, index) => (
+                              <Draggable key={video.id} draggableId={video.id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className="group"
+                                  >
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 border border-white/5 p-5 rounded-2xl group-hover:bg-white/10 transition-all duration-300 gap-4">
+                                      <div className="flex items-center gap-4 flex-1">
+                                        <div {...provided.dragHandleProps} className="p-2 bg-black/40 rounded-xl text-gray-500 hover:text-[#dd2727] transition-colors cursor-grab active:cursor-grabbing">
+                                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"/></svg>
+                                        </div>
+                                        <div>
+                                          <p className="font-bold text-white tracking-wide">{video.description}</p>
+                                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Order: {video.order + 1}</p>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center gap-3 w-full md:w-auto">
+                                        <button
+                                          onClick={() => handleDeleteVideo(video.id, title)}
+                                          className="flex-1 md:flex-none px-6 py-2 bg-red-500/10 text-red-500 border border-red-500/10 rounded-xl hover:bg-red-500 hover:text-white transition-all text-xs font-bold uppercase"
+                                        >
+                                          Delete
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-20 bg-white/5 border border-white/10 rounded-3xl">
+                    <p className="text-gray-500 italic">No videos found for this course section.</p>
+                  </div>
+                )}
+              </div>
+            </DragDropContext>
+          ) : (
+            <div className="text-center py-20 bg-white/5 border border-white/10 rounded-3xl">
+              <svg className="w-16 h-16 mx-auto mb-6 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <p className="text-gray-500 font-medium">Select a course to manage video sequence</p>
+            </div>
+          )}
+        </div>
+      </main>
       </div>
-    </div>
+    </>
   );
 };
 

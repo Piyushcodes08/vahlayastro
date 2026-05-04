@@ -8,6 +8,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import Admin from "./Admin";
+import Header from "../../components/sections/Header/Header";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const AdminEnrolledUsers = () => {
@@ -38,8 +39,12 @@ const AdminEnrolledUsers = () => {
 
   useEffect(() => {
     const unsub1 = onSnapshot(collection(db, "paidCourses"), (snapshot) => {
-      const paid = snapshot.docs.map((doc) => ({ id: doc.id, type: "paid" }));
-      paid.sort((a, b) => a.id.localeCompare(b.id));
+      const paid = snapshot.docs.map((doc) => ({ 
+        id: doc.id, 
+        title: doc.data().title || doc.id,
+        type: "paid" 
+      }));
+      paid.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
       setCourses(paid);
       setAllCourses((prev) => {
         const free = prev.filter((c) => c.type === "free");
@@ -48,9 +53,13 @@ const AdminEnrolledUsers = () => {
     });
 
     const unsub2 = onSnapshot(collection(db, "freeCourses"), (snapshot) => {
-      const free = snapshot.docs.map((doc) => ({ id: doc.id, type: "free" }));
-      free.sort((a, b) => a.id.localeCompare(b.id));
-      setFreeCourses(free.map((f) => f.id));
+      const free = snapshot.docs.map((doc) => ({ 
+        id: doc.id, 
+        title: doc.data().title || doc.id,
+        type: "free" 
+      }));
+      free.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+      setFreeCourses(free);
       setAllCourses((prev) => {
         const paid = prev.filter((c) => c.type === "paid");
         return [...paid, ...free];
@@ -172,270 +181,235 @@ const AdminEnrolledUsers = () => {
   };
 
   return (
-    <div className="flex flex-row md:flex-row min-h-screen bg-white ">
-      <div className="bg-white shadow-md">
-        <Admin />
-      </div>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+        <Aside />
 
-      <div className="pt-16 flex flex-col items-center w-full">
-        <div className="mb-8 bg-gray-50 p-6 rounded-lg shadow-md w-full md:w-4/5 ">
-          <h2 className="text-2xl font-bold text-red-600 flex justify-between mb-4">
-            Add New Subscriber
-            <button onClick={handleExpand} className="text-xl transition-all  ">
-              {expend ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-          </h2>
-          {expend && (
-            <form
-              onSubmit={handleAddSubscriber}
-              className="space-y-4 transition-all duration-300 "
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4  ">
-                {/* Email/User ID Field */}
-                <div>
-                  <label
-                    htmlFor="userId"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email/User ID
-                  </label>
-                  <input
-                    id="userId"
-                    type="text"
-                    required
-                    placeholder="Email/User ID"
-                    value={newSubscriber.userId}
-                    onChange={(e) =>
-                      setNewSubscriber({
-                        ...newSubscriber,
-                        userId: e.target.value,
-                      })
-                    }
-                    className="block p-2 w-full rounded-md border-gray-300 shadow-sm"
-                  />
-                </div>
-
-                {/* Course Type Selection */}
-                <div>
-                  <label
-                    htmlFor="courseType"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Course Type
-                  </label>
-                  <select
-                    id="courseType"
-                    value={newSubscriber.courseType}
-                    onChange={(e) =>
-                      setNewSubscriber({
-                        ...newSubscriber,
-                        courseType: e.target.value,
-                      })
-                    }
-                    className="block p-2 w-full rounded-md border-gray-300 shadow-sm"
-                  >
-                    <option value="paid">Paid Course</option>
-                    <option value="free">Free Course</option>
-                  </select>
-                </div>
-
-                {/* Course Selection */}
-                <div>
-                  <label
-                    htmlFor="course"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Course
-                  </label>
-                  <select
-                    id="course"
-                    required
-                    value={newSubscriber.course}
-                    onChange={(e) =>
-                      setNewSubscriber({
-                        ...newSubscriber,
-                        course: e.target.value,
-                      })
-                    }
-                    className="block w-full rounded-md p-2 border-gray-300 shadow-sm"
-                  >
-                    <option value="">Select Course</option>
-                    {newSubscriber.courseType === "paid"
-                      ? courses.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.id}
-                          </option>
-                        ))
-                      : freeCourses.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Error and Success Messages */}
-              {errorMessage && (
-                <p className="text-red-600 text-sm">{errorMessage}</p>
-              )}
-              {successMessage && (
-                <p className="text-green-600 text-sm">{successMessage}</p>
-              )}
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+        <main className="flex-1 p-4 md:p-8">
+          <div className="space-y-8">
+          {/* Add New Subscriber Section */}
+          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold tracking-wider">
+                ADD NEW <span className="text-[#dd2727]">SUBSCRIBER</span>
+              </h2>
+              <button 
+                onClick={handleExpand} 
+                className={`p-2 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 ${expend ? 'rotate-180' : ''}`}
               >
-                Add Subscriber
+                <IoIosArrowDown size={24} />
               </button>
-            </form>
-          )}
-        </div>
+            </div>
 
-        <div className="w-full md:w-4/5 ">
-          <h1 className="text-3xl font-bold text-red-600 mb-4 text-center ">
-            Enrolled Users
-          </h1>
+            {expend && (
+              <form onSubmit={handleAddSubscriber} className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email / User ID</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="user@example.com"
+                      value={newSubscriber.userId}
+                      onChange={(e) => setNewSubscriber({ ...newSubscriber, userId: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                    />
+                  </div>
 
-          <div className="mb-6 max-w-auto">
-            <label className="block mb-2 font-medium text-gray-700">
-              Filter by Course
-            </label>
-            <select
-              value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
-              className="p-2 w-full border border-gray-300 rounded"
-            >
-              <option value="">All Courses</option>
-              {allCourses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.id}
-                </option>
-              ))}
-            </select>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Course Type</label>
+                    <select
+                      value={newSubscriber.courseType}
+                      onChange={(e) => setNewSubscriber({ ...newSubscriber, courseType: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="paid" className="bg-[#1a1a1a]">Paid Course</option>
+                      <option value="free" className="bg-[#1a1a1a]">Free Course</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Course</label>
+                    <select
+                      required
+                      value={newSubscriber.course}
+                      onChange={(e) => setNewSubscriber({ ...newSubscriber, course: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-[#1a1a1a]">Select Course</option>
+                      {newSubscriber.courseType === "paid"
+                        ? courses.map((c) => (
+                            <option key={c.id} value={c.id} className="bg-[#1a1a1a]">
+                              {c.title}
+                            </option>
+                          ))
+                        : freeCourses.map((c) => (
+                            <option key={c.id} value={c.id} className="bg-[#1a1a1a]">
+                              {c.title}
+                            </option>
+                          ))}
+                    </select>
+                  </div>
+
+                  {newSubscriber.courseType === "paid" && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Subscription Date</label>
+                        <input
+                          type="date"
+                          value={newSubscriber.subscriptionDate}
+                          onChange={(e) => setNewSubscriber({ ...newSubscriber, subscriptionDate: e.target.value })}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Expiry Date</label>
+                        <input
+                          type="date"
+                          value={newSubscriber.expiryDate}
+                          onChange={(e) => setNewSubscriber({ ...newSubscriber, expiryDate: e.target.value })}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {errorMessage && <p className="text-red-500 text-sm font-medium">{errorMessage}</p>}
+                {successMessage && <p className="text-green-500 text-sm font-medium">{successMessage}</p>}
+
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white py-4 rounded-xl font-bold uppercase tracking-[0.2em] hover:shadow-[0_0_20px_rgba(221,39,39,0.4)] transform hover:scale-[1.01] transition-all duration-300"
+                >
+                  Add Subscriber
+                </button>
+              </form>
+            )}
           </div>
 
-          <div>
-            <div className="md:flex items-center justify-between">
-            {!selectedCourse && (
-              <p className="text-md text-red-500 mt-1 p-2">
-                Select a course to enable delete
-              </p>
-            )}
-            <div className="flex flex-row items-center justify-between">
-            <p className="text-right p-2" >
-              Total Subscribers:{" "}
-              <strong className="bg-green-500 text-white px-3 py-1 rounded ">
-                {filteredSubscribers.length}
-              </strong>
-            </p>
-            </div>
-            
+          {/* Enrolled Users Section */}
+          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
+            <h2 className="text-2xl font-bold tracking-wider mb-8 text-center uppercase">
+              Enrolled <span className="text-[#dd2727]">Users</span>
+            </h2>
+
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-8">
+              <div className="w-full md:w-1/2 lg:w-1/3">
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Filter by Course</label>
+                <select
+                  value={selectedCourse}
+                  onChange={(e) => setSelectedCourse(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                >
+                  <option value="" className="bg-[#1a1a1a]">All Courses</option>
+                  {allCourses.map((c) => (
+                    <option key={c.id} value={c.id} className="bg-[#1a1a1a]">
+                      {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                {!selectedCourse && (
+                  <p className="text-[10px] text-yellow-500 font-bold uppercase tracking-wider bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">
+                    Select a course to enable delete
+                  </p>
+                )}
+                <p className="text-sm font-medium tracking-wide">
+                  TOTAL SUBSCRIBERS: <strong className="text-[#dd2727] text-lg ml-2">{filteredSubscribers.length}</strong>
+                </p>
+              </div>
             </div>
 
-            <div className="overflow-y-auto my-4 mb-16 max-h-[30rem] hidden md:block md:w-auto border border-gray-800 rounded">
-              <table className="w-full text-left table-auto">
-                <thead className="bg-pink-100 sticky top-0 z-10">
+            {/* Table */}
+            <div className="hidden md:block overflow-hidden rounded-2xl border border-white/10">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-white/5 border-b border-white/10">
                   <tr>
-                    <th className="border px-4 py-2">Name</th>
-                    <th className="border px-4 py-2">User ID</th>
-                    <th className="border px-4 w-52 py-2">Phone</th>
-                    <th className="border px-6 py-2"></th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">User ID / Email</th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Phone</th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-white/5 bg-black/20">
                   {filteredSubscribers.length > 0 ? (
                     filteredSubscribers.map((sub) => (
-                      <tr key={sub.id}>
-                        <td className="border px-4 py-2">
-                          {sub.name || "N/A"}
-                        </td>
-                        <td className="border px-4 py-2">{sub.id}</td>
-                        <td className="border px-4 py-2">
-                          {sub.phone || "N/A"}
-                        </td>
-                        <td className="border px-4 py-2 text-center">
+                      <tr key={sub.id} className="hover:bg-white/5 transition-colors group">
+                        <td className="px-6 py-4 text-sm font-medium text-white">{sub.name || "N/A"}</td>
+                        <td className="px-6 py-4 text-sm text-gray-400">{sub.id}</td>
+                        <td className="px-6 py-4 text-sm text-gray-400">{sub.phone || "N/A"}</td>
+                        <td className="px-6 py-4 text-right">
                           <button
                             disabled={!selectedCourse}
-                            onClick={() =>
-                              selectedCourse &&
-                              handleDeleteCourse(sub.id, selectedCourse)
-                            }
-                            className={`${
-                              !selectedCourse
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
+                            onClick={() => selectedCourse && handleDeleteCourse(sub.id, selectedCourse)}
+                            className={`p-2 rounded-lg transition-all ${
+                              !selectedCourse 
+                                ? "opacity-20 grayscale cursor-not-allowed" 
+                                : "hover:bg-red-500/20 text-red-500"
                             }`}
                           >
-                            <img
-                              src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png"
-                              className="h-6"
-                              alt="Delete"
-                            />
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
                           </button>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" className="text-center py-2">
-                        No subscribers found.
+                      <td colSpan="4" className="px-6 py-12 text-center text-gray-500 italic font-medium">
+                        No subscribers found for this selection.
                       </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
-          </div>
 
-          {/* Card layout for small screens */}
-          <div className="space-y-4 md:hidden">
-            {filteredSubscribers.length > 0 ? (
-              filteredSubscribers.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="border rounded-lg shadow p-4 bg-white"
-                >
-                  <p className="mb-2">
-                    <span className="font-semibold">Name:</span>{" "}
-                    {sub.name || "N/A"}
-                  </p>
-                  <p className="mb-2">
-                    <span className="font-semibold">User ID:</span> {sub.id}
-                  </p>
-                  <p className="mb-2">
-                    <span className="font-semibold">Phone:</span>{" "}
-                    {sub.phone || "N/A"}
-                  </p>
-                  <div className="text-right">
-                    <button
-                      onClick={() => handleDeleteCourse(sub.id, selectedCourse)}
-                      className={`${
-                        !selectedCourse
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                      }`}
-                    >
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png"
-                        className="h-6 inline-block"
-                        alt="Delete"
-                      />
-                    </button>
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-4">
+              {filteredSubscribers.length > 0 ? (
+                filteredSubscribers.map((sub) => (
+                  <div key={sub.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Name</p>
+                        <p className="text-sm font-bold text-white">{sub.name || "N/A"}</p>
+                      </div>
+                      <button
+                        disabled={!selectedCourse}
+                        onClick={() => selectedCourse && handleDeleteCourse(sub.id, selectedCourse)}
+                        className={`p-2 rounded-lg ${!selectedCourse ? "opacity-20" : "bg-red-500/20 text-red-500"}`}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">User ID / Email</p>
+                      <p className="text-sm text-gray-300 break-all">{sub.id}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Phone</p>
+                      <p className="text-sm text-gray-300">{sub.phone || "N/A"}</p>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center py-4 text-gray-500">
-                No subscribers found.
-              </p>
-            )}
+                ))
+              ) : (
+                <p className="text-center py-8 text-gray-500 italic">No subscribers found.</p>
+              )}
+            </div>
           </div>
         </div>
+      </main>
       </div>
-    </div>
+    </>
   );
 };
 

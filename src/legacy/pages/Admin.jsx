@@ -80,13 +80,13 @@ const SideBar = () => {
       {/* Toggle Button */}
       {!isOpen && (
         <button
-          className="lg:hidden fixed top-24 left-4 text-white p-2 rounded-full z-40"
+          className="lg:hidden fixed top-24 left-4 text-white p-3 rounded-xl z-40 bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(221,39,39,0.3)] transition-all hover:scale-110 active:scale-95"
           onClick={() => setIsOpen(true)}
         >
           <img
             src="https://cdn-icons-png.flaticon.com/512/14025/14025507.png"
             alt="menu"
-            className="h-8"
+            className="h-6 w-6"
           />
         </button>
       )}
@@ -95,40 +95,62 @@ const SideBar = () => {
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-all duration-300"
         ></div>
       )}
 
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`bg-red-600 text-white h-full md:w-64 w-4/5 p-6 fixed lg:relative transition-transform overflow-y-scroll md:overflow-auto left-0 top-0 z-50 duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0`}
+        className={`bg-black/80 backdrop-blur-2xl border-r border-white/10 text-white h-full md:w-64 w-[85%] p-6 fixed lg:relative transition-all duration-500 ease-in-out overflow-y-auto left-0 top-0 z-50 shadow-[4px_0_24px_rgba(221,39,39,0.15)] ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
       >
-        <button
-          className="lg:hidden absolute top-7 right-4 text-white"
-          onClick={() => setIsOpen(false)}
-        >
-          <IoIosArrowBack size={24} />
-        </button>
+        <div className="flex items-center justify-between mb-10 pb-4 border-b border-white/10">
+          <h2 className="text-xl font-bold tracking-wider uppercase text-white">
+            Admin <span className="text-[#dd2727]">Portal</span>
+          </h2>
+          <button
+            className="lg:hidden text-gray-400 hover:text-white transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            <IoIosArrowBack size={24} />
+          </button>
+        </div>
 
-        <h2 className="text-2xl font-bold mb-6">Admin Portal</h2>
         <nav>
-          <ul className="space-y-4">
+          <ul className="space-y-2">
             {menuItems.map((item, index) => (
-              <li
-                key={index}
-                className="p-2 hover:bg-white hover:text-red-600 rounded flex items-center gap-2"
-              ><span className="text-2xl"> {item.icon}</span>
-
-                <Link to={item.path}>{item.name}</Link>
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  onClick={() => window.innerWidth < 768 && setIsOpen(false)}
+                  className="group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent hover:border-white/10 text-gray-400 hover:text-white"
+                >
+                  <span className="text-2xl text-[#dd2727] group-hover:scale-110 transition-transform duration-300">
+                    {item.icon}
+                  </span>
+                  <span className="text-sm font-medium tracking-wide">
+                    {item.name}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
+
+        {/* Bottom decorative element */}
+        <div className="mt-10 p-4 rounded-2xl bg-gradient-to-r from-[#dd2727]/10 to-transparent border border-[#dd2727]/20">
+          <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold mb-1">Status</p>
+          <p className="text-xs text-white flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            Server Online
+          </p>
+        </div>
       </aside>
     </>
   );
 };
 
 export default SideBar;
+

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import Admin from "./Admin";
+import Header from "../../components/sections/Header/Header";
+
+import Aside from "./Aside";
 
 const PaymentsList = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -18,7 +20,6 @@ const PaymentsList = () => {
 
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          // Convert Firestore timestamp to JavaScript Date
           const timestamp = data.timestamp?.toDate?.() || data.timestamp;
           const payment = {
             id: doc.id,
@@ -41,107 +42,86 @@ const PaymentsList = () => {
         console.error("Error fetching payments:", error);
         setLoading(false);
       }
-    };              
+    };
 
     fetchPayments();
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-    {/* Sidebar - Always visible on desktop and mobile */}
-      <Admin />
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+        <Aside />
 
-    <div className="w-full md:w-3/4 px-4 sm:px-6 py-8 mx-auto">
+        <main className="flex-1 p-4 md:p-8">
+          <div className="space-y-8">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight uppercase">
+                Payment <span className="text-[#dd2727]">Transactions</span>
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">Audit and track your cosmic revenue</p>
+            </div>
+            
+            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex items-center gap-4">
+              <div className="bg-[#b0a102]/10 p-3 rounded-xl text-[#b0a102]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Revenue</p>
+                <p className="text-2xl font-bold text-white">₹{totalAmount.toLocaleString("en-IN")}</p>
+              </div>
+            </div>
+          </header>
 
-          <h2 className="text-2xl font-bold mb-4 text-red-600 text-center">
-            Payments List
-          </h2>
-
-          {loading ? (
-            <p className="text-center text-red-600">Loading...</p>
-          ) : payments.length === 0 ? (
-            <p className="text-center text-red-600">No payments found.</p>
-          ) : (
-            <>
-              {/* Table View for Larger Screens */}
-              <div className="hidden md:block overflow-x-auto h-[60vh]">
-                <table className="w-full border-collapse border border-gray-200 text-left">
+          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-xl">
+            {loading ? (
+              <div className="p-20 space-y-4">
+                {[1, 2, 3, 4, 5].map(i => <div key={i} className="h-12 bg-white/5 rounded-xl animate-pulse"></div>)}
+              </div>
+            ) : payments.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-gray-500">No payment records found.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-red-50">
-                      <th className="border px-4 py-2">#</th>
-                      <th className="border px-4 py-2">User ID</th>
-                      <th className="border px-4 py-2">Course ID</th>
-                      <th className="border px-4 py-2">Amount</th>
-                      <th className="border px-4 py-2">Status</th>
-                      <th className="border px-4 py-2">Payment ID</th>
-                      <th className="border px-4 py-2">Timestamp</th>
+                    <tr className="bg-white/5 border-b border-white/10">
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Order Details</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">User ID</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Amount</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Status</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400 text-right">Date</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {payments.map((payment, index) => (
-                      <tr key={payment.id} className="hover:bg-red-50">
-                        <td className="border px-4 py-2">{index + 1}</td>
-                        <td className="border px-4 py-2">{payment.userId}</td>
-                        <td className="border px-4 py-2">{payment.courseId}</td>
-                        <td className="border px-4 py-2">₹{payment.amount}</td>
-                        <td className="border px-4 py-2">{payment.status}</td>
-                        <td className="border px-4 py-2">{payment.paymentId}</td>
-                        <td className="border px-4 py-2">{payment.timestamp}</td>
+                  <tbody className="divide-y divide-white/5">
+                    {payments.map((payment) => (
+                      <tr key={payment.id} className="hover:bg-white/5 transition-colors group">
+                        <td className="px-6 py-5">
+                          <p className="font-bold text-white group-hover:text-[#dd2727] transition-colors">{payment.courseId}</p>
+                          <p className="text-[10px] text-gray-500 font-mono mt-1 uppercase">ID: {payment.paymentId}</p>
+                        </td>
+                        <td className="px-6 py-5 text-sm text-gray-400 font-mono">{payment.userId?.substring(0, 8)}...</td>
+                        <td className="px-6 py-5 font-bold text-[#b0a102]">₹{payment.amount}</td>
+                        <td className="px-6 py-5">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${payment.status === 'success' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                            {payment.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-5 text-right text-xs text-gray-500">{payment.timestamp}</td>
                       </tr>
                     ))}
-                    {/* Total Row */}
-                    <tr className="bg-red-100 font-bold">
-                      <td colSpan="3" className="border px-4 py-2 text-right">
-                        Total Payments:
-                      </td>
-                      <td colSpan="4" className="border px-4 py-2">
-                        ₹{totalAmount.toLocaleString("en-IN")}
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
-
-              {/* Card View for Mobile Screens */}
-              <div className="block md:hidden">
-                {payments.map((payment, index) => (
-                  <div
-                    key={payment.id}
-                    className="bg-red-50 mb-4 p-4 rounded shadow border border-gray-200"
-                  >
-                    <h3 className="text-lg font-bold text-red-600">
-                      Payment #{index + 1}
-                    </h3>
-                    <p className="text-gray-700">
-                      <strong>User ID:</strong> {payment.userId}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Course ID:</strong> {payment.courseId}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Amount:</strong> ₹{payment.amount}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Status:</strong> {payment.status}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Payment ID:</strong> {payment.paymentId}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Timestamp:</strong> {payment.timestamp}
-                    </p>
-                  </div>
-                ))}
-                <div className="bg-red-100 p-4 rounded shadow mt-4">
-                  <h3 className="text-lg font-bold text-red-600">Total Payments:</h3>
-                  <p className="text-gray-700">₹{totalAmount.toLocaleString("en-IN")}</p>
-                </div>
-              </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
-      
-    </div>
+      </main>
+      </div>
+    </>
   );
 };
 

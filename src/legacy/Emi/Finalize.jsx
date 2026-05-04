@@ -121,16 +121,27 @@ const EMIDetails = () => {
     if (!paymentModal.isOpen) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-          <h3 className="text-xl font-bold mb-4 text-red-600">
-            Select Payment Method
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(221,39,39,0.2)] p-8 w-full max-w-md relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#dd2727] to-[#b0a102]"></div>
+          
+          <h3 className="text-2xl font-bold mb-2 text-white">
+            Complete <span className="text-[#dd2727]">Payment</span>
           </h3>
-          <p className="mb-6">
-            EMI #{paymentModal.emiNumber} for Course {paymentModal.courseId} - ₹
-            {Number(paymentModal.amount).toLocaleString("en-IN")}
-          </p>
-          {error && <p className="text-red-500">{error}</p>}
+          
+          <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5">
+            <p className="text-gray-300 mb-1 font-medium">
+              Course: <span className="text-white">{paymentModal.courseId}</span>
+            </p>
+            <p className="text-gray-400 text-sm mb-3">
+              EMI <span className="text-white font-bold">#{paymentModal.emiNumber}</span>
+            </p>
+            <div className="text-3xl font-bold text-[#dd2727]">
+              ₹{Number(paymentModal.amount).toLocaleString("en-IN")}
+            </div>
+          </div>
+
+          {error && <p className="text-red-400 text-sm mb-4 bg-red-400/10 p-3 rounded-lg border border-red-400/20">{error}</p>}
           <div className="flex flex-col gap-4">
             <button
               onClick={() =>
@@ -141,30 +152,14 @@ const EMIDetails = () => {
                   "razorpay"
                 )
               }
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+              className="bg-white text-black font-bold px-4 py-3 rounded-xl transition-all hover:bg-gray-200 flex justify-center items-center gap-2 uppercase tracking-wider shadow-[0_0_15px_rgba(255,255,255,0.2)]"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    ></path>
+                  <svg className="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                   </svg>
                   Processing...
                 </>
@@ -173,6 +168,7 @@ const EMIDetails = () => {
               )}
             </button>
             {usdAmount ? (
+              <div className="mt-2 relative z-10 paypal-button-container-dark">
               <PayPalScriptProvider
                 options={{
                   "client-id": PAYPAL_CLIENT_ID,
@@ -252,12 +248,15 @@ const EMIDetails = () => {
                   }}
                 />
               </PayPalScriptProvider>
+              </div>
             ) : (
-              <p className="text-gray-500">Loading PayPal options...</p>
+              <div className="flex justify-center items-center p-4">
+                 <div className="w-6 h-6 border-2 border-[#dd2727] border-t-transparent rounded-full animate-spin"></div>
+              </div>
             )}
             <button
               onClick={closePaymentModal}
-              className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition"
+              className="mt-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-3 rounded-xl transition-all uppercase tracking-wider font-bold"
             >
               Cancel
             </button>
@@ -495,25 +494,26 @@ const EMIDetails = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] bg-gray-50">
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10">
         <Aside />
-        <div className="flex-1 bg-white shadow-lg rounded-lg p-6 pt-16 my-4 md:m-0 md:pt-6 overflow-x-auto">
-        <h2 className="text-2xl font-bold mb-4 text-red-600">
-          EMI Details for {userEmail}
+        <div className="flex-1 p-4 md:p-8">
+          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 border-b border-white/10 pb-6">
+          EMI Details <span className="text-[#dd2727] text-xl block md:inline md:ml-4">{userEmail}</span>
         </h2>
 
         {/* Show message if user is not enrolled in any EMI plans */}
         {Object.keys(emiSchedules).length === 0 ? (
-          <div className="text-center p-8 bg-red-50 border border-red-200 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-gray-800">
+          <div className="text-center p-12 bg-white/5 border border-white/10 rounded-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4">
               You are not enrolled in any EMI plans.
             </h3>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-400 mb-8">
               Explore available courses with EMI options and start your journey
               today.
             </p>
             <Link to="/courses">
-              <button className="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(221,39,39,0.3)]">
                 Browse Courses with EMI Plans
               </button>
             </Link>
@@ -532,24 +532,32 @@ const EMIDetails = () => {
             return (
               <div
                 key={courseId}
-                className="mb-8 border border-red-100 rounded p-4"
+                className="mb-8 p-6 bg-black/20 border border-white/10 rounded-2xl hover:border-white/20 transition-all shadow-lg"
               >
-                <h3 className="text-lg font-semibold mb-2 text-red-600">
-                  Course: {courseId}
+                <h3 className="text-xl font-bold mb-6 text-white border-b border-white/10 pb-4">
+                  Course: <span className="text-[#dd2727]">{courseId}</span>
                 </h3>
-                <ul>
+                <ul className="space-y-4">
                   {schedule.map((emi, idx) => (
                     <li
                       key={idx}
-                      className="flex justify-between items-center mb-2"
+                      className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors gap-4"
                     >
-                      <span>
-                        EMI #{emi.emiNumber} — Due on{" "}
-                        {emi.date.toLocaleDateString("en-IN")} — ₹
-                        {Number(emi.amount).toLocaleString("en-IN")}
-                      </span>
+                      <div className="flex flex-col">
+                        <span className="text-white font-bold text-lg">
+                          EMI #{emi.emiNumber}
+                        </span>
+                        <span className="text-sm text-gray-400 uppercase tracking-wider">
+                          Due on <span className="text-gray-300 font-medium">{emi.date.toLocaleDateString("en-IN")}</span>
+                        </span>
+                        <span className="text-[#dd2727] font-bold mt-1 text-lg">
+                          ₹{Number(emi.amount).toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                      <div className="w-full md:w-auto flex justify-end">
                       {emi.status === "paid" ? (
-                        <span className="bg-green-500 text-white px-4 py-1 rounded">
+                        <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-6 py-2 rounded-lg font-bold uppercase tracking-wider text-sm flex items-center justify-center w-full md:w-auto">
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                           Paid
                         </span>
                       ) : (
@@ -561,11 +569,12 @@ const EMIDetails = () => {
                               emi.amount
                             )
                           }
-                          className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded"
+                          className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white px-8 py-2 rounded-lg font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)] w-full md:w-auto"
                         >
-                          Pay
+                          Pay Now
                         </button>
                       )}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -575,7 +584,8 @@ const EMIDetails = () => {
         )}
 
         <PaymentModal />
-      </div>
+          </div>
+        </div>
       </div>
     </>
   );

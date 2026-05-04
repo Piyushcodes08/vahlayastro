@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/sections/Header/Header";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { app } from "../../firebaseConfig";
@@ -163,357 +164,270 @@ const NewUser = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-sm">
-  <div className="bg-white p-4 w-full max-w-3xl">
-    <h1 className="text-xl md:text-3xl font-bold text-center text-red-600 mb-6">
-      Book an Appointment
-    </h1>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="min-h-screen bg-[#0a0a0a] text-white pt-[120px] pb-20 px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] w-full max-w-4xl mx-auto shadow-[0_0_50px_rgba(221,39,39,0.15)]">
+          <h1 className="text-3xl md:text-5xl font-bold text-center mb-2 text-white uppercase tracking-tight">
+            Book <span className="text-[#dd2727]">Consultation</span>
+          </h1>
+          <p className="text-center text-gray-400 mb-12 text-sm font-medium uppercase tracking-widest">Map your celestial journey with our expert astrologers</p>
 
-    <form onSubmit={handleSubmit}>
-      {/* Personal Details */}
-      <fieldset className="border border-red-300 rounded-lg p-6 mb-6">
-        <legend className="text-base font-semibold text-red-500 px-2">
-          Personal Details
-        </legend>
+          <form onSubmit={handleSubmit} className="space-y-12">
+            {/* Personal Details */}
+            <div className="space-y-8">
+              <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] border-b border-white/10 pb-4 flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#dd2727] rounded-full animate-pulse"></span>
+                Celestial Identity
+              </h3>
 
-        {/* First & Last Name */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              First Name
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="Enter your first name"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-              required
-            />
-            {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Last Name
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Enter your last name"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-              required
-            />
-            {errors.lastName && (
-              <p className="text-red-500 text-sm">{errors.lastName}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Gender */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Gender</label>
-          <div className="flex flex-col space-y-2">
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Male"
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Male
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Female"
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Female
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Other"
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Other
-            </label>
-          </div>
-        </div>
-
-        {/* DOB & Birth Time */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          {/* Day */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">Day</label>
-            <input
-              type="number"
-              name="dob.day"
-              value={formData.dob.day}
-              onChange={handleChange}
-              placeholder="DD"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            />
-            {errors["dob.day"] && (
-              <p className="text-red-500 text-sm">{errors["dob.day"]}</p>
-            )}
-          </div>
-
-          {/* Month */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Month
-            </label>
-            <input
-              type="number"
-              name="dob.month"
-              value={formData.dob.month}
-              onChange={handleChange}
-              placeholder="MM"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            />
-            {errors["dob.month"] && (
-              <p className="text-red-500 text-sm">{errors["dob.month"]}</p>
-            )}
-          </div>
-
-          {/* Year */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">Year</label>
-            <input
-              type="number"
-              name="dob.year"
-              value={formData.dob.year}
-              onChange={handleChange}
-              placeholder="YYYY"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            />
-            {errors["dob.year"] && (
-              <p className="text-red-500 text-sm">{errors["dob.year"]}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          {/* Hour */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">Hour</label>
-            <input
-              type="number"
-              name="birthTime.hour"
-              value={formData.birthTime.hour}
-              onChange={handleChange}
-              placeholder="HH"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            />
-            {errors["birthTime.hour"] && (
-              <p className="text-red-500 text-sm">
-                {errors["birthTime.hour"]}
-              </p>
-            )}
-          </div>
-
-          {/* Minute */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Minute
-            </label>
-            <input
-              type="number"
-              name="birthTime.minute"
-              value={formData.birthTime.minute}
-              onChange={handleChange}
-              placeholder="MM"
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            />
-            {errors["birthTime.minute"] && (
-              <p className="text-red-500 text-sm">
-                {errors["birthTime.minute"]}
-              </p>
-            )}
-          </div>
-
-          {/* AM/PM */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              AM/PM
-            </label>
-            <select
-              name="birthTime.period"
-              value={formData.birthTime.period}
-              onChange={handleChange}
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            >
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Birth Place */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            Birth Place
-          </label>
-          <input
-            type="text"
-            name="birthPlace"
-            value={formData.birthPlace}
-            onChange={handleChange}
-            placeholder="Enter your birth place"
-            className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            required
-          />
-        </div>
-      </fieldset>
-
-      {/* Contact Details */}
-      <fieldset className="border border-red-300 rounded-lg p-6 mb-6">
-        <legend className="text-base font-semibold text-red-500 px-2">
-          Contact Details
-        </legend>
-
-        {/* Country Code + Phone */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Phone</label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Country Code */}
-            <div>
-              <input
-                type="text"
-                name="countryCode"
-                value={formData.countryCode}
-                onChange={handleChange}
-                placeholder="+91"
-                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                required
-              />
-              {errors["countryCode"] && (
-                <p className="text-red-500 text-sm">{errors["countryCode"]}</p>
-              )}
-            </div>
-
-            {/* Phone Number */}
-            <div>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="1234567890"
-                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                required
-              />
-              {errors["phone"] && (
-                <p className="text-red-500 text-sm">{errors["phone"]}</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Available Date + Slots */}
-        <div className="mb-4">
-          <fieldset className="border border-red-300 rounded-lg p-2">
-            <legend className="text-sm font-semibold text-red-500 px-2">
-              Appointment
-            </legend>
-
-            {/* Date */}
-            <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
-                Available Date
-              </label>
-              <select
-                name="availableDate"
-                value={formData.availableDate}
-                onChange={handleChange}
-                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                required
-              >
-                <option value="" disabled>
-                  Select a date
-                </option>
-                {availableData.map((item) => (
-                  <option key={item.date} value={item.date}>
-                    {item.date}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Time Slots */}
-            {formData.availableDate && (
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Available Slots
-                </label>
-                <select
-                  name="slot"
-                  value={formData.slot}
-                  onChange={handleChange}
-                  className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                  required
-                >
-                  <option value="" disabled>
-                    Select a time slot
-                  </option>
-                  {availableData
-                    .find((item) => item.date === formData.availableDate)
-                    ?.timeSlot.map((slot) => (
-                      <option key={slot} value={slot}>
-                        {slot}
-                      </option>
-                    ))}
-                </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    placeholder="Enter first name"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Enter last name"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                    required
+                  />
+                </div>
               </div>
-            )}
-          </fieldset>
-        </div>
 
-        {/* Email */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="example@example.com"
-            className="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-            required
-          />
-          {errors["email"] && (
-            <p className="text-red-500 text-sm">{errors["email"]}</p>
+              <div className="space-y-4">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Gender Energy</label>
+                <div className="flex flex-wrap gap-4">
+                  {["Male", "Female", "Other"].map((g) => (
+                    <label key={g} className="relative cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value={g}
+                        checked={formData.gender === g}
+                        onChange={handleChange}
+                        className="peer sr-only"
+                      />
+                      <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-bold uppercase tracking-widest text-gray-400 peer-checked:bg-[#dd2727]/20 peer-checked:border-[#dd2727] peer-checked:text-white transition-all group-hover:bg-white/10">
+                        {g}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Day</label>
+                  <input
+                    type="number"
+                    name="dob.day"
+                    value={formData.dob.day}
+                    onChange={handleChange}
+                    placeholder="DD"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Month</label>
+                  <input
+                    type="number"
+                    name="dob.month"
+                    value={formData.dob.month}
+                    onChange={handleChange}
+                    placeholder="MM"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Year</label>
+                  <input
+                    type="number"
+                    name="dob.year"
+                    value={formData.dob.year}
+                    onChange={handleChange}
+                    placeholder="YYYY"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Hour</label>
+                  <input
+                    type="number"
+                    name="birthTime.hour"
+                    value={formData.birthTime.hour}
+                    onChange={handleChange}
+                    placeholder="HH"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Birth Minute</label>
+                  <input
+                    type="number"
+                    name="birthTime.minute"
+                    value={formData.birthTime.minute}
+                    onChange={handleChange}
+                    placeholder="MM"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Period</label>
+                  <select
+                    name="birthTime.period"
+                    value={formData.birthTime.period}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="AM" className="bg-[#0a0a0a]">AM</option>
+                    <option value="PM" className="bg-[#0a0a0a]">PM</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Earthly Birth Place</label>
+                <input
+                  type="text"
+                  name="birthPlace"
+                  value={formData.birthPlace}
+                  onChange={handleChange}
+                  placeholder="City, State, Country"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder-gray-600"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Contact Details */}
+            <div className="space-y-8 pt-8 border-t border-white/10">
+              <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#b0a102] rounded-full animate-pulse"></span>
+                Cosmic Communication
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Country Code</label>
+                  <input
+                    type="text"
+                    name="countryCode"
+                    value={formData.countryCode}
+                    onChange={handleChange}
+                    placeholder="+91"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                    required
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Phone Frequency</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Enter phone number"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Aetheric Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="example@celestial.com"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all"
+                  required
+                />
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 space-y-8">
+                <h4 className="text-xs font-bold text-[#dd2727] uppercase tracking-[0.2em]">Temporal Selection</h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Celestial Date</label>
+                    <select
+                      name="availableDate"
+                      value={formData.availableDate}
+                      onChange={handleChange}
+                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                      required
+                    >
+                      <option value="" disabled className="bg-[#0a0a0a]">Select a Date</option>
+                      {availableData.map((item) => (
+                        <option key={item.date} value={item.date} className="bg-[#0a0a0a]">{item.date}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {formData.availableDate && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Time Slot</label>
+                      <select
+                        name="slot"
+                        value={formData.slot}
+                        onChange={handleChange}
+                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer"
+                        required
+                      >
+                        <option value="" disabled className="bg-[#0a0a0a]">Select a Slot</option>
+                        {availableData
+                          .find((item) => item.date === formData.availableDate)
+                          ?.timeSlot.map((slot) => (
+                            <option key={slot} value={slot} className="bg-[#0a0a0a]">{slot}</option>
+                          ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-6 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.3em] rounded-[1.5rem] hover:scale-[1.02] transition-all shadow-[0_0_30px_rgba(221,39,39,0.4)]"
+            >
+              Align Destinies
+            </button>
+          </form>
+
+          {success && (
+            <div className="mt-8 p-4 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-center font-bold uppercase tracking-widest text-xs">
+              {success}
+            </div>
+          )}
+          {errors.submit && (
+            <div className="mt-8 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-red-400 text-center font-bold uppercase tracking-widest text-xs">
+              {errors.submit}
+            </div>
           )}
         </div>
-      </fieldset>
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-red-600 text-white font-medium py-2 px-6 rounded-lg hover:bg-red-700 transition-all w-full md:w-auto"
-      >
-        Submit
-      </button>
-    </form>
-
-    {/* Success / Error Messages */}
-    {success && <p className="text-green-500 mt-4">{success}</p>}
-    {errors.submit && <p className="text-red-500 mt-4">{errors.submit}</p>}
-  </div>
-</div>
-
+      </div>
+    </>
   );
 };
 

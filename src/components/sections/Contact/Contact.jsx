@@ -1,28 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { IoLocationOutline, IoCallOutline, IoTimeOutline } from "react-icons/io5";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import ReCAPTCHA from "react-google-recaptcha";
 import "./Contact.css";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const recaptchaRef = useRef(null);
+
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; // Fallback to testing key if not set
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const onCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
+    if (!captchaToken) {
+      alert("Please verify that you are not a robot.");
+      return;
+    }
+
     setStatus("loading");
     try {
       await addDoc(collection(db, "Astro_Contact"), {
         ...formData,
+        captchaVerified: true,
         createdAt: serverTimestamp(),
       });
       setStatus("success");
       setFormData({ name: "", email: "", phone: "", message: "" });
+      setCaptchaToken(null);
+      if (recaptchaRef.current) recaptchaRef.current.reset();
     } catch (err) {
       console.error("Contact form error:", err);
       setStatus("error");
@@ -141,6 +158,15 @@ const Contact = () => {
                 />
               </div>
 
+              <div className="recaptcha-container my-4 flex justify-center">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={recaptchaSiteKey}
+                  onChange={onCaptchaChange}
+                  theme="dark"
+                />
+              </div>
+
               {status === "success" && (
                 <p className="text-green-400 text-sm text-center subtitle-poppins mb-2">
                   ✅ Message sent! We'll get back to you shortly.
@@ -155,7 +181,7 @@ const Contact = () => {
               <button
                 type="submit"
                 className="contact-submit-btn"
-                disabled={status === "loading"}
+                disabled={status === "loading" || !captchaToken}
               >
                 {status === "loading" ? "Sending..." : "Send Message"}
               </button>

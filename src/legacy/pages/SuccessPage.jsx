@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../../components/sections/Header/Header";
 
 const SubmissionSuccess = () => {
   const location = useLocation(); // Retrieve data passed from the previous page
@@ -13,35 +14,44 @@ const SubmissionSuccess = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-4">Submission Successful!</h2>
+    <>
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="min-h-screen bg-[#0a0a0a] text-white pt-[120px] pb-20 px-4 flex items-center justify-center relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-10 md:p-16 rounded-[2.5rem] w-full max-w-2xl text-center shadow-[0_0_50px_rgba(221,39,39,0.2)]">
+          <div className="w-24 h-24 bg-gradient-to-r from-[#dd2727] to-[#b0a102] rounded-full flex items-center justify-center mx-auto mb-10 shadow-[0_0_30px_rgba(221,39,39,0.4)] animate-pulse">
+            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white uppercase tracking-tight">
+            Transmission <span className="text-[#dd2727]">Received</span>
+          </h2>
 
-      <p className="text-lg text-gray-700 mb-6">
-        {isNewUser && !availableDate ? (
-          <>
-            Hello, {firstName}!
-            <br />
-            Thank you for reaching out to us. We’re excited to assist you and ensure your experience is exceptional.  
-            <br />
-            One of our agents will contact you shortly to schedule your appointment and address your needs with care and professionalism.
-          </>
-        ) : (
-          <>
-            Hello, {firstName}!
-            <br />
-            Your appointment request has been successfully submitted. Our agent will contact you on{" "}
-            <span className="font-bold text-gray-800">{availableDate}</span> to assist you further.
-          </>
-        )}
-      </p>
+          <div className="text-lg md:text-xl text-gray-300 mb-12 leading-relaxed space-y-4">
+            {isNewUser && !availableDate ? (
+              <p>
+                Greetings, <span className="text-white font-bold">{firstName}</span>. 
+                <br />
+                Your connection to the celestial network has been established. Our guides will reach out to you shortly to harmonize your schedule.
+              </p>
+            ) : (
+              <p>
+                Greetings, <span className="text-white font-bold">{firstName}</span>.
+                <br />
+                Your cosmic appointment is aligned for <span className="text-[#b0a102] font-bold">{availableDate}</span>. Our agent will initiate contact then.
+              </p>
+            )}
+          </div>
 
-      <button
-        onClick={handleExploreMore}
-        className="mt-6 py-2 px-4 bg-red-600 text-white font-bold rounded-md hover:bg-red-700"
-      >
-        Explore More
-      </button>
-    </div>
+          <button
+            onClick={handleExploreMore}
+            className="px-12 py-5 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-[0_0_20px_rgba(221,39,39,0.4)]"
+          >
+            Explore More
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 
