@@ -3,6 +3,7 @@ import { db } from "../../firebaseConfig";
 import { doc, setDoc, updateDoc, arrayUnion, getDoc, collection, getDocs } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import ReCAPTCHA from 'react-google-recaptcha';
+import Select from 'react-select';
 import { auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import Header from "../../components/sections/Header/Header";
@@ -65,7 +66,7 @@ const EnrollPage = () => {
       alert("Please fill out all fields.");
       return;
     }
-    if (!recaptchaToken) {
+    if (recaptchaSiteKey && !recaptchaToken) {
       alert("Please verify the reCAPTCHA.");
       return;
     }
@@ -101,87 +102,145 @@ const EnrollPage = () => {
     }
   };
 
+  const customSelectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+      borderColor: state.isFocused ? '#dd2727' : 'rgba(255, 255, 255, 0.1)',
+      borderRadius: '0.75rem',
+      padding: '0.25rem',
+      boxShadow: state.isFocused ? '0 0 0 2px rgba(221, 39, 39, 0.3)' : 'none',
+      '&:hover': {
+        borderColor: '#dd2727'
+      },
+      cursor: 'pointer',
+      opacity: 1
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: '#0a0a0a',
+      borderRadius: '0.75rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      overflow: 'hidden',
+      zIndex: 50
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#dd2727' : state.isFocused ? 'rgba(221, 39, 39, 0.2)' : 'transparent',
+      color: 'white',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: '#dd2727'
+      }
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'white'
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: 'white'
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#9ca3af'
+    })
+  };
+
+  const courseOptions = courses.map(c => ({ value: c.id, label: c.id }));
+  const selectedOption = courseOptions.find(opt => opt.value === selectedCourse) || null;
+
   return (
     <>
       <Header />
       <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
-      <div className="bg-red-500 text-white p-4 rounded-lg max-w-lg mx-auto min-h-screen text-sm   m-6 ">
-      <h2 className="text-xl md:text-4xl  font-semibold text-center mb-6">Enroll Now</h2>
-      <p className="text-center mb-6">
-        Join our <span className="font-bold text-white">Astrology</span> course and begin your journey into the world of astrology!
-      </p>
-      <form onSubmit={handleEnroll} className="space-y-6">
-        <div className="flex flex-col">
-          <label htmlFor="name" className="text-lg mb-2">Name</label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-            className="px-4 py-2 rounded-lg bg-white text-red-500"
-            required
-          />
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl w-full max-w-lg shadow-[0_0_40px_rgba(221,39,39,0.2)]">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+            Enroll for <span className="text-[#dd2727]">Free</span>
+          </h2>
+          <p className="text-center mb-8 text-gray-300">
+            Join our course and begin your journey into the world of astrology!
+          </p>
+          <form onSubmit={handleEnroll} className="space-y-6">
+            <div className="flex flex-col">
+              <label htmlFor="name" className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Name</label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="email" className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="phone" className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Phone</label>
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number with country code"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="course" className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Course</label>
+              <Select
+                id="course"
+                value={selectedOption}
+                onChange={(option) => setSelectedCourse(option ? option.value : '')}
+                options={courseOptions}
+                styles={customSelectStyles}
+                placeholder="Select a course"
+                className="react-select-container"
+                classNamePrefix="react-select"
+                isClearable={!courseId}
+                required
+              />
+            </div>
+
+            {recaptchaSiteKey ? (
+              <div className="flex justify-center mt-4">
+                <ReCAPTCHA
+                  sitekey={recaptchaSiteKey}
+                  onChange={handleRecaptchaChange}
+                  theme="dark"
+                />
+              </div>
+            ) : (
+              <p className="text-yellow-400 text-sm text-center font-medium bg-yellow-400/10 py-2 px-4 rounded-lg">
+                ReCAPTCHA configuration is missing. You can proceed without it for now.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_20px_rgba(221,39,39,0.5)] transform hover:scale-[1.02] transition-all duration-300"
+            >
+              Enroll Now
+            </button>
+          </form>
         </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="email" className="text-lg mb-2">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="px-4 py-2 rounded-lg bg-white text-red-500"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="phone" className="text-lg mb-2">Phone</label>
-          <input
-            id="phone"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Enter phone number with country code"
-            className="px-4 py-2 rounded-lg bg-white text-red-500"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="course" className="text-lg mb-2">Course</label>
-          <select
-            id="course"
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            disabled={!!courseId}
-            className={`px-4 py-2 rounded-lg bg-white text-red-500 ${courseId ? 'opacity-70 cursor-not-allowed' : ''}`}
-            required
-          >
-            <option value="">Select a course</option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.id}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <ReCAPTCHA
-          sitekey={recaptchaSiteKey}
-          onChange={handleRecaptchaChange}
-        />
-
-        <button
-          type="submit"
-          className="w-full py-3 bg-white text-red-500 font-semibold rounded-lg hover:bg-red-600 hover:text-white transition"
-        >
-          Enroll Now
-        </button>
-      </form>
-    </div>
+      </div>
     <Footer />
     </>
   );

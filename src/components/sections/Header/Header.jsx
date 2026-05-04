@@ -113,7 +113,7 @@ const Header = () => {
                         <li key={link.name}>
                             <Link 
                                 to={link.href} 
-                                className="text-[14px] lg:text-[16px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:text-[#dd2727]"
+                                className="text-[14px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:text-[#dd2727]"
                             >
                                 {link.name}
                             </Link>
@@ -127,13 +127,13 @@ const Header = () => {
                             <>
                                 <Link
                                     to={isAdmin ? "/admin" : "/dashboard"}
-                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
                                 >
                                     {isAdmin ? "Admin" : "Dashboard"}
                                 </Link>
                                 <button
                                     onClick={handleLogout}
-                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
                                 >
                                     Logout
                                 </button>
@@ -141,16 +141,16 @@ const Header = () => {
                         ) : (
                             <Link
                                 to="/login"
-                                className="ml-2 px-6 py-1.5 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                className="ml-2 px-6 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
                             >
                                 Login
                             </Link>
                         )}
                         <Link
-                            to="/appointment"
-                             className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] lg:text-[16px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
+                            to="/contact"
+                             className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
                         >
-                            Book Now
+                            Contact Us
                         </Link>
                     </div>
 

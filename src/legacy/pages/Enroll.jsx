@@ -205,7 +205,7 @@ const Enrollment = () => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!recaptchaValue) {
+    if (recaptchaSiteKey && !recaptchaValue) {
       setErrorMessage("Please complete the reCAPTCHA!");
       alert("Please Complete Recaptcha")
       return;
@@ -365,97 +365,138 @@ const Enrollment = () => {
 
 
 
+  const customSelectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+      borderColor: state.isFocused ? '#dd2727' : 'rgba(255, 255, 255, 0.1)',
+      borderRadius: '0.75rem',
+      padding: '0.25rem',
+      boxShadow: state.isFocused ? '0 0 0 2px rgba(221, 39, 39, 0.3)' : 'none',
+      '&:hover': {
+        borderColor: '#dd2727'
+      },
+      cursor: 'pointer',
+      opacity: 1
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: '#0a0a0a',
+      borderRadius: '0.75rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      overflow: 'hidden',
+      zIndex: 50
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#dd2727' : state.isFocused ? 'rgba(221, 39, 39, 0.2)' : 'transparent',
+      color: 'white',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: '#dd2727'
+      }
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'white'
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: 'white'
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#9ca3af'
+    })
+  };
+
+  const courseOptions = courses.map(c => ({ value: c.id, label: `${c.title} - ₹${c.price}` }));
+  const selectedOption = courseOptions.find(opt => opt.value === formData.course) || null;
+
   return (
     <>
       <Header />
       <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
-      <div className="min-h-screen bg-gradient-to-b from-red-100 via-white to-orange-100 py-16 text-sm">
-
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="bg-white border border-red-600 rounded-xl shadow-lg max-w-lg w-full p-8">
-          <h1 className="text-xl md:text-4xl  font-bold text-center text-red-600">Enroll in a Course</h1>
-          <p className="text-center text-red-500 mb-6">
+      
+      <div className="min-h-screen flex flex-col justify-center items-center py-16 px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl w-full max-w-lg shadow-[0_0_40px_rgba(221,39,39,0.2)]">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">Enroll in a <span className="text-[#dd2727]">Course</span></h1>
+          <p className="text-center mb-8 text-gray-300">
             Join our course and explore the wonders of astrology.
           </p>
 
           {errorMessage && (
-            <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+            <div className="bg-red-500/20 border border-red-500/50 text-red-200 p-4 rounded-xl mb-6 text-center backdrop-blur-sm">
               {errorMessage}
             </div>
           )}
 
           {successMessage && (
-            <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
+            <div className="bg-green-500/20 border border-green-500/50 text-green-200 p-4 rounded-xl mb-6 text-center backdrop-blur-sm">
               {successMessage}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-          {successMessage && <InquiryHandler formData={formData} />}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {successMessage && <InquiryHandler formData={formData} />}
 
-            <div>
-              <label className="block text-red-600 font-medium">Name</label>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Name</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your name"
-                className="w-full border border-red-300 rounded px-3 py-2 focus:ring-red-500 focus:outline-none"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
               />
             </div>
 
-            <div>
-              <label className="block text-red-600 ">Email</label>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Email</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="w-full border text-xs border-red-300 rounded px-3 py-2 focus:ring-red-500 focus:outline-none"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
               />
             </div>
 
-            <div>
-              <label className="block text-red-600 font-medium">Country Code</label>
-              <PhoneInput selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
-              <label className="block text-red-600 font-medium pt-[10px]">Phone Number</label>
-
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Country Code</label>
+              <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 mb-4">
+                <PhoneInput selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
+              </div>
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handlePhoneChange}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-600"
-                // placeholder={`Enter phone number (${selectedCountry})`}
                 placeholder="Enter Phone Number"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
                 required
               />
             </div>
 
-
-            <div>
-              <label className="block text-red-600 font-medium">Course</label>
-              <select
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Course</label>
+              <Select
                 name="course"
-                value={formData.course}
-                onChange={handleChange}
-                disabled //  Prevents changing course since it's already selected
-                className="w-full border border-red-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed text-xs"
-              >
-                {courses
-                  .filter((course) => course.id === formData.course) //  Show only the selected course
-                  .map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.title} - ₹{course.price}
-                    </option>
-                  ))}
-              </select>
+                value={selectedOption}
+                onChange={(option) => setFormData({ ...formData, course: option ? option.value : '' })}
+                options={courseOptions}
+                styles={customSelectStyles}
+                placeholder="Select a course"
+                className="react-select-container"
+                classNamePrefix="react-select"
+              />
             </div>
 
-            <div>
-              <label className="block text-red-600 font-medium">Price</label>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Price</label>
               <input
                 type="text"
                 name="price"
@@ -464,51 +505,45 @@ const Enrollment = () => {
                     ? `₹${courses.find((course) => course.id === formData.course).price}`
                     : "Loading..."
                 }
-                readOnly //  Prevents manual editing
-                className="w-full border border-red-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                readOnly
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-400 cursor-not-allowed"
               />
             </div>
 
-
-            <div className="flex justify-center mt-4 ">
-              <ReCAPTCHA
-                sitekey={recaptchaSiteKey}
-                onChange={(value) => setRecaptchaValue(value)}
-              />
+            <div className="flex justify-center mt-4">
+              {recaptchaSiteKey ? (
+                <ReCAPTCHA
+                  sitekey={recaptchaSiteKey}
+                  onChange={(value) => setRecaptchaValue(value)}
+                  theme="dark"
+                />
+              ) : (
+                <p className="text-yellow-400 text-sm text-center font-medium bg-yellow-400/10 py-2 px-4 rounded-lg w-full">ReCAPTCHA configuration is missing. You can proceed without it for now.</p>
+              )}
             </div>
-
 
             <button
               type="submit"
-              className="w-full bg-red-600 text-white font-medium py-2 rounded hover:bg-red-700 focus:ring-red-500 focus:outline-none"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_20px_rgba(221,39,39,0.5)] transform hover:scale-[1.02] transition-all duration-300"
             >
               Proceed to Payment
             </button>
           </form>
 
           {successMessage && (
-            <div className="mt-6">
-              <h2 className="text-lg font-medium text-red-600 text-center">Make Payment</h2>
-              <div className="mt-4 space-y-2">
+            <div className="mt-8 border-t border-white/10 pt-8">
+              <h2 className="text-xl font-bold text-white text-center mb-6">Make Payment</h2>
+              <div className="space-y-4">
                 <button
                   onClick={handleRazorpay}
-                  className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 focus:ring-red-500 focus:outline-none flex justify-center items-center"
-                  disabled={isLoading} // Disable button when loading
+                  disabled={isLoading}
+                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] transform hover:scale-[1.02] transition-all duration-300 flex justify-center items-center"
                 >
                   {isLoading ? (
                     <>
-                      <svg
-                        className="animate-spin h-5 w-5 mr-2 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                        ></path>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                       </svg>
                       Processing...
                     </>
@@ -516,8 +551,6 @@ const Enrollment = () => {
                     "Pay with Razorpay"
                   )}
                 </button>
-                {/* <div className="mt-4">{handlePayPal()}</div> */}
-
 
                 <div className="mt-4">
                   <button
@@ -532,7 +565,6 @@ const Enrollment = () => {
                       const paypalScriptUrl = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
 
                       try {
-                        // Dynamically load PayPal script
                         await new Promise((resolve, reject) => {
                           const script = document.createElement("script");
                           script.src = paypalScriptUrl;
@@ -541,18 +573,16 @@ const Enrollment = () => {
                           document.body.appendChild(script);
                         });
 
-                        // Get the selected course
                         const selectedCourse = courses.find((course) => course.id === formData.course);
                         if (!selectedCourse) {
                           alert("Selected course not found. Please select a valid course.");
                           return;
                         }
 
-                        // Render PayPal button
                         window.paypal
                           .Buttons({
                             createOrder: (data, actions) => {
-                              const priceInUSD = usd; // Payment amount in USD
+                              const priceInUSD = usd;
                               if (!priceInUSD) {
                                 throw new Error("Payment amount not set. Please try again.");
                               }
@@ -571,7 +601,6 @@ const Enrollment = () => {
                                 const details = await actions.order.capture();
                                 alert(`Transaction completed by ${details.payer.name.given_name}`);
 
-                                // Call the backend to process payment
                                 const backendResponse = await fetch(
                                   "https://backend-7e8f.onrender.com/api/payment/paypal/success",
                                   {
@@ -592,8 +621,6 @@ const Enrollment = () => {
                                   return;
                                 }
 
-
-                                // Save payment details to Firebase
                                 await addDoc(collection(db, "payments"), {
                                   userId: currentUser,
                                   courseId: selectedCourse.id,
@@ -603,10 +630,8 @@ const Enrollment = () => {
                                   timestamp: new Date(),
                                 });
 
-                                // Update subscription in Firebase
                                 await updateFirebaseSubscription(formData);
 
-                                // Navigate to dashboard
                                 navigate("/dashboard");
                               } catch (error) {
                                 alert("An error occurred during the payment process. Please try again.");
@@ -624,43 +649,38 @@ const Enrollment = () => {
                         alert("An error occurred while initializing PayPal. Please try again.");
                       }
                     }}
-                    className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 focus:ring-red-500 focus:outline-none"
+                    className="w-full py-4 bg-[#0079C1] text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(0,121,193,0.5)] transform hover:scale-[1.02] transition-all duration-300"
                   >
                     Pay with PayPal
                   </button>
-                  {/* Placeholder for dynamically rendered PayPal button */}
                   <div id="paypal-button-container" className="mt-4"></div>
 
-                  <div className="mt-4 space-y-2">
-                    <Link
-                      to="/payemi"
-                      state={{
-                        name: formData.name,
-                        email: formData.email,
-                        phone: `${selectedCountry} ${formData.phone}`,  // Include country code
-                        courseId: formData.course
-                      }}>
-                      <button className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 focus:ring-red-500 focus:outline-none">
-                        Pay with Installment
-                      </button>
-                    </Link>
-
-                  </div>
-
+                  <Link
+                    to="/payemi"
+                    state={{
+                      name: formData.name,
+                      email: formData.email,
+                      phone: `${selectedCountry} ${formData.phone}`,
+                      courseId: formData.course
+                    }}
+                    className="block mt-4"
+                  >
+                    <button className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transform hover:scale-[1.02] transition-all duration-300">
+                      Pay with Installment
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
           )}
-
+        </div>
+        
+        <div className="w-full max-w-5xl mt-12 bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(221,39,39,0.2)]">
+          <PaymentGuide />
         </div>
       </div>
-      <div className=" left-0 bottom-0 " >
-      <PaymentGuide  />
-      </div>
-    </div>
-    <Footer />
+      <Footer />
     </>
-    
   );
 };
 

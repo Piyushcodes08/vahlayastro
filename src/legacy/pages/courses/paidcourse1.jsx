@@ -138,7 +138,7 @@ const EnrollmentPage = () => {
 
   
     {/* Right Section: White Background */}
-    <Link to="/enrollfree">
+    <Link to="/enrollfree/punchange-and-foundation-of-astrology/free">
     <div className="bg-[#FAFAF0] w-1/4"> 
     <button className="mt-6 text-white bg-red-600 px-10 py-4 text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 hover:bg-red-100 hover:text-red-600 animate-bounce ">
     Enroll Now
@@ -270,7 +270,7 @@ const EnrollmentPage = () => {
             Enroll now and unlock the secrets of astrology with our expert-led
             courses.
           </p>
-          <Link to="/enroll">
+          <Link to="/enroll/punchange-and-foundation-of-astrology/paid">
           <button className="mt-6 bg-white text-red-600 px-10 py-4 text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 hover:bg-red-100">
             Enroll Now
           </button>

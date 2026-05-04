@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import React, { Suspense, useEffect, useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, useAnimations, Reflector, useTexture, Stars, Float } from '@react-three/drei'
+import { useGLTF, useAnimations, MeshReflectorMaterial, useTexture, Stars, Float } from '@react-three/drei'
 import useStore from './store'
 import Overlay from './Overlay'
 

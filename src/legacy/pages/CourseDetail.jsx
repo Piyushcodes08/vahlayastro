@@ -207,7 +207,7 @@ const CourseDetail = () => {
             {authLoading ? (
                <div className="w-8 h-8 rounded-full border-2 border-[#dd2727]/30 border-t-[#dd2727] animate-spin"></div>
             ) : (
-              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`)}`}>
+              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`)}`}>
                 <button className="bg-[#dd2727] text-white text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-xl hover:bg-white hover:text-[#dd2727] transition-all duration-300">
                   {courseData.type === 'free' ? 'Get Free' : 'Enroll Now'}
                 </button>
@@ -311,7 +311,7 @@ const CourseDetail = () => {
             {authLoading ? (
               <div className="w-12 h-12 rounded-full border-2 border-[#dd2727]/30 border-t-[#dd2727] animate-spin"></div>
             ) : (
-              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id}` : `/enroll/${courseType}/${courseData.id}`)}`}>
+              <Link to={user ? (courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`) : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`)}`}>
                 <button className="bg-[#dd2727] text-white px-12 py-5 rounded-full font-black uppercase tracking-[0.3em] text-sm hover:bg-white hover:text-[#dd2727] hover:scale-105 transition-all duration-500 shadow-[0_15px_50px_rgba(221,39,39,0.4)]">
                   {courseData.type === "free" ? "Enroll for Free" : "Claim Your Spot"}
                 </button>

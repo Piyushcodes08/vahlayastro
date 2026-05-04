@@ -58,6 +58,8 @@ import Notifications from '../legacy/Emi/Notification';
 import Payment from '../legacy/Emi/Payment';
 import PaymentGuide from '../legacy/pages/PaymentGuide';
 import CourseDetail from '../legacy/pages/CourseDetail';
+import AudioVisualizer from '../components/AudioVisualizer/AudioVisualizer';
+import QuestionAndAns from '../legacy/pages/QuestionAndAns';
 import ConsultingPage from '../pages/ConsultingPage';
 
 // ── Additional Legacy Sub-pages ──
@@ -101,6 +103,7 @@ const AppRoutes = () => {
             <Route path="/copartners" element={<Copartners />} />
             <Route path="/newuser" element={<NewUser />} />
             <Route path="/olduser" element={<OldUser />} />
+            <Route path="/audio-experience" element={<AudioVisualizer />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
@@ -114,8 +117,8 @@ const AppRoutes = () => {
             <Route path="/enrolledcourse" element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
             <Route path="/course/:courseName" element={<ProtectedRoute><Startlearning /></ProtectedRoute>} />
             <Route path="/course/:courseName/video/:videoId" element={<ProtectedRoute><VedioDetail /></ProtectedRoute>} />
-            <Route path="/enroll/:courseType/:courseId" element={<ProtectedRoute><Enroll /></ProtectedRoute>} />
-            <Route path="/enrollfree/:courseId" element={<ProtectedRoute><EnrollFree /></ProtectedRoute>} />
+            <Route path="/enroll/:courseId/:courseType" element={<ProtectedRoute><Enroll /></ProtectedRoute>} />
+            <Route path="/enrollfree/:courseId/:courseType" element={<ProtectedRoute><EnrollFree /></ProtectedRoute>} />
             <Route path="/submission-success" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
             <Route path="/studentlivesession" element={<ProtectedRoute><StudentLiveSession /></ProtectedRoute>} />
             <Route path="/JitsiIframe" element={<ProtectedRoute><JitsiIframe /></ProtectedRoute>} />
@@ -127,6 +130,7 @@ const AppRoutes = () => {
             <Route path="/admin/admincourseorder" element={<ProtectedRoute adminOnly={true}><AdminCourseOrder /></ProtectedRoute>} />
             <Route path="/admin/admincontact" element={<ProtectedRoute adminOnly={true}><AdminContact /></ProtectedRoute>} />
             <Route path="/admin/question-ans" element={<ProtectedRoute adminOnly={true}><AdminQuestion /></ProtectedRoute>} />
+            <Route path="/admin/question-answer" element={<ProtectedRoute adminOnly={true}><QuestionAndAns /></ProtectedRoute>} />
             <Route path="/admin/admincalendar" element={<ProtectedRoute adminOnly={true}><AdminCalendar /></ProtectedRoute>} />
             <Route path="/admin/adminsubscribecourselist" element={<ProtectedRoute adminOnly={true}><AdminSubscribeCourseList /></ProtectedRoute>} />
             <Route path="/admin/admininquiry" element={<ProtectedRoute adminOnly={true}><AdminInquiries /></ProtectedRoute>} />
