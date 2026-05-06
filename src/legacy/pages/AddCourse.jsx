@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Admin from "./Admin";
-import Header from "../../components/sections/Header/Header";
+import SideBar from "./Admin";
 import {
   getFirestore,
   collection,
@@ -13,10 +12,11 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db } from "../../firebaseConfig";
 import { serverTimestamp } from "firebase/firestore";
 import { Link } from "react-router-dom";
-
-import Aside from "./Aside";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const AddCourse = () => {
+  // ORIGINAL LOGIC: State from old folder
   const [courseTitle, setCourseTitle] = useState("");
   const [courseSubTitle, setCourseSubTitle] = useState("");
   const [courseType, setCourseType] = useState("free");
@@ -60,14 +60,16 @@ const AddCourse = () => {
 
     try {
       setIsUploading(true);
+
       let imageUrl = null;
 
       if (imageFile) {
-        const imageRef = ref(storage, `course-images/${courseTitle}_${Date.now()}`);
+        const imageRef = ref(storage, `course-images/${courseTitle}`);
         await uploadBytes(imageRef, imageFile);
         imageUrl = await getDownloadURL(imageRef);
       }
 
+      // ORIGINAL LOGIC: courseData structure with Subtitle (Capital S)
       const courseData = {
         title: courseTitle,
         Subtitle: courseSubTitle,
@@ -75,7 +77,7 @@ const AddCourse = () => {
         description,
         seoTitle,
         seoDescription,
-        seoKeywords: seoKeywords.split(',').map(kw => kw.trim()).filter(kw => kw.length > 0),
+        seoKeywords: seoKeywords.split(',').map(kw => kw.trim()),
         imageUrl: imageUrl || (courses.find((c) => c.id === editingCourseId)?.imageUrl || ""),
       };
 
@@ -101,7 +103,7 @@ const AddCourse = () => {
       fetchCourses();
     } catch (error) {
       console.error("Error adding or updating course:", error);
-      alert("Failed to save course.");
+      alert("Failed to save course. Please try again.");
     } finally {
       setIsUploading(false);
     }
@@ -112,9 +114,11 @@ const AddCourse = () => {
     try {
       const collectionName = type === "free" ? "freeCourses" : "paidCourses";
       await deleteDoc(doc(db, collectionName, id));
+      alert("Course deleted successfully");
       fetchCourses();
     } catch (error) {
       console.error("Error deleting course:", error);
+      alert("Failed to delete course. Please try again.");
     }
   };
 
@@ -149,137 +153,200 @@ const AddCourse = () => {
   };
 
   return (
-    <>
+    <div className="admin-layout">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
-        <Aside />
+      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 admin-fluid-container gap-10 pb-20">
+        <SideBar />
 
-        <main className="flex-1 p-4 md:p-8">
-          <div className="space-y-8">
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase">
-                Manage <span className="text-[#dd2727]">Courses</span>
+        <main className="flex-1 py-8">
+          <div className="space-y-12">
+            <div className="flex justify-between items-center">
+               <h2 className="text-4xl font-bold text-white uppercase tracking-tighter">
+                Course <span className="text-[#dd2727]">Management</span>
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Catalog your divine knowledge and offerings</p>
+              <button
+                onClick={() => setIsFormVisible(!isFormVisible)}
+                className="bg-[#dd2727] text-white px-8 py-3 rounded-2xl font-bold uppercase tracking-widest hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all"
+              >
+                {isFormVisible ? "X" : "Add New Course"}
+              </button>
             </div>
-            <button
-              onClick={() => { resetForm(); setIsFormVisible(true); }}
-              className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] px-8 py-3 rounded-xl font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(221,39,39,0.3)] transition-all"
-            >
-              + Create New Course
-            </button>
-          </header>
 
-          {isFormVisible && (
-            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl animate-in zoom-in-95 duration-300">
-              <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-                <h3 className="text-xl font-bold uppercase tracking-widest">
-                  {editingCourseId ? "Edit" : "Add"} <span className="text-[#b0a102]">Course</span>
-                </h3>
-                <button onClick={resetForm} className="p-2 hover:bg-white/10 rounded-full transition-colors">✕</button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Course Title</label>
-                  <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#dd2727] transition-all" value={courseTitle} onChange={(e) => setCourseTitle(e.target.value)} placeholder="e.g. Vedic Astrology Basics" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Course Subtitle</label>
-                  <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#dd2727] transition-all" value={courseSubTitle} onChange={(e) => setCourseSubTitle(e.target.value)} placeholder="A short catchy phrase" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Access Type</label>
-                  <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#dd2727] transition-all appearance-none cursor-pointer" value={courseType} onChange={(e) => setCourseType(e.target.value)}>
-                    <option value="free" className="bg-[#1a1a1a]">Free Course</option>
-                    <option value="paid" className="bg-[#1a1a1a]">Paid Course</option>
-                  </select>
-                </div>
+            {isFormVisible && (
+              <div className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-10 md:p-16 shadow-2xl animate-in zoom-in-95 duration-500 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-[#dd2727]/5 rounded-full blur-[100px]"></div>
                 
-                {courseType === "paid" && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Price (INR)</label>
-                      <input type="number" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" />
+                {/* ORIGINAL TITLE: Add Course / Edit Course */}
+                <h3 className="text-2xl font-bold text-white mb-12 uppercase tracking-widest border-b border-white/5 pb-6">
+                  {editingCourseId ? "Edit Course" : "Add Course"}
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    {/* ORIGINAL LABEL: Course Title */}
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Title</label>
+                    <input
+                      type="text"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700"
+                      value={courseTitle}
+                      onChange={(e) => setCourseTitle(e.target.value)}
+                      placeholder="Enter course title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {/* ORIGINAL LABEL: Course Subtitle */}
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Subtitle</label>
+                    <input
+                      type="text"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700"
+                      value={courseSubTitle}
+                      onChange={(e) => setCourseSubTitle(e.target.value)}
+                      placeholder="Enter course Sub title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {/* ORIGINAL LABEL: Course Type */}
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Type</label>
+                    <select
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
+                      value={courseType}
+                      onChange={(e) => setCourseType(e.target.value)}
+                    >
+                      <option value="free" className="bg-[#050505]">Free</option>
+                      <option value="paid" className="bg-[#050505]">Paid</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Title</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Enter SEO Title" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Description</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} placeholder="Enter SEO Description" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Keywords (comma separated)</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. astrology, horoscope, zodiac" />
+                  </div>
+                  
+                  {courseType === "paid" && (
+                    <div className="space-y-2 animate-in slide-in-from-left-4 duration-300">
+                      <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Price</label>
+                      <input
+                        type="number"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        placeholder="Enter course price"
+                      />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Status</label>
-                      <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none" value={status} onChange={(e) => setStatus(e.target.value)}>
-                        <option value="active" className="bg-[#1a1a1a]">Active</option>
-                        <option value="inactive" className="bg-[#1a1a1a]">Inactive</option>
+                  )}
+                  {courseType === "paid" && (
+                    <div className="space-y-2 animate-in slide-in-from-right-4 duration-300">
+                      <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Status</label>
+                      <select
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                      >
+                        <option value="active" className="bg-[#050505]">Active</option>
+                        <option value="inactive" className="bg-[#050505]">Inactive</option>
                       </select>
                     </div>
+                  )}
+                </div>
+
+                <div className="mt-8 space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Description</label>
+                  <textarea
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white h-40 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all resize-none"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter course description"
+                  ></textarea>
+                </div>
+
+                <div className="mt-8 space-y-2">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Image</label>
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center group/upload hover:border-[#dd2727]/50 transition-all cursor-pointer relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={(e) => setImageFile(e.target.files[0])}
+                    />
+                    <div className="space-y-3">
+                      <svg className="w-10 h-10 text-gray-600 mx-auto group-hover/upload:text-[#dd2727] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                      <p className="text-sm font-medium text-gray-400">{imageFile ? imageFile.name : "Select Celestial Visual"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-12">
+                  <button
+                    onClick={handleAddOrUpdateCourse}
+                    className={`w-full bg-[#dd2727] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(221,39,39,0.5)] transition-all transform hover:scale-[1.01] active:scale-95 ${isUploading ? "cursor-not-allowed opacity-50" : ""}`}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? "Transmitting Data..." : editingCourseId ? "Update Course" : "Add Course"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Courses List */}
+            <div className="space-y-8">
+              {/* ORIGINAL TITLE: Courses */}
+              <h3 className="text-2xl font-bold text-white flex items-center gap-4">
+                <span className="w-1.5 h-8 bg-[#b0a102] rounded-full shadow-[0_0_15px_rgba(176,161,2,0.5)]"></span>
+                Courses
+              </h3>
+              <div className="bg-white/5 border border-white/5 rounded-[3rem] overflow-hidden backdrop-blur-3xl shadow-2xl">
+                <ul className="divide-y divide-white/5">
+                  {courses.map((course) => (
+                    <li
+                      key={course.id}
+                      className="p-8 flex justify-between items-center hover:bg-white/5 transition-all group"
+                    >
+                      <div className="flex items-center gap-6">
+                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#dd2727]/30 transition-all">
+                          <span className="text-[10px] font-bold text-gray-500 group-hover:text-[#dd2727] transition-all uppercase tracking-tighter">ID: {course.id.substring(0,4)}</span>
+                        </div>
+                        <div>
+                          <span className="text-lg text-white font-bold tracking-tight group-hover:text-[#dd2727] transition-all uppercase">{course.title}</span>
+                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">{course.type} • {course.status || 'Active'}</p>
+                        </div>
+                      </div>
+                      <div className="flex space-x-6">
+                        <button
+                          onClick={() => handleEditCourse(course)}
+                          className="text-[10px] font-bold uppercase tracking-widest text-[#b0a102] hover:text-white transition-all border-b border-transparent hover:border-[#b0a102]"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCourse(course.id, course.type)}
+                          className="text-[10px] font-bold uppercase tracking-widest text-red-600 hover:text-white transition-all border-b border-transparent hover:border-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {courses.length === 0 && (
+                  <div className="py-20 text-center opacity-20">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.4em]">No courses found in records</p>
                   </div>
                 )}
-                
-                <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Full Description</label>
-                  <textarea className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none h-32" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Tell students what they will learn..." />
-                </div>
               </div>
-
-              <div className="bg-white/5 rounded-2xl p-6 mt-8 border border-white/5">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-gray-300 mb-4">SEO & Media</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="lg:col-span-2 space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">SEO Title</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} />
-                  </div>
-                  <div className="lg:col-span-2 space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">SEO Keywords</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="keyword1, keyword2..." />
-                  </div>
-                  <div className="lg:col-span-4 space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Course Cover Image</label>
-                    <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} className="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#dd2727]/10 file:text-[#dd2727] cursor-pointer" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-4 mt-10">
-                <button onClick={handleAddOrUpdateCourse} disabled={isUploading} className="flex-1 bg-gradient-to-r from-[#dd2727] to-[#b0a102] py-4 rounded-2xl font-bold uppercase tracking-[0.2em] hover:scale-[1.01] transition-all disabled:opacity-50 shadow-lg">
-                  {isUploading ? "Uploading..." : editingCourseId ? "Update Course" : "Create Course"}
-                </button>
-                <button onClick={resetForm} className="px-10 py-4 bg-white/5 border border-white/10 rounded-2xl font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Cancel</button>
-              </div>
-            </div>
-          )}
-
-          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8">
-            <h3 className="text-xl font-bold uppercase tracking-widest mb-6 flex justify-between items-center">
-              Existing Courses
-              <span className="text-xs bg-white/5 px-3 py-1 rounded-full text-gray-400">{courses.length} Total</span>
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {courses.map((course) => (
-                <div key={course.id} className="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300">
-                  <div className="aspect-[16/9] relative">
-                    <img src={course.imageUrl || "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop"} alt={course.title} className="w-full h-full object-cover" />
-                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">
-                      {course.type}
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <h4 className="font-bold text-white mb-1 truncate">{course.title}</h4>
-                    <p className="text-xs text-gray-500 mb-4 line-clamp-1">{course.Subtitle}</p>
-                    <div className="flex gap-2">
-                      <button onClick={() => handleEditCourse(course)} className="flex-1 bg-white/5 border border-white/10 py-2 rounded-xl text-[10px] font-bold uppercase hover:bg-white/10 transition-all">Edit</button>
-                      <button onClick={() => handleDeleteCourse(course.id, course.type)} className="p-2 bg-red-500/10 text-red-500 border border-red-500/10 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
-      </main>
+        </main>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

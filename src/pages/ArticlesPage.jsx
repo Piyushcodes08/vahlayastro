@@ -45,7 +45,7 @@ const ArticlesPage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black">
+            <div className="min-h-screen flex items-center justify-center bg-transparent backdrop-blur-sm">
                 <div className="text-[#dd2727] text-2xl font-bold animate-pulse uppercase tracking-widest">
                     Consulting Stars...
                 </div>

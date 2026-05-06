@@ -46,6 +46,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
+
 body::before {
   content: "";
   position: fixed;
@@ -101,20 +102,21 @@ h6 {
     padding: var(--spacing-section-mobile) 15px;
   }
 }
-/* Premium Container for new pages */
+
+/* Premium Container for new pages - Aligned with landing page grid */
 .premium-container {
-  max-width: 1280px; /* 7xl equivalent */
+  max-width: var(--container-max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem; /* px-6 */
-  padding-right: 1.5rem; /* px-6 */
+  padding-left: 24px;
+  padding-right: 24px;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .premium-container {
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
@@ -175,6 +177,7 @@ h6 {
     padding: 0 0 20px 0;
   }
 }
+
 /* Support for Old Project Auth/Admin Pages */
 .bg-backgroundImage {
   background-image: url('../assets/img/image.webp');
@@ -183,8 +186,15 @@ h6 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -192,6 +202,107 @@ h6 {
   animation: fadeIn 0.5s forwards;
 }
 
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-500 { animation-delay: 0.5s; }
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+/* Admin Portal - Cosmic Dashboard Theme */
+.admin-layout {
+  --admin-bg: #050505;
+  --admin-text: #ffffff;
+  --admin-text-soft: rgba(255, 255, 255, 0.6);
+  --admin-accent: #dd2727;
+  --admin-glass: rgba(255, 255, 255, 0.05);
+  --admin-border: rgba(255, 255, 255, 0.1);
+  
+  background: var(--admin-bg) !important;
+  color: var(--admin-text) !important;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Fluid Content for Admin Panel */
+.admin-fluid-container {
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .admin-fluid-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.admin-layout::before {
+  content: "";
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(221, 39, 39, 0.1) 0%, transparent 70%);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+  animation: pulse 8s infinite alternate;
+}
+
+.admin-layout::after {
+  content: "";
+  position: fixed;
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(176, 161, 2, 0.1) 0%, transparent 70%);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+  animation: pulse 12s infinite alternate-reverse;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+
+.admin-layout aside {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(60px) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+.admin-layout .admin-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3rem;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+}

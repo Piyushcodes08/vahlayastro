@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import AboutPage from '../pages/AboutPage';
-import ServicesPage from '../pages/ServicesPage';
 import CoursesPage from '../pages/CoursesPage';
 import ArticlesPage from '../pages/ArticlesPage';
 import ArticleDetailsPage from '../pages/ArticleDetailsPage';
@@ -77,7 +76,6 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:courseType/:slug" element={<CourseDetail />} />
             <Route path="/consulting" element={<ConsultingPage />} />

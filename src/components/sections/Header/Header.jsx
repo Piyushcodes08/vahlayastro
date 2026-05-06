@@ -13,25 +13,25 @@ const Header = () => {
     const location = useLocation();
 
     // Check if we are on admin or dashboard-related pages
-    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/finalize', '/admin', '/course'].some(path => location.pathname.startsWith(path));
+    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/course'].some(path => location.pathname.startsWith(path));
     const showBg = scrolled || alwaysShowBg;
 
     useEffect(() => {
         const handleScroll = (e) => {
             // Get scroll position from window, document, or the scrolling target itself
-            const scrollTop = 
-                window.scrollY || 
-                document.documentElement.scrollTop || 
-                document.body.scrollTop || 
-                (e.target && e.target.scrollTop) || 
+            const scrollTop =
+                window.scrollY ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop ||
+                (e.target && e.target.scrollTop) ||
                 0;
-                
+
             setScrolled(scrollTop > 20);
         };
-        
+
         // Use capture phase (true) to catch scroll events from any nested scrollable container
         window.addEventListener('scroll', handleScroll, true);
-        
+
         // Cleanup
         return () => window.removeEventListener('scroll', handleScroll, true);
     }, []);
@@ -78,46 +78,44 @@ const Header = () => {
     ];
 
     return (
-    <header
-  className={`fixed top-0 left-0 right-0 z-[1000] w-full text-white transition-all duration-500 overflow-hidden ${
-        showBg
-          ? "border-b border-white/10 bg-black/40 backdrop-blur-lg"
-          : "bg-transparent"
-      }`}
-    >
-  {/* Premium Custom Glowing Background */}
-      <div
-    className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 ${
-      showBg ? "opacity-[0.75]" : "opacity-0"
-        }`}
-        style={{
-          background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
-      filter: "blur(100px)",
-      transform: "scale(1.2)",
-        }}
-      />
-            
+        <header
+            className={`fixed top-0 left-0 right-0 z-[1000] w-full text-white transition-all duration-700 overflow-hidden ${showBg
+                    ? "border-b border-white/5 backdrop-blur-[15px]"
+                    : "bg-transparent"
+                }`}
+        >
+            {/* Premium Custom Glowing Background */}
+            <div
+                className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 ${showBg ? "opacity-[0.75]" : "opacity-0"
+                    }`}
+                style={{
+                    background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
+                    filter: "blur(100px)",
+                    transform: "scale(1.2)",
+                }}
+            />
+
             {/* Add a subtle dark overlay so the text remains perfectly readable over the bright glow */}
-            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 -z-10 ${showBg ? 'bg-black/40' : 'bg-transparent'}`} />
+            {/* Subtle overlay removed for transparency */}
 
             <nav className={`max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 transition-all duration-500 relative ${showBg ? 'py-1' : 'py-1'}`}>
-          
-          {/* Logo Section */}
-          <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
-              <img 
-                  src={logo} 
-                  alt="Vahlay Astro Logo" 
-                  loading="lazy"
-                            className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-12 w-12 md:h-14 md:w-14' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
-              />
-          </Link>
+
+                {/* Logo Section */}
+                <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
+                    <img
+                        src={logo}
+                        alt="Vahlay Astro Logo"
+                        loading="lazy"
+                        className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-12 w-12 md:h-14 md:w-14' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
+                    />
+                </Link>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden lg:flex items-center gap-6 xl:gap-8 ">
                     {navLinks.map((link) => (
                         <li key={link.name}>
-                            <Link 
-                                to={link.href} 
+                            <Link
+                                to={link.href}
                                 className="text-[14px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:text-[#dd2727]"
                             >
                                 {link.name}
@@ -153,14 +151,14 @@ const Header = () => {
                         )}
                         <Link
                             to="/contact"
-                             className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
+                            className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
                         >
                             Contact Us
                         </Link>
                     </div>
 
                     {/* Hamburger Menu Toggle */}
-                    <button 
+                    <button
                         className="lg:hidden flex flex-col gap-1.5 p-2 z-50 focus:outline-none"
                         onClick={() => setIsOpen(!isOpen)}
                         aria-label="Toggle Menu"
@@ -172,22 +170,21 @@ const Header = () => {
                 </div>
 
                 {/* Mobile Navigation Menu */}
-                <div 
-                    className={`fixed inset-0 bg-[#0a0a0a]/95 backdrop-blur-2xl transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 z-40 ${
-                        isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-full'
-                    }`}
+                <div
+                    className={`fixed inset-0 bg-[#0a0a0a]/95 backdrop-blur-2xl transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 z-40 ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-full'
+                        }`}
                 >
                     {navLinks.map((link) => (
-                        <Link 
+                        <Link
                             key={`mobile_${link.name}`}
-                            to={link.href} 
+                            to={link.href}
                             onClick={() => setIsOpen(false)}
                             className="text-2xl md:text-3xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-[#dd2727] hover:scale-105 transition-all duration-300 whitespace-nowrap"
                         >
                             {link.name}
                         </Link>
                     ))}
-                    
+
                     <div className="flex flex-col items-center gap-6 mt-4">
                         {user ? (
                             <>
@@ -214,10 +211,10 @@ const Header = () => {
                                 Login
                             </Link>
                         )}
-                        <Link 
-                            to="/contact" 
+                        <Link
+                            to="/contact"
                             onClick={() => setIsOpen(false)}
-                             className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap"
+                            className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap"
                         >
                             Contact us
                         </Link>

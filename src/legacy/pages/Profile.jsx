@@ -8,6 +8,7 @@ import {  updateProfile } from "firebase/auth";
 
 import Aside from "./Aside";
 import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -310,6 +311,7 @@ const handleSave = async () => {
           </div>
       </main>
       </div>
+      <Footer />
     </>
   );
 };

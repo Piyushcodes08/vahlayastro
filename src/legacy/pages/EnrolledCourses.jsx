@@ -15,6 +15,7 @@ import ActiveLink from "./ActiveLink"; // Custom Link component
 import { PieChart, Pie, Cell } from "recharts";
 import Aside from "./Aside";
 import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const EnrollCourse = () => {
   const [user, setUser] = useState(null);
@@ -51,13 +52,21 @@ const EnrollCourse = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        const data = docSnap.data();
+        // Fetch metadata for all courses to get images
+        const coursesRef = collection(db, "courses");
+        const coursesSnap = await getDocs(coursesRef);
+        const coursesMetadata = {};
+        coursesSnap.forEach(doc => {
+            const data = doc.data();
+            coursesMetadata[data.Title || data.title] = data.imageUrl || data.image;
+        });
 
         const freeCourses =
           data.freecourses?.map((courseName) => ({
             name: courseName,
             type: "Free",
             enrolled: true,
+            image: coursesMetadata[courseName] || "/assets/img/courses.webp"
           })) || [];
 
         const paidCourses =
@@ -94,6 +103,7 @@ const EnrollCourse = () => {
               daysLeft,
               usedDays,
               totalDays,
+              image: coursesMetadata[courseName] || "/assets/img/courses.webp"
             };
           }) || [];
 
@@ -369,39 +379,45 @@ const EnrollCourse = () => {
           <>
             {/* Mobile: Grid View */}
             <div className="grid gap-6 md:hidden">
-              {courses.map((course, index) => (
-                <div
-                  key={index}
-                  className="border border-white/10 p-6 rounded-2xl bg-white/5 hover:border-white/20 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]"
-                >
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {course.name}
-                  </h3>
-                  <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">Type: <span className="text-white font-medium">{course.type}</span></p>
-                  <p className="text-sm text-gray-400 uppercase tracking-wider mb-4">
-                    Enrolled: <span className={course.enrolled ? "text-green-400" : "text-red-400"}>{course.enrolled ? "Yes" : "No"}</span>
-                  </p>
-                  {course.type === "Paid" && (
-                    <div className="mt-4 mb-4 flex items-center space-x-4 bg-black/40 p-4 rounded-xl border border-white/5">
-                      <MiniPieChart
-                        usedDays={course.usedDays}
-                        daysLeft={course.daysLeft}
-                      />
-                      <span className="text-sm text-gray-300 font-medium tracking-wider">
-                        VALIDITY LEFT: <span className="text-white">{course.daysLeft} DAYS</span>
-                      </span>
-                    </div>
-                  )}
-                  <button
-                    onClick={() =>
-                      navigate(`/course/${encodeURIComponent(course.name)}`)
-                    }
-                    className="mt-2 w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white py-3 rounded-xl font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)]"
+              {courses.map((course, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="border border-white/10 p-6 rounded-2xl bg-white/5 hover:border-white/20 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] group"
                   >
-                    Start Learning
-                  </button>
-                </div>
-              ))}
+                    <div className="relative h-40 mb-6 rounded-xl overflow-hidden border border-white/10">
+                      <img src={course.image} alt={course.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute top-3 right-3 bg-[#dd2727] text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">{course.type}</div>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {course.name}
+                    </h3>
+                    <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">Type: <span className="text-white font-medium">{course.type}</span></p>
+                    <p className="text-sm text-gray-400 uppercase tracking-wider mb-4">
+                      Enrolled: <span className={course.enrolled ? "text-green-400" : "text-red-400"}>{course.enrolled ? "Yes" : "No"}</span>
+                    </p>
+                    {course.type === "Paid" && (
+                      <div className="mt-4 mb-4 flex items-center space-x-4 bg-black/40 p-4 rounded-xl border border-white/5">
+                        <MiniPieChart
+                          usedDays={course.usedDays}
+                          daysLeft={course.daysLeft}
+                        />
+                        <span className="text-sm text-gray-300 font-medium tracking-wider">
+                          VALIDITY LEFT: <span className="text-white">{course.daysLeft} DAYS</span>
+                        </span>
+                      </div>
+                    )}
+                    <button
+                      onClick={() =>
+                        navigate(`/course/${encodeURIComponent(course.name)}`)
+                      }
+                      className="mt-2 w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white py-3 rounded-xl font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)]"
+                    >
+                      Start Learning
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Desktop: Table View */}
@@ -417,47 +433,56 @@ const EnrollCourse = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {courses.map((course, index) => (
-                    <tr
-                      key={index}
-                      className="hover:bg-white/5 transition-colors group"
-                    >
-                      <td className="py-5 px-6 text-white font-medium text-lg">{course.name}</td>
-                      <td className="py-5 px-6 text-gray-300">{course.type}</td>
-                      <td className="py-5 px-6">
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${course.enrolled ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
-                          {course.enrolled ? "YES" : "NO"}
-                        </span>
-                      </td>
-                      <td className="py-5 px-6">
-                        {course.type === "Paid" ? (
-                          <div className="flex items-center space-x-3">
-                            <MiniPieChart
-                              usedDays={course.usedDays}
-                              daysLeft={course.daysLeft}
-                            />
-                            <span className="text-sm text-gray-300">
-                              Left: <span className="text-white font-bold">{course.daysLeft}d</span>
-                            </span>
+                  {courses.map((course, index) => {
+                    return (
+                      <tr
+                        key={index}
+                        className="hover:bg-white/5 transition-colors group"
+                      >
+                        <td className="py-5 px-6">
+                          <div className="flex items-center gap-4">
+                             <div className="w-16 h-10 rounded-lg overflow-hidden border border-white/10 bg-black/40">
+                               <img src={course.image} alt={course.name} className="w-full h-full object-cover" />
+                             </div>
+                             <span className="text-white font-medium text-lg">{course.name}</span>
                           </div>
-                        ) : (
-                          <span className="text-sm text-gray-500 font-medium">LIFETIME</span>
-                        )}
-                      </td>
-                      <td className="py-5 px-6 text-right">
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/course/${encodeURIComponent(course.name)}`
-                            )
-                          }
-                          className="bg-white/5 border border-white/10 hover:border-[#dd2727] hover:bg-[#dd2727]/20 text-white py-2 px-6 rounded-xl font-bold uppercase tracking-wider text-xs transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transform md:translate-x-2 md:group-hover:translate-x-0"
-                        >
-                          Start Learning
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="py-5 px-6 text-gray-300">{course.type}</td>
+                        <td className="py-5 px-6">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${course.enrolled ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                            {course.enrolled ? "YES" : "NO"}
+                          </span>
+                        </td>
+                        <td className="py-5 px-6">
+                          {course.type === "Paid" ? (
+                            <div className="flex items-center space-x-3">
+                              <MiniPieChart
+                                usedDays={course.usedDays}
+                                daysLeft={course.daysLeft}
+                              />
+                              <span className="text-sm text-gray-300">
+                                Left: <span className="text-white font-bold">{course.daysLeft}d</span>
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-sm text-gray-500 font-medium">LIFETIME</span>
+                          )}
+                        </td>
+                        <td className="py-5 px-6 text-right">
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/course/${encodeURIComponent(course.name)}`
+                              )
+                            }
+                            className="bg-white/5 border border-white/10 hover:border-[#dd2727] hover:bg-[#dd2727]/20 text-white py-2 px-6 rounded-xl font-bold uppercase tracking-wider text-xs transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transform md:translate-x-2 md:group-hover:translate-x-0"
+                          >
+                            Start Learning
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -650,6 +675,7 @@ const EnrollCourse = () => {
         </div>
       </main>
       </div>
+      <Footer />
     </>
   );
 };

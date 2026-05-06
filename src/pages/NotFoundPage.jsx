@@ -8,8 +8,7 @@ const NotFoundPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent flex items-center justify-center pt-24">
-                {/* Premium Transparent Cosmic Background */}
-                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-black via-[#1a0f0f]/90 to-[#2b0b0b]/95"></div>
+                {/* Premium Transparent Cosmic Background - removed for global particles */}
 
                 {/* Glow Effects */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#dd2727]/10 blur-[200px] rounded-full pointer-events-none"></div>

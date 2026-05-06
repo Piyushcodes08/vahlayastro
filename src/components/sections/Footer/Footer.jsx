@@ -25,28 +25,28 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Column 2: Overview */}
+          {/* Column 2: Quick Links */}
           <div className="footer-col">
-            <h3 className="title-batangas footer-col-title">Overview</h3>
+            <h3 className="title-batangas footer-col-title">Quick Links</h3>
             <ul className="footer-links">
+              <li><Link to="/">Home</Link></li>
               <li><Link to="/about">About Us</Link></li>
               <li><Link to="/services">Services</Link></li>
-              <li><Link to="/articles">Articles</Link></li>
-              <li><Link to="/courses">Courses</Link></li>
-              <li><Link to="/appointment">Appointment</Link></li>
               <li><Link to="/consulting">Consulting</Link></li>
+              <li><Link to="/courses">Courses</Link></li>
+              <li><Link to="/articles">Articles</Link></li>
             </ul>
           </div>
 
-          {/* Column 3: Courses */}
+          {/* Column 3: Support */}
           <div className="footer-col">
-            <h3 className="title-batangas footer-col-title">Courses</h3>
+            <h3 className="title-batangas footer-col-title">Support</h3>
             <ul className="footer-links">
-              <li><Link to="/courses">Basics</Link></li>
-              <li><Link to="/courses">The Essentials of Self-Discovery</Link></li>
-              <li><Link to="/courses">Narad Puran</Link></li>
-              <li><Link to="/courses">Foundation of Vedic Astrology</Link></li>
-              <li><Link to="/courses">New edge Bhadvad Geeta</Link></li>
+              <li><Link to="/appointment">Appointment</Link></li>
+              <li><Link to="/testimonials">Testimonials</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+              <li><Link to="/terms">Terms & Conditions</Link></li>
             </ul>
           </div>
 

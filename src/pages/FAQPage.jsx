@@ -26,8 +26,7 @@ const FAQPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                {/* Premium Transparent Cosmic Background */}
-                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-black via-[#1a0f0f]/90 to-[#2b0b0b]/95"></div>
+                {/* Premium Transparent Cosmic Background - removed for global particles */}
 
                 {/* Glow Effects */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/20 blur-[180px] rounded-full pointer-events-none"></div>
