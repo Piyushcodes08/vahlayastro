@@ -9,16 +9,9 @@ const ArticleSection = () => {
   const { slugMap, loading } = useArticles();
   const articlesData = React.useMemo(() => {
     return Object.values(slugMap).sort((a, b) => {
-      // Sort by createdAt timestamp if available
-      const timeA = a.createdAt?.seconds || 0;
-      const timeB = b.createdAt?.seconds || 0;
-      
-      if (timeA === 0 && timeB === 0) {
-        // Fallback to rawDate if createdAt is missing
-        const dateA = a.rawDate ? new Date(a.rawDate).getTime() : 0;
-        const dateB = b.rawDate ? new Date(b.rawDate).getTime() : 0;
-        return dateB - dateA;
-      }
+      // Prioritize rawDate (Post Date) for editorial order
+      const timeA = a.rawDate ? new Date(a.rawDate).getTime() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const timeB = b.rawDate ? new Date(b.rawDate).getTime() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
       
       return timeB - timeA; // Descending order (newest first)
     });

@@ -118,7 +118,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
 }
 
 .article-cover-title {
@@ -146,7 +146,7 @@
 .article-cover-date {
   font-family: 'Poppins', sans-serif;
   font-size: 0.75rem;
-  color: #888;
+  color: #555555;
   margin: 0;
 }
 
@@ -184,7 +184,7 @@
   font-family: 'Batangas', sans-serif;
   font-size: 1.1rem;
   color: var(--color-brand-red);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
   line-height: 1.2;
   text-align: center;
   width: 100%;
@@ -209,7 +209,7 @@
   font-family: 'Poppins', sans-serif;
   font-size: 0.95rem;
   color: #555;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.2rem;
   font-weight: 600;
   line-height: 1.2;
   text-align: center;
@@ -221,8 +221,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.2rem;
-  margin-bottom: 0.5rem;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
   width: 100%;
   text-align: center;
 }
@@ -237,7 +237,7 @@
 .article-inner-date {
   font-family: 'Poppins', sans-serif;
   font-size: 0.7rem;
-  color: #888;
+  color: #555555;
 }
 
 .article-read-more {

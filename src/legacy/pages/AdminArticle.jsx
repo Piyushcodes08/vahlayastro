@@ -7,41 +7,33 @@ import {
   collection,
   getDocs,
   addDoc,
-  updateDoc,
   deleteDoc,
   doc,
-  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { MdEditSquare, MdDelete } from "react-icons/md";
 
 const AdminArticles = () => {
-  // ORIGINAL LOGIC: State from old folder
   const [articles, setArticles] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [editMode, setEditMode] = useState(false);
+  const [currentArticleId, setCurrentArticleId] = useState(null);
+  const [formState, setFormState] = useState({
+    title: "",
+    hindi: "",
+    author: "",
+    type: "Career",
+    data: "",
+    image: null,
+    imageUrl: "",
+    sTitle: "",
+    sDesc: "",
+    sKeywords: "",
+  });
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [formState, setFormState] = useState({
-    title: "",
-    author: "",
-    rawDate: "",
-    data: "",
-    denglish: "",
-    dhindi: "",
-    hindi: "",
-    imageUrl: "",
-    description: "",
-    type: "",
-    content: "",
-    sTitle: '',
-    sDesc:'',
-    sKeywords: '',
-    referenceLink: "",
-  });
-  const [selectedImage, setSelectedImage] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
 
@@ -52,68 +44,88 @@ const AdminArticles = () => {
   const fetchArticles = async () => {
     setIsLoading(true);
     try {
-      const data = await getDocs(collection(db, "Articles"));
-      const articlesData = data.docs.map((doc) => ({
-        ...doc.data(),
+      const querySnapshot = await getDocs(collection(db, "Articles"));
+      const articlesData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
+        ...doc.data(),
       }));
+
+      // Sort by date (latest first)
+      articlesData.sort((a, b) => {
+        const dateA = new Date(a.timestamp?.seconds * 1000 || a.data || 0);
+        const dateB = new Date(b.timestamp?.seconds * 1000 || b.data || 0);
+        return dateB - dateA;
+      });
+
       setArticles(articlesData);
     } catch (error) {
-      showAlert("Error fetching articles. Please try again.", "error");
+      console.error("Error fetching articles:", error);
+      showAlert("Failed to load articles.", "error");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormState({ ...formState, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormState({ ...formState, image: e.target.files[0] });
   };
 
   const handleSaveArticle = async () => {
+    const { title, hindi, author, type, data, image, imageUrl, sTitle, sDesc, sKeywords } = formState;
+
+    if (!title || !author || !type || !data) {
+      showAlert("Please fill in all required fields.", "error");
+      return;
+    }
+
     setIsSaving(true);
     try {
-      let imageUrl = formState.imageUrl;
-      if (selectedImage) {
-        const imageRef = ref(storage, `articles/${selectedImage.name}`);
-        const uploadTask = await uploadBytes(imageRef, selectedImage);
-        imageUrl = await getDownloadURL(uploadTask.ref);
-      }
+      let finalImageUrl = imageUrl;
 
-      // ORIGINAL LOGIC: Date formatting
-      let formattedDate = "";
-      if (formState.rawDate) {
-        const dateObj = new Date(formState.rawDate);
-        const options = { month: "long", day: "numeric", year: "numeric" };
-        formattedDate = dateObj.toLocaleDateString("en-US", options);
+      if (image) {
+        const imageRef = ref(storage, `AstroArticles/${image.name}`);
+        await uploadBytes(imageRef, image);
+        finalImageUrl = await getDownloadURL(imageRef);
       }
-      
-      const keywordArray = formState.sKeywords
-        ? formState.sKeywords.split(',').map((kw) => kw.trim()).filter((kw) => kw.length > 0)
-        : [];
 
       const articleData = {
-        ...formState,
-        sKeywords: keywordArray,
-        imageUrl,
-        createdAt: serverTimestamp(),
-        data: formattedDate,
+        title,
+        hindi,
+        author,
+        type,
+        data,
+        imageUrl: finalImageUrl,
+        sTitle,
+        sDesc,
+        sKeywords,
+        timestamp: new Date(),
       };
 
       if (editMode) {
-        const { createdAt, ...updatedArticleData } = articleData;
-        await updateDoc(doc(db, "Articles", formState.id), updatedArticleData);
+        await updateDoc(doc(db, "Articles", currentArticleId), articleData);
         showAlert("Article updated successfully!", "success");
       } else {
         await addDoc(collection(db, "Articles"), articleData);
-        showAlert("Article added successfully!", "success");
+        showAlert("Article created successfully!", "success");
       }
 
-      fetchArticles();
       resetForm();
+      fetchArticles();
     } catch (error) {
-      showAlert("Error saving article. Please try again.", "error");
+      console.error("Error saving article:", error);
+      showAlert("Failed to save article.", "error");
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const handleDeleteArticle = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this article?");
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure you want to delete this article?")) return;
 
     setIsDeleting(true);
     try {
@@ -121,33 +133,29 @@ const AdminArticles = () => {
       showAlert("Article deleted successfully!", "success");
       fetchArticles();
     } catch (error) {
-      showAlert("Error deleting article. Please try again.", "error");
+      console.error("Error deleting article:", error);
+      showAlert("Failed to delete article.", "error");
+    } finally {
+      setIsDeleting(false);
     }
-    setIsDeleting(false);
   };
 
   const resetForm = () => {
     setFormState({
       title: "",
-      author: "",
-      rawDate: "",
-      data: "",
-      denglish: "",
-      dhindi: "",
       hindi: "",
+      author: "",
+      type: "Career",
+      data: "",
+      image: null,
       imageUrl: "",
-      description: "",
-      type: "",
-      content: "",
-      sTitle: '',
-      sDesc:'',
-      sKeywords: '',
-      referenceLink: "",
+      sTitle: "",
+      sDesc: "",
+      sKeywords: "",
     });
-    setSelectedImage(null);
     setEditMode(false);
+    setCurrentArticleId(null);
     setFormVisible(false);
-    setUploadProgress(0);
   };
 
   const showAlert = (message, type) => {
@@ -160,135 +168,149 @@ const AdminArticles = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+    <div className="admin-layout flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[80px] relative z-10 admin-fluid-container gap-8 pb-20">
+
+      {/* Main Wrapper using Sticky Sidebar Logic */}
+      <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 py-8">
+        <main className="flex-1 min-w-0 py-20 px-6 md:px-10 bg-white">
           <div className="space-y-12">
             <div className="flex justify-between items-center">
-               <h2 className="text-4xl font-bold text-white uppercase tracking-tighter">
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Manage <span className="text-[#dd2727]">Articles</span>
               </h2>
               <button
                 onClick={() => { resetForm(); setFormVisible(true); }}
-                className="bg-[#dd2727] text-white px-8 py-3 rounded-2xl font-bold uppercase tracking-widest hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all"
+                className="bg-[#dd2727] text-white px-3 text-xs py-2 rounded-2xl uppercase  tracking-widest hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all"
               >
-                {formVisible ? "X" : "Upload New Article"}
+                {formVisible ? "X" : "add new"}
               </button>
             </div>
 
             {alertMessage && (
-              <div className={`p-5 rounded-3xl text-center text-[10px] font-bold uppercase tracking-[0.2em] animate-in fade-in border ${alertType === "success" ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20"}`}>
+              <div className={`p-5 rounded-3xl text-center text-[10px] font-bold uppercase tracking-[0.2em] animate-in fade-in border ${alertType === "success" ? "bg-green-50 text-green-700 border-green-200" : "bg-red-50 text-red-700 border-red-200"}`}>
                 {alertMessage}
               </div>
             )}
 
             {formVisible && (
-              <div className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-10 md:p-16 shadow-2xl animate-in zoom-in-95 duration-500 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#dd2727]/5 rounded-full blur-[100px]"></div>
-                
-                <h3 className="text-2xl font-bold text-white mb-12 uppercase tracking-widest border-b border-white/5 pb-6">
-                  {editMode ? "Edit Article" : "Add Article"}
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-xl shadow-slate-200/50 animate-in zoom-in-95 duration-500 relative overflow-hidden group">
+                <h3 className="text-xl font-bold text-slate-900 mb-8 pb-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
+                  {editMode ? "Edit Article" : "Create New Article"}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Title</label>
-                    <input type="text" value={formState.title} onChange={(e) => setFormState({ ...formState, title: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700" />
+                    <input type="text" name="title" value={formState.title} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-400" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Hindi Title</label>
-                    <input type="text" value={formState.hindi} onChange={(e) => setFormState({ ...formState, hindi: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700" />
+                    <input type="text" name="hindi" value={formState.hindi} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Author</label>
-                    <input type="text" value={formState.author} onChange={(e) => setFormState({ ...formState, author: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700" />
+                    <input type="text" name="author" value={formState.author} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Date</label>
-                    <input type="date" value={formState.rawDate} onChange={(e) => setFormState({ ...formState, rawDate: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" />
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Category</label>
+                    <select name="type" value={formState.type} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer">
+                      <option>Career</option>
+                      <option>Health</option>
+                      <option>Marriage</option>
+                      <option>Money</option>
+                      <option>Love</option>
+                      <option>Education</option>
+                      <option>Property</option>
+                    </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Reference Video Link</label>
-                    <input type="url" placeholder="https://youtube.com/..." value={formState.referenceLink} onChange={(e) => setFormState({ ...formState, referenceLink: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" />
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Publish Date</label>
+                    <input type="date" name="data" value={formState.data} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Upload Image</label>
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 relative cursor-pointer group/upload hover:border-[#dd2727]/50 transition-all">
-                      <input type="file" onChange={(e) => setSelectedImage(e.target.files[0])} className="absolute inset-0 opacity-0 cursor-pointer" />
-                      <div className="w-10 h-10 bg-white/5 flex items-center justify-center rounded-xl text-gray-500 group-hover/upload:text-[#dd2727]">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                      </div>
-                      <p className="text-[10px] text-gray-500 font-bold truncate">{selectedImage ? selectedImage.name : "Select Image"}</p>
-                    </div>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Featured Image</label>
+                    <input type="file" onChange={handleFileChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 relative z-10">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Denglish</label>
-                    <textarea value={formState.denglish} onChange={(e) => setFormState({ ...formState, denglish: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none h-32 resize-none" placeholder="Enter Denglish content"></textarea>
+                  {/* SEO Section */}
+                  <div className="md:col-span-2 lg:col-span-3 pt-6 border-t border-gray-100 mt-4">
+                    <h4 className="text-xs font-black text-[#b0a102] uppercase tracking-[0.2em] mb-8">Search Engine Optimization</h4>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Dhindi</label>
-                    <textarea value={formState.dhindi} onChange={(e) => setFormState({ ...formState, dhindi: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none h-32 resize-none" placeholder="Enter Dhindi content"></textarea>
-                  </div>
+
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Title</label>
-                    <textarea value={formState.sTitle} onChange={(e) => setFormState({ ...formState, sTitle: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none h-24 resize-none"></textarea>
+                    <input type="text" name="sTitle" value={formState.sTitle} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Description</label>
-                    <textarea value={formState.sDesc} onChange={(e) => setFormState({ ...formState, sDesc: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none h-24 resize-none"></textarea>
+                    <textarea name="sDesc" value={formState.sDesc} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-24 resize-none"></textarea>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Keywords (comma separated)</label>
-                    <textarea value={formState.sKeywords} onChange={(e) => setFormState({ ...formState, sKeywords: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none h-20 resize-none"></textarea>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider ml-1">SEO Keywords</label>
+                    <textarea name="sKeywords" value={formState.sKeywords} onChange={handleInputChange} className="w-full bg-white border border-slate-200 rounded-xl px-5 py-3 text-slate-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-20 resize-none"></textarea>
                   </div>
                 </div>
 
-                <div className="mt-12 flex flex-col sm:flex-row gap-5 relative z-10">
-                  <button onClick={handleSaveArticle} disabled={isSaving} className="flex-1 bg-[#dd2727] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all transform hover:scale-[1.01] active:scale-95 disabled:opacity-50">
-                    {isSaving ? "Saving..." : editMode ? "Update Article" : "Add Article"}
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-10">
+                  <button onClick={handleSaveArticle} disabled={isSaving} className="flex-1 bg-[#dd2727] text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:shadow-lg hover:shadow-red-500/30 transition-all transform hover:scale-[1.01] active:scale-95 disabled:opacity-50">
+                    {isSaving ? "Publishing..." : editMode ? "Save Changes" : "Publish Article"}
                   </button>
-                  <button onClick={resetForm} className="px-12 py-5 bg-white/5 border border-white/10 rounded-2xl font-bold uppercase tracking-widest text-gray-400 hover:bg-white/10 hover:text-white transition-all">Discard</button>
+                  <button onClick={resetForm} className="px-10 py-4 bg-slate-100 border border-slate-200 rounded-xl font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-200 transition-all">Cancel</button>
                 </div>
               </div>
             )}
 
-            <div className="space-y-8">
-              <h3 className="text-2xl font-bold text-white flex items-center gap-4">
-                <span className="w-1.5 h-8 bg-[#b0a102] rounded-full shadow-[0_0_15px_rgba(176,161,2,0.5)]"></span>
-                Editorial Archive
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-[#b0a102] rounded-full"></span>
+                Article Library
+                <span className="ml-auto text-[10px] font-bold text-slate-400 uppercase tracking-widest">{articles.length} total</span>
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {isLoading ? (
                   Array(6).fill(0).map((_, i) => (
-                    <div key={i} className="h-40 bg-white/5 border border-white/5 rounded-[2.5rem] animate-pulse"></div>
-                  ))
-                ) : articles.map((article) => (
-                  <div key={article.id} className="group bg-white/5 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 hover:border-white/20 transition-all duration-500 flex flex-col h-full shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#dd2727]/5 rounded-full blur-2xl group-hover:bg-[#dd2727]/10 transition-all"></div>
-                    
-                    <div className="flex-1 space-y-4 relative z-10">
-                      <div className="flex justify-between items-start">
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{article.data || "Eternal"}</p>
-                        <p className="text-[10px] text-[#b0a102] font-bold uppercase tracking-widest">BY {article.author}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-white group-hover:text-[#dd2727] transition-colors line-clamp-1 uppercase tracking-tight">{article.title}</h4>
-                        <p className="text-[10px] text-gray-500 font-medium line-clamp-1 mt-1">Hindi: {article.hindi}</p>
+                    <div key={i} className="rounded-3xl overflow-hidden bg-gray-100 border border-gray-200 animate-pulse">
+                      <div className="w-full aspect-video bg-gray-200"></div>
+                      <div className="p-5 space-y-3">
+                        <div className="h-3 bg-gray-200 rounded-full w-3/4"></div>
+                        <div className="h-2 bg-gray-200 rounded-full w-1/2"></div>
                       </div>
                     </div>
+                  ))
+                ) : articles.length === 0 ? (
+                  <div className="col-span-3 text-center py-20 bg-white border border-slate-200 rounded-2xl">
+                    <p className="text-slate-400 font-medium italic">No articles found in the library.</p>
+                  </div>
+                ) : articles.map((article) => (
+                  <div key={article.id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#dd2727]/40 transition-all duration-300 flex flex-col shadow-sm hover:shadow-xl relative">
 
-                    <div className="mt-8 flex gap-4 relative z-10">
-                      <button onClick={() => { setEditMode(true); setFormState({ ...article, rawDate: "" }); setFormVisible(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1 bg-white/5 border border-white/10 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-all">Edit</button>
-                      <button onClick={() => handleDeleteArticle(article.id)} disabled={isDeleting} className="px-5 py-3.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                      </button>
+                    {/* 16:9 Article Image */}
+                    <div className="relative w-full aspect-video overflow-hidden bg-slate-50">
+                      {article.imageUrl ? (
+                        <img src={article.imageUrl} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                          <svg className="w-10 h-10 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        </div>
+                      )}
+                      {article.data && (
+                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">{article.data}</div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 flex flex-col p-6 space-y-4">
+                      <div className="space-y-2">
+                        <h4 className="text-base font-bold text-slate-900 group-hover:text-[#dd2727] transition-colors line-clamp-2 leading-snug">{article.title}</h4>
+                        {article.hindi && <p className="text-xs text-slate-500 font-medium line-clamp-1">{article.hindi}</p>}
+                      </div>
+                      <div className="flex gap-3 mt-auto pt-4 border-t border-slate-50">
+                        <button onClick={() => { setEditMode(true); setCurrentArticleId(article.id); setFormState({ ...article, image: null }); setFormVisible(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1 bg-[#dd2727] border border-slate-100 py-1 rounded-xl text-xs font-semibold uppercase tracking-widest text-white hover:bg-slate-50 hover:text-[#dd2727] transition-all">Edit</button>
+                        <button onClick={() => handleDeleteArticle(article.id)} disabled={isDeleting} className="px-5 py-3 bg-[#dd2727] text-white border border-red-100 rounded-xl hover:bg-white hover:text-[#dd2727] transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -297,6 +319,7 @@ const AdminArticles = () => {
           </div>
         </main>
       </div>
+
       <Footer />
     </div>
   );

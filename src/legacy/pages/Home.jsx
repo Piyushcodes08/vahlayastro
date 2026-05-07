@@ -217,7 +217,7 @@ const Home = () => {
   // if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="pt-0 bg-white min-h-screen text-sm ">
+    <div className="pt-0 bg-transparent min-h-screen text-sm ">
       {/* Dynamic Marquee for Articles */}
       <Link to={"/articles"}>
         <marquee
@@ -243,7 +243,7 @@ const Home = () => {
         </marquee>
       </Link>
 
-      <section className="bg-white-50 mb-2 md:py-16 text-sm">
+      <section className="bg-transparent mb-2 md:py-16 text-sm">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 px-4 text-2xl">
           {/* Courses */}
           <Link to={"/courses"}>

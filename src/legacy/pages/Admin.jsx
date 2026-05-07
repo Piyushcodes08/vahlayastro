@@ -1,80 +1,43 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { IoIosArrowBack } from "react-icons/io";
-import {
-  MdArticle,
-  MdCalendarMonth,
-  MdLibraryAdd,
-  MdViewModule,
-  MdVideoCall,
-  MdSubscriptions,
-  MdAttachMoney,
-  MdTrackChanges,
-  MdPayment,
-  MdQuestionAnswer,
-  MdContactMail,
-  MdLiveHelp,
-  MdVideoLibrary,
-  MdShoppingCart,
-} from "react-icons/md";
+import React, { useState, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { 
+  IoIosArrowBack,
+  IoIosPaper,
+  IoIosCalendar,
+  IoIosAddCircle,
+  IoIosListBox,
+  IoIosVideocam,
+  IoIosPeople,
+  IoIosCash,
+  IoIosStats,
+  IoIosCard,
+  IoIosHelpCircle,
+  IoIosContact,
+  IoIosChatbubbles,
+  IoIosCart,
+  IoIosPlay
+} from "react-icons/io";
 
-const SideBar = () => {
+const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useRef();
+  const sidebarRef = useRef(null);
+  const location = useLocation();
 
-  // ORIGINAL LOGIC: Click outside to close sidebar
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        window.innerWidth < 768
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [isOpen]);
-
-  // ORIGINAL LOGIC & TITLES: Menu items from old folder
   const menuItems = [
-    { name: "Add Articles", path: "/admin/adminarticle", icon: <MdArticle /> },
-    { name: "Calendar", path: "/admin/admincalendar", icon: <MdCalendarMonth /> },
-    { name: "Add Course", path: "/admin/addcourse", icon: <MdLibraryAdd /> },
-    { name: "Add Module", path: "/admin/addmodule", icon: <MdViewModule /> },
-    { name: "Add Live Session", path: "/admin/addmeeting", icon: <MdVideoCall /> },
-    { name: "Subscribe List", path: "/admin/adminsubscribecourselist", icon: <MdSubscriptions /> },
-    { name: "Add EMI Plans", path: "/admin/addemi", icon: <MdAttachMoney /> },
-    { name: "Track EMI Plans", path: "/admin/emailuserlist", icon: <MdTrackChanges /> },
-    { name: "Payment List", path: "/admin/payment", icon: <MdPayment /> },
-    { name: "Course Inquiry", path: "/admin/admininquiry", icon: <MdLiveHelp /> },
-    { name: "ContactUs Inquiry", path: "/admin/admincontact", icon: <MdContactMail /> },
-    { name: "Question & Ans", path: "/admin/question-ans", icon: <MdQuestionAnswer /> },
-    { name: "Course Order", path: "/admin/admincourseorder", icon: <MdShoppingCart /> },
-    { name: "Video Order", path: "/admin/vedio-order", icon: <MdVideoLibrary /> },
+    { title: "ADD ARTICLES", path: "/admin/adminarticle", icon: <IoIosPaper size={20} /> },
+    { title: "CALENDAR", path: "/admin/admincalendar", icon: <IoIosCalendar size={20} /> },
+    { title: "ADD COURSE", path: "/admin/addcourse", icon: <IoIosAddCircle size={20} /> },
+    { title: "ADD MODULE", path: "/admin/addmodule", icon: <IoIosListBox size={20} /> },
+    { title: "ADD LIVE SESSION", path: "/admin/adminlivesession", icon: <IoIosVideocam size={20} /> },
+    { title: "SUBSCRIBE LIST", path: "/admin/adminsubscribecourselist", icon: <IoIosPeople size={20} /> },
+    { title: "ADD EMI PLANS", path: "/admin/addemi", icon: <IoIosCash size={20} /> },
+    { title: "TRACK EMI PLANS", path: "/admin/emailuserlist", icon: <IoIosStats size={20} /> },
+    { title: "PAYMENT LIST", path: "/admin/payment", icon: <IoIosCard size={20} /> },
+    { title: "COURSE INQUIRY", path: "/admin/admininquiry", icon: <IoIosHelpCircle size={20} /> },
+    { title: "CONTACTUS INQUIRY", path: "/admin/admincontact", icon: <IoIosContact size={20} /> },
+    { title: "QUESTION & ANS", path: "/admin/question-ans", icon: <IoIosChatbubbles size={20} /> },
+    { title: "COURSE ORDER", path: "/admin/admincourseorder", icon: <IoIosCart size={20} /> },
+    { title: "VIDEO ORDER", path: "/admin/vedio-order", icon: <IoIosPlay size={20} /> },
   ];
 
   return (
@@ -82,10 +45,10 @@ const SideBar = () => {
       {/* Toggle Button for Mobile */}
       {!isOpen && (
         <button
-          className="lg:hidden fixed top-[85px] left-4 bg-black/60 backdrop-blur-md p-3 rounded-2xl border border-white/10 z-40 hover:bg-[#dd2727] transition-all"
+          className="lg:hidden fixed top-24 left-4 bg-white text-[#dd2727] p-3 rounded-2xl shadow-lg z-[100] transition-all border border-[#dd2727]/10"
           onClick={() => setIsOpen(true)}
         >
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
       )}
 
@@ -93,66 +56,65 @@ const SideBar = () => {
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] lg:hidden"
         ></div>
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Perfect Premium Theme with Restored Paths */}
       <aside
         ref={sidebarRef}
-        className={`bg-[#050505] border-r border-white/5 h-screen md:w-72 w-[85%] fixed lg:sticky top-0 left-0 transition-transform duration-500 ease-out z-50 overflow-y-auto scrollbar-hide shadow-2xl ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`bg-gradient-to-b from-[#dd2727] to-[#b91c1c] h-[calc(100vh-64px)] md:w-56 w-[85%] sticky top-16 left-0 transition-all duration-500 ease-in-out z-[95] overflow-y-auto scrollbar-hide self-start ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 shadow-[10px_0_40px_rgba(221,39,39,0.1)]`}
       >
-        <div className="p-8 space-y-10">
-          {/* Header Section */}
+        <div className="pt-10 px-3 space-y-12 pb-10">
+          {/* Header Section - Modern & Clean */}
           <div className="flex justify-between items-center relative">
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#dd2727] animate-pulse shadow-[0_0_10px_rgba(221,39,39,0.5)]"></div>
-                {/* ORIGINAL TITLE: Admin Portal */}
-                <h2 className="text-xl font-bold text-white uppercase tracking-tighter">Admin <span className="text-[#dd2727]">Portal</span></h2>
+                <h2 className="text-2xl font-black text-white tracking-tighter">VAHLAY <span className="text-white/40 not-italic font-light">ASTRO</span></h2>
               </div>
-              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] ml-5">Vahlay Astro HQ</p>
+              <p className="text-[9px] text-white/50 font-bold uppercase tracking-[0.4em]  leading-none">ADMINISTRATION HQ</p>
             </div>
-            
+
             <button
-              className="lg:hidden p-2 text-gray-500 hover:text-white"
+              className="lg:hidden p-2 text-white/70 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              <IoIosArrowBack size={20} />
+              <IoIosArrowBack size={24} />
             </button>
           </div>
 
-          {/* User Profile Hook */}
-          <div className="bg-white/5 border border-white/5 rounded-[2rem] p-5 flex items-center gap-4 group hover:border-[#dd2727]/30 transition-all duration-500">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#dd2727] to-[#b0a102] flex items-center justify-center text-white font-bold text-lg shadow-lg">A</div>
-            <div>
-              <p className="text-xs font-bold text-white uppercase tracking-wider">Grand Architect</p>
-              <p className="text-[9px] text-[#dd2727] font-bold uppercase tracking-widest mt-0.5">Primary Root</p>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <nav className="space-y-2">
-            {menuItems.map((item, index) => (
-              <Link 
-                key={index} 
-                to={item.path}
-                onClick={() => window.innerWidth < 1024 && setIsOpen(false)}
-                className="flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300 group relative overflow-hidden"
-              >
-                <div className="absolute left-0 top-0 w-1 h-full bg-[#dd2727] -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
-                <span className="text-xl group-hover:scale-110 transition-transform duration-300 text-gray-600 group-hover:text-[#dd2727]">{item.icon}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest">{item.name}</span>
-              </Link>
-            ))}
+          <nav className="space-y-1.5">
+            {menuItems.map((item, index) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={index}
+                  to={item.path}
+                  onClick={() => window.innerWidth < 1024 && setIsOpen(false)}
+                  className={`flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden ${
+                    isActive 
+                    ? "bg-white/10 backdrop-blur-md text-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white/10" 
+                    : "text-white/70 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <div className={`${isActive ? "text-white scale-110" : "text-white/30 group-hover:text-white/80 group-hover:scale-110"} transition-all duration-300`}>
+                    {item.icon}
+                  </div>
+                  <span className={`text-[11px] font-bold uppercase tracking-[0.15em] ${isActive ? "opacity-100" : "opacity-80 group-hover:opacity-100"}`}>{item.title}</span>
+                  
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full shadow-[0_0_10px_white]"></div>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Logout Button Placeholder */}
-          <div className="pt-10">
-            <button className="w-full bg-white/5 border border-white/5 text-gray-500 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-red-500/10 hover:text-red-500 transition-all">
-              Terminate Session
+          <div className="pt-6">
+            <button className="w-full group bg-black/10 backdrop-blur-sm border border-white/5 text-white/50 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-[#dd2727] hover:border-white transition-all duration-500 flex items-center justify-center gap-2">
+              <span className="group-hover:translate-x-1 transition-transform">TERMINATE</span>
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity">SESSION</span>
             </button>
           </div>
         </div>
@@ -161,4 +123,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default AdminSidebar;

@@ -125,6 +125,7 @@ const AppRoutes = () => {
 
             {/* Admin Protected Routes */}
             <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminArticle /></ProtectedRoute>} />
+            <Route path="/admin/adminarticle" element={<ProtectedRoute adminOnly={true}><AdminArticle /></ProtectedRoute>} />
             <Route path="/admin/admincourseorder" element={<ProtectedRoute adminOnly={true}><AdminCourseOrder /></ProtectedRoute>} />
             <Route path="/admin/admincontact" element={<ProtectedRoute adminOnly={true}><AdminContact /></ProtectedRoute>} />
             <Route path="/admin/question-ans" element={<ProtectedRoute adminOnly={true}><AdminQuestion /></ProtectedRoute>} />

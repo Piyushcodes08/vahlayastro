@@ -4,8 +4,6 @@
     background: #110303; /* Deep dark cocoa background */
     color: #fff;
     overflow: hidden;
-    /* Simulate the zodiac wheel pattern if possible or just use a focus gradient */
-    background: radial-gradient(circle at center, rgba(221, 39, 39, 0.1) 0%, #110303 70%);
 }
 .section-container {
    padding-bottom: 0;
@@ -14,9 +12,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../../../assets/img/image.webp'); /* Reuse global bg if available */
     opacity: 0.1;
-    background-size: cover;
     pointer-events: none;
 }
 

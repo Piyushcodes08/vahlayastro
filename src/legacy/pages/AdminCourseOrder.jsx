@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../../firebaseConfig";
-import { collection, getDocs, writeBatch, query } from "firebase/firestore";
+import { collection, getDocs, writeBatch } from "firebase/firestore";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import SideBar from "./Admin";
 import Header from "../../components/sections/Header/Header";
-
+import Footer from "../../components/sections/Footer/Footer";
 
 const AdminTitleOrder = () => {
   const [courses, setCourses] = useState([]);
@@ -13,12 +13,12 @@ const AdminTitleOrder = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Fetch courses from both collections
+  // Fetch all course names (collection IDs)
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const freeSnapshot = await getDocs(collection(db, "freeCourses"));
         const paidSnapshot = await getDocs(collection(db, "paidCourses"));
+        const freeSnapshot = await getDocs(collection(db, "freeCourses"));
         
         const allCourses = [
           ...paidSnapshot.docs.map(d => d.id),
@@ -108,121 +108,122 @@ const AdminTitleOrder = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+    <div className="admin-layout flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 premium-container">
+      
+      <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 min-w-0 py-10 px-6 md:px-10 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase text-[#1a1a1a]">
-                Course <span className="text-[#dd2727]">Hierarchy</span>
-              </h2>
-              <p className="text-gray-500 text-sm mt-1">Define the logical flow of your curriculum</p>
-            </div>
-            
-            <select
-              value={selectedCourse}
-              onChange={(e) => {
-                setSelectedCourse(e.target.value);
-                fetchTitles(e.target.value);
-              }}
-              className="w-full md:w-64 bg-gray-50 border border-black/5 rounded-xl px-5 py-3 text-sm text-[#1a1a1a] focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
-            >
-              <option value="">Select a Course</option>
-              {courses.map(course => (
-                <option key={course} value={course}>{course}</option>
-              ))}
-            </select>
-          </header>
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Course <span className="text-[#dd2727]">Hierarchy</span>
+                </h2>
+                <p className="text-slate-400 text-sm mt-1 font-medium">Define the logical flow of your curriculum</p>
+              </div>
+              
+              <select
+                value={selectedCourse}
+                onChange={(e) => {
+                  setSelectedCourse(e.target.value);
+                  fetchTitles(e.target.value);
+                }}
+                className="w-full md:w-64 bg-white border border-slate-200 rounded-xl px-5 py-3 text-sm text-slate-900 focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] outline-none transition-all appearance-none cursor-pointer shadow-sm"
+              >
+                <option value="">Select a Course</option>
+                {courses.map(course => (
+                  <option key={course} value={course}>{course}</option>
+                ))}
+              </select>
+            </header>
 
-          {loading ? (
-            <div className="space-y-4">
-              {[1, 2, 3, 4].map(i => <div key={i} className="h-20 bg-gray-100 rounded-2xl animate-pulse"></div>)}
-            </div>
-          ) : selectedCourse ? (
-            <div className="space-y-6">
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="titles">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className="bg-white border border-black/5 rounded-3xl p-4 shadow-[0_10px_30px_rgba(0,0,0,0.02)]"
-                    >
-                      {titles.length > 0 ? (
-                        titles.map((title, index) => (
-                          <Draggable
-                            key={title.title}
-                            draggableId={title.title}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                className="group mb-3 last:mb-0"
-                              >
-                                <div className="flex items-center gap-4 p-5 bg-gray-50 border border-black/5 rounded-2xl group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
-                                  <div 
-                                    {...provided.dragHandleProps}
-                                    className="p-2 bg-white rounded-xl text-gray-400 hover:text-[#dd2727] cursor-grab active:cursor-grabbing shadow-sm border border-black/5 transition-colors"
-                                  >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"/></svg>
-                                  </div>
-                                  
-                                  <div className="flex-1">
-                                    <h3 className="font-bold text-[#1a1a1a] tracking-wide uppercase text-sm">
-                                      {title.title}
-                                    </h3>
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
-                                      Module ID: {title.id.substring(0, 8)}...
-                                    </p>
-                                  </div>
+            {loading ? (
+              <div className="space-y-4">
+                {[1, 2, 3, 4].map(i => <div key={i} className="h-20 bg-white border border-slate-100 rounded-2xl animate-pulse"></div>)}
+              </div>
+            ) : selectedCourse ? (
+              <div className="space-y-6">
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="titles">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm"
+                      >
+                        {titles.length > 0 ? (
+                          titles.map((title, index) => (
+                            <Draggable
+                              key={title.title}
+                              draggableId={title.title}
+                              index={index}
+                            >
+                              {(provided) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  className="group mb-3 last:mb-0"
+                                >
+                                  <div className="flex items-center gap-4 p-5 bg-slate-50 border border-slate-100 rounded-xl group-hover:bg-white group-hover:border-[#dd2727]/30 transition-all duration-300">
+                                    <div 
+                                      {...provided.dragHandleProps}
+                                      className="p-2 bg-white rounded-lg text-slate-400 hover:text-[#dd2727] cursor-grab active:cursor-grabbing border border-slate-200 transition-colors shadow-sm"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"/></svg>
+                                    </div>
+                                    
+                                    <div className="flex-1">
+                                      <h3 className="font-bold text-slate-900 tracking-tight text-sm">
+                                        {title.title}
+                                      </h3>
+                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                                        Module ID: {title.id.substring(0, 8)}...
+                                      </p>
+                                    </div>
 
-                                  <div className="w-10 h-10 flex items-center justify-center bg-[#b0a102]/10 text-[#b0a102] rounded-full font-bold text-xs border border-[#b0a102]/20">
-                                    {title.order}
+                                    <div className="w-10 h-10 flex items-center justify-center bg-[#b0a102]/10 text-[#b0a102] rounded-full font-bold text-xs border border-[#b0a102]/20">
+                                      {title.order}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))
-                      ) : (
-                        <div className="text-center py-12 text-gray-400 italic">
-                          No titles found for this course.
-                        </div>
-                      )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                              )}
+                            </Draggable>
+                          ))
+                        ) : (
+                          <div className="text-center py-12 text-gray-500 italic">
+                            No titles found for this course.
+                          </div>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
 
-              {titles.length > 0 && (
-                <div className="flex justify-end">
-                  <button
-                    onClick={saveOrder}
-                    disabled={saving}
-                    className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] px-10 py-4 rounded-2xl font-bold uppercase tracking-[0.2em] text-white hover:scale-105 transition-all shadow-xl disabled:opacity-50"
-                  >
-                    {saving ? "Saving Changes..." : "Apply Sequence"}
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-20 bg-white border border-black/5 rounded-3xl shadow-sm">
-              <svg className="w-16 h-16 mx-auto mb-6 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <p className="text-gray-500 font-medium">Please select a course to organize</p>
-            </div>
-          )}
-        </div>
-      </main>
+                {titles.length > 0 && (
+                  <div className="flex justify-end">
+                    <button
+                      onClick={saveOrder}
+                      disabled={saving}
+                      className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-extrabold uppercase tracking-widest hover:shadow-lg hover:shadow-red-500/20 transition-all transform hover:scale-[1.01] active:scale-95 disabled:opacity-50"
+                    >
+                      {saving ? "Saving Changes..." : "Apply Sequence"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-24 bg-white border border-slate-100 rounded-2xl shadow-sm">
+                <svg className="w-16 h-16 mx-auto mb-6 text-slate-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <p className="text-slate-400 font-medium italic">Please select a course to organize hierarchy</p>
+              </div>
+            )}
+          </div>
+        </main>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -22,8 +22,9 @@ const Home = () => {
                 <CourseSection />
                 <ArticleSection />
                 <About />
-                <Numerology />
                 <Horoscope />
+                <Numerology />
+                
                 <Testimonials />
                 <Partners />
                 <Contact />

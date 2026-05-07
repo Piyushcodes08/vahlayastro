@@ -120,7 +120,7 @@
 .project-card[active] .project-card__title {
   writing-mode: horizontal-tb;
   transform: none;
-  font-size: 2.5rem;
+  font-size: 25px;
   line-height: 1.1;
   white-space: normal;
   max-width: 300px;

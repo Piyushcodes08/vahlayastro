@@ -52,13 +52,14 @@ const EnrollCourse = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
+        const data = docSnap.data(); // ✅ Fix: subscription document data
         // Fetch metadata for all courses to get images
         const coursesRef = collection(db, "courses");
         const coursesSnap = await getDocs(coursesRef);
         const coursesMetadata = {};
-        coursesSnap.forEach(doc => {
-            const data = doc.data();
-            coursesMetadata[data.Title || data.title] = data.imageUrl || data.image;
+        coursesSnap.forEach(courseDoc => {
+            const courseData = courseDoc.data();
+            coursesMetadata[courseData.Title || courseData.title] = courseData.imageUrl || courseData.image;
         });
 
         const freeCourses =

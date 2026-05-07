@@ -13,7 +13,7 @@ const Header = () => {
     const location = useLocation();
 
     // Check if we are on admin or dashboard-related pages
-    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/course'].some(path => location.pathname.startsWith(path));
+    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/admin'].some(path => location.pathname.startsWith(path));
     const showBg = scrolled || alwaysShowBg;
 
     useEffect(() => {

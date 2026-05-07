@@ -1,99 +1,99 @@
 .horoscope-section {
-  position: relative;
   width: 100%;
-  padding: 100px 24px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.horoscope-section * {
-  box-sizing: border-box;
-}
-
-.horoscope-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(145deg, #dd2727 50%, #b0a10291 50%);
-  filter: blur(80px);
-  opacity: 0.7;
-  transform: scale(1.1);
-  z-index: -1;
-}
-
-.horoscope-wrapper {
+  background: transparent;
   position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1440px;
+  padding-bottom: 100px;
 }
 
 
+
+/* Heading and container styles handled by common project classes */
 
 .quote-row {
   width: 100%;
-  min-height: 620px;
+  min-height: 600px;
+  /* Increased slightly for better centering */
   display: flex;
   align-items: center;
   position: relative;
   justify-content: center;
+  margin: 0 auto;
 }
 
+/* Orbit lines removed */
 .quote-column {
   position: absolute;
   padding: 0 !important;
-  overflow: hidden;
-  transition: all 0.45s ease;
+  overflow: visible;
+  transition:
+    top 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease,
+    filter 0.35s ease,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   background: transparent;
+  border: none;
   box-shadow: none;
   cursor: pointer;
+  appearance: none;
 }
 
 .horoscope-float {
-  animation: horoscopeFloat 5s ease-in-out infinite alternate;
+  animation: horoscopeFloat 4.8s ease-in-out infinite alternate;
+}
+
+.quote-column:nth-child(odd) {
+  animation-delay: -1.4s;
+}
+
+.quote-column:nth-child(even) {
+  animation-delay: -2.2s;
 }
 
 @keyframes horoscopeFloat {
   from {
-    transform: translate3d(-8px, -10px, 0);
+    margin-top: -7px;
   }
+
   to {
-    transform: translate3d(8px, 10px, 0);
+    margin-top: 7px;
   }
 }
 
+/* Active center card - clean, resized, no shadow/border */
 .col-active {
-  width: 33.33% !important;
-  min-width: 430px;
+  width: min(90%, 450px) !important;
+  min-width: unset;
   height: auto !important;
   transform: translate(-50%, -50%) !important;
-  top: 55% !important;
+  top: 57% !important;
   left: 50% !important;
   right: auto !important;
   bottom: auto !important;
-  background: rgba(255, 255, 255, 0.38);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
-  border-radius: 1.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.37);
+  background: rgba(66, 20, 20, 0.68) !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+  border: none !important;
   overflow: hidden;
-  z-index: 5;
+  z-index: 20;
   cursor: default;
   animation: none;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .col-inner {
   position: relative;
   width: 100%;
-  max-width: 130px;
-  overflow: hidden;
+  max-width: 100px;
+  overflow: visible;
 }
 
 .col-active .col-inner {
   max-width: 100%;
+  padding: 5px;
 }
 
 .author-meta {
@@ -101,16 +101,17 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   border: none;
   transition: all 0.45s ease;
 }
 
 .col-active .author-meta {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.43);
+  border-bottom: none !important;
   padding-bottom: 12px;
 }
 
+/* Normal rashi icons - no bg, no border, no shadow */
 .image-cover {
   position: relative;
   flex-shrink: 0;
@@ -118,20 +119,31 @@
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: none !important;
+  box-shadow: none !important;
   z-index: 1;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.05); /* Fallback to see container */
+  transition: all 0.45s ease;
+  background: transparent !important;
+}
+
+.image-cover::after {
+  display: none !important;
+}
+
+.quote-column:not(.col-active):hover .image-cover {
+  transform: scale(1.08);
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .col-active .image-cover {
   position: relative;
-  width: 140px !important;
-  height: 140px !important;
-  border-radius: 1.5rem !important;
-  border: 2.5px solid #dd2727 !important;
-  box-shadow: 0 15px 45px rgba(221, 39, 39, 0.3) !important;
+  width: 118px !important;
+  height: 118px !important;
+  border-radius: 22px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
 .image-cover img {
@@ -143,12 +155,12 @@
 }
 
 .quote-column:hover .image-cover img {
-  transform: scale(1.1);
+  transform: scale(1.06);
 }
 
 .author-info {
   width: 70%;
-  padding: 10px 16px;
+  padding: 8px 4px;
   overflow: hidden;
   visibility: hidden;
 }
@@ -160,7 +172,7 @@
 .author-info .author-name,
 .author-info .person-title {
   transform: translateX(-100%);
-  transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: 0.42s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 .show .author-info .author-name,
@@ -169,29 +181,36 @@
 }
 
 .show .author-info .person-title {
-  transition-delay: 0.2s;
+  transition-delay: 0.14s;
 }
 
 .person-name {
-  font-size: 21px;
-  font-weight: 700;
-  color: #000;
-  margin: 0 0 5px;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 7px;
+  letter-spacing: -0.03em;
 }
 
 .person-title {
-  font-size: 14px;
+  display: inline-flex;
+  width: fit-content;
+  font-size: 13px;
   font-weight: 700;
-  color: #000;
+  color: #ffd782;
   margin: 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 215, 130, 0.12);
+  border: none;
 }
 
 .quote-wrapper {
   position: relative;
   width: 100%;
-  color: #494949;
-  padding: 24px 18px;
-  text-align: center;
+  color: #fff;
+  padding: 18px 10px 4px;
+  text-align: left;
   overflow: hidden;
   visibility: hidden;
 }
@@ -201,72 +220,117 @@
 }
 
 .box-text-inner {
-  max-width: 400px;
+  max-width: 410px;
   margin: auto;
-  color: #000;
-  font-size: 15px;
-  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 15.5px;
+  line-height: 1.72;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
+.box-text-inner p {
+  margin: 0;
+}
+
+/* Quote black overlay removed */
 .quote-wrapper .quote-symbol {
-  font-size: 12vw;
-  line-height: 1em;
+  display: none !important;
+}
+
+/* Prev Next Controls */
+.horoscope-controls {
   position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  z-index: 1;
-  transition: 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19);
-  color: #000;
+  left: 50%;
+  bottom: -40px;
+  /* Moved below the orbit for better spacing */
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: rgba(66, 20, 20, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 130, 0.1);
 }
 
-.quote-wrapper .quote-symbol:first-child {
-  left: 0;
-  text-align: right;
+.horoscope-controls button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  background: rgba(221, 39, 39, 0.85);
+  box-shadow: none;
+  transition: transform 0.25s ease, background 0.25s ease;
 }
 
-.quote-wrapper .quote-symbol:last-child {
-  right: 0;
-  text-align: left;
+.horoscope-controls button:hover {
+  transform: scale(1.06);
+  background: rgba(255, 190, 80, 0.9);
 }
 
-.show .quote-wrapper .quote-symbol:first-child {
-  left: -50%;
+.horoscope-controls span {
+  min-width: 70px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.84);
 }
 
-.show .quote-wrapper .quote-symbol:last-child {
-  right: -50%;
-}
-
-/* Arrows removed from CSS, handled by JSX/Tailwind */
-
+/* Tablet */
 @media (max-width: 1080px) {
   .quote-row {
     min-height: 560px;
   }
 
+  .orbit-ring {
+    display: none !important;
+  }
+
   .col-active {
-    width: 55% !important;
-    min-width: unset;
+    width: min(88%, 430px) !important;
   }
 }
 
+/* Small Tablet */
 @media (max-width: 840px) {
-  .col-active {
-    width: 75% !important;
-  }
-}
-
-@media (max-width: 640px) {
   .horoscope-section {
-    padding: 80px 18px;
-    min-height: 100vh;
+    padding: 80px 18px 60px;
   }
 
   .quote-row {
-    min-height: 520px;
+    min-height: 540px;
+  }
+
+  .col-active {
+    width: 82% !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .horoscope-section {
+    padding: 70px 16px 60px;
+    min-height: auto;
+  }
+
+  .horoscope-heading {
+    padding-bottom: 24px;
+  }
+
+  .quote-row {
+    min-height: 500px;
+  }
+
+  .orbit-ring {
+    display: none !important;
   }
 
   .quote-column {
@@ -274,32 +338,31 @@
     top: 50% !important;
     left: 50% !important;
     opacity: 0;
-    transform: translate(-50%, -50%) !important;
+    transform: translate(-50%, -50%) scale(0.95) !important;
     height: auto !important;
     z-index: 0;
+    pointer-events: none;
   }
 
   .col-active {
     opacity: 1;
-    z-index: 5;
+    z-index: 20;
     width: 90% !important;
+    pointer-events: auto;
   }
 
-  .col-inner {
-    max-width: 100%;
+  .col-active .col-inner {
+    padding: 18px;
   }
 
   .author-meta {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.43);
+    gap: 12px;
   }
 
-  .image-cover {
-    position: relative;
-    width: 30%;
-    max-width: 120px;
-    border-radius: 1.3rem 0 1.3rem 0;
+  .col-active .image-cover {
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 18px !important;
   }
 
   .author-info,
@@ -307,12 +370,24 @@
     visibility: visible;
   }
 
-  .quote-wrapper .quote-symbol {
-    font-size: 28vh;
+  .person-name {
+    font-size: 26px;
   }
 
-  .arrow {
-    top: auto;
-    bottom: 20px;
+  .person-title {
+    font-size: 12px;
+  }
+
+  .box-text-inner {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .quote-wrapper {
+    padding: 16px 4px 4px;
+  }
+
+  .horoscope-controls {
+    bottom: 0;
   }
 }
