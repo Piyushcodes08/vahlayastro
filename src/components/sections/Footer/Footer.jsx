@@ -111,16 +111,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* WhatsApp Floating Button */}
-      <a 
-        href="https://wa.me/917949217538" 
-        className="whatsapp-float" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        aria-label="Contact us on WhatsApp"
-      >
-        <FaWhatsapp size={30} />
-      </a>
     </footer>
   );
 };

@@ -71,16 +71,6 @@ const AdminFooter = () => {
         </div>
       </div>
 
-      {/* Floating Chat Bubble */}
-      <div className="fixed bottom-8 right-8 flex items-center gap-3 z-[100]">
-        <div className="bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2 animate-bounce">
-          <span className="text-xs font-bold text-slate-700">Chat with us 👋</span>
-        </div>
-        <button className="w-14 h-14 bg-[#dd2727] rounded-full flex items-center justify-center text-white shadow-[0_10px_30px_rgba(221,39,39,0.4)] hover:scale-110 transition-transform relative">
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2.5 21.5l4.5-.838A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.477 0-2.854-.396-4.031-1.085l-2.617.487.487-2.617C5.161 16.036 4.765 14.659 4.765 13.182c0-3.992 3.243-7.235 7.235-7.235 3.992 0 7.235 3.243 7.235 7.235 0 3.992-3.243 7.235-7.235 7.235z"/></svg>
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-[#dd2727] text-[10px] font-black rounded-full flex items-center justify-center shadow-sm border border-slate-100">1</span>
-        </button>
-      </div>
     </footer>
   );
 };

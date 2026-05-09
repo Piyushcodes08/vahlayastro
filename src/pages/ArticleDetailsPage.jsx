@@ -281,16 +281,6 @@ const ArticleDetailsPage = () => {
                         </ul>
                     </aside>
 
-                    {/* Mobile Sidebar Toggle Button */}
-                    <div className="lg:hidden fixed bottom-6 right-6 z-40">
-                        <button
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="bg-[#dd2727] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(221,39,39,0.4)] hover:scale-105 transition-transform flex items-center justify-center"
-                            aria-label="Open Other Articles"
-                        >
-                            <span className="text-2xl font-bold title-batangas">✦</span>
-                        </button>
-                    </div>
 
                     {/* Mobile Side-drawer */}
                     {isSidebarOpen && (

@@ -491,103 +491,122 @@ const EMIDetails = () => {
   }, [payments, emiPlans]);
 
   return (
-    <>
+    <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10">
+      
+      <div className="flex flex-1 relative z-10 pt-16">
         <Aside />
-        <div className="flex-1 p-4 md:p-8">
-          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 border-b border-white/10 pb-6">
-          EMI Details <span className="text-[#dd2727] text-xl block md:inline md:ml-4">{userEmail}</span>
-        </h2>
-
-        {/* Show message if user is not enrolled in any EMI plans */}
-        {Object.keys(emiSchedules).length === 0 ? (
-          <div className="text-center p-12 bg-white/5 border border-white/10 rounded-2xl">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              You are not enrolled in any EMI plans.
-            </h3>
-            <p className="text-gray-400 mb-8">
-              Explore available courses with EMI options and start your journey
-              today.
-            </p>
-            <Link to="/courses">
-              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(221,39,39,0.3)]">
-                Browse Courses with EMI Plans
-              </button>
-            </Link>
-          </div>
-        ) : (
-          Object.keys(emiSchedules).map((courseId) => {
-            const schedule = emiSchedules[courseId] || [];
-            const unpaidEMIs = schedule.filter(
-              (emi) => emi.status === "unpaid"
-            );
-            const totalUnpaid = unpaidEMIs.reduce(
-              (sum, emi) => sum + Number(emi.amount),
-              0
-            );
-
-            return (
-              <div
-                key={courseId}
-                className="mb-8 p-6 bg-black/20 border border-white/10 rounded-2xl hover:border-white/20 transition-all shadow-lg"
-              >
-                <h3 className="text-xl font-bold mb-6 text-white border-b border-white/10 pb-4">
-                  Course: <span className="text-[#dd2727]">{courseId}</span>
-                </h3>
-                <ul className="space-y-4">
-                  {schedule.map((emi, idx) => (
-                    <li
-                      key={idx}
-                      className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors gap-4"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-white font-bold text-lg">
-                          EMI #{emi.emiNumber}
-                        </span>
-                        <span className="text-sm text-gray-400 uppercase tracking-wider">
-                          Due on <span className="text-gray-300 font-medium">{emi.date.toLocaleDateString("en-IN")}</span>
-                        </span>
-                        <span className="text-[#dd2727] font-bold mt-1 text-lg">
-                          ₹{Number(emi.amount).toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                      <div className="w-full md:w-auto flex justify-end">
-                      {emi.status === "paid" ? (
-                        <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-6 py-2 rounded-lg font-bold uppercase tracking-wider text-sm flex items-center justify-center w-full md:w-auto">
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                          Paid
-                        </span>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            openPaymentModal(
-                              courseId,
-                              emi.emiNumber,
-                              emi.amount
-                            )
-                          }
-                          className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white px-8 py-2 rounded-lg font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)] w-full md:w-auto"
-                        >
-                          Pay Now
-                        </button>
-                      )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+        
+        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10">
+          <div className="max-w-7xl mx-auto space-y-10">
+            
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
+              <div>
+                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-2">Financial Overview</h4>
+                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                  EMI <span className="text-[#dd2727]">Details</span>
+                </h1>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Active for: <span className="text-slate-600">{userEmail}</span></p>
               </div>
-            );
-          })
-        )}
+            </div>
 
-        <PaymentModal />
+            {Object.keys(emiSchedules).length === 0 ? (
+              <div className="admin-card p-20 text-center bg-white">
+                <div className="text-4xl mb-6">💳</div>
+                <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tight">No Active EMI Plans</h3>
+                <p className="text-slate-500 font-medium mb-8 max-w-md mx-auto">
+                  You are not currently enrolled in any EMI plans. Check our premium courses for flexible payment options.
+                </p>
+                <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">
+                  Browse Premium Courses
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-10">
+                {Object.keys(emiSchedules).map((courseId) => {
+                  const schedule = emiSchedules[courseId] || [];
+                  const unpaidEMIs = schedule.filter(emi => emi.status === "unpaid");
+                  const totalUnpaid = unpaidEMIs.reduce((sum, emi) => sum + Number(emi.amount), 0);
+                  const paidEMIs = schedule.filter(emi => emi.status === "paid");
+                  const progress = (paidEMIs.length / schedule.length) * 100;
+
+                  return (
+                    <div key={courseId} className="admin-card overflow-hidden bg-white">
+                      <div className="bg-slate-50 border-b border-slate-100 p-8">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                          <div>
+                            <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase">
+                              Course: <span className="text-[#dd2727]">{courseId}</span>
+                            </h3>
+                            <div className="flex items-center gap-4">
+                              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Progress</span>
+                              <div className="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="h-full bg-[#dd2727]" style={{ width: `${progress}%` }}></div>
+                              </div>
+                              <span className="text-[10px] font-bold text-slate-900">{Math.round(progress)}%</span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Remaining</p>
+                             <h4 className="text-2xl font-black text-slate-900">₹{totalUnpaid.toLocaleString("en-IN")}</h4>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-8">
+                        <div className="grid grid-cols-1 gap-4">
+                          {schedule.map((emi, idx) => (
+                            <div
+                              key={idx}
+                              className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 bg-slate-50/50 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group"
+                            >
+                              <div className="flex items-center gap-6">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-xs ${emi.status === 'paid' ? 'bg-green-100 text-green-600' : 'bg-slate-200 text-slate-500'}`}>
+                                  {emi.emiNumber.toString().padStart(2, '0')}
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-slate-900 font-bold text-lg tracking-tight">EMI Payment</span>
+                                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    Due: <span className="text-slate-600">{emi.date.toLocaleDateString("en-IN")}</span>
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center gap-8 w-full md:w-auto mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-slate-200/50">
+                                <span className="text-xl font-black text-slate-900 min-w-[100px] text-right">
+                                  ₹{Number(emi.amount).toLocaleString("en-IN")}
+                                </span>
+                                {emi.status === "paid" ? (
+                                  <div className="flex items-center gap-2 text-green-600 bg-green-50 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border border-green-100">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Paid
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => openPaymentModal(courseId, emi.emiNumber, emi.amount)}
+                                    className="bg-slate-900 text-white px-8 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-[#dd2727] transition-all shadow-lg shadow-slate-200"
+                                  >
+                                    Pay Now
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <PaymentModal />
           </div>
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 

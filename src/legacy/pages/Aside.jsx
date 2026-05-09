@@ -6,11 +6,11 @@ import {
   IoIosArrowBack, 
   IoIosContact, 
   IoIosBook, 
-  IoIosTelescope, 
   IoIosCard, 
   IoIosLogOut,
   IoIosHome
 } from "react-icons/io";
+import { IoTelescope } from "react-icons/io5";
 
 const Aside = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -73,7 +73,7 @@ const Aside = () => {
     { title: "MY DASHBOARD", path: "/dashboard", icon: <IoIosHome size={20} /> },
     { title: "MY PROFILE", path: "/profile", icon: <IoIosContact size={20} /> },
     { title: "ENROLLED COURSES", path: "/enrolledcourse", icon: <IoIosBook size={20} /> },
-    { title: "BROWSE COURSES", path: "/courses", icon: <IoIosTelescope size={20} /> },
+    { title: "BROWSE COURSES", path: "/courses", icon: <IoTelescope size={20} /> },
     { title: "PAYMENTS", path: "/finalize", icon: <IoIosCard size={20} /> },
   ];
 
@@ -102,22 +102,18 @@ const Aside = () => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 shadow-[10px_0_40px_rgba(221,39,39,0.1)]`}
       >
-        <div className="pt-10 px-3 space-y-12 pb-10 flex flex-col h-full">
-          {/* Header Section */}
-          <div className="flex justify-between items-center relative px-2">
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-black text-white tracking-tighter">VAHLAY <span className="text-white/40 not-italic font-light">ASTRO</span></h2>
-              </div>
-              <p className="text-[9px] text-white/50 font-bold uppercase tracking-[0.4em] leading-none">STUDENT PORTAL</p>
-            </div>
+        <div className="pt-6 px-3 space-y-8 pb-10 flex flex-col h-full">
+          {/* Mobile Close Button (Visible only on mobile) */}
+          <div className="lg:hidden flex justify-end px-2">
             <button
-              className="lg:hidden p-2 text-white/70 hover:text-white transition-colors"
+              className="p-2 text-white/70 hover:text-white transition-colors"
               onClick={() => setSidebarOpen(false)}
             >
               <IoIosArrowBack size={24} />
             </button>
           </div>
+
+          {/* Profile Quick Look - Now higher up for cleaner look */}
 
           {/* Profile Quick Look */}
           <div className="px-2 flex flex-col items-center gap-4">

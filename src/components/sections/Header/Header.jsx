@@ -13,8 +13,9 @@ const Header = () => {
     const location = useLocation();
 
     // Check if we are on admin or dashboard-related pages
-    const alwaysShowBg = ['/dashboard', '/profile', '/enrolledcourse', '/admin'].some(path => location.pathname.startsWith(path));
-    const showBg = scrolled || alwaysShowBg;
+    const portalPaths = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/course'];
+    const isPortal = portalPaths.some(path => location.pathname.startsWith(path));
+    const showBg = scrolled || isPortal;
 
     useEffect(() => {
         const handleScroll = (e) => {
@@ -80,8 +81,8 @@ const Header = () => {
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-[1000] w-full text-white transition-all duration-700 overflow-hidden ${showBg
-                    ? "border-b border-white/5 backdrop-blur-[15px]"
-                    : "bg-transparent"
+                ? "border-b border-white/5 backdrop-blur-[15px]"
+                : "bg-transparent"
                 }`}
         >
             {/* Premium Custom Glowing Background */}
@@ -98,17 +99,29 @@ const Header = () => {
             {/* Add a subtle dark overlay so the text remains perfectly readable over the bright glow */}
             {/* Subtle overlay removed for transparency */}
 
-            <nav className={`max-w-[1170px] mx-auto flex justify-between items-center px-4 md:px-12 transition-all duration-500 relative ${showBg ? 'py-1' : 'py-1'}`}>
+            <nav className={`mx-auto flex justify-between items-center transition-all duration-500 relative 
+                ${isPortal ? 'w-full h-16' : 'max-w-[1170px] px-4 md:px-12 py-1'}`}
+            >
+                {/* Logo Section - Portal Branded Block */}
+                <div className={`flex items-center h-full transition-all duration-500 ${isPortal ? 'md:w-56 justify-center bg-[#dd2727] shadow-[4px_0_15px_rgba(221,39,39,0.2)]' : ''}`}>
+                    <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
+                        <img
+                            src={logo}
+                            alt="Vahlay Astro Logo"
+                            loading="lazy"
+                            className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-10 w-10 md:h-12 md:w-12' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
+                        />
+                        {isPortal && (
+                            <div className="hidden lg:flex flex-col ml-3 leading-none">
+                                <span className="text-[14px] font-black tracking-tighter text-white">VAHLAY</span>
+                                <span className="text-[8px] font-bold tracking-[0.3em] text-white/50 uppercase">Portal</span>
+                            </div>
+                        )}
+                    </Link>
+                </div>
 
-                {/* Logo Section */}
-                <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
-                    <img
-                        src={logo}
-                        alt="Vahlay Astro Logo"
-                        loading="lazy"
-                        className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-12 w-12 md:h-14 md:w-14' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
-                    />
-                </Link>
+                {/* Main Nav Content Wrapper for Portal Alignment */}
+                <div className={`flex-1 flex justify-between items-center h-full ${isPortal ? 'px-6 md:px-10 bg-black/20 backdrop-blur-md' : ''}`}>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden lg:flex items-center gap-6 xl:gap-8 ">
@@ -157,16 +170,16 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    {/* Hamburger Menu Toggle */}
-                    <button
-                        className="lg:hidden flex flex-col gap-1.5 p-2 z-50 focus:outline-none"
-                        onClick={() => setIsOpen(!isOpen)}
-                        aria-label="Toggle Menu"
-                    >
-                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
-                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-                    </button>
+                        <button
+                            className="lg:hidden flex flex-col gap-1.5 p-2 z-50 focus:outline-none"
+                            onClick={() => setIsOpen(!isOpen)}
+                            aria-label="Toggle Menu"
+                        >
+                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
+                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Mobile Navigation Menu */}

@@ -31,8 +31,9 @@ const Horoscope = () => {
         };
       }
 
-      const radiusX = isTablet ? 230 : 380;
-      const radiusY = isTablet ? 170 : 230;
+      // Larger radiusY to avoid overlap with the growing active center card
+      const radiusX = isTablet ? 240 : 390;
+      const radiusY = isTablet ? 195 : 260;
 
       const angle = (360 / total) * index - 90;
       const radian = (angle * Math.PI) / 180;
@@ -43,8 +44,8 @@ const Horoscope = () => {
       return {
         left: `calc(50% + ${x}px)`,
         top: `calc(50% + ${y}px)`,
-        width: isTablet ? "72px" : "86px",
-        height: isTablet ? "72px" : "86px",
+        width: isTablet ? "60px" : "88px",
+        height: isTablet ? "60px" : "88px",
         transform: "translate(-50%, -50%)",
       };
     });
@@ -64,6 +65,7 @@ const Horoscope = () => {
 
   return (
     <section className="horoscope-section">
+      {/* Heading stays inside constrained container */}
       <div className="section-container">
         <div className="flex flex-col gap-2 mb-12 text-center">
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight">
@@ -73,48 +75,44 @@ const Horoscope = () => {
             Check your daily astrological predictions for cosmic guidance.
           </p>
         </div>
+      </div>
 
-        <div className="quote-row">
-          {horoscopeData.map((item, index) => {
-            const isActive = activeIndex === index;
-
-            return (
-              <button
-                type="button"
-                key={item.name}
-                className={`quote-column horoscope-float ${isActive ? "col-active show" : ""
-                  }`}
-                style={isActive ? undefined : cardPositions[index]}
-                onClick={() => setActiveIndex(index)}
-                aria-label={`Open ${item.name} horoscope`}
-              >
-                <div className="col-inner">
-                  <div className="author-meta">
-                    <div className="image-cover">
-                      <img src={item.image} alt={item.name} />
-                    </div>
-
-                    <div className="author-info">
-                      <div className="author-name">
-                        <p className="person-name">{item.name}</p>
-                      </div>
-
-                      <div className="author-status">
-                        <p className="person-title">{item.title}</p>
-                      </div>
-                    </div>
+      {/* Orbit + active card — full viewport width so left:50% = true center */}
+      <div className="quote-row">
+        {horoscopeData.map((item, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <button
+              type="button"
+              key={item.name}
+              className={`quote-column horoscope-float ${isActive ? "col-active show" : ""}`}
+              style={isActive ? undefined : cardPositions[index]}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Open ${item.name} horoscope`}
+            >
+              <div className="col-inner">
+                <div className="author-meta">
+                  <div className="image-cover">
+                    <img src={item.image} alt={item.name} />
                   </div>
-
-                  <div className="quote-wrapper">
-                    <div className="box-text-inner">
-                      <p>{item.quote}</p>
+                  <div className="author-info">
+                    <div className="author-name">
+                      <p className="person-name">{item.name}</p>
+                    </div>
+                    <div className="author-status">
+                      <p className="person-title">{item.title}</p>
                     </div>
                   </div>
                 </div>
-              </button>
-            );
-          })}
-        </div>
+                <div className="quote-wrapper">
+                  <div className="box-text-inner">
+                    <p>{item.quote}</p>
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })} 
       </div>
     </section>
   );

@@ -26,6 +26,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Aside from '../pages/Aside'
 import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const PersonalCourse = () => {
   const { courseName } = useParams();
@@ -566,27 +567,40 @@ const PersonalCourse = () => {
    * -----------------------
    */
   return (
-    <>
+    <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10">
-        {/* SIDEBAR */}
+
+      <div className="flex flex-1 relative z-10 pt-16">
         <Aside />
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 p-4 md:p-8">
-        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
-        {/* Course Name */}
-        <h1 className="text-3xl md:text-5xl font-bold mb-8 text-white text-center border-b border-white/10 pb-6 uppercase tracking-wider">
-          <span className="text-[#dd2727]">{courseName}</span>
-        </h1>
+      <main className="flex-1 admin-fluid-container bg-gray-50/50 p-4 md:p-10">
+        <div className="max-w-7xl mx-auto">
+
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8 mb-10">
+          <div>
+            <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-2">Academic Portal</h4>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase">
+              <span className="text-[#dd2727]">{courseName}</span>
+            </h1>
+          </div>
+        </div>
 
         {/* Live Session Marquee */}
         {meetings.length > 0 && (
-          <Link to={`/${courseName}/meetings`}>
-            <div className="bg-gradient-to-r from-[#dd2727]/20 to-[#b0a102]/20 border border-[#dd2727]/30 text-white p-4 mb-8 rounded-xl hover:bg-[#dd2727]/30 transition-all text-center font-bold uppercase tracking-wider animate-pulse flex items-center justify-center shadow-[0_0_15px_rgba(221,39,39,0.2)]">
-              <span className="w-2 h-2 rounded-full bg-red-500 mr-2 animate-ping"></span>
-              Click Here to join Live Session for {courseName}
+          <Link to={`/${courseName}/meetings`} className="block mb-8">
+            <div className="bg-gradient-to-r from-[#dd2727] to-[#f43f5e] p-5 rounded-2xl text-white shadow-lg shadow-red-200 flex items-center justify-between hover:scale-[1.01] transition-all">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                  <span className="w-3 h-3 rounded-full bg-white animate-ping"></span>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-80">Live Session Active</p>
+                  <h4 className="font-bold text-lg">Join the sacred live session for {courseName}</h4>
+                </div>
+              </div>
+              <div className="bg-white text-[#dd2727] px-6 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] hidden md:block">Join Room</div>
             </div>
           </Link>
         )}
@@ -598,35 +612,25 @@ const PersonalCourse = () => {
 
         {/* Upcoming EMI Payments */}
         {upcomingEMIs.length > 0 && (
-          <div className="mb-8 p-6 bg-black/20 border border-[#dd2727]/30 rounded-2xl shadow-[0_0_20px_rgba(221,39,39,0.1)]">
-            <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4 flex items-center">
-               <span className="text-[#dd2727] mr-2">⚠</span> Upcoming EMI Payments
+          <div className="mb-8 admin-card border-l-4 border-l-amber-500 bg-amber-50/30 p-8">
+            <h3 className="text-sm font-black text-amber-800 uppercase tracking-widest mb-6 flex items-center gap-3">
+              <span>⚠</span> Upcoming EMI Payments
             </h3>
             <div className="space-y-4">
             {upcomingEMIs.map((emi, index) => (
-              <div key={index} className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div className="flex flex-col">
-                    <h4 className="font-bold text-white text-lg">Course: <span className="text-[#dd2727]">{emi.courseId}</span></h4>
-                    <p className="text-gray-300 font-medium mt-1">EMI #{emi.emiNumber} Due</p>
-                    <p className="text-sm text-gray-400 uppercase tracking-wider mt-1">
-                      Due Date: <span className="text-gray-200">{emi.dueDate.toLocaleDateString()}</span>
-                    </p>
+              <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center p-5 bg-white border border-amber-100 rounded-2xl gap-6">
+                <div>
+                  <p className="text-[9px] font-black text-amber-600 uppercase tracking-widest mb-1">EMI #{emi.emiNumber}</p>
+                  <h4 className="font-bold text-slate-800">Payment for {emi.courseId}</h4>
+                  <p className="text-xs text-slate-500 mt-1">Due: <span className="font-bold text-slate-700">{emi.dueDate.toLocaleDateString()}</span></p>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div>
+                    <p className={`text-xs font-black uppercase tracking-widest ${emi.daysRemaining <= 3 ? "text-red-600" : "text-amber-600"}`}>{emi.daysRemaining} days left</p>
+                    <p className="text-xl font-black text-slate-900">₹{emi.amountDue}</p>
                   </div>
-                  <div className="text-right flex flex-col items-start md:items-end w-full md:w-auto">
-                    <p
-                      className={`text-lg font-bold ${emi.daysRemaining <= 3 ? "text-[#dd2727]" : "text-green-400"
-                        }`}
-                    >
-                      {emi.daysRemaining} days left
-                    </p>
-                    <p className="text-2xl font-bold text-white mt-1">₹{emi.amountDue}</p>
-                    <Link
-                      to={`/finalize`}
-                      className="mt-4 px-8 py-2 rounded-lg bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)] w-full md:w-auto text-center"
-                    >
-                      Pay Now
-                    </Link>
-                  </div>
+                  <Link to="/finalize" className="bg-amber-500 text-white px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-amber-600 transition-all">Pay Now</Link>
+                </div>
               </div>
             ))}
             </div>
@@ -637,154 +641,136 @@ const PersonalCourse = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {/* Subscription Validity (Paid Courses) */}
           {courseType !== "free" && (
-            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
-              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
+            <div className="admin-card p-8 flex flex-col items-center bg-white">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
                 Subscription
               </h3>
               {typeof validityPercentage === "string" && validityPercentage === "Lifetime Access" ? (
-                <div className="flex-1 flex items-center justify-center">
-                  <p className="text-center text-2xl font-bold text-[#b0a102] drop-shadow-[0_0_10px_rgba(176,161,2,0.5)]">Lifetime<br/>Access</p>
+                <div className="flex-1 flex flex-col items-center justify-center text-center">
+                  <div className="text-4xl mb-2">♾️</div>
+                  <p className="text-xl font-black text-slate-900">Lifetime Access</p>
                 </div>
               ) : validityPercentage === "0" ? (
-                <div className="flex-1 flex items-center justify-center">
-                  <p className="text-center text-2xl font-bold text-[#dd2727] drop-shadow-[0_0_10px_rgba(221,39,39,0.5)]">Expired</p>
+                <div className="flex-1 flex flex-col items-center justify-center text-center">
+                  <div className="text-4xl mb-2">⌛</div>
+                  <p className="text-xl font-black text-red-600 uppercase tracking-widest">Expired</p>
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
+                  <div className="relative w-32 h-32 flex items-center justify-center">
                     <PieChart
                       data={[
-                        {
-                          title: "Remaining",
-                          value: parseInt(validityPercentage) || 0,
-                          color: "#dd2727",
-                        },
-                        {
-                          title: "Expired",
-                          value: 100 - (parseInt(validityPercentage) || 0),
-                          color: "rgba(255,255,255,0.1)",
-                        },
+                        { value: parseInt(validityPercentage) || 0, color: "#dd2727" },
+                        { value: 100 - (parseInt(validityPercentage) || 0), color: "#f1f5f9" },
                       ]}
                       lineWidth={20}
                       rounded
                       animate
-                      style={{ height: "140px", width: "140px" }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center flex-col">
-                      <span className="text-2xl font-bold text-white">{validityPercentage || 0}%</span>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-2xl font-black text-slate-900">{validityPercentage || 0}%</span>
                     </div>
                   </div>
-                  <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
-                    Validity Remaining
-                  </p>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">Validity Remaining</p>
                 </>
               )}
             </div>
           )}
 
           {/* Course Progress */}
-          <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
-            <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
+          <div className="admin-card p-8 flex flex-col items-center bg-white">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
               Course Progress
             </h3>
             {courseType !== "free" ? (
               <>
-                <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
+                <div className="relative w-32 h-32 flex items-center justify-center">
                   <PieChart
                     data={[
-                      { title: "Watched", value: watchedPercentage, color: "#b0a102" },
-                      { title: "Remaining", value: 100 - watchedPercentage, color: "rgba(255,255,255,0.1)" },
+                      { value: watchedPercentage, color: "#b0a102" },
+                      { value: 100 - watchedPercentage, color: "#f1f5f9" },
                     ]}
                     lineWidth={20}
                     rounded
                     animate
-                    style={{ height: "140px", width: "140px" }}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center flex-col">
-                      <span className="text-2xl font-bold text-white">{watchedPercentage}%</span>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-black text-slate-900">{watchedPercentage}%</span>
                   </div>
                 </div>
-                <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">
                   {watchedVideos.length}/{totalVideos} Videos Watched
                 </p>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center p-4">
-                <p className="text-center text-gray-400 italic">
-                  Progress tracking is not available for free courses.
-                </p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center">
+                <div className="text-4xl mb-2">📖</div>
+                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest px-4">Tracking disabled for free courses</p>
               </div>
             )}
           </div>
 
           {/* Modules Covered (Paid Courses) */}
           {courseType !== "free" && totalModules > 0 && (
-            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center hover:border-white/20 transition-all">
-              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
-                Modules Covered
+            <div className="admin-card p-8 flex flex-col items-center bg-white">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
+                Curriculum
               </h3>
-              <div className="flex items-center justify-center relative" style={{ width: "140px", height: "140px" }}>
+              <div className="relative w-32 h-32 flex items-center justify-center">
                 <PieChart
                   data={[
-                    { title: "Covered", value: modulesCovered, color: "#dd2727" },
-                    {
-                      title: "Remaining",
-                      value: totalModules - modulesCovered,
-                      color: "rgba(255,255,255,0.1)",
-                    },
+                    { value: modulesCovered, color: "#dd2727" },
+                    { value: totalModules - modulesCovered, color: "#f1f5f9" },
                   ]}
                   lineWidth={20}
                   rounded
                   animate
-                  style={{ height: "140px", width: "140px" }}
                 />
-                 <div className="absolute inset-0 flex items-center justify-center flex-col">
-                      <span className="text-2xl font-bold text-white">{modulesCoveredPercentage}%</span>
-                  </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-2xl font-black text-slate-900">{modulesCoveredPercentage}%</span>
+                </div>
               </div>
-              <p className="text-center mt-4 text-sm text-gray-400 font-medium uppercase tracking-wider">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">
                 {modulesCovered}/{totalModules} Modules Covered
               </p>
             </div>
           )}
 
           {/* Study Materials */}
-          {studyMaterials.length > 0 && (
-            <div className="bg-black/20 p-6 rounded-2xl border border-white/10 shadow-lg flex flex-col hover:border-white/20 transition-all">
-              <h3 className="text-lg font-bold text-white mb-4 text-center uppercase tracking-wider">
-                Study Materials
-              </h3>
-              <div className="space-y-3 overflow-y-auto max-h-[160px] custom-scrollbar pr-2">
-                {studyMaterials.map((material) => (
-                  <div
-                    key={material.id}
-                    className="p-3 bg-white/5 border border-white/5 rounded-xl flex flex-col items-start hover:bg-white/10 transition-colors"
+          <div className="admin-card p-8 flex flex-col bg-white">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">
+              Study Materials
+            </h3>
+            <div className="flex-1 space-y-3 overflow-y-auto max-h-[160px] custom-scrollbar pr-2">
+              {studyMaterials.length > 0 ? studyMaterials.map((material) => (
+                <div key={material.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
+                  <p className="text-[10px] font-bold text-slate-700 truncate mb-2">{material.title}</p>
+                  <a
+                    href={material.url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-center text-[9px] font-black text-white bg-slate-900 py-1.5 rounded-lg uppercase tracking-widest hover:bg-[#dd2727] transition-all"
                   >
-                    <h4 className="text-white font-medium mb-2 text-sm">
-                      {material.title}
-                    </h4>
-                    <a
-                      href={material.url}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-bold uppercase tracking-wider text-white bg-white/10 border border-white/20 px-4 py-1.5 rounded-lg hover:bg-[#dd2727] hover:border-[#dd2727] transition-all shadow-md w-full text-center"
-                    >
-                      Download PDF
-                    </a>
-                  </div>
-                ))}
-              </div>
+                    Download
+                  </a>
+                </div>
+              )) : (
+                <div className="h-full flex items-center justify-center">
+                  <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest text-center">No materials yet</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
 
        {/* COURSE VIDEOS */}
-              <div className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">
-                  Course <span className="text-[#dd2727]">Videos</span>
-                </h2>
+              <div className="mt-10 mb-10">
+                <div className="flex items-center gap-4 mb-8">
+                  <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Course <span className="text-[#dd2727]">Videos</span></h2>
+                  <div className="flex-1 h-px bg-slate-200"></div>
+                </div>
                 {Object.keys(groupedVideos).reverse().map((title, index) => {
                   // Initialize navigation refs
                   if (!swiperNavRefs.current[index]) {
@@ -883,14 +869,19 @@ const PersonalCourse = () => {
 
 
         {/* Q&A SECTION */}
-        <div className="mb-8">
+        <div className="mt-10 mb-8 admin-card p-10 bg-white">
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Cosmic <span className="text-[#dd2727]">Q&A</span></h2>
+            <div className="flex-1 h-px bg-slate-100"></div>
+          </div>
           <QandASection courseName={courseName} />
         </div>
 
         </div>
       </main>
     </div>
-    </>
+    <Footer />
+    </div>
   );
 };
 

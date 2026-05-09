@@ -25,14 +25,20 @@ const Dashboard = () => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    // Fetch metadata for images
-                    const coursesRef = collection(db, "courses");
-                    const coursesSnap = await getDocs(coursesRef);
+                    // Fetch metadata for images from correct collections
+                    const courseTypes = ["freeCourses", "paidCourses"];
                     const coursesMetadata = {};
-                    coursesSnap.forEach(doc => {
-                        const d = doc.data();
-                        coursesMetadata[d.Title || d.title] = d.imageUrl || d.image;
-                    });
+                    
+                    for (const type of courseTypes) {
+                        const coursesSnap = await getDocs(collection(db, type));
+                        coursesSnap.forEach(doc => {
+                            const d = doc.data();
+                            const courseName = d.Title || d.title;
+                            if (courseName) {
+                                coursesMetadata[courseName] = d.imageUrl || d.image || d.thumbnail || d.courseImage || d.imgUrl || "";
+                            }
+                        });
+                    }
 
                     const enrolled = [
                         ...(data.freecourses || []),
@@ -41,7 +47,7 @@ const Dashboard = () => {
 
                     setCourses(enrolled.map(name => ({
                         name,
-                        image: coursesMetadata[name] || "/assets/img/courses.webp"
+                        image: coursesMetadata[name] || "/assets/courses.jpg"
                     })));
                 }
             } catch (err) {
@@ -119,19 +125,29 @@ const Dashboard = () => {
                             ) : courses.length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     {courses.map((course, idx) => (
-                                        <div key={idx} className="admin-card group hover:border-[#dd2727] transition-all duration-500 overflow-hidden">
-                                            <div className="relative h-48 overflow-hidden bg-slate-100">
-                                                <img src={course.image} alt={course.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-all"></div>
+                                        <div key={idx} className="admin-card group hover:border-[#dd2727] transition-all duration-500 overflow-hidden flex flex-col h-full bg-white shadow-sm border border-slate-100">
+                                            <div className="relative overflow-hidden bg-slate-50">
+                                                <img 
+                                                    src={course.image} 
+                                                    alt={course.name} 
+                                                    className="w-full h-auto group-hover:scale-105 transition-transform duration-700 block" 
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "/assets/courses.jpg";
+                                                    }}
+                                                />
+                                                <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-slate-900/0 transition-all"></div>
                                             </div>
-                                            <div className="p-6">
-                                                <h4 className="text-lg font-black text-slate-800 mb-6 line-clamp-1 group-hover:text-[#dd2727] transition-colors">{course.name}</h4>
-                                                <Link 
-                                                    to={`/course/${encodeURIComponent(course.name)}`} 
-                                                    className="w-full inline-block py-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-center hover:bg-[#dd2727] hover:text-white hover:border-[#dd2727] transition-all"
-                                                >
-                                                    Start Learning
-                                                </Link>
+                                            <div className="p-6 flex flex-col flex-1">
+                                                <h4 className="text-lg font-black text-slate-800 mb-4 group-hover:text-[#dd2727] transition-colors">{course.name}</h4>
+                                                <div className="mt-auto">
+                                                    <Link 
+                                                        to={`/course/${encodeURIComponent(course.name)}`} 
+                                                        className="w-full inline-block py-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-center hover:bg-[#dd2727] hover:text-white hover:border-[#dd2727] transition-all"
+                                                    >
+                                                        Start Learning
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}

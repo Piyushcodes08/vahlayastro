@@ -53,21 +53,27 @@ const EnrollCourse = () => {
 
       if (docSnap.exists()) {
         const data = docSnap.data(); // ✅ Fix: subscription document data
-        // Fetch metadata for all courses to get images
-        const coursesRef = collection(db, "courses");
-        const coursesSnap = await getDocs(coursesRef);
+        // Fetch metadata for all courses from correct collections
+        const courseTypes = ["freeCourses", "paidCourses"];
         const coursesMetadata = {};
-        coursesSnap.forEach(courseDoc => {
+        
+        for (const type of courseTypes) {
+          const coursesSnap = await getDocs(collection(db, type));
+          coursesSnap.forEach(courseDoc => {
             const courseData = courseDoc.data();
-            coursesMetadata[courseData.Title || courseData.title] = courseData.imageUrl || courseData.image;
-        });
+            const courseName = courseData.Title || courseData.title;
+            if (courseName) {
+              coursesMetadata[courseName] = courseData.imageUrl || courseData.image || courseData.thumbnail || courseData.courseImage || courseData.imgUrl || "";
+            }
+          });
+        }
 
         const freeCourses =
           data.freecourses?.map((courseName) => ({
             name: courseName,
             type: "Free",
             enrolled: true,
-            image: coursesMetadata[courseName] || "/assets/img/courses.webp"
+            image: coursesMetadata[courseName] || "/assets/courses.jpg"
           })) || [];
 
         const paidCourses =
@@ -346,339 +352,241 @@ const EnrollCourse = () => {
         </div>
       </div>
     );
-  }
-  return (
-    <>
+  }  return (
+    <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 premium-container">
-      {/* Sidebar */}
-      <Aside />
-      {/* Main Content */}
-      <main className="flex-1 p-4 md:p-8">
-        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-10 shadow-[0_0_30px_rgba(221,39,39,0.1)] w-full mx-auto overflow-x-hidden">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 border-b border-white/10 pb-6">
-            Your <span className="text-[#dd2727]">Courses</span>
-          </h2>
-
-        {/* Show message if no courses are enrolled */}
-        {courses.length === 0 ? (
-          <div className="text-center p-12 bg-white/5 border border-white/10 rounded-2xl">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              You are not enrolled in any courses yet.
-            </h3>
-            <p className="text-gray-400 mb-8">
-              Explore our courses and start your learning journey today.
-            </p>
-            <Link to="/courses">
-              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(221,39,39,0.3)]">
-                Browse Courses
-              </button>
-            </Link>
-          </div>
-        ) : (
-          <>
-            {/* Mobile: Grid View */}
-            <div className="grid gap-6 md:hidden">
-              {courses.map((course, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="border border-white/10 p-6 rounded-2xl bg-white/5 hover:border-white/20 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] group"
-                  >
-                    <div className="relative h-40 mb-6 rounded-xl overflow-hidden border border-white/10">
-                      <img src={course.image} alt={course.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                      <div className="absolute top-3 right-3 bg-[#dd2727] text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">{course.type}</div>
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {course.name}
-                    </h3>
-                    <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">Type: <span className="text-white font-medium">{course.type}</span></p>
-                    <p className="text-sm text-gray-400 uppercase tracking-wider mb-4">
-                      Enrolled: <span className={course.enrolled ? "text-green-400" : "text-red-400"}>{course.enrolled ? "Yes" : "No"}</span>
-                    </p>
-                    {course.type === "Paid" && (
-                      <div className="mt-4 mb-4 flex items-center space-x-4 bg-black/40 p-4 rounded-xl border border-white/5">
-                        <MiniPieChart
-                          usedDays={course.usedDays}
-                          daysLeft={course.daysLeft}
-                        />
-                        <span className="text-sm text-gray-300 font-medium tracking-wider">
-                          VALIDITY LEFT: <span className="text-white">{course.daysLeft} DAYS</span>
-                        </span>
-                      </div>
-                    )}
-                    <button
-                      onClick={() =>
-                        navigate(`/course/${encodeURIComponent(course.name)}`)
-                      }
-                      className="mt-2 w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white py-3 rounded-xl font-bold uppercase tracking-wider hover:scale-[1.02] transition-all shadow-[0_0_15px_rgba(221,39,39,0.3)]"
-                    >
-                      Start Learning
-                    </button>
-                  </div>
-                );
-              })}
+      
+      <div className="flex flex-1 relative z-10 pt-16">
+        <Aside />
+        
+        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10">
+          <div className="max-w-7xl mx-auto space-y-10">
+            
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
+              <div>
+                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-2">Learning Path</h4>
+                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                  My Enrolled <span className="text-[#dd2727]">Courses</span>
+                </h1>
+              </div>
+              <Link to="/courses" className="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:shadow-xl transition-all hover:-translate-y-0.5 self-start md:self-center">
+                Explore More
+              </Link>
             </div>
 
-            {/* Desktop: Table View */}
-            <div className="hidden md:block overflow-x-auto pb-4">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Course Name</th>
-                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Type</th>
-                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Enrolled</th>
-                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm">Validity</th>
-                    <th className="py-4 px-6 font-bold text-gray-400 uppercase tracking-wider text-sm text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {courses.map((course, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className="hover:bg-white/5 transition-colors group"
-                      >
-                        <td className="py-5 px-6">
-                          <div className="flex items-center gap-4">
-                             <div className="w-16 h-10 rounded-lg overflow-hidden border border-white/10 bg-black/40">
-                               <img src={course.image} alt={course.name} className="w-full h-full object-cover" />
-                             </div>
-                             <span className="text-white font-medium text-lg">{course.name}</span>
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 text-gray-300">{course.type}</td>
-                        <td className="py-5 px-6">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${course.enrolled ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
-                            {course.enrolled ? "YES" : "NO"}
-                          </span>
-                        </td>
-                        <td className="py-5 px-6">
-                          {course.type === "Paid" ? (
-                            <div className="flex items-center space-x-3">
-                              <MiniPieChart
-                                usedDays={course.usedDays}
-                                daysLeft={course.daysLeft}
-                              />
-                              <span className="text-sm text-gray-300">
-                                Left: <span className="text-white font-bold">{course.daysLeft}d</span>
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-sm text-gray-500 font-medium">LIFETIME</span>
-                          )}
-                        </td>
-                        <td className="py-5 px-6 text-right">
-                          <button
-                            onClick={() =>
-                              navigate(
-                                `/course/${encodeURIComponent(course.name)}`
-                              )
-                            }
-                            className="bg-white/5 border border-white/10 hover:border-[#dd2727] hover:bg-[#dd2727]/20 text-white py-2 px-6 rounded-xl font-bold uppercase tracking-wider text-xs transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 md:transform md:translate-x-2 md:group-hover:translate-x-0"
-                          >
-                            Start Learning
-                          </button>
-                        </td>
+            {courses.length === 0 ? (
+              <div className="admin-card p-20 text-center bg-white">
+                <div className="text-4xl mb-6">🔭</div>
+                <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tight">No Courses Found</h3>
+                <p className="text-slate-500 font-medium mb-8 max-w-md mx-auto">
+                  You are not enrolled in any courses yet. Start your cosmic journey by exploring our sacred teachings.
+                </p>
+                <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">
+                  Browse Catalog
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-10">
+                {/* Desktop: Table View */}
+                <div className="hidden md:block admin-card overflow-hidden bg-white">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-100">
+                        <th className="py-5 px-8 font-black text-slate-400 uppercase tracking-widest text-[9px]">Course Details</th>
+                        <th className="py-5 px-8 font-black text-slate-400 uppercase tracking-widest text-[9px]">Type</th>
+                        <th className="py-5 px-8 font-black text-slate-400 uppercase tracking-widest text-[9px]">Validity</th>
+                        <th className="py-5 px-8 font-black text-slate-400 uppercase tracking-widest text-[9px] text-right">Actions</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-
-        {/* Video Sessions Section */}
-        <div className="mt-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-white/10 pb-4">Video <span className="text-[#dd2727]">Sessions</span></h2>
-          {Object.entries(groupedVideos).map(([title, modules]) => (
-            <div key={title} className="mb-8">
-              <h3 className="text-xl font-bold text-white mb-4 bg-white/5 px-4 py-2 rounded-lg border-l-4 border-[#dd2727]">{title}</h3>
-              {modules.map((module) => (
-                <div key={module.id} className="p-6 border border-white/10 rounded-2xl mb-4 ml-0 md:ml-6 bg-black/20 hover:bg-white/5 transition-colors">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                    <div>
-                      <h4 className="font-bold text-lg text-white mb-2">
-                        {module.description?.substring(0, 60)}...
-                      </h4>
-                      <a
-                        href={module.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#dd2727] hover:text-white font-medium uppercase tracking-wider text-sm flex items-center gap-2 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg>
-                        Watch Video
-                      </a>
-                    </div>
-                    <div className="mt-4 md:mt-0 flex gap-2 w-full md:w-auto">
-                      <button
-                        onClick={() => setEditVideo(module)}
-                        className="flex-1 md:flex-none bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(module.id, "videos")}
-                        className="flex-1 md:flex-none bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                  {editVideo && editVideo.id === module.id && (
-                    <div className="mt-6 p-6 bg-black/40 border border-white/10 rounded-xl space-y-4">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                          Edit Video Title
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue={module.title}
-                          onChange={(e) => (module.title = e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                          Edit Video Description
-                        </label>
-                        <textarea
-                          defaultValue={module.description}
-                          onChange={(e) => (module.description = e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                          Upload New Video (Optional)
-                        </label>
-                        <input
-                          type="file"
-                          onChange={(e) => (module.newFile = e.target.files[0])}
-                          className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer"
-                        />
-                      </div>
-
-                      <div className="flex space-x-4 pt-4 border-t border-white/10">
-                        <button
-                          onClick={() =>
-                            handleEdit(
-                              module.id,
-                              module.title,
-                              module.description,
-                              module.newFile,
-                              "videos"
-                            )
-                          }
-                          className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:shadow-[0_0_15px_rgba(22,163,74,0.4)] transition-all"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setEditVideo(null)}
-                          className="bg-white/5 border border-white/10 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:bg-white/10 transition-all"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {courses.map((course, index) => (
+                        <tr key={index} className="hover:bg-slate-50/50 transition-colors group">
+                          <td className="py-6 px-8">
+                            <div className="flex items-center gap-5">
+                               <div className="w-20 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 flex-shrink-0 flex items-center justify-center">
+                                 <img 
+                                   src={course.image} 
+                                   alt={course.name} 
+                                   className="w-full h-full object-contain" 
+                                   onError={(e) => {
+                                     e.target.onerror = null;
+                                     e.target.src = "/assets/courses.jpg";
+                                   }}
+                                 />
+                               </div>
+                               <span className="text-slate-800 font-bold text-base tracking-tight">{course.name}</span>
+                            </div>
+                          </td>
+                          <td className="py-6 px-8">
+                            <span className={`px-3 py-1 rounded-full text-[9px] font-black tracking-widest ${course.type === 'Paid' ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"}`}>
+                              {course.type.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="py-6 px-8">
+                            {course.type === "Paid" ? (
+                              <div className="flex items-center space-x-4">
+                                <MiniPieChart usedDays={course.usedDays} daysLeft={course.daysLeft} />
+                                <div className="flex flex-col">
+                                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Days Left</span>
+                                  <span className="text-slate-900 font-bold">{course.daysLeft} Days</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lifetime Access</span>
+                            )}
+                          </td>
+                          <td className="py-6 px-8 text-right">
+                            <button
+                              onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}
+                              className="bg-white border border-slate-200 text-slate-600 hover:bg-[#dd2727] hover:text-white hover:border-[#dd2727] px-6 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                            >
+                              Continue Learning
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              ))}
-            </div>
-          ))}
-        </div>
 
-        {/* Study Materials Section */}
-        <div className="mt-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-white/10 pb-4">Study <span className="text-[#dd2727]">Materials</span></h2>
-          {studyMaterials.map((material) => (
-            <div key={material.id} className="p-6 border border-white/10 rounded-2xl mb-4 bg-black/20 hover:bg-white/5 transition-colors">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div>
-                  <h3 className="font-bold text-lg text-white mb-2">{material.title}</h3>
-                  <a
-                    href={material.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#dd2727] hover:text-white font-medium uppercase tracking-wider text-sm flex items-center gap-2 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>
-                    View Document
-                  </a>
-                </div>
-                <div className="mt-4 md:mt-0 flex gap-2 w-full md:w-auto">
-                  <button
-                    onClick={() => setEditMaterial(material)}
-                    className="flex-1 md:flex-none bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(material.id, "materials")}
-                    className="flex-1 md:flex-none bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold uppercase transition-colors"
-                  >
-                    Delete
-                  </button>
+                {/* Mobile: Card View */}
+                <div className="grid gap-6 md:hidden">
+                  {courses.map((course, index) => (
+                    <div key={index} className="admin-card overflow-hidden group bg-white flex flex-col h-full shadow-sm border border-slate-100">
+                      <div className="relative overflow-hidden bg-slate-50">
+                        <img 
+                          src={course.image} 
+                          alt={course.name} 
+                          className="w-full h-auto group-hover:scale-105 transition-transform duration-700 block" 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/assets/courses.jpg";
+                          }}
+                        />
+                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm border border-slate-100">
+                          {course.type}
+                        </div>
+                        <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-slate-900/0 transition-all"></div>
+                      </div>
+                      <div className="p-6 flex flex-col flex-1">
+                        <h3 className="text-xl font-black text-slate-900 tracking-tight mb-6 group-hover:text-[#dd2727] transition-colors">{course.name}</h3>
+                        
+                        <div className="mt-auto space-y-6">
+                          {course.type === "Paid" && (
+                            <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                              <MiniPieChart usedDays={course.usedDays} daysLeft={course.daysLeft} />
+                              <div className="flex flex-col">
+                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Validity Remaining</span>
+                                <span className="text-slate-900 font-bold">{course.daysLeft} Days</span>
+                              </div>
+                            </div>
+                          )}
+                          
+                          <button
+                            onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}
+                            className="w-full py-4 bg-[#dd2727] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_10px_20px_rgba(221,39,39,0.2)] hover:shadow-[0_15px_25px_rgba(221,39,39,0.3)] transition-all"
+                          >
+                            Continue Learning
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              {editMaterial && editMaterial.id === material.id && (
-                <div className="mt-6 p-6 bg-black/40 border border-white/10 rounded-xl space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Edit Material Title</label>
-                    <input
-                      type="text"
-                      defaultValue={material.title}
-                      onChange={(e) => (material.title = e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#dd2727]"
-                    />
+            )}
+
+            {/* Video Sessions Section */}
+            <div className="space-y-8 pt-10">
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Recorded <span className="text-[#dd2727]">Sessions</span></h2>
+                <div className="flex-1 h-px bg-slate-200"></div>
+              </div>
+
+              {Object.entries(groupedVideos).length === 0 ? (
+                <div className="admin-card p-12 text-center border-dashed">
+                  <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">No recorded sessions available for your courses yet.</p>
+                </div>
+              ) : (
+                Object.entries(groupedVideos).map(([title, modules]) => (
+                  <div key={title} className="space-y-4">
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2">{title}</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                      {modules.map((module) => (
+                        <div key={module.id} className="admin-card p-5 bg-white group hover:border-[#dd2727] transition-all">
+                          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-[#dd2727] flex-shrink-0 group-hover:bg-[#dd2727] group-hover:text-white transition-colors">
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/></svg>
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-slate-800 tracking-tight leading-tight mb-1">
+                                  {module.description?.substring(0, 80) || "Video Session"}...
+                                </h4>
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Sacred Lecture</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3 w-full md:w-auto">
+                              <a
+                                href={module.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-1 md:flex-none text-center bg-slate-900 text-white px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-[#dd2727] transition-all"
+                              >
+                                Watch Now
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Upload New File (Optional)</label>
-                    <input
-                      type="file"
-                      onChange={(e) => (material.newFile = e.target.files[0])}
-                      className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer"
-                    />
-                  </div>
-                  <div className="flex space-x-4 pt-4 border-t border-white/10">
-                    <button
-                      onClick={() =>
-                        handleEdit(
-                          material.id,
-                          material.title,
-                          "", // no desc for materials
-                          material.newFile,
-                          "materials"
-                        )
-                      }
-                      className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:shadow-[0_0_15px_rgba(22,163,74,0.4)] transition-all"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditMaterial(null)}
-                      className="bg-white/5 border border-white/10 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-wider w-full hover:bg-white/10 transition-all"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Study Materials Section */}
+            <div className="space-y-8 pt-10 pb-10">
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Study <span className="text-[#dd2727]">Materials</span></h2>
+                <div className="flex-1 h-px bg-slate-200"></div>
+              </div>
+
+              {studyMaterials.length === 0 ? (
+                 <div className="admin-card p-12 text-center border-dashed">
+                   <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Reference documents will appear here once available.</p>
+                 </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {studyMaterials.map((material) => (
+                    <div key={material.id} className="admin-card p-6 bg-white hover:border-[#dd2727] transition-all group">
+                      <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 mb-6 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>
+                      </div>
+                      <h3 className="font-bold text-slate-800 tracking-tight mb-4 line-clamp-2 min-h-[3rem]">{material.title}</h3>
+                      <a
+                        href={material.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-[10px] font-black text-[#dd2727] uppercase tracking-widest hover:underline"
+                      >
+                        Download PDF
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                      </a>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
-          ))}
-        </div>
-        </div>
-      </main>
+          </div>
+        </main>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
 export default EnrollCourse;
+

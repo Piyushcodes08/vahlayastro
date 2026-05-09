@@ -11,13 +11,14 @@
 
 .quote-row {
   width: 100%;
-  min-height: 600px;
-  /* Increased slightly for better centering */
+  min-height: 640px;
   display: flex;
   align-items: center;
   position: relative;
   justify-content: center;
   margin: 0 auto;
+  /* Prevents orbit cards from being clipped */
+  overflow: visible;
 }
 
 /* Orbit lines removed */
@@ -32,12 +33,20 @@
     height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.35s ease,
     filter 0.35s ease,
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    z-index 0s;
   background: transparent;
   border: none;
   box-shadow: none;
   cursor: pointer;
   appearance: none;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+/* Boost z-index on hover so orbit cards are always above the active card */
+.quote-column:not(.col-active):hover {
+  z-index: 25;
 }
 
 .horoscope-float {
@@ -62,26 +71,57 @@
   }
 }
 
-/* Active center card - clean, resized, no shadow/border */
+/* Active center card - premium glassmorphic */
 .col-active {
   width: min(90%, 450px) !important;
   min-width: unset;
   height: auto !important;
   transform: translate(-50%, -50%) !important;
-  top: 57% !important;
+  top: 52% !important;
   left: 50% !important;
   right: auto !important;
   bottom: auto !important;
-  background: rgba(66, 20, 20, 0.68) !important;
-  box-shadow: none !important;
-  border-radius: 10px;
+
+  /* Premium layered background */
+  background: linear-gradient(
+    160deg,
+    rgba(80, 18, 18, 0.92) 0%,
+    rgba(50, 12, 12, 0.97) 60%,
+    rgba(30, 8, 8, 1) 100%
+  ) !important;
+
+  /* Glowing red-gold top border accent */
   border: none !important;
+  border-radius: 18px;
   overflow: hidden;
   z-index: 20;
   cursor: default;
   animation: none;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+
+  /* Glassmorphism */
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+
+  /* Multi-layer premium shadow */
+  box-shadow:
+    0 0 0 1px rgba(221, 39, 39, 0.35),
+    0 0 0 1px rgba(176, 161, 2, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(221, 39, 39, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Glowing top accent line */
+.col-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #dd2727 30%, #b0a102 70%, transparent);
+  z-index: 1;
+  border-radius: 18px 18px 0 0;
 }
 
 .col-inner {
@@ -93,7 +133,10 @@
 
 .col-active .col-inner {
   max-width: 100%;
-  padding: 5px;
+  padding: 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .author-meta {
@@ -107,43 +150,114 @@
 }
 
 .col-active .author-meta {
+  /* Override horizontal flex to vertical centered */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
   border-bottom: none !important;
   padding-bottom: 12px;
+  margin-bottom: 4px;
+  position: relative;
+  width: 100%;
 }
 
-/* Normal rashi icons - no bg, no border, no shadow */
+.col-active .author-meta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(221, 39, 39, 0.5) 30%, rgba(176, 161, 2, 0.4) 70%, transparent);
+}
+
+/* Normal rashi icons - premium dark glassmorphic circle */
 .image-cover {
-  position: relative;
-  flex-shrink: 0;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-radius: 50%;
-  border: none !important;
-  box-shadow: none !important;
-  z-index: 1;
-  transition: all 0.45s ease;
-  background: transparent !important;
+    position: relative;
+    flex-shrink: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 50%;
+    z-index: 1;
+    transition: all 0.45s ease;
+    padding: 6px;
+
+    /* Deep dark layered background */
+    background: radial-gradient(
+        circle at 35% 35%,
+        rgba(90, 18, 18, 0.85) 0%,
+        rgba(40, 8, 8, 0.92) 55%,
+        rgba(15, 3, 3, 0.97) 100%
+    );
+
+    /* Glowing border */
+    border: 1.5px solid rgba(221, 39, 39, 0.45) !important;
+    box-shadow:
+        0 0 0 1px rgba(176, 161, 2, 0.12),
+        0 4px 16px rgba(0, 0, 0, 0.5),
+        0 0 18px rgba(221, 39, 39, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+
+    /* Glassmorphism */
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    padding: 6px !important;
+}
+
+/* Inner ambient glow layer */
+.image-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(221, 39, 39, 0.25) 0%,
+        rgba(176, 161, 2, 0.12) 50%,
+        transparent 80%
+    );
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease;
 }
 
 .image-cover::after {
-  display: none !important;
+    display: none !important;
 }
 
 .quote-column:not(.col-active):hover .image-cover {
-  transform: scale(1.08);
-  border-color: transparent !important;
-  box-shadow: none !important;
+    transform: scale(1.1);
+    border-color: rgba(176, 161, 2, 0.6) !important;
+    box-shadow:
+        0 0 0 1px rgba(221, 39, 39, 0.3),
+        0 6px 24px rgba(0, 0, 0, 0.6),
+        0 0 28px rgba(176, 161, 2, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.quote-column:not(.col-active):hover .image-cover::before {
+    opacity: 1.5;
 }
 
 .col-active .image-cover {
   position: relative;
-  width: 118px !important;
-  height: 118px !important;
-  border-radius: 22px !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(221, 39, 39, 0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(176, 161, 2, 0.15),
+    0 0 20px rgba(221, 39, 39, 0.2) !important;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(90, 18, 18, 0.85) 0%,
+    rgba(15, 3, 3, 0.97) 100%
+  ) !important;
+  margin-bottom: 4px;
 }
 
 .image-cover img {
@@ -151,7 +265,10 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  position: relative;
+  z-index: 1;
   transition: transform 0.6s ease;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
 }
 
 .quote-column:hover .image-cover img {
@@ -167,6 +284,9 @@
 
 .col-active .author-info {
   visibility: visible;
+  width: 100%;
+  text-align: center;
+  padding: 0;
 }
 
 .author-info .author-name,
@@ -185,31 +305,34 @@
 }
 
 .person-name {
-  font-size: clamp(26px, 3vw, 38px);
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 900;
   color: #fff;
-  margin: 0 0 7px;
-  letter-spacing: -0.03em;
+  /* margin: 0 0 8px; */
+  letter-spacing: -0.02em;
+  text-shadow:
+    0 0 20px rgba(221, 39, 39, 0.4),
+    0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 .person-title {
-  display: inline-flex;
+  display: inline-block;
   width: fit-content;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   color: #ffd782;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 10px rgba(176, 161, 2, 0.5);
+  text-transform: uppercase;
   margin: 0;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(255, 215, 130, 0.12);
-  border: none;
+  opacity: 0.9;
 }
 
 .quote-wrapper {
   position: relative;
   width: 100%;
   color: #fff;
-  padding: 18px 10px 4px;
+  padding: 10px 10px 8px;
   text-align: left;
   overflow: hidden;
   visibility: hidden;
@@ -217,16 +340,21 @@
 
 .col-active .quote-wrapper {
   visibility: visible;
+  text-align: center;
+  width: 100%;
+  padding: 12px 16px 8px;
 }
 
 .box-text-inner {
-  max-width: 410px;
+  max-width: 100%;
   margin: auto;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 15.5px;
-  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.78;
   font-family: "Poppins", sans-serif;
-  font-weight: 500;
+  font-weight: 400;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  text-align: center;
 }
 
 .box-text-inner p {
@@ -243,17 +371,18 @@
   position: absolute;
   left: 50%;
   bottom: -40px;
-  /* Moved below the orbit for better spacing */
   transform: translateX(-50%);
   z-index: 30;
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border-radius: 999px;
-  background: rgba(66, 20, 20, 0.75);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 215, 130, 0.1);
+  background: linear-gradient(135deg, rgba(66, 18, 18, 0.88), rgba(40, 10, 10, 0.95));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(221, 39, 39, 0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(176, 161, 2, 0.1);
 }
 
 .horoscope-controls button {
@@ -287,7 +416,7 @@
 /* Tablet */
 @media (max-width: 1080px) {
   .quote-row {
-    min-height: 560px;
+    min-height: 620px;
   }
 
   .orbit-ring {
@@ -306,7 +435,7 @@
   }
 
   .quote-row {
-    min-height: 540px;
+    min-height: 600px;
   }
 
   .col-active {
