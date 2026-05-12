@@ -2,25 +2,14 @@
   width: 100%;
   background: transparent;
   position: relative;
-  padding:100px 0px;
-}
-
-.about-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(145deg, #dd2727 50%, #b0a10291 50%);
-  filter: blur(80px);
-  opacity: 0.7;
-  transform: scale(1.1);
-  z-index: -1;
+  overflow: hidden;
 }
 
 .about-container {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
   align-items: center;
-  gap: 80px;
+  gap: 60px;
   width: 100%;
 }
 
@@ -28,38 +17,38 @@
 .about-img-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
 .about-img-wrapper {
   width: 100%;
-  height: 480px;
   overflow: hidden;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   cursor: pointer;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  position: relative;
 }
 
 .about-img-wrapper img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+  height: auto;
+  object-fit: contain;
+  transition: transform 1s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 .about-img-wrapper:hover img {
-  transform: scale(1.15);
-}
-
-.about-img-wrapper:nth-child(odd) {
-  transform: translateY(-30px);
+  transform: scale(1.1);
 }
 
 .about-img-wrapper:nth-child(even) {
-  transform: translateY(30px);
+  margin-top: 40px;
+}
+
+.about-img-wrapper:nth-child(odd) {
+  margin-bottom: 40px;
 }
 
 /* Text Content */
@@ -67,40 +56,36 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
 }
 
 .about-intro-wrapper {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  margin-bottom: 1rem;
 }
 
 .about-intro-line {
-  width: 40px;
+  width: 30px;
   height: 2px;
   background: #dd2727;
-  display: inline-block;
 }
 
 .about-intro {
   color: #dd2727;
   text-transform: uppercase;
   font-weight: 800;
-  letter-spacing: 0.4em;
-  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
 }
 
 .about-title {
-  font-size: clamp(2.8rem, 6vw, 3.5rem);
-  line-height: 1.05;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
   color: #ffffff;
-  margin: 0;
+  margin: 0 0 2rem 0;
   font-weight: 900;
   font-family: 'Batangas', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .about-desc-wrapper {
@@ -111,71 +96,71 @@
 
 .about-description {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.8;
   margin: 0;
-  max-width: 550px;
+  max-width: 600px;
+}
+
+.about-btn-wrapper {
+  margin-top: 2.5rem;
 }
 
 /* Tablet */
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .about-container {
-    gap: 50px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .about-container {
+    gap: 40px;
     grid-template-columns: 1fr;
-    gap: 80px;
   }
 
-  .about-img-wrapper {
-    height: 350px;
+  .about-content-left {
+    order: 2;
   }
-  
+
+  .about-content-right {
+    order: 1;
+    text-align: center;
+    align-items: center;
+  }
+
   .about-text-content {
     align-items: center;
-    text-align: center;
   }
-  
-  .about-desc-wrapper {
-    align-items: center;
+
+  .about-intro-wrapper {
+    justify-content: center;
+  }
+
+  .about-img-grid {
+    max-width: 700px;
+    margin: 0 auto;
   }
 }
 
 /* Mobile */
 @media (max-width: 767px) {
   .about-container {
-    gap: 50px;
+    gap: 30px;
   }
 
   .about-img-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
 
   .about-img-wrapper {
-    height: 240px;
-    border-radius: 1rem;
+    border-radius: 1.5rem;
   }
 
-  .about-img-wrapper:nth-child(odd),
-  .about-img-wrapper:nth-child(even) {
-    transform: translateY(0);
+  .about-img-wrapper:nth-child(even),
+  .about-img-wrapper:nth-child(odd) {
+    margin: 0;
   }
 
   .about-title {
-    font-size: 2.5rem;
-    padding-bottom: 15px !important;
+    font-size: clamp(2.2rem, 10vw, 3rem);
   }
 
   .about-description {
     font-size: 1rem;
-    line-height: 1.6;
-  }
-  
-  .about-intro-line {
-    width: 30px;
   }
 }

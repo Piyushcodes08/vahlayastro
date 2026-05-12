@@ -3,6 +3,7 @@ import { db } from "../../../firebaseConfig";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import Header from "../../../components/sections/Header/Header";
 import Aside from "../Aside";
+import Footer from "../../../components/sections/Footer/Footer";
 
 const StudentLiveSession = () => {
   const [courses, setCourses] = useState([]);
@@ -58,12 +59,12 @@ const StudentLiveSession = () => {
   };
 
   return (
-    <>
+    <div className="student-layout">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 premium-container gap-8 pb-20">
         <Aside />
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 pt-20">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase tracking-tight">
@@ -163,7 +164,8 @@ const StudentLiveSession = () => {
           </div>
         </main>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

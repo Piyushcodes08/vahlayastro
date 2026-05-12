@@ -7,41 +7,55 @@ const TermsConditionsPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                {/* Premium Transparent Cosmic Background */}
-                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-black via-[#1a0f0f]/90 to-[#2b0b0b]/95"></div>
+                <section className="hero-section">
+                    {/* Background Glows */}
+                    <div className="bg-glow-container">
+                        <div className="absolute top-[20%] left-[10%] w-[500px] h-[500px] bg-glow-red opacity-40"></div>
+                        <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-glow-gold opacity-20"></div>
+                    </div>
 
-                {/* Glow Effects */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/20 blur-[180px] rounded-full pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-400/10 blur-[180px] rounded-full pointer-events-none"></div>
+                    <div className="section-container">
+                        <div className="relative z-10 max-w-4xl mx-auto text-center">
+                            <span className="inline-block px-8 py-2 rounded-full border border-white/10 bg-white/5 mb-6">
+                                <span className="text-[#dd2727] text-sm font-bold uppercase tracking-[0.3em]">
+                                    Legal Framework
+                                </span>
+                            </span>
+                            <h1 className="title-batangas text-5xl md:text-7xl mb-6 text-white leading-tight">
+                                Terms & <span className="text-[#dd2727]">Conditions</span>
+                            </h1>
+                            <p className="subtitle-poppins text-lg text-white/60 max-w-xl mx-auto">
+                                Please review the sacred agreements that govern our astrological journey together.
+                            </p>
+                        </div>
+                    </div>
+                </section>
 
-                <div className="relative w-full min-h-[40vh] pt-32 pb-16 flex flex-col items-center justify-center text-center px-4">
-                    <h1 className="title-batangas text-6xl mb-6 text-white">Terms & Conditions</h1>
-                </div>
+                <section>
+                    <div className="section-container">
+                        <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-16 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+                            <div className="subtitle-poppins text-white/80 space-y-8 text-lg">
+                                <p className="text-white/50 border-b border-white/10 pb-6">Last updated: April 2026</p>
 
-                <section className="max-w-[1170px] mx-auto px-4 py-12">
-                    <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-16 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+                                <div>
+                                    <h2 className="title-batangas text-2xl md:text-3xl text-white mb-4">1. Acceptance of Terms</h2>
+                                    <p className="leading-relaxed">By accessing and using Vahlay Astro's website and services, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services.</p>
+                                </div>
 
-                        <div className="subtitle-poppins text-white/80 space-y-8 text-lg">
-                            <p className="text-white/50 border-b border-white/10 pb-6">Last updated: April 2026</p>
+                                <div>
+                                    <h2 className="title-batangas text-2xl md:text-3xl text-white mb-4">2. Nature of Services</h2>
+                                    <p className="leading-relaxed">Astrology is an ancient art and science. The consultations, courses, and readings provided by Vahlay Astro are for guidance and self-reflection purposes. They should not replace professional medical, legal, or financial advice.</p>
+                                </div>
 
-                            <div>
-                                <h2 className="title-batangas text-3xl text-white mb-4">1. Acceptance of Terms</h2>
-                                <p className="leading-relaxed">By accessing and using Vahlay Astro's website and services, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services.</p>
-                            </div>
+                                <div>
+                                    <h2 className="title-batangas text-2xl md:text-3xl text-white mb-4">3. Bookings and Cancellations</h2>
+                                    <p className="leading-relaxed">Appointments must be booked in advance. Cancellations must be made at least 24 hours prior to the scheduled consultation time. We reserve the right to reschedule appointments in case of unforeseen circumstances.</p>
+                                </div>
 
-                            <div>
-                                <h2 className="title-batangas text-3xl text-white mb-4">2. Nature of Services</h2>
-                                <p className="leading-relaxed">Astrology is an ancient art and science. The consultations, courses, and readings provided by Vahlay Astro are for guidance and self-reflection purposes. They should not replace professional medical, legal, or financial advice.</p>
-                            </div>
-
-                            <div>
-                                <h2 className="title-batangas text-3xl text-white mb-4">3. Bookings and Cancellations</h2>
-                                <p className="leading-relaxed">Appointments must be booked in advance. Cancellations must be made at least 24 hours prior to the scheduled consultation time. We reserve the right to reschedule appointments in case of unforeseen circumstances.</p>
-                            </div>
-
-                            <div>
-                                <h2 className="title-batangas text-3xl text-white mb-4">4. Intellectual Property</h2>
-                                <p className="leading-relaxed">All content on this website, including courses, articles, graphics, and logos, is the property of Vahlay Astro and is protected by copyright laws. Unauthorized use or distribution is prohibited.</p>
+                                <div>
+                                    <h2 className="title-batangas text-2xl md:text-3xl text-white mb-4">4. Intellectual Property</h2>
+                                    <p className="leading-relaxed">All content on this website, including courses, articles, graphics, and logos, is the property of Vahlay Astro and is protected by copyright laws. Unauthorized use or distribution is prohibited.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

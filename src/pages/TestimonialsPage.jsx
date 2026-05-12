@@ -16,24 +16,30 @@ const TestimonialsPage = () => {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/20 blur-[180px] rounded-full pointer-events-none"></div>
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-400/10 blur-[180px] rounded-full pointer-events-none"></div>
 
-                <div className="relative w-full min-h-[40vh] pt-32 pb-16 flex flex-col items-center justify-center text-center px-4">
-                    <h1 className="title-batangas text-6xl mb-6 text-white">Client Success Stories</h1>
-                    <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
-                        Read about the transformative experiences our clients have had through our astrological guidance.
-                    </p>
-                </div>
+                <section className="hero-banner">
+                    <div className="section-container">
+                        <div className="relative w-full text-center px-4">
+                            <h1 className="title-batangas text-6xl mb-6 text-white">Client Success Stories</h1>
+                            <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
+                                Read about the transformative experiences our clients have had through our astrological guidance.
+                            </p>
+                        </div>
+                    </div>
+                </section>
 
                 <Testimonials />
 
-                <section className="max-w-[1170px] mx-auto px-4 py-20 text-center">
-                    <div className="bg-gradient-to-r from-[#dd2727]/90 to-orange-500/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-12 md:p-16 max-w-4xl mx-auto shadow-[0_15px_60px_rgba(221,39,39,0.35)]">
-                        <h2 className="title-batangas text-4xl mb-6 text-white">Become Our Next Success Story</h2>
-                        <p className="subtitle-poppins text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed text-lg">
-                            Every journey of a thousand miles begins with a single step. Let the stars illuminate your path and help you discover your true potential.
-                        </p>
-                        <Link to="/contact" className="inline-block bg-white/10 backdrop-blur-lg border border-white/20 text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#dd2727]">
-                            Schedule Your Reading
-                        </Link>
+                <section>
+                    <div className="section-container">
+                        <div className="bg-gradient-to-r from-[#dd2727]/90 to-orange-500/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-12 md:p-16 max-w-4xl mx-auto shadow-[0_15px_60px_rgba(221,39,39,0.35)] text-center">
+                            <h2 className="title-batangas text-4xl mb-6 text-white">Become Our Next Success Story</h2>
+                            <p className="subtitle-poppins text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed text-lg">
+                                Every journey of a thousand miles begins with a single step. Let the stars illuminate your path and help you discover your true potential.
+                            </p>
+                            <Link to="/contact" className="inline-block bg-white/10 backdrop-blur-lg border border-white/20 text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#dd2727]">
+                                Schedule Your Reading
+                            </Link>
+                        </div>
                     </div>
                 </section>
             </main>

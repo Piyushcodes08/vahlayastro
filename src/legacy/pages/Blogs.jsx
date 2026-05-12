@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { Helmet } from "react-helmet-async";
 
@@ -14,8 +14,7 @@ const ArticlesPage = () => {
   const fetchData = async () => {
     try {
       const articlesQuery = query(
-        collection(db, "Articles"),
-        orderBy("createdAt", "desc")
+        collection(db, "Articles")
       );
       const querySnapshot = await getDocs(articlesQuery);
 
@@ -24,6 +23,17 @@ const ArticlesPage = () => {
         slug: slugify(doc.data().title),
         ...doc.data(),
       }));
+
+      // Sort client-side: support createdAt (Firestore Timestamp), timestamp, or data (string date)
+      fetchedData.sort((a, b) => {
+        const getTime = (item) => {
+          if (item.createdAt?.seconds) return item.createdAt.seconds * 1000;
+          if (item.timestamp?.seconds) return item.timestamp.seconds * 1000;
+          if (item.data) return new Date(item.data).getTime();
+          return 0;
+        };
+        return getTime(b) - getTime(a);
+      });
 
       setData(fetchedData);
     } catch (error) {

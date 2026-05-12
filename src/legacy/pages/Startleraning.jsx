@@ -75,11 +75,19 @@ const PersonalCourse = () => {
 
       try {
         // Check course type (free or paid)
-        const courseDoc = doc(db, "freeCourses", courseName);
-        const courseSnapshot = await getDoc(courseDoc);
-        if (courseSnapshot.exists()) {
-          setCourseType(courseSnapshot.data().type);
+        let cType = null;
+        const freeCourseDoc = doc(db, "freeCourses", courseName);
+        const freeCourseSnapshot = await getDoc(freeCourseDoc);
+        if (freeCourseSnapshot.exists()) {
+          cType = "free";
+        } else {
+          const paidCourseDoc = doc(db, "paidCourses", courseName);
+          const paidCourseSnapshot = await getDoc(paidCourseDoc);
+          if (paidCourseSnapshot.exists()) {
+            cType = "paid";
+          }
         }
+        setCourseType(cType);
 
         // Fetch Videos
         const videosRef = collection(db, `videos_${courseName}`);
@@ -125,31 +133,32 @@ const PersonalCourse = () => {
 
         // Check subscription details if user is logged in
         if (userEmail) {
+          console.log("Fetching subscription for:", userEmail);
           const userSubscriptionRef = doc(db, "subscriptions", userEmail);
           const subscriptionSnapshot = await getDoc(userSubscriptionRef);
+          
           if (subscriptionSnapshot.exists()) {
             const subscriptionData = subscriptionSnapshot.data();
+            console.log("Subscription Data Found:", subscriptionData);
 
-            if (courseType === "free") {
-              if (
-                subscriptionData.freecourses &&
-                subscriptionData.freecourses.includes(courseName)
-              ) {
+            if (cType === "free") {
+              if (subscriptionData.freecourses?.includes(courseName)) {
                 setWatchedVideos([]);
+                setValidityPercentage("Lifetime Access");
               }
-            } else {
+            } else if (subscriptionData.DETAILS) {
               const courseDetails = subscriptionData.DETAILS.find(
                 (detail) => Object.keys(detail)[0] === courseName
               );
-              if (courseDetails) {
-                const courseInfo = courseDetails[courseName];
-                const isFreeCourse = courseInfo.isFree;
 
-                if (isFreeCourse) {
-                  setValidityPercentage(null);
+              if (courseDetails) {
+                console.log("Course Details Found:", courseDetails);
+                const courseInfo = courseDetails[courseName];
+                
+                if (courseInfo.isFree) {
+                  setValidityPercentage("Lifetime Access");
                 } else {
                   let daysLeft = 0;
-                  let usedDays = 0;
                   let totalDays = 0;
 
                   if (courseInfo.subscriptionDate && courseInfo.expiryDate) {
@@ -157,31 +166,26 @@ const PersonalCourse = () => {
                     const expDate = new Date(courseInfo.expiryDate);
                     const now = new Date();
 
-                    const totalTime = expDate.getTime() - subDate.getTime();
-                    totalDays = Math.floor(totalTime / (1000 * 3600 * 24));
-
-                    const usedTime = now.getTime() - subDate.getTime();
-                    usedDays =
-                      usedTime > 0
-                        ? Math.floor(usedTime / (1000 * 3600 * 24))
-                        : 0;
-
-                    const rawDaysLeft = totalDays - usedDays;
-                    daysLeft = rawDaysLeft < 0 ? 0 : rawDaysLeft;
+                    totalDays = Math.floor((expDate - subDate) / (1000 * 3600 * 24));
+                    const remainingTime = expDate - now;
+                    daysLeft = Math.ceil(remainingTime / (1000 * 3600 * 24));
+                    daysLeft = daysLeft < 0 ? 0 : daysLeft;
                   }
 
                   if (totalDays > 0) {
-                    const validityPercent = Math.floor(
-                      (daysLeft / totalDays) * 100
-                    );
+                    const validityPercent = Math.max(0, Math.floor((daysLeft / totalDays) * 100));
                     setValidityPercentage(validityPercent.toString());
                   } else {
                     setValidityPercentage("0");
                   }
                 }
                 setWatchedVideos(courseInfo.watchedVideos || []);
+              } else {
+                console.warn("Course details NOT found in DETAILS array for:", courseName);
               }
             }
+          } else {
+            console.warn("Subscription document does NOT exist for:", userEmail);
           }
         }
       } catch (error) {
@@ -571,10 +575,10 @@ const PersonalCourse = () => {
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
 
-      <div className="flex flex-1 relative z-10 pt-16">
+      <div className="flex flex-1 relative z-10">
         <Aside />
 
-      <main className="flex-1 admin-fluid-container bg-gray-50/50 p-4 md:p-10">
+      <main className="flex-1 admin-fluid-container bg-gray-50/50 p-4 md:p-10 pt-20">
         <div className="max-w-7xl mx-auto">
 
         {/* Page Header */}
@@ -639,125 +643,112 @@ const PersonalCourse = () => {
 
         {/* Top Row: Validity, Progress, Modules, Study Materials */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {/* Subscription Validity (Paid Courses) */}
-          {courseType !== "free" && (
-            <div className="admin-card p-8 flex flex-col items-center bg-white">
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
-                Subscription
-              </h3>
-              {typeof validityPercentage === "string" && validityPercentage === "Lifetime Access" ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-center">
-                  <div className="text-4xl mb-2">♾️</div>
-                  <p className="text-xl font-black text-slate-900">Lifetime Access</p>
-                </div>
-              ) : validityPercentage === "0" ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-center">
-                  <div className="text-4xl mb-2">⌛</div>
+          {/* Subscription Status Card */}
+          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-between text-center min-h-[280px]">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Subscription</h3>
+            <div className="flex-1 flex flex-col items-center justify-center">
+              {validityPercentage === "Lifetime Access" ? (
+                <>
+                  <div className="text-4xl mb-4">♾️</div>
+                  <p className="text-sm font-black text-slate-900 uppercase tracking-widest">Lifetime Access</p>
+                </>
+              ) : (validityPercentage === "0" || !validityPercentage) ? (
+                <>
+                  <div className="text-4xl mb-4">⌛</div>
                   <p className="text-xl font-black text-red-600 uppercase tracking-widest">Expired</p>
-                </div>
+                </>
               ) : (
                 <>
-                  <div className="relative w-32 h-32 flex items-center justify-center">
+                  <div className="relative w-28 h-28">
                     <PieChart
-                      data={[
-                        { value: parseInt(validityPercentage) || 0, color: "#dd2727" },
-                        { value: 100 - (parseInt(validityPercentage) || 0), color: "#f1f5f9" },
-                      ]}
-                      lineWidth={20}
+                      data={[{ value: parseInt(validityPercentage), color: "#dd2727" }]}
+                      totalValue={100}
+                      lineWidth={15}
+                      label={({ dataEntry }) => `${dataEntry.value}%`}
+                      labelStyle={{ fontSize: '18px', fontWeight: '900', fill: '#0f172a' }}
+                      labelPosition={0}
+                      background="#f1f5f9"
                       rounded
                       animate
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-2xl font-black text-slate-900">{validityPercentage || 0}%</span>
-                    </div>
                   </div>
                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">Validity Remaining</p>
                 </>
               )}
             </div>
-          )}
-
-          {/* Course Progress */}
-          <div className="admin-card p-8 flex flex-col items-center bg-white">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
-              Course Progress
-            </h3>
-            {courseType !== "free" ? (
-              <>
-                <div className="relative w-32 h-32 flex items-center justify-center">
-                  <PieChart
-                    data={[
-                      { value: watchedPercentage, color: "#b0a102" },
-                      { value: 100 - watchedPercentage, color: "#f1f5f9" },
-                    ]}
-                    lineWidth={20}
-                    rounded
-                    animate
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-black text-slate-900">{watchedPercentage}%</span>
-                  </div>
-                </div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">
-                  {watchedVideos.length}/{totalVideos} Videos Watched
-                </p>
-              </>
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-center">
-                <div className="text-4xl mb-2">📖</div>
-                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest px-4">Tracking disabled for free courses</p>
-              </div>
-            )}
           </div>
 
-          {/* Modules Covered (Paid Courses) */}
-          {courseType !== "free" && totalModules > 0 && (
-            <div className="admin-card p-8 flex flex-col items-center bg-white">
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
-                Curriculum
-              </h3>
-              <div className="relative w-32 h-32 flex items-center justify-center">
+          {/* Course Progress Card */}
+          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-between text-center min-h-[280px] hover:border-red-100 transition-all">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Course Progress</h3>
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <div className="relative w-28 h-28">
                 <PieChart
-                  data={[
-                    { value: modulesCovered, color: "#dd2727" },
-                    { value: totalModules - modulesCovered, color: "#f1f5f9" },
-                  ]}
-                  lineWidth={20}
+                  data={[{ value: watchedPercentage, color: "#dd2727" }]}
+                  totalValue={100}
+                  lineWidth={15}
+                  label={({ dataEntry }) => `${dataEntry.value}%`}
+                  labelStyle={{ fontSize: '18px', fontWeight: '900', fill: '#0f172a' }}
+                  labelPosition={0}
+                  background="#f1f5f9"
                   rounded
                   animate
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-2xl font-black text-slate-900">{modulesCoveredPercentage}%</span>
-                </div>
+              </div>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">
+                {watchedVideos.length}/{totalVideos} Videos Watched
+              </p>
+            </div>
+          </div>
+
+          {/* Curriculum Card */}
+          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-between text-center min-h-[280px]">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Curriculum</h3>
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <div className="relative w-28 h-28">
+                <PieChart
+                  data={[{ value: modulesCoveredPercentage, color: "#dd2727" }]}
+                  totalValue={100}
+                  lineWidth={15}
+                  label={({ dataEntry }) => `${dataEntry.value}%`}
+                  labelStyle={{ fontSize: '18px', fontWeight: '900', fill: '#0f172a' }}
+                  labelPosition={0}
+                  background="#f1f5f9"
+                  rounded
+                  animate
+                />
               </div>
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-6">
                 {modulesCovered}/{totalModules} Modules Covered
               </p>
             </div>
-          )}
+          </div>
 
-          {/* Study Materials */}
-          <div className="admin-card p-8 flex flex-col bg-white">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">
-              Study Materials
-            </h3>
-            <div className="flex-1 space-y-3 overflow-y-auto max-h-[160px] custom-scrollbar pr-2">
-              {studyMaterials.length > 0 ? studyMaterials.map((material) => (
-                <div key={material.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
-                  <p className="text-[10px] font-bold text-slate-700 truncate mb-2">{material.title}</p>
-                  <a
-                    href={material.url}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-center text-[9px] font-black text-white bg-slate-900 py-1.5 rounded-lg uppercase tracking-widest hover:bg-[#dd2727] transition-all"
-                  >
-                    Download
-                  </a>
+          {/* Study Materials Card */}
+          <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-between text-center min-h-[280px]">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Study Materials</h3>
+            <div className="flex-1 w-full flex flex-col justify-center">
+              {studyMaterials.length > 0 ? (
+                <div className="space-y-3 max-h-[160px] overflow-y-auto custom-scrollbar pr-1 w-full">
+                  {studyMaterials.map((material) => (
+                    <div key={material.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between gap-3">
+                      <p className="text-[10px] font-bold text-slate-700 truncate text-left flex-1">{material.title}</p>
+                      <a
+                        href={material.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 bg-slate-900 text-white rounded-lg hover:bg-[#dd2727] transition-all"
+                        title="Download"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              )) : (
-                <div className="h-full flex items-center justify-center">
-                  <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest text-center">No materials yet</p>
+              ) : (
+                <div className="flex flex-col items-center justify-center opacity-30">
+                  <div className="text-4xl mb-4">📚</div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] italic">No Materials Yet</p>
                 </div>
               )}
             </div>

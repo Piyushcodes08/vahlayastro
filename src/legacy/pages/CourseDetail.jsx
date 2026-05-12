@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { RiShareForwardFill } from "react-icons/ri";
 import { 
@@ -29,18 +30,41 @@ const CourseDetail = () => {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setAuthLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
+  const { slug, courseType } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { slug, courseType } = useParams();
   const { slugMap, loading: contextLoading } = useCourses();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+      
+      if (currentUser && slug) {
+        // Check enrollment status
+        try {
+          const userRef = doc(db, "subscriptions", currentUser.email);
+          const docSnap = await getDoc(userRef);
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            const courseId = slug; // The ID usually matches the slug or is passed in courseData
+            
+            const enrolledFree = userData.freecourses && userData.freecourses.includes(courseId);
+            const enrolledPaid = userData.DETAILS && userData.DETAILS.some(d => Object.keys(d)[0] === courseId);
+            
+            if (enrolledFree || enrolledPaid) {
+              setIsEnrolled(true);
+            }
+          }
+        } catch (err) {
+          console.error("Error checking enrollment:", err);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, [slug]);
 
   useEffect(() => {
     if (!slug || !courseType || contextLoading) return;
@@ -99,9 +123,17 @@ const CourseDetail = () => {
     </Helmet>
   );
 
-  const enrollUrl = user 
-    ? (courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`) 
-    : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`)}`;
+  const enrollUrl = isEnrolled 
+    ? `/course/${encodeURIComponent(courseData.id || slug)}`
+    : user 
+      ? (courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`) 
+      : `/login?redirectTo=${encodeURIComponent(courseData.type === 'free' ? `/enrollfree/${courseData.id || slug}/${courseType}` : `/enroll/${courseData.id || slug}/${courseType}`)}`;
+
+  const enrollText = isEnrolled 
+    ? 'Go to Course'
+    : courseData.type === 'free' 
+      ? 'Enroll Free' 
+      : 'Secure Your Seat';
 
   return (
     <div className="min-h-screen text-white selection:bg-[#dd2727]/80 font-poppins bg-transparent">
@@ -153,7 +185,7 @@ const CourseDetail = () => {
                <Link to={enrollUrl} className="group/btn relative">
                   <div className="absolute -inset-1 bg-gradient-to-r from-[#dd2727] to-orange-500 rounded-full blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200"></div>
                   <button className="relative px-10 py-4 bg-white text-black rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-black hover:text-white transition-all duration-300">
-                    Join the Journey
+                    {isEnrolled ? 'Open Course' : 'Join the Journey'}
                   </button>
                </Link>
               
@@ -185,7 +217,7 @@ const CourseDetail = () => {
             <div className="w-full">
                <Link to={enrollUrl}>
                   <button className="w-full py-5 rounded-2xl bg-[#dd2727] text-white font-black uppercase tracking-[0.3em] text-xs shadow-2xl hover:bg-white hover:text-[#dd2727] transition-all duration-500 transform hover:-translate-y-1">
-                    {courseData.type === 'free' ? 'Enroll Free' : 'Secure Your Seat'}
+                    {enrollText}
                   </button>
                </Link>
             </div>

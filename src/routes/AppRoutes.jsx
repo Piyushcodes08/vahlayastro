@@ -60,6 +60,7 @@ import CourseDetail from '../legacy/pages/CourseDetail';
 import AudioVisualizer from '../components/AudioVisualizer/AudioVisualizer';
 import QuestionAndAns from '../legacy/pages/QuestionAndAns';
 import ConsultingPage from '../pages/ConsultingPage';
+import Services from '../legacy/pages/Services';
 
 // ── Additional Legacy Sub-pages ──
 import BhagavadGita from '../legacy/pages/courses/BhagavadGita';
@@ -70,6 +71,7 @@ import Calendar2 from '../legacy/pages/Calender2';
 import Copartners from '../legacy/pages/Copartners';
 import NewUser from '../legacy/pages/NewUser';
 import OldUser from '../legacy/pages/OldUser';
+import ArticlePage from '../legacy/pages/Articles/Article1';
 
 const AppRoutes = () => {
     return (
@@ -79,8 +81,11 @@ const AppRoutes = () => {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:courseType/:slug" element={<CourseDetail />} />
             <Route path="/consulting" element={<ConsultingPage />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:id" element={<ArticleDetailsPage />} />
+            {/* Legacy article route used by Blogs.jsx and Article1.jsx */}
+            <Route path="/article/:slug" element={<ArticlePage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/appointment" element={<ProtectedRoute><AppointmentPage /></ProtectedRoute>} />
             <Route path="/testimonials" element={<TestimonialsPage />} />

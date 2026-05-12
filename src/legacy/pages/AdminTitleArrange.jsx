@@ -114,17 +114,17 @@ const AdminTitleOrder = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
         <Aside />
 
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 pt-20">
           <div className="max-w-4xl mx-auto space-y-8">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase">
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Title <span className="text-[#dd2727]">Arrangement</span>
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Organize the sequence of modules for your courses</p>
+              <p className="text-slate-400 text-sm mt-1 font-medium">Organize the sequence of modules for your courses</p>
             </div>
             
             <select
@@ -133,18 +133,18 @@ const AdminTitleOrder = () => {
                 setSelectedCourse(e.target.value);
                 fetchVideos(e.target.value);
               }}
-              className="w-full md:w-64 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
+              className="w-full md:w-64 bg-gray-50 border border-slate-200 rounded-xl px-5 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer shadow-sm"
             >
-              <option value="" className="bg-[#1a1a1a]">Select a Course</option>
+              <option value="" className="bg-white">Select a Course</option>
               {courses.map(course => (
-                <option key={course} value={course} className="bg-[#1a1a1a]">{course}</option>
+                <option key={course} value={course} className="bg-white">{course}</option>
               ))}
             </select>
           </header>
 
           {loading ? (
             <div className="space-y-4">
-              {[1, 2, 3, 4].map(i => <div key={i} className="h-20 bg-white/5 rounded-2xl animate-pulse"></div>)}
+              {[1, 2, 3, 4].map(i => <div key={i} className="h-20 bg-slate-50 rounded-2xl animate-pulse"></div>)}
             </div>
           ) : selectedCourse ? (
             <div className="space-y-6">
@@ -154,7 +154,7 @@ const AdminTitleOrder = () => {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-4 shadow-xl"
+                      className="bg-white border border-slate-200 rounded-3xl p-4 shadow-sm"
                     >
                       {titleGroups.length > 0 ? (
                         titleGroups.map((group, index) => (
@@ -169,19 +169,19 @@ const AdminTitleOrder = () => {
                                 {...provided.draggableProps}
                                 className="group mb-3 last:mb-0"
                               >
-                                <div className="flex items-center gap-4 p-5 bg-white/5 border border-white/5 rounded-2xl group-hover:bg-white/10 transition-all duration-300">
+                                <div className="flex items-center gap-4 p-5 bg-gray-50 border border-slate-100 rounded-2xl group-hover:bg-slate-100 transition-all duration-300">
                                   <div 
                                     {...provided.dragHandleProps}
-                                    className="p-2 bg-black/40 rounded-xl text-gray-500 hover:text-[#dd2727] cursor-grab active:cursor-grabbing transition-colors"
+                                    className="p-2 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-[#dd2727] cursor-grab active:cursor-grabbing transition-colors shadow-sm"
                                   >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"/></svg>
                                   </div>
                                   
                                   <div className="flex-1">
-                                    <h3 className="font-bold text-white tracking-wide uppercase text-sm">
+                                    <h3 className="font-bold text-slate-900 tracking-wide uppercase text-sm">
                                       {group.title}
                                     </h3>
-                                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
                                       {group.docRefs.length} Lessons within this title
                                     </p>
                                   </div>
@@ -210,7 +210,7 @@ const AdminTitleOrder = () => {
                   <button
                     onClick={saveOrder}
                     disabled={saving}
-                    className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] px-10 py-4 rounded-2xl font-bold uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl disabled:opacity-50"
+                    className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-bold uppercase tracking-[0.2em] hover:shadow-lg hover:shadow-red-500/30 transition-all disabled:opacity-50"
                   >
                     {saving ? "Saving Changes..." : "Save New Sequence"}
                   </button>
@@ -218,9 +218,9 @@ const AdminTitleOrder = () => {
               )}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white/5 border border-white/10 rounded-3xl">
-              <svg className="w-16 h-16 mx-auto mb-6 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 01-2-2m0 0V5a2 2 0 012-2h6.5L21 7v2"/></svg>
-              <p className="text-gray-500 font-medium">Please select a course to arrange its modules</p>
+            <div className="text-center py-20 bg-gray-50 border border-slate-100 rounded-2xl">
+              <svg className="w-16 h-16 mx-auto mb-6 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 01-2-2m0 0V5a2 2 0 012-2h6.5L21 7v2"/></svg>
+              <p className="text-slate-400 font-medium">Please select a course to arrange its modules</p>
             </div>
           )}
         </div>

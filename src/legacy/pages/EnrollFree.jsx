@@ -20,14 +20,40 @@ const EnrollPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setEmail(user.email || "");
         setName(user.displayName || "");
+        
+        // Check if user is already enrolled to prevent double-asking
+        try {
+          const userRef = doc(db, "subscriptions", user.email);
+          const docSnap = await getDoc(userRef);
+          
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            
+            // Pre-fill phone if we have it
+            if (userData.phone && !phone) {
+              setPhone(userData.phone);
+            }
+
+            // Check enrollment in freecourses or DETAILS
+            const isEnrolledFree = userData.freecourses && userData.freecourses.includes(selectedCourse);
+            const isEnrolledPaid = userData.DETAILS && userData.DETAILS.some(d => Object.keys(d)[0] === selectedCourse);
+
+            if ((isEnrolledFree || isEnrolledPaid) && selectedCourse) {
+              console.log("User already enrolled, redirecting to course...");
+              navigate(`/course/${selectedCourse}`);
+            }
+          }
+        } catch (err) {
+          console.error("Error checking enrollment status:", err);
+        }
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [selectedCourse, navigate]);
 
   useEffect(() => {
     if (courseId) {

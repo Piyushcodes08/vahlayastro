@@ -51,34 +51,34 @@ const PaymentsList = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
         <Aside />
 
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 pt-20">
           <div className="space-y-8">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase">
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Payment <span className="text-[#dd2727]">Transactions</span>
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Audit and track your cosmic revenue</p>
+              <p className="text-slate-400 text-sm mt-1 font-medium">Audit and track your cosmic revenue</p>
             </div>
             
-            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex items-center gap-4">
-              <div className="bg-[#b0a102]/10 p-3 rounded-xl text-[#b0a102]">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-4 shadow-sm">
+              <div className="bg-[#b0a102]/10 p-4 rounded-xl text-[#b0a102]">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
               <div>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Revenue</p>
-                <p className="text-2xl font-bold text-white">₹{totalAmount.toLocaleString("en-IN")}</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Revenue</p>
+                <p className="text-2xl font-bold text-slate-900">₹{totalAmount.toLocaleString("en-IN")}</p>
               </div>
             </div>
           </header>
 
-          <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             {loading ? (
               <div className="p-20 space-y-4">
-                {[1, 2, 3, 4, 5].map(i => <div key={i} className="h-12 bg-white/5 rounded-xl animate-pulse"></div>)}
+                {[1, 2, 3, 4, 5].map(i => <div key={i} className="h-12 bg-slate-50 rounded-xl animate-pulse"></div>)}
               </div>
             ) : payments.length === 0 ? (
               <div className="text-center py-20">
@@ -88,29 +88,29 @@ const PaymentsList = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-white/5 border-b border-white/10">
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Order Details</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">User ID</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Amount</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">Status</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400 text-right">Date</th>
+                    <tr className="bg-slate-50 border-b border-slate-100">
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Order Details</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">User ID</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Amount</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Status</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 text-right">Date</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
                     {payments.map((payment) => (
-                      <tr key={payment.id} className="hover:bg-white/5 transition-colors group">
+                      <tr key={payment.id} className="hover:bg-slate-50 transition-colors group border-b border-slate-100 last:border-0">
                         <td className="px-6 py-5">
-                          <p className="font-bold text-white group-hover:text-[#dd2727] transition-colors">{payment.courseId}</p>
-                          <p className="text-[10px] text-gray-500 font-mono mt-1 uppercase">ID: {payment.paymentId}</p>
+                          <p className="font-bold text-slate-900 group-hover:text-[#dd2727] transition-colors">{payment.courseId}</p>
+                          <p className="text-[10px] text-slate-400 font-mono mt-1 uppercase">ID: {payment.paymentId}</p>
                         </td>
-                        <td className="px-6 py-5 text-sm text-gray-400 font-mono">{payment.userId?.substring(0, 8)}...</td>
+                        <td className="px-6 py-5 text-sm text-slate-500 font-mono">{payment.userId?.substring(0, 8)}...</td>
                         <td className="px-6 py-5 font-bold text-[#b0a102]">₹{payment.amount}</td>
                         <td className="px-6 py-5">
                           <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${payment.status === 'success' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
                             {payment.status}
                           </span>
                         </td>
-                        <td className="px-6 py-5 text-right text-xs text-gray-500">{payment.timestamp}</td>
+                        <td className="px-6 py-5 text-right text-xs text-slate-400">{payment.timestamp}</td>
                       </tr>
                     ))}
                   </tbody>

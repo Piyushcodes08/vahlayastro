@@ -1,5 +1,4 @@
 
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -22,6 +21,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import ReactPlayer from 'react-player';
 import Header from "../../components/sections/Header/Header";
 import Aside from "./Aside";
+import Footer from "../../components/sections/Footer/Footer";
 
 const VideoDetailsPage = () => {
     const { courseName, videoId } = useParams();
@@ -34,7 +34,6 @@ const VideoDetailsPage = () => {
     const [likes, setLikes] = useState(0);
     const [userLiked, setUserLiked] = useState(false);
     const [user, setUser] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [watchedVideos, setWatchedVideos] = useState([]);
     const [orderedVideos, setOrderedVideos] = useState([]);
@@ -46,9 +45,12 @@ const VideoDetailsPage = () => {
                 const userSubRef = doc(db, "subscriptions", user.email);
                 getDoc(userSubRef).then((docSnap) => {
                     if (docSnap.exists()) {
-                        const courseData = docSnap.data().DETAILS.find(d => Object.keys(d)[0] === courseName);
-                        if (courseData) {
-                            setWatchedVideos(courseData[courseName].watchedVideos || []);
+                        const details = docSnap.data().DETAILS;
+                        if (details && Array.isArray(details)) {
+                            const courseData = details.find(d => Object.keys(d)[0] === courseName);
+                            if (courseData) {
+                                setWatchedVideos(courseData[courseName].watchedVideos || []);
+                            }
                         }
                     }
                 });
@@ -60,56 +62,52 @@ const VideoDetailsPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 1️⃣ Fetch all videos from Firestore (loop through document IDs)
                 const videosRef = collection(db, `videos_${courseName}`);
                 const videosSnapshot = await getDocs(videosRef);
 
-                let allVideos = videosSnapshot.docs.map(doc => ({
-                    id: doc.id,  // Use document ID directly
-                    ...doc.data(),
-                    thumbnail: doc.data().thumbnail || `https://img.youtube.com/vi/${extractYTId(doc.data().url)}/hqdefault.jpg`,
-                    order: doc.data().order || 0,
-                    titleOrder: doc.data()["title-order"] || 999  // Default large value if missing
-                }));
+                let allVideos = videosSnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const videoUrl = (data.url || data.videoUrl || data.link || "").trim();
+                    const ytId = extractYTId(videoUrl);
+                    
+                    return {
+                        id: doc.id,
+                        ...data,
+                        url: videoUrl,
+                        thumbnail: data.thumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : 'https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?w=200'),
+                        displayTitle: data.description || data.title || "Untitled Lesson",
+                        order: parseInt(data.order) || 0,
+                        titleOrder: parseInt(data["title-order"]) || 0
+                    };
+                });
 
-                // 2️⃣ Fetch details of the currently playing video
+                setVideos(allVideos);
+
                 const currentVideo = allVideos.find(video => video.id === videoId);
                 if (!currentVideo) {
-                    console.error("Current video not found in Firestore");
+                    if (allVideos.length > 0) {
+                        navigate(`/course/${courseName}/video/${allVideos[0].id}`);
+                    }
+                    setLoading(false);
                     return;
                 }
-
-                let activeVideoTitle = currentVideo.title;
-                let activeVideoTitleOrder = currentVideo.titleOrder;
 
                 setActiveVideo(currentVideo);
                 setLikes(currentVideo.likes || 0);
 
-                // 3️⃣ Get videos with the same title first
-                let relatedVideos = allVideos.filter(video => video.title === activeVideoTitle);
+                const sortedVideos = [...allVideos].sort((a, b) => {
+                    if (a.titleOrder !== b.titleOrder) {
+                        return a.titleOrder - b.titleOrder;
+                    }
+                    return a.order - b.order;
+                });
 
-                // 4️⃣ If fewer than 10 videos exist, fetch from the next `title-order`
-                if (relatedVideos.length < 10) {
-                    let remainingVideos = allVideos
-                        .filter(video => video.titleOrder > activeVideoTitleOrder)
-                        .sort((a, b) => a.titleOrder - b.titleOrder); // Sort by next title-order
+                setOrderedVideos(sortedVideos);
 
-                    relatedVideos = [...relatedVideos, ...remainingVideos].slice(0, 10);
-                } else {
-                    relatedVideos = relatedVideos.slice(0, 10); // Ensure max 10 videos
-                }
-
-                // 5️⃣ Sort the final list by `order`
-                relatedVideos.sort((a, b) => a.order - b.order);
-
-                setOrderedVideos(relatedVideos);
-
-                // Fetch ads
                 const adsRef = collection(db, "ads");
                 const adsSnapshot = await getDocs(adsRef);
                 setAds(adsSnapshot.docs.map(doc => doc.data()));
 
-                // Fetch comments
                 const commentsQuery = query(
                     collection(db, "Comments_Vahaly_Astro"),
                     where("courseName", "==", courseName),
@@ -135,9 +133,8 @@ const VideoDetailsPage = () => {
         fetchData();
     }, [courseName, videoId]);
 
-
-
     const extractYTId = (url) => {
+        if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
@@ -145,25 +142,18 @@ const VideoDetailsPage = () => {
 
     const markVideoAsWatched = async () => {
         if (!user) return;
-
         try {
             const userSubRef = doc(db, "subscriptions", user.email);
             const docSnap = await getDoc(userSubRef);
-
             if (docSnap.exists()) {
                 const subscriptions = docSnap.data().DETAILS;
                 const courseIndex = subscriptions.findIndex(d => Object.keys(d)[0] === courseName);
-
                 if (courseIndex !== -1) {
                     const updatedSubs = [...subscriptions];
                     const watched = new Set(updatedSubs[courseIndex][courseName].watchedVideos || []);
                     watched.add(videoId);
-
                     updatedSubs[courseIndex][courseName].watchedVideos = Array.from(watched);
-
-                    await updateDoc(userSubRef, {
-                        DETAILS: updatedSubs
-                    });
+                    await updateDoc(userSubRef, { DETAILS: updatedSubs });
                     setWatchedVideos(Array.from(watched));
                 }
             }
@@ -179,7 +169,6 @@ const VideoDetailsPage = () => {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (!newComment.trim() || !user) return;
-
         try {
             await addDoc(collection(db, "Comments_Vahaly_Astro"), {
                 courseName,
@@ -197,12 +186,9 @@ const VideoDetailsPage = () => {
 
     const handleLike = async () => {
         if (!user || userLiked) return;
-
         try {
             const videoRef = doc(db, `videos_${courseName}`, videoId);
-            await updateDoc(videoRef, {
-                likes: increment(1)
-            });
+            await updateDoc(videoRef, { likes: increment(1) });
             setUserLiked(true);
             setLikes(prev => prev + 1);
         } catch (err) {
@@ -210,198 +196,154 @@ const VideoDetailsPage = () => {
         }
     };
 
-    const filteredVideos = videos.filter(video =>
-        video.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="flex justify-center items-center h-screen bg-white">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="admin-layout min-h-screen flex flex-col">
-            <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+        <div className="min-h-screen flex flex-col bg-[#f0f2f5] text-slate-900">
             <Header />
 
             <div className="flex flex-1 relative z-10 pt-16">
                 <Aside />
-                <main className="flex-1 admin-fluid-container bg-gray-50/50 p-4 md:p-8 flex flex-col lg:flex-row gap-8">
+                
+                <main className="flex-1 p-4 md:p-8 flex flex-col lg:flex-row gap-6 overflow-y-auto">
+                    
+                    {/* Left Column: Video & Info */}
+                    <div className="flex-1 lg:w-3/4 space-y-4 pb-20">
+                        
+                        {/* Video Player Section */}
+                        <div className="bg-black aspect-video relative rounded-xl overflow-hidden shadow-sm">
+                            {activeVideo?.url ? (
+                                <div className="w-full h-full">
+                                    {activeVideo.url.includes('youtube.com') || activeVideo.url.includes('youtu.be') || activeVideo.url.includes('vimeo.com') || activeVideo.url.includes('drive.google.com') ? (
+                                        <ReactPlayer url={activeVideo.url} controls playing={true} width="100%" height="100%" onEnded={markVideoAsWatched} />
+                                    ) : (
+                                        <video key={activeVideo.url} src={activeVideo.url} controls autoPlay muted className="w-full h-full object-contain" onEnded={markVideoAsWatched} />
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-center h-full bg-slate-900 text-white/50 text-xs uppercase tracking-widest">Video Unavailable</div>
+                            )}
+                        </div>
 
-                    {/* Main Video Column */}
-                    <div className="flex-1 lg:w-3/4 space-y-6">
-                        <div className="admin-card overflow-hidden bg-white">
-                            {/* Video Player */}
-                            <div className="aspect-video relative bg-slate-900">
-                                {activeVideo?.url ? (
-                                    <ReactPlayer
-                                        url={activeVideo.url}
-                                        controls
-                                        width="100%"
-                                        height="100%"
-                                        onEnded={markVideoAsWatched}
-                                        config={{
-                                            file: {
-                                                attributes: { controlsList: "nodownload" }
-                                            }
-                                        }}
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">Video unavailable</p>
-                                    </div>
-                                )}
+                        {/* Video Title and Likes Card */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h1 className="text-xl md:text-2xl font-bold text-slate-800 leading-tight mb-4">
+                                {activeVideo?.displayTitle}
+                            </h1>
+                            <div className="flex items-center gap-4">
+                                <button 
+                                    onClick={handleLike}
+                                    className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-full transition-all group"
+                                >
+                                    <span className={`text-xl ${userLiked ? 'text-red-500' : 'text-slate-400'} group-hover:scale-110 transition-transform`}>❤</span>
+                                    <span className="text-sm font-bold text-slate-600">{likes}</span>
+                                </button>
+                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+                                    Module {activeVideo?.titleOrder} • Lesson {activeVideo?.order}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Comments Section */}
+                        <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+                            <div className="flex items-center gap-3 mb-6">
+                                <h2 className="text-lg font-bold text-slate-800">Comments ({comments.length})</h2>
                             </div>
 
-                            {/* Video Info */}
-                            <div className="p-6 md:p-8">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-slate-100 pb-6">
-                                    <div>
-                                        <h1 className="text-xl md:text-2xl font-black text-slate-900 mb-2 leading-tight tracking-tight">
-                                            {activeVideo?.description || "Untitled Video"}
-                                        </h1>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-[9px] font-black text-[#dd2727] uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full border border-red-100">{courseName}</span>
-                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lesson {activeVideo?.order || 0}</span>
+                            <form onSubmit={handleCommentSubmit} className="space-y-4 mb-8">
+                                <textarea
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-red-500 transition-all resize-none h-20 placeholder:text-slate-400"
+                                    placeholder="Add a public comment..."
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                />
+                                <div className="flex justify-end">
+                                    <button 
+                                        type="submit"
+                                        className="bg-[#dd2727] text-white px-8 py-2.5 rounded-full text-sm font-bold hover:bg-red-700 transition-all"
+                                    >
+                                        Comment
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div className="space-y-6">
+                                {comments.map((comment) => (
+                                    <div key={comment.id} className="flex gap-4 items-start">
+                                        <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 flex-shrink-0">
+                                            {comment.userName.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center gap-3">
+                                                <p className="text-xs font-bold text-slate-900">{comment.userName}</p>
+                                                <p className="text-[10px] text-slate-400 uppercase tracking-tighter">
+                                                    {comment.timestamp?.toDate().toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                            <p className="text-sm text-slate-600 leading-relaxed">{comment.comment}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3 w-full md:w-auto">
-                                        <button
-                                            onClick={handleLike}
-                                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${userLiked
-                                                    ? "bg-red-50 border-red-200 text-[#dd2727]"
-                                                    : "bg-slate-50 border-slate-200 text-slate-600 hover:border-red-200 hover:text-[#dd2727]"
-                                                }`}
-                                        >
-                                            <svg className="w-4 h-4" fill={userLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                            </svg>
-                                            {likes.toLocaleString()}
-                                        </button>
-                                        {watchedVideos.includes(videoId) && (
-                                            <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-50 border border-green-100 text-green-600 text-[9px] font-black uppercase tracking-widest">
-                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                                                Completed
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Comments */}
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-3">
-                                        <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Comments</h2>
-                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest bg-slate-100 px-2.5 py-1 rounded-full">{comments.length}</span>
-                                    </div>
-
-                                    {user && (
-                                        <form onSubmit={handleCommentSubmit} className="flex gap-4 items-start">
-                                            <div className="w-10 h-10 rounded-xl bg-[#dd2727] flex items-center justify-center flex-shrink-0 font-black text-white text-sm shadow-lg">
-                                                {user.displayName ? user.displayName[0].toUpperCase() : "U"}
-                                            </div>
-                                            <div className="flex-1 space-y-3">
-                                                <textarea
-                                                    value={newComment}
-                                                    onChange={(e) => setNewComment(e.target.value)}
-                                                    placeholder="Share your thoughts or ask a question..."
-                                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#dd2727]/20 focus:border-[#dd2727] transition-all min-h-[100px] resize-none font-medium"
-                                                />
-                                                <div className="flex justify-end">
-                                                    <button
-                                                        type="submit"
-                                                        className="bg-[#dd2727] text-white px-8 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                                                    >
-                                                        Post Comment
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    )}
-
-                                    <div className="space-y-4 mt-6">
-                                        {comments.length > 0 ? comments.map((comment) => (
-                                            <div key={comment.id} className="flex gap-4 items-start group">
-                                                <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0 font-black text-slate-500 text-sm group-hover:bg-[#dd2727] group-hover:text-white group-hover:border-[#dd2727] transition-all">
-                                                    {comment.userName ? comment.userName[0].toUpperCase() : "?"}
-                                                </div>
-                                                <div className="flex-1 bg-slate-50 rounded-2xl p-5 border border-slate-100 group-hover:border-slate-200 transition-all">
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <h3 className="font-black text-slate-900 text-xs uppercase tracking-widest">{comment.userName}</h3>
-                                                        <span className="text-slate-400 text-[9px] font-black uppercase tracking-widest">
-                                                            {comment.timestamp ? new Date(comment.timestamp.toDate()).toLocaleDateString() : "Just now"}
-                                                        </span>
-                                                    </div>
-                                                    <p className="text-slate-600 text-sm leading-relaxed">{comment.comment}</p>
-                                                </div>
-                                            </div>
-                                        )) : (
-                                            <div className="text-center py-10 admin-card border-dashed">
-                                                <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">No comments yet. Be the first!</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                ))}
+                                {comments.length === 0 && (
+                                    <p className="text-center py-10 text-slate-400 text-xs font-bold italic uppercase tracking-widest">No comments yet.</p>
+                                )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Sidebar Playlist */}
+                    {/* Right Column: Playlist */}
                     <aside className="lg:w-1/4 space-y-6">
-                        <div className="admin-card p-6 bg-white sticky top-24">
-                            <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 bg-[#dd2727] rounded-full animate-pulse"></span>
-                                Course Sequence
-                            </h3>
-
-                            <div className="space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
-                                {orderedVideos.map((video) => (
-                                    <div
-                                        key={video.id}
-                                        onClick={() => handleVideoSelect(video)}
-                                        className={`group flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all border ${video.id === videoId
-                                                ? "bg-red-50 border-red-100"
-                                                : "bg-slate-50 border-slate-100 hover:border-slate-200 hover:bg-slate-100"
-                                            }`}
-                                    >
-                                        <div className="relative w-16 h-11 flex-shrink-0 rounded-xl overflow-hidden border border-slate-200 bg-slate-200">
-                                            <img
-                                                src={video.thumbnail}
-                                                alt="Thumbnail"
-                                                className="w-full h-full object-cover"
-                                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?w=200&auto=format&fit=crop'; }}
-                                            />
-                                            {watchedVideos.includes(video.id) && (
-                                                <div className="absolute inset-0 bg-green-500/50 flex items-center justify-center">
-                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className={`text-[10px] font-bold tracking-wide truncate leading-snug ${video.id === videoId ? "text-[#dd2727]" : "text-slate-700"}`}>
-                                                {video.description || "Lesson " + video.order}
-                                            </h4>
-                                            <p className="text-[9px] text-slate-400 mt-0.5 font-black uppercase tracking-widest">
-                                                Lesson {video.order}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden sticky top-20">
+                            <div className="p-4 border-b border-slate-100 bg-slate-50">
+                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Course Sequence</h3>
+                            </div>
+                            <div className="max-h-[60vh] overflow-y-auto">
+                                {orderedVideos.map((video) => {
+                                    const isActive = video.id === videoId;
+                                    const isWatched = watchedVideos.includes(video.id);
+                                    
+                                    return (
+                                        <button
+                                            key={video.id}
+                                            onClick={() => handleVideoSelect(video)}
+                                            className={`w-full group flex items-center gap-4 p-4 transition-all text-left border-b border-slate-50 ${isActive ? 'bg-red-50 border-l-4 border-l-[#dd2727]' : 'hover:bg-slate-50'}`}
+                                        >
+                                            <div className="relative w-16 aspect-video bg-slate-200 rounded overflow-hidden flex-shrink-0">
+                                                <img src={video.thumbnail} alt="" className={`w-full h-full object-cover ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
+                                                {isWatched && (
+                                                    <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
+                                                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">✓</div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className={`text-[10px] font-black uppercase tracking-tighter mb-1 ${isActive ? 'text-[#dd2727]' : 'text-slate-400'}`}>
+                                                    M{video.titleOrder} • L{video.order}
+                                                </p>
+                                                <h5 className={`text-xs font-bold truncate ${isActive ? 'text-[#dd2727]' : 'text-slate-700'}`}>
+                                                    {video.displayTitle}
+                                                </h5>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
+                        {/* Ads */}
                         {ads.length > 0 && (
                             <div className="space-y-4">
                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Sponsored</p>
                                 {ads.map((ad, index) => (
                                     <a key={index} href={ad.link} target="_blank" rel="noopener noreferrer" className="block group">
-                                        <div className="admin-card overflow-hidden hover:border-slate-300 transition-all">
-                                            <img src={ad.imageUrl} alt={ad.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-500" />
-                                            <div className="p-4">
-                                                <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest group-hover:text-[#dd2727] transition-colors">{ad.title}</p>
-                                            </div>
+                                        <div className="rounded-xl overflow-hidden border border-slate-200 bg-white group-hover:border-red-300 transition-all shadow-sm">
+                                            <img src={ad.imageUrl} alt="" className="w-full aspect-video object-cover" />
                                         </div>
                                     </a>
                                 ))}
@@ -410,9 +352,9 @@ const VideoDetailsPage = () => {
                     </aside>
                 </main>
             </div>
+            <Footer />
         </div>
     );
 };
 
 export default VideoDetailsPage;
-

@@ -12,14 +12,17 @@ const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
 
-    // Check if we are on admin or dashboard-related pages
-    const portalPaths = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/course'];
-    const isPortal = portalPaths.some(path => location.pathname.startsWith(path));
+    // Check if we are on admin or dashboard-related pages to keep header always visible/blurred
+    const portalPaths = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/finalize', '/studentlivesession', '/payemi', '/notifications'];
+    
+    // We treat as portal if it's in portalPaths OR if it's a specific learning course page (but NOT the main course catalog)
+    const isPortal = portalPaths.some(path => location.pathname.startsWith(path)) || 
+                     (location.pathname.startsWith('/course/') && !location.pathname.startsWith('/courses'));
+    
     const showBg = scrolled || isPortal;
 
     useEffect(() => {
         const handleScroll = (e) => {
-            // Get scroll position from window, document, or the scrolling target itself
             const scrollTop =
                 window.scrollY ||
                 document.documentElement.scrollTop ||
@@ -30,12 +33,21 @@ const Header = () => {
             setScrolled(scrollTop > 20);
         };
 
-        // Use capture phase (true) to catch scroll events from any nested scrollable container
         window.addEventListener('scroll', handleScroll, true);
-
-        // Cleanup
         return () => window.removeEventListener('scroll', handleScroll, true);
     }, []);
+
+    // Body Scroll Lock for Mobile Menu
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -79,138 +91,137 @@ const Header = () => {
     ];
 
     return (
-        <header
-            className={`fixed top-0 left-0 right-0 z-[1000] w-full text-white transition-all duration-700 overflow-hidden ${showBg
-                ? "border-b border-white/5 backdrop-blur-[15px]"
-                : "bg-transparent"
-                }`}
-        >
-            {/* Premium Custom Glowing Background */}
-            <div
-                className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 ${showBg ? "opacity-[0.75]" : "opacity-0"
+        <>
+            <header
+                className={`fixed top-0 left-0 right-0 z-[2000] w-full h-auto text-white transition-all duration-700 ${showBg && !isOpen
+                    ? "border-b border-white/5 backdrop-blur-[15px]"
+                    : "bg-transparent"
                     }`}
-                style={{
-                    background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
-                    filter: "blur(100px)",
-                    transform: "scale(1.2)",
-                }}
-            />
-
-            {/* Add a subtle dark overlay so the text remains perfectly readable over the bright glow */}
-            {/* Subtle overlay removed for transparency */}
-
-            <nav className={`mx-auto flex justify-between items-center transition-all duration-500 relative 
-                ${isPortal ? 'w-full h-16' : 'max-w-[1170px] px-4 md:px-12 py-1'}`}
             >
-                {/* Logo Section - Portal Branded Block */}
-                <div className={`flex items-center h-full transition-all duration-500 ${isPortal ? 'md:w-56 justify-center bg-[#dd2727] shadow-[4px_0_15px_rgba(221,39,39,0.2)]' : ''}`}>
-                    <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
-                        <img
-                            src={logo}
-                            alt="Vahlay Astro Logo"
-                            loading="lazy"
-                            className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-10 w-10 md:h-12 md:w-12' : 'h-16 w-16 md:h-[70px] md:w-[70px]'}`}
-                        />
-                        {isPortal && (
-                            <div className="hidden lg:flex flex-col ml-3 leading-none">
-                                <span className="text-[14px] font-black tracking-tighter text-white">VAHLAY</span>
-                                <span className="text-[8px] font-bold tracking-[0.3em] text-white/50 uppercase">Portal</span>
-                            </div>
-                        )}
-                    </Link>
+                {/* Premium Custom Glowing Background */}
+                <div
+                    className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 overflow-hidden ${showBg && !isOpen ? "opacity-[0.75]" : "opacity-0"
+                        }`}
+                >
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            background: "linear-gradient(145deg, #dd2727 30%, #b0a102 70%)",
+                            filter: "blur(100px)",
+                            transform: "scale(1.2)",
+                        }}
+                    />
                 </div>
 
-                {/* Main Nav Content Wrapper for Portal Alignment */}
-                <div className={`flex-1 flex justify-between items-center h-full ${isPortal ? 'px-6 md:px-10 bg-black/20 backdrop-blur-md' : ''}`}>
-
-                {/* Desktop Navigation */}
-                <ul className="hidden lg:flex items-center gap-6 xl:gap-8 ">
-                    {navLinks.map((link) => (
-                        <li key={link.name}>
-                            <Link
-                                to={link.href}
-                                className="text-[14px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:text-[#dd2727]"
-                            >
-                                {link.name}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-
-                <div className="flex items-center gap-2 md:gap-4">
-                    <div className="hidden lg:flex items-center gap-2">
-                        {user ? (
-                            <>
-                                <Link
-                                    to={isAdmin ? "/admin" : "/dashboard"}
-                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px] hover:text-[#dd2727] uppercase tracking-[0.2em] transition-all duration-500 text-white"
-                                >
-                                    {isAdmin ? "Admin" : "Dashboard"}
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
-                                >
-                                    Logout
-                                </button>
-                            </>
-                        ) : (
-                            <Link
-                                to="/login"
-                                className="ml-2 px-6 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
-                            >
-                                Login
-                            </Link>
-                        )}
-                        <Link
-                            to="/contact"
-                            className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
-                        >
-                            Contact Us
+                <nav className="mx-auto flex justify-between items-center transition-all duration-500 relative max-w-[1170px] px-6 py-0 h-full">
+                    {/* Logo Section */}
+                    <div className={`flex items-center h-full transition-all duration-500 py-2 ${isOpen ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
+                        <Link to="/" className="flex items-center" aria-label="Vahlay Astro Home">
+                            <img
+                                src={logo}
+                                alt="Vahlay Astro Logo"
+                                loading="lazy"
+                                className={`transition-all duration-500 object-contain hover:scale-105 ${showBg ? 'h-12 w-12 md:h-14 md:w-14' : 'h-20 w-20 md:h-[85px] md:w-[85px]'}`}
+                            />
                         </Link>
                     </div>
 
-                        <button
-                            className="lg:hidden flex flex-col gap-1.5 p-2 z-50 focus:outline-none"
-                            onClick={() => setIsOpen(!isOpen)}
-                            aria-label="Toggle Menu"
-                        >
-                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
-                            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-                        </button>
-                    </div>
-                </div>
+                    {/* Desktop Navigation & Right Controls */}
+                    <div className="flex items-center gap-4 lg:gap-8 h-full">
+                        <ul className="hidden lg:flex items-center gap-6 xl:gap-8">
+                            {navLinks.map((link) => (
+                                <li key={link.name}>
+                                    <Link
+                                        to={link.href}
+                                        className="text-[14px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:text-[#dd2727]"
+                                    >
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
 
-                {/* Mobile Navigation Menu */}
-                <div
-                    className={`fixed inset-0 bg-[#0a0a0a]/95 backdrop-blur-2xl transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 z-40 ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-full'
-                        }`}
-                >
+                        <div className="flex items-center gap-2 md:gap-4">
+                            <div className="hidden lg:flex items-center gap-2">
+                                {user ? (
+                                    <>
+                                        <Link
+                                            to={isAdmin ? "/admin" : "/dashboard"}
+                                            className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px] hover:text-[#dd2727] uppercase tracking-[0.2em] transition-all duration-500 text-white"
+                                        >
+                                            {isAdmin ? "Admin" : "Dashboard"}
+                                        </Link>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="ml-2 px-4 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <Link
+                                        to="/login"
+                                        className="ml-2 px-6 py-1.5 rounded-full font-bold text-[14px]  uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    >
+                                        Login
+                                    </Link>
+                                )}
+                                <Link
+                                    to="/contact"
+                                    className="ml-2 px-4 lg:px-6 py-2 rounded-full font-bold text-[14px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap shadow-[0_0_20px_rgba(221,39,39,0.3)]"
+                                >
+                                    Contact Us
+                                </Link>
+                            </div>
+
+                            <button
+                                className="lg:hidden flex flex-col gap-1.5 p-2 z-[1100] focus:outline-none"
+                                onClick={() => setIsOpen(!isOpen)}
+                                aria-label="Toggle Menu"
+                            >
+                                <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                                <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
+                                <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            {/* Mobile Navigation Menu - Moved outside header to fix backdrop-filter positioning bugs */}
+            <div
+                className={`fixed inset-0 bg-[#080808] transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 z-[1050] ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-full'
+                    }`}
+            >
+                {/* Background Decorative Glow */}
+                <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-[#dd2727]/20 blur-[100px] rounded-full pointer-events-none"></div>
+                <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-[#b0a102]/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+                <div className="relative z-10 flex flex-col items-center gap-8 w-full px-6">
                     {navLinks.map((link) => (
                         <Link
                             key={`mobile_${link.name}`}
                             to={link.href}
                             onClick={() => setIsOpen(false)}
-                            className="text-2xl md:text-3xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-[#dd2727] hover:scale-105 transition-all duration-300 whitespace-nowrap"
+                            className="text-3xl font-bold uppercase tracking-[0.25em] text-white hover:text-[#dd2727] transition-all duration-300"
                         >
                             {link.name}
                         </Link>
                     ))}
 
-                    <div className="flex flex-col items-center gap-6 mt-4">
+                    <div className="flex flex-col items-center gap-6 mt-8 w-full max-w-[280px]">
                         {user ? (
                             <>
                                 <Link
                                     to={isAdmin ? "/admin" : "/dashboard"}
                                     onClick={() => setIsOpen(false)}
-                                    className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    className="w-full text-center py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white/20 bg-white/5 text-white hover:bg-white hover:text-black"
                                 >
                                     {isAdmin ? "Admin" : "Dashboard"}
                                 </Link>
                                 <button
                                     onClick={() => { setIsOpen(false); handleLogout(); }}
-                                    className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                    className="w-full text-center py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white/20 bg-white/5 text-white hover:bg-white hover:text-black"
                                 >
                                     Logout
                                 </button>
@@ -219,7 +230,7 @@ const Header = () => {
                             <Link
                                 to="/login"
                                 onClick={() => setIsOpen(false)}
-                                className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white text-white hover:bg-white hover:text-black whitespace-nowrap"
+                                className="w-full text-center py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 border border-white/20 bg-white/5 text-white hover:bg-white hover:text-black"
                             >
                                 Login
                             </Link>
@@ -227,15 +238,14 @@ const Header = () => {
                         <Link
                             to="/contact"
                             onClick={() => setIsOpen(false)}
-                            className="mt-2 px-10 py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] whitespace-nowrap"
+                            className="w-full text-center py-4 rounded-full font-bold text-[15px] uppercase tracking-[0.2em] transition-all duration-500 bg-[#dd2727] text-white hover:bg-white hover:text-[#dd2727] shadow-[0_10px_30px_rgba(221,39,39,0.3)]"
                         >
                             Contact us
                         </Link>
                     </div>
                 </div>
-
-            </nav>
-        </header>
+            </div>
+        </>
     );
 };
 

@@ -204,27 +204,27 @@ const QandAAdminPanel = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
         <Aside />
 
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 pt-20">
           <div className="space-y-10">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase">
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Q&A <span className="text-[#dd2727]">Management</span>
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Moderate inquiries and organize educational responses</p>
+              <p className="text-slate-400 text-sm mt-1 font-medium">Moderate inquiries and organize educational responses</p>
             </div>
             
             <select
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
-              className="w-full md:w-64 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
+              className="w-full md:w-64 bg-gray-50 border border-slate-200 rounded-xl px-5 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer shadow-sm"
             >
-              <option value="" className="bg-[#1a1a1a]">-- Select Course --</option>
+              <option value="" className="bg-white">-- Select Course --</option>
               {courses.map((course) => (
-                <option key={course.id} value={course.courseName} className="bg-[#1a1a1a]">
+                <option key={course.id} value={course.courseName} className="bg-white">
                   {course.courseName} ({course.type})
                 </option>
               ))}
@@ -234,9 +234,9 @@ const QandAAdminPanel = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Q&A Section */}
             <section className="space-y-6">
-              <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
-                <h3 className="text-lg font-bold uppercase tracking-widest text-[#dd2727] mb-6 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xl shadow-slate-200/50">
+                <h3 className="text-lg font-bold uppercase tracking-widest text-[#dd2727] mb-6 flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
                   Interactive Items
                 </h3>
                 
@@ -245,14 +245,14 @@ const QandAAdminPanel = () => {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
+                    className="w-full bg-gray-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder:text-slate-400"
                     placeholder="Inquiry Title"
                   />
                   <input
                     type="text"
                     value={subTitle}
                     onChange={(e) => setSubTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
+                    className="w-full bg-gray-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:ring-2 focus:ring-[#dd2727] transition-all placeholder:text-slate-400"
                     placeholder="Short Context / Subtitle"
                   />
                   <div className="relative">
@@ -260,13 +260,13 @@ const QandAAdminPanel = () => {
                       type="file"
                       accept="video/*"
                       onChange={(e) => setVideoFile(e.target.files[0])}
-                      className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
+                      className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-gray-100 file:text-slate-600 cursor-pointer font-bold uppercase tracking-widest"
                     />
                     {editingId && existingVideoUrl && (
                       <p className="text-[10px] text-[#b0a102] font-bold uppercase mt-2">Current video active</p>
                     )}
                   </div>
-                  <button type="submit" className="w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] py-4 rounded-xl font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg">
+                  <button type="submit" className="w-full bg-[#dd2727] text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:shadow-lg hover:shadow-red-500/30 transition-all">
                     {editingId ? "Update Q&A" : "Create Q&A"}
                   </button>
                 </form>
@@ -274,15 +274,19 @@ const QandAAdminPanel = () => {
 
               <div className="space-y-4">
                 {qandaItems.map((item) => (
-                  <div key={item.id} className="bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 transition-all group">
+                  <div key={item.id} className="bg-white border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-all group shadow-sm">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h4 className="font-bold text-white tracking-wide">{item.title}</h4>
-                        <p className="text-xs text-gray-500 mt-1">{item.subTitle}</p>
+                        <h4 className="font-bold text-slate-900 tracking-wide group-hover:text-[#dd2727] transition-colors">{item.title}</h4>
+                        <p className="text-xs text-slate-400 mt-1 font-medium">{item.subTitle}</p>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleEdit(item)} className="p-2 bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                        <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-500/10 rounded-lg text-red-500 hover:bg-red-500 hover:text-white transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                        <button onClick={() => handleEdit(item)} className="p-2 bg-slate-50 text-slate-400 hover:text-white hover:bg-yellow-500 rounded-lg transition-colors border border-slate-100 shadow-sm">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </button>
+                        <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-600 hover:text-white rounded-lg transition-all border border-red-100 shadow-sm">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
                       </div>
                     </div>
                     {item.videoUrl && (
@@ -297,9 +301,9 @@ const QandAAdminPanel = () => {
 
             {/* Comments Section */}
             <section className="space-y-6">
-              <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
-                <h3 className="text-lg font-bold uppercase tracking-widest text-[#b0a102] mb-6 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xl shadow-slate-200/50">
+                <h3 className="text-lg font-bold uppercase tracking-widest text-[#b0a102] mb-6 flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-[#b0a102] rounded-full"></div>
                   Client Testimonials
                 </h3>
                 
@@ -308,16 +312,16 @@ const QandAAdminPanel = () => {
                     type="text"
                     value={commentName}
                     onChange={(e) => setCommentName(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all"
+                    className="w-full bg-gray-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:ring-2 focus:ring-[#b0a102] transition-all placeholder:text-slate-400"
                     placeholder="Display Name"
                   />
                   <textarea
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all h-24"
+                    className="w-full bg-gray-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 outline-none focus:ring-2 focus:ring-[#b0a102] transition-all h-24 resize-none placeholder:text-slate-400"
                     placeholder="Share the experience..."
                   />
-                  <button type="submit" className="w-full border border-[#b0a102]/30 bg-[#b0a102]/10 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-[#b0a102] hover:text-black transition-all">
+                  <button type="submit" className="w-full bg-[#b0a102] text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:shadow-lg hover:shadow-yellow-500/20 transition-all">
                     {editingCommentId ? "Update Review" : "Post Review"}
                   </button>
                 </form>
@@ -325,14 +329,18 @@ const QandAAdminPanel = () => {
 
               <div className="space-y-4">
                 {comments.map((comm) => (
-                  <div key={comm.id} className="bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 transition-all flex justify-between items-start">
+                  <div key={comm.id} className="bg-white border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-all flex justify-between items-start shadow-sm group">
                     <div className="flex-1 pr-4">
                       <p className="text-xs font-bold text-[#b0a102] uppercase tracking-widest mb-1">{comm.userName}</p>
-                      <p className="text-sm text-gray-300 leading-relaxed italic">"{comm.comment}"</p>
+                      <p className="text-sm text-slate-500 leading-relaxed italic font-medium">"{comm.comment}"</p>
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => handleEditComment(comm)} className="p-2 bg-white/5 rounded-lg text-gray-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                      <button onClick={() => handleDeleteComment(comm.id)} className="p-2 bg-red-500/10 rounded-lg text-red-500 hover:bg-red-500 hover:text-white transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                      <button onClick={() => handleEditComment(comm)} className="p-2 bg-slate-50 text-slate-400 hover:text-white hover:bg-yellow-500 rounded-lg transition-colors border border-slate-100 shadow-sm">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                      </button>
+                      <button onClick={() => handleDeleteComment(comm.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-600 hover:text-white rounded-lg transition-all border border-red-100 shadow-sm">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      </button>
                     </div>
                   </div>
                 ))}

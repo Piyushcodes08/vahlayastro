@@ -64,7 +64,7 @@ const AdminInquiries = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-6 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 pt-20 pb-10 px-6 md:px-10 bg-white">
           <div className="space-y-8">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>

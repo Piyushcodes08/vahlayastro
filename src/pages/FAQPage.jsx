@@ -26,27 +26,41 @@ const FAQPage = () => {
         <>
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                {/* Premium Transparent Cosmic Background - removed for global particles */}
+                <section className="hero-section">
+                    {/* Background Glows */}
+                    <div className="bg-glow-container">
+                        <div className="absolute top-[20%] left-[10%] w-[600px] h-[600px] bg-glow-red opacity-45"></div>
+                        <div className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-glow-gold opacity-20"></div>
+                    </div>
 
-                {/* Glow Effects */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/20 blur-[180px] rounded-full pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-400/10 blur-[180px] rounded-full pointer-events-none"></div>
+                    <div className="section-container">
+                        <div className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4">
+                            <span className="inline-block px-8 py-2 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5 mb-6">
+                                <span className="text-[#dd2727] text-sm font-bold uppercase tracking-[0.3em]">
+                                    Cosmic Inquiries
+                                </span>
+                            </span>
+                            <h1 className="title-batangas text-5xl md:text-7xl mb-6 text-white leading-tight">
+                                Frequently Asked <br /> <span className="text-[#dd2727]">Questions</span>
+                            </h1>
+                            <p className="subtitle-poppins text-lg md:text-xl text-white/80 max-w-2xl mx-auto font-medium">
+                                Find answers to the most common questions about our sacred astrological 
+                                services and consultation processes.
+                            </p>
+                        </div>
+                    </div>
+                </section>
 
-                <div className="relative w-full min-h-[40vh] pt-32 pb-16 flex flex-col items-center justify-center text-center px-4">
-                    <h1 className="title-batangas text-6xl mb-6 text-white">Frequently Asked Questions</h1>
-                    <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
-                        Find answers to the most common questions about our astrological services and consultation processes.
-                    </p>
-                </div>
-
-                <section className="max-w-[1170px] mx-auto px-4 py-16">
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {faqs.map((faq, index) => (
-                            <div key={index} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-[#dd2727]/40 shadow-[0_10px_40px_rgba(0,0,0,0.25)] transition-all duration-500">
-                                <h3 className="title-batangas text-2xl md:text-3xl mb-4 text-[#dd2727]">{faq.question}</h3>
-                                <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">{faq.answer}</p>
-                            </div>
-                        ))}
+                <section>
+                    <div className="section-container">
+                        <div className="max-w-4xl mx-auto space-y-6">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-[#dd2727]/40 shadow-[0_10px_40px_rgba(0,0,0,0.25)] transition-all duration-500">
+                                    <h3 className="title-batangas text-2xl md:text-3xl mb-4 text-[#dd2727]">{faq.question}</h3>
+                                    <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
             </main>

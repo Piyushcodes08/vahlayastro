@@ -2,116 +2,51 @@
   width: 100%;
   background: transparent;
   position: relative;
-  padding-bottom: 100px;
+  overflow: hidden;
 }
-
-
-
-/* Heading and container styles handled by common project classes */
 
 .quote-row {
   width: 100%;
-  min-height: 640px;
+  min-height: 600px;
   display: flex;
   align-items: center;
   position: relative;
   justify-content: center;
   margin: 0 auto;
-  /* Prevents orbit cards from being clipped */
-  overflow: visible;
 }
 
-/* Orbit lines removed */
 .quote-column {
   position: absolute;
   padding: 0 !important;
-  overflow: visible;
-  transition:
-    top 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    left 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.35s ease,
-    filter 0.35s ease,
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    z-index 0s;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   background: transparent;
   border: none;
-  box-shadow: none;
   cursor: pointer;
-  appearance: none;
   z-index: 5;
-  pointer-events: auto;
 }
 
-/* Boost z-index on hover so orbit cards are always above the active card */
-.quote-column:not(.col-active):hover {
-  z-index: 25;
-}
-
-.horoscope-float {
-  animation: horoscopeFloat 4.8s ease-in-out infinite alternate;
-}
-
-.quote-column:nth-child(odd) {
-  animation-delay: -1.4s;
-}
-
-.quote-column:nth-child(even) {
-  animation-delay: -2.2s;
-}
-
-@keyframes horoscopeFloat {
-  from {
-    margin-top: -7px;
-  }
-
-  to {
-    margin-top: 7px;
-  }
-}
-
-/* Active center card - premium glassmorphic */
 .col-active {
-  width: min(90%, 450px) !important;
-  min-width: unset;
+  width: min(90%, 500px) !important;
   height: auto !important;
   transform: translate(-50%, -50%) !important;
-  top: 52% !important;
+  top: 50% !important;
   left: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-
-  /* Premium layered background */
   background: linear-gradient(
     160deg,
-    rgba(80, 18, 18, 0.92) 0%,
-    rgba(50, 12, 12, 0.97) 60%,
-    rgba(30, 8, 8, 1) 100%
+    rgba(30, 8, 8, 0.95) 0%,
+    rgba(15, 5, 5, 0.98) 100%
   ) !important;
-
-  /* Glowing red-gold top border accent */
-  border: none !important;
-  border-radius: 18px;
-  overflow: hidden;
+  border-radius: 2.5rem;
   z-index: 20;
   cursor: default;
-  animation: none;
-
-  /* Glassmorphism */
-  backdrop-filter: blur(24px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
-
-  /* Multi-layer premium shadow */
-  box-shadow:
-    0 0 0 1px rgba(221, 39, 39, 0.35),
-    0 0 0 1px rgba(176, 161, 2, 0.15),
-    0 8px 32px rgba(0, 0, 0, 0.55),
-    0 2px 8px rgba(221, 39, 39, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(221, 39, 39, 0.2);
+  padding: 40px !important;
 }
 
-/* Glowing top accent line */
 .col-active::before {
   content: '';
   position: absolute;
@@ -119,404 +54,118 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #dd2727 30%, #b0a102 70%, transparent);
-  z-index: 1;
-  border-radius: 18px 18px 0 0;
-}
-
-.col-inner {
-  position: relative;
-  width: 100%;
-  max-width: 100px;
-  overflow: visible;
-}
-
-.col-active .col-inner {
-  max-width: 100%;
-  padding: 20px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: linear-gradient(90deg, transparent, #dd2727, transparent);
 }
 
 .author-meta {
-  width: 100%;
-  position: relative;
   display: flex;
-  align-items: center;
-  gap: 16px;
-  border: none;
-  transition: all 0.45s ease;
-}
-
-.col-active .author-meta {
-  /* Override horizontal flex to vertical centered */
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  gap: 10px;
-  border-bottom: none !important;
-  padding-bottom: 12px;
-  margin-bottom: 4px;
-  position: relative;
-  width: 100%;
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
-.col-active .author-meta::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(221, 39, 39, 0.5) 30%, rgba(176, 161, 2, 0.4) 70%, transparent);
-}
-
-/* Normal rashi icons - premium dark glassmorphic circle */
 .image-cover {
-    position: relative;
-    flex-shrink: 0;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-radius: 50%;
-    z-index: 1;
-    transition: all 0.45s ease;
-    padding: 6px;
-
-    /* Deep dark layered background */
-    background: radial-gradient(
-        circle at 35% 35%,
-        rgba(90, 18, 18, 0.85) 0%,
-        rgba(40, 8, 8, 0.92) 55%,
-        rgba(15, 3, 3, 0.97) 100%
-    );
-
-    /* Glowing border */
-    border: 1.5px solid rgba(221, 39, 39, 0.45) !important;
-    box-shadow:
-        0 0 0 1px rgba(176, 161, 2, 0.12),
-        0 4px 16px rgba(0, 0, 0, 0.5),
-        0 0 18px rgba(221, 39, 39, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
-
-    /* Glassmorphism */
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    padding: 6px !important;
-}
-
-/* Inner ambient glow layer */
-.image-cover::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(
-        circle at 30% 30%,
-        rgba(221, 39, 39, 0.25) 0%,
-        rgba(176, 161, 2, 0.12) 50%,
-        transparent 80%
-    );
-    z-index: 0;
-    pointer-events: none;
-    transition: opacity 0.45s ease;
-}
-
-.image-cover::after {
-    display: none !important;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #dd2727;
+  overflow: hidden;
+  background: rgba(221, 39, 39, 0.1);
+  box-shadow: 0 0 20px rgba(221, 39, 39, 0.3);
+  padding: 5px;
+  transition: all 0.3s ease;
 }
 
 .quote-column:not(.col-active):hover .image-cover {
-    transform: scale(1.1);
-    border-color: rgba(176, 161, 2, 0.6) !important;
-    box-shadow:
-        0 0 0 1px rgba(221, 39, 39, 0.3),
-        0 6px 24px rgba(0, 0, 0, 0.6),
-        0 0 28px rgba(176, 161, 2, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-.quote-column:not(.col-active):hover .image-cover::before {
-    opacity: 1.5;
-}
-
-.col-active .image-cover {
-  position: relative;
-  width: 60px !important;
-  height: 60px !important;
-  border-radius: 50% !important;
-  flex-shrink: 0;
-  border: 1.5px solid rgba(221, 39, 39, 0.45) !important;
-  box-shadow:
-    0 0 0 1px rgba(176, 161, 2, 0.15),
-    0 0 20px rgba(221, 39, 39, 0.2) !important;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(90, 18, 18, 0.85) 0%,
-    rgba(15, 3, 3, 0.97) 100%
-  ) !important;
-  margin-bottom: 4px;
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(221, 39, 39, 0.5);
 }
 
 .image-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.6s ease;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
-}
-
-.quote-column:hover .image-cover img {
-  transform: scale(1.06);
-}
-
-.author-info {
-  width: 70%;
-  padding: 8px 4px;
-  overflow: hidden;
-  visibility: hidden;
-}
-
-.col-active .author-info {
-  visibility: visible;
-  width: 100%;
-  text-align: center;
-  padding: 0;
-}
-
-.author-info .author-name,
-.author-info .person-title {
-  transform: translateX(-100%);
-  transition: 0.42s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-}
-
-.show .author-info .author-name,
-.show .author-info .person-title {
-  transform: translateX(0);
-}
-
-.show .author-info .person-title {
-  transition-delay: 0.14s;
+  border-radius: 50%;
 }
 
 .person-name {
-  font-size: 16px;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #fff;
-  /* margin: 0 0 8px; */
-  letter-spacing: -0.02em;
-  text-shadow:
-    0 0 20px rgba(221, 39, 39, 0.4),
-    0 2px 12px rgba(0, 0, 0, 0.5);
+  font-family: 'Batangas', sans-serif;
+  margin: 0;
 }
 
 .person-title {
-  display: inline-block;
-  width: fit-content;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #ffd782;
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 10px rgba(176, 161, 2, 0.5);
+  color: #dd2727;
   text-transform: uppercase;
-  margin: 0;
-  opacity: 0.9;
+  letter-spacing: 0.2em;
+  margin: 5px 0 0 0;
 }
 
 .quote-wrapper {
-  position: relative;
-  width: 100%;
-  color: #fff;
-  padding: 10px 10px 8px;
-  text-align: left;
-  overflow: hidden;
-  visibility: hidden;
-}
-
-.col-active .quote-wrapper {
-  visibility: visible;
-  text-align: center;
-  width: 100%;
-  padding: 12px 16px 8px;
-}
-
-.box-text-inner {
-  max-width: 100%;
-  margin: auto;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 15px;
-  line-height: 1.78;
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
   text-align: center;
 }
 
 .box-text-inner p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
 }
 
-/* Quote black overlay removed */
-.quote-wrapper .quote-symbol {
-  display: none !important;
+/* Hide inactive content on orbit */
+.quote-column:not(.col-active) .author-info,
+.quote-column:not(.col-active) .quote-wrapper {
+  display: none;
 }
 
-/* Prev Next Controls */
-.horoscope-controls {
-  position: absolute;
-  left: 50%;
-  bottom: -40px;
-  transform: translateX(-50%);
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 24px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(66, 18, 18, 0.88), rgba(40, 10, 10, 0.95));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(221, 39, 39, 0.25);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(176, 161, 2, 0.1);
+/* Orbit specific styling for non-active */
+.quote-column:not(.col-active) .image-cover {
+  width: 60px;
+  height: 60px;
 }
 
-.horoscope-controls button {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-  font-size: 28px;
-  line-height: 1;
-  background: rgba(221, 39, 39, 0.85);
-  box-shadow: none;
-  transition: transform 0.25s ease, background 0.25s ease;
-}
-
-.horoscope-controls button:hover {
-  transform: scale(1.06);
-  background: rgba(255, 190, 80, 0.9);
-}
-
-.horoscope-controls span {
-  min-width: 70px;
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.84);
-}
-
-/* Tablet */
-@media (max-width: 1080px) {
+@media (max-width: 1024px) {
   .quote-row {
-    min-height: 620px;
+    min-height: 550px;
   }
-
-  .orbit-ring {
-    display: none !important;
-  }
-
-  .col-active {
-    width: min(88%, 430px) !important;
+  
+  .quote-column:not(.col-active) .image-cover {
+    width: 50px;
+    height: 50px;
   }
 }
 
-/* Small Tablet */
-@media (max-width: 840px) {
-  .horoscope-section {
-    padding: 80px 18px 60px;
-  }
-
-  .quote-row {
-    min-height: 600px;
-  }
-
-  .col-active {
-    width: 82% !important;
-  }
-}
-
-/* Mobile */
 @media (max-width: 640px) {
-  .horoscope-section {
-    padding: 70px 16px 60px;
-    min-height: auto;
-  }
-
-  .horoscope-heading {
-    padding-bottom: 24px;
-  }
-
   .quote-row {
-    min-height: 500px;
+    min-height: 450px;
   }
 
-  .orbit-ring {
-    display: none !important;
-  }
-
-  .quote-column {
-    width: 90% !important;
-    top: 50% !important;
-    left: 50% !important;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95) !important;
-    height: auto !important;
-    z-index: 0;
-    pointer-events: none;
+  .quote-column:not(.col-active) {
+    display: none;
   }
 
   .col-active {
-    opacity: 1;
-    z-index: 20;
     width: 90% !important;
-    pointer-events: auto;
+    padding: 30px !important;
+    border-radius: 2rem;
   }
 
-  .col-active .col-inner {
-    padding: 18px;
-  }
-
-  .author-meta {
-    gap: 12px;
-  }
-
-  .col-active .image-cover {
-    width: 90px !important;
-    height: 90px !important;
-    border-radius: 18px !important;
-  }
-
-  .author-info,
-  .quote-wrapper {
-    visibility: visible;
+  .image-cover {
+    width: 70px;
+    height: 70px;
   }
 
   .person-name {
-    font-size: 26px;
+    font-size: 1.25rem;
   }
 
-  .person-title {
-    font-size: 12px;
+  .box-text-inner p {
+    font-size: 1rem;
   }
-
-  .box-text-inner {
-    font-size: 14px;
-    line-height: 1.65;
-  }
-
-  .quote-wrapper {
-    padding: 16px 4px 4px;
-  }
-
-  .horoscope-controls {
-    bottom: 0;
-  }
-}
+}

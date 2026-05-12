@@ -495,10 +495,10 @@ const EMIDetails = () => {
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
       
-      <div className="flex flex-1 relative z-10 pt-16">
+      <div className="flex flex-1 relative z-10">
         <Aside />
         
-        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10">
+        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
             {/* Page Header */}

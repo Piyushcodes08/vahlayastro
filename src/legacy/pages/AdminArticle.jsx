@@ -3,6 +3,7 @@ import { db, storage } from "../../firebaseConfig";
 import SideBar from "./Admin";
 import Header from "../../components/sections/Header/Header";
 import Footer from "../../components/sections/Footer/Footer";
+import { useNavigate } from "react-router-dom";
 import {
   collection,
   getDocs,
@@ -10,10 +11,16 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+const slugify = (text) =>
+  text?.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-");
+
+
 const AdminArticles = () => {
+  const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -23,7 +30,12 @@ const AdminArticles = () => {
     hindi: "",
     author: "",
     type: "Career",
+    rawDate: "",
     data: "",
+    description: "",
+    dhindi: "",
+    denglish: "",
+    referenceLink: "",
     image: null,
     imageUrl: "",
     sTitle: "",
@@ -76,10 +88,10 @@ const AdminArticles = () => {
   };
 
   const handleSaveArticle = async () => {
-    const { title, hindi, author, type, data, image, imageUrl, sTitle, sDesc, sKeywords } = formState;
+    const { title, author, type, rawDate, data, denglish, dhindi, description, referenceLink, image, imageUrl, sTitle, sDesc, sKeywords, hindi } = formState;
 
-    if (!title || !author || !type || !data) {
-      showAlert("Please fill in all required fields.", "error");
+    if (!title || !author || !type) {
+      showAlert("Please fill in Title, Author, and Category.", "error");
       return;
     }
 
@@ -93,24 +105,41 @@ const AdminArticles = () => {
         finalImageUrl = await getDownloadURL(imageRef);
       }
 
+      // Format date: if rawDate is provided (YYYY-MM-DD), format it; else keep existing data string
+      let formattedDate = data;
+      if (rawDate) {
+        const dateObj = new Date(rawDate);
+        const options = { month: "long", day: "numeric", year: "numeric" };
+        formattedDate = dateObj.toLocaleDateString("en-US", options);
+      }
+
+      // Handle keywords as array
+      const keywordArray = typeof sKeywords === 'string'
+        ? sKeywords.split(',').map(kw => kw.trim()).filter(kw => kw.length > 0)
+        : sKeywords || [];
+
       const articleData = {
         title,
         hindi,
         author,
         type,
-        data,
+        data: formattedDate,
+        rawDate: rawDate || "",
+        description,
+        dhindi,
+        denglish,
+        referenceLink,
         imageUrl: finalImageUrl,
         sTitle,
         sDesc,
-        sKeywords,
-        timestamp: new Date(),
+        sKeywords: keywordArray,
       };
 
       if (editMode) {
         await updateDoc(doc(db, "Articles", currentArticleId), articleData);
         showAlert("Article updated successfully!", "success");
       } else {
-        await addDoc(collection(db, "Articles"), articleData);
+        await addDoc(collection(db, "Articles"), { ...articleData, createdAt: serverTimestamp() });
         showAlert("Article created successfully!", "success");
       }
 
@@ -146,7 +175,12 @@ const AdminArticles = () => {
       hindi: "",
       author: "",
       type: "Career",
+      rawDate: "",
       data: "",
+      description: "",
+      dhindi: "",
+      denglish: "",
+      referenceLink: "",
       image: null,
       imageUrl: "",
       sTitle: "",
@@ -175,7 +209,7 @@ const AdminArticles = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-20 px-6 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 pt-16 pb-20 px-6 md:px-10 bg-white">
           <div className="space-y-12">
             <div className="flex justify-between items-center">
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -229,11 +263,34 @@ const AdminArticles = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Publish Date</label>
-                    <input type="date" name="data" value={formState.data} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
+                    <input type="date" name="rawDate" value={formState.rawDate} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Featured Image</label>
                     <input type="file" onChange={handleFileChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Reference Video Link</label>
+                    <input type="url" name="referenceLink" value={formState.referenceLink} onChange={handleInputChange} placeholder="https://youtube.com/..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none placeholder:text-gray-300" />
+                  </div>
+
+                  {/* Article Content Section */}
+                  <div className="md:col-span-2 lg:col-span-3 pt-6 border-t border-gray-100 mt-4">
+                    <h4 className="text-xs font-black text-[#dd2727] uppercase tracking-[0.2em] mb-2">Article Content</h4>
+                    <p className="text-[10px] text-slate-400 font-medium">This is the body text displayed on the article detail page.</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Short Description (English)</label>
+                    <textarea name="description" value={formState.description} onChange={handleInputChange} placeholder="A brief intro shown on the article card..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-28 resize-none placeholder:text-gray-300" />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">English Body (denglish)</label>
+                    <textarea name="denglish" value={formState.denglish} onChange={handleInputChange} placeholder="Full article content in English..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-48 resize-none placeholder:text-gray-300" />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Hindi Body (dhindi)</label>
+                    <textarea name="dhindi" value={formState.dhindi} onChange={handleInputChange} placeholder="पूर्ण लेख सामग्री हिंदी में..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-48 resize-none placeholder:text-gray-300" />
                   </div>
 
                   {/* SEO Section */}
@@ -308,7 +365,28 @@ const AdminArticles = () => {
                         {article.hindi && <p className="text-xs text-slate-500 font-medium line-clamp-1">{article.hindi}</p>}
                       </div>
                       <div className="flex gap-3 mt-auto pt-4 border-t border-slate-50">
-                        <button onClick={() => { setEditMode(true); setCurrentArticleId(article.id); setFormState({ ...article, image: null }); setFormVisible(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex-1 bg-[#dd2727] border border-slate-100 py-1 rounded-xl text-xs font-semibold uppercase tracking-widest text-white hover:bg-slate-50 hover:text-[#dd2727] transition-all">Edit</button>
+                        <button
+                          onClick={() => {
+                            setEditMode(true);
+                            setCurrentArticleId(article.id);
+                            // Convert keywords array back to string for the textarea
+                            const keywordsString = Array.isArray(article.sKeywords) 
+                              ? article.sKeywords.join(", ") 
+                              : article.sKeywords || "";
+                            
+                            setFormState({ 
+                              ...article, 
+                              sKeywords: keywordsString,
+                              type: article.type || "Career", // Default to Career if missing
+                              image: null 
+                            });
+                            setFormVisible(true);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="flex-1 bg-[#dd2727] border border-slate-100 py-1 rounded-xl text-xs font-semibold uppercase tracking-widest text-white hover:bg-slate-50 hover:text-[#dd2727] transition-all"
+                        >
+                          Edit
+                        </button>
                         <button onClick={() => handleDeleteArticle(article.id)} disabled={isDeleting} className="px-5 py-3 bg-[#dd2727] text-white border border-red-100 rounded-xl hover:bg-white hover:text-[#dd2727] transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
                       </div>
                     </div>

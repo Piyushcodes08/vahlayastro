@@ -159,26 +159,27 @@ const AddCourse = () => {
       <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 admin-fluid-container gap-10 pb-20">
         <SideBar />
 
-        <main className="flex-1 py-8">
+        <main className="flex-1 py-8 pt-20">
           <div className="space-y-12">
             <div className="flex justify-between items-center">
-               <h2 className="text-4xl font-bold text-white uppercase tracking-tighter">
+               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Course <span className="text-[#dd2727]">Management</span>
               </h2>
               <button
                 onClick={() => setIsFormVisible(!isFormVisible)}
-                className="bg-[#dd2727] text-white px-8 py-3 rounded-2xl font-bold uppercase tracking-widest hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all"
+                className="bg-[#dd2727] text-white px-3 text-xs py-2 rounded-2xl uppercase tracking-widest hover:shadow-[0_0_30px_rgba(221,39,39,0.5)] transition-all"
               >
-                {isFormVisible ? "X" : "Add New Course"}
+                {isFormVisible ? "X" : "add new course"}
               </button>
             </div>
 
             {isFormVisible && (
-              <div className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-10 md:p-16 shadow-2xl animate-in zoom-in-95 duration-500 relative overflow-hidden group">
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-xl shadow-slate-200/50 animate-in zoom-in-95 duration-500 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-[#dd2727]/5 rounded-full blur-[100px]"></div>
                 
                 {/* ORIGINAL TITLE: Add Course / Edit Course */}
-                <h3 className="text-2xl font-bold text-white mb-12 uppercase tracking-widest border-b border-white/5 pb-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-12 pb-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
                   {editingCourseId ? "Edit Course" : "Add Course"}
                 </h3>
 
@@ -188,7 +189,7 @@ const AddCourse = () => {
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Title</label>
                     <input
                       type="text"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-400"
                       value={courseTitle}
                       onChange={(e) => setCourseTitle(e.target.value)}
                       placeholder="Enter course title"
@@ -199,7 +200,7 @@ const AddCourse = () => {
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Subtitle</label>
                     <input
                       type="text"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-700"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-400"
                       value={courseSubTitle}
                       onChange={(e) => setCourseSubTitle(e.target.value)}
                       placeholder="Enter course Sub title"
@@ -209,7 +210,7 @@ const AddCourse = () => {
                     {/* ORIGINAL LABEL: Course Type */}
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Type</label>
                     <select
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
                       value={courseType}
                       onChange={(e) => setCourseType(e.target.value)}
                     >
@@ -219,15 +220,15 @@ const AddCourse = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Title</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Enter SEO Title" />
+                    <input type="text" className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Enter SEO Title" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Description</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} placeholder="Enter SEO Description" />
+                    <input type="text" className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} placeholder="Enter SEO Description" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">SEO Keywords (comma separated)</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. astrology, horoscope, zodiac" />
+                    <input type="text" className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. astrology, horoscope, zodiac" />
                   </div>
                   
                   {courseType === "paid" && (
@@ -235,7 +236,7 @@ const AddCourse = () => {
                       <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Price</label>
                       <input
                         type="number"
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Enter course price"
@@ -246,7 +247,7 @@ const AddCourse = () => {
                     <div className="space-y-2 animate-in slide-in-from-right-4 duration-300">
                       <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Status</label>
                       <select
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer"
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                       >
@@ -269,7 +270,7 @@ const AddCourse = () => {
 
                 <div className="mt-8 space-y-2">
                   <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Course Image</label>
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center group/upload hover:border-[#dd2727]/50 transition-all cursor-pointer relative">
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center group/upload hover:border-[#dd2727]/50 transition-all cursor-pointer relative">
                     <input
                       type="file"
                       accept="image/*"
@@ -286,7 +287,7 @@ const AddCourse = () => {
                 <div className="mt-12">
                   <button
                     onClick={handleAddOrUpdateCourse}
-                    className={`w-full bg-[#dd2727] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(221,39,39,0.5)] transition-all transform hover:scale-[1.01] active:scale-95 ${isUploading ? "cursor-not-allowed opacity-50" : ""}`}
+                    className={`w-full bg-[#dd2727] text-white py-5 rounded-xl font-bold uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(221,39,39,0.5)] transition-all transform hover:scale-[1.01] active:scale-95 ${isUploading ? "cursor-not-allowed opacity-50" : ""}`}
                     disabled={isUploading}
                   >
                     {isUploading ? "Transmitting Data..." : editingCourseId ? "Update Course" : "Add Course"}
@@ -298,24 +299,28 @@ const AddCourse = () => {
             {/* Courses List */}
             <div className="space-y-8">
               {/* ORIGINAL TITLE: Courses */}
-              <h3 className="text-2xl font-bold text-white flex items-center gap-4">
-                <span className="w-1.5 h-8 bg-[#b0a102] rounded-full shadow-[0_0_15px_rgba(176,161,2,0.5)]"></span>
-                Courses
+              <h3 className="text-xl font-bold text-slate-900 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="w-1.5 h-6 bg-[#b0a102] rounded-full"></span>
+                  Course Library ({courses.length})
+                </div>
               </h3>
-              <div className="bg-white/5 border border-white/5 rounded-[3rem] overflow-hidden backdrop-blur-3xl shadow-2xl">
-                <ul className="divide-y divide-white/5">
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                <ul className="divide-y divide-slate-100">
                   {courses.map((course) => (
                     <li
                       key={course.id}
-                      className="p-8 flex justify-between items-center hover:bg-white/5 transition-all group"
+                      className="p-8 flex justify-between items-center hover:bg-slate-50 transition-all group"
                     >
                       <div className="flex items-center gap-6">
-                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#dd2727]/30 transition-all">
-                          <span className="text-[10px] font-bold text-gray-500 group-hover:text-[#dd2727] transition-all uppercase tracking-tighter">ID: {course.id.substring(0,4)}</span>
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:border-[#dd2727]/30 transition-all">
+                          <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#dd2727] transition-all uppercase tracking-tighter">ID: {course.id.substring(0,4)}</span>
                         </div>
                         <div>
-                          <span className="text-lg text-white font-bold tracking-tight group-hover:text-[#dd2727] transition-all uppercase">{course.title}</span>
-                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">{course.type} • {course.status || 'Active'}</p>
+                          <span className="text-lg text-slate-900 font-bold tracking-tight group-hover:text-[#dd2727] transition-all uppercase">
+                            {course.title || course.Title || "Untitled Course"}
+                          </span>
+                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{course.type} • {course.status || 'Active'}</p>
                         </div>
                       </div>
                       <div className="flex space-x-6">
@@ -327,7 +332,7 @@ const AddCourse = () => {
                         </button>
                         <button
                           onClick={() => handleDeleteCourse(course.id, course.type)}
-                          className="text-[10px] font-bold uppercase tracking-widest text-red-600 hover:text-white transition-all border-b border-transparent hover:border-red-600"
+                          className="text-[10px] font-bold uppercase tracking-widest text-[#dd2727] hover:bg-red-50 px-4 py-2 rounded-lg transition-all"
                         >
                           Delete
                         </button>

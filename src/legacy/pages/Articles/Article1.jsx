@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { collection, doc, getDoc, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { RiShareForwardFill, RiFacebookFill, RiTwitterFill, RiLinkedinFill, RiWhatsappFill } from "react-icons/ri";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 const slugify = (text) =>
   text?.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-");
 
@@ -94,12 +94,24 @@ const ArticlePage = () => {
   useEffect(() => {
     const fetchFAQs = async () => {
       try {
-        const querySnapshot = await getDocs(query(collection(db, "Articles"), orderBy("createdAt", "desc")));
+        const querySnapshot = await getDocs(query(collection(db, "Articles")));
         const results = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          slug: slugify(doc.data().title),  // add slug here
+          slug: slugify(doc.data().title),
           ...doc.data(),
         }));
+
+        // Sort client-side to avoid missing index errors
+        results.sort((a, b) => {
+          const getTime = (item) => {
+            if (item.createdAt?.seconds) return item.createdAt.seconds * 1000;
+            if (item.timestamp?.seconds) return item.timestamp.seconds * 1000;
+            if (item.data) return new Date(item.data).getTime();
+            return 0;
+          };
+          return getTime(b) - getTime(a);
+        });
+
         setFaqs(results);
       } catch (error) {
         console.error("Error fetching FAQs: ", error);

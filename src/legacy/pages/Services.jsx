@@ -1,150 +1,171 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const Services = () => {
   const services = [
     {
-      title: "Courses",
+      title: "Sacred Courses",
       img: "/assets/courses.jpg",
-      description: "Read More",
+      description: "Dive deep into the ancient knowledge of Astrology through our comprehensive courses designed for modern seekers.",
       link: "/courses",
+      icon: "📚"
     },
     {
-      title: "Consultation",
+      title: "Cosmic Consultation",
       img: "/assets/consulting.webp",
-      description: "Read More",
+      description: "Get personalized guidance and planetary insights through one-on-one sessions with our expert astrologers.",
       link: "/consulting",
+      icon: "🧘"
     },
     {
-      title: "Articles",
+      title: "Celestial Articles",
       img: "/assets/books.webp",
-      description: "Read More",
+      description: "Explore a vast library of celestial wisdom and planetary insights through our curated spiritual articles.",
       link: "/articles",
+      icon: "📜"
     },
   ];
 
   const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.2 },
+      transition: { staggerChildren: 0.3 },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen text-sm">
-      {/* Hero Section */}
-      <div className="relative bg-gray-50" style={{
-  backgroundImage: "url('https://res.cloudinary.com/dzdnwpocf/image/upload/v1753466288/Screenshot_2024-11-28_211019_ascx1z.png')"
-}}>
-        <div className="max-w-screen-xl mx-auto px-6 lg:px-20 py-12 lg:py-20 flex flex-col lg:flex-row items-center gap-12">
-          {/* Left Section - Text */}
-          <div className="flex-1 space-y-6 text-center lg:text-left">
-            <motion.h1
-              className="text-xl md:text-4xl font-bold text-red-600 leading-tight"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              Unlock the Secrets <br />
-              of the <span className="text-gray-800">Vahlay Astro</span>
-            </motion.h1>
-            <motion.p
-              className="text-gray-700  leading-relaxed"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-            >
-              Discover our astrology services designed to provide insights and guidance 
-              to help you align with your life's purpose.
-            </motion.p>
+    <div className="min-h-screen flex flex-col relative">
+      <Header />
+      
+      <main className="flex-1 relative z-10">
+        {/* Hero Section - Matching Landing Page Style */}
+        <section className="relative h-[100dvh] flex items-center overflow-hidden text-center">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="flex flex-col items-center"
             >
-              
+              <span className="text-[#dd2727] font-black uppercase tracking-[0.5em] text-[10px] mb-6 block bg-red-600/10 px-4 py-2 rounded-full border border-red-600/20 backdrop-blur-sm">
+                Sacred Portfolio
+              </span>
+              <h1 className="text-5xl md:text-8xl font-black text-white leading-[1.1] mb-8 uppercase tracking-tighter">
+                Explore Our <br />
+                <span className="text-[#dd2727]">Divine Services</span>
+              </h1>
+              <p className="text-gray-400 text-lg md:text-xl max-w-3xl leading-relaxed font-medium">
+                We offer a wide range of astrology-based solutions to help you navigate 
+                life's cosmic path with clarity, purpose, and spiritual wisdom.
+              </p>
+            </motion.div>
+          </div>
+          
+          {/* Decorative Elements matching landing page */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+        </section>
+
+        {/* Services Grid Section */}
+        <section className="py-24 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-12"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {services.map((service, index) => (
+                <motion.div
+                  key={index}
+                  className="group relative"
+                  variants={cardVariants}
+                >
+                  {/* Glassmorphic Card */}
+                  <div className="relative bg-white/5 backdrop-blur-md rounded-[3rem] border border-white/10 overflow-hidden h-full flex flex-col shadow-2xl transition-all duration-500 hover:border-red-600/50 hover:bg-white/10 group-hover:-translate-y-4">
+                    
+                    {/* Image Area */}
+                    <div className="relative h-72 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent z-10"></div>
+                      <img
+                        src={service.img}
+                        alt={service.title}
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                      <div className="absolute top-6 left-8 z-20">
+                         <span className="w-12 h-12 flex items-center justify-center bg-[#dd2727] text-2xl rounded-2xl shadow-xl transform -rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                           {service.icon}
+                         </span>
+                      </div>
+                      <div className="absolute bottom-6 left-8 z-20">
+                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none mb-1">
+                          {service.title.split(' ')[0]} <br />
+                          <span className="text-[#dd2727]">{service.title.split(' ')[1]}</span>
+                        </h3>
+                      </div>
+                    </div>
+                    
+                    {/* Content Area */}
+                    <div className="p-10 flex flex-col flex-1">
+                      <p className="text-gray-400 leading-relaxed mb-10 font-medium text-lg">
+                        {service.description}
+                      </p>
+                      
+                      <div className="mt-auto">
+                        <Link 
+                          to={service.link}
+                          className="flex items-center justify-center gap-3 w-full py-5 bg-[#dd2727] text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white hover:text-black transition-all shadow-[0_10px_40px_-10px_rgba(221,39,39,0.5)] active:scale-95"
+                        >
+                          Continue Path
+                          <svg className="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Red Glow Background Effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-600 rounded-[3rem] blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
 
-          {/* Right Section - Image */}
-          <motion.div
-            className="md:flex-1 flex items-center justify-between"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-          >
-             
-          <img
-            src="https://res.cloudinary.com/dzdnwpocf/image/upload/v1753466298/wheel_no6cpe.png" // Replace with the correct image path
-            alt="Astrology Chart"
-           className="lg:w-full animate-slowspin"
-          />
-       
-          </motion.div>
-        </div>
-      </div>
+          {/* Large Background Text */}
+          <div className="absolute top-0 right-0 text-[20vw] font-black text-white/[0.02] leading-none select-none -z-10 tracking-tighter translate-x-1/4 translate-y-1/4">
+            VAHLAY
+          </div>
+        </section>
 
-      {/* Services Section */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-xl md:text-4xl font-bold text-red-800">What We Offer</h2>
-          <p className="text-gray-600 mt-4">
-            We provide a range of astrology services designed to help you unlock deeper insights into your life.
-          </p>
-        </motion.div>
-
-        {/* Cards Section */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              className="relative bg-white border-orange-100  rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-              variants={cardVariants}
-            >
-              <img
-                src={service.img}
-                alt={service.title}
-                className="h-60 w-full object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold text-red-800">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 mt-4">{service.description}</p>
-              </div>
-              {service.link ? (
-                <Link to={service.link}>
-                  <motion.div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-40 flex items-center justify-center text-white text-lg font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300">
-                    Learn More
-                  </motion.div>
+        {/* Call to Action Section */}
+        <section className="py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gradient-to-r from-[#dd2727] to-[#b91c1c] rounded-[4rem] p-12 md:p-20 text-center relative overflow-hidden group shadow-2xl">
+              <div className="relative z-10">
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-8 uppercase tracking-tighter">Ready to Begin Your <br /> <span className="text-white/60">Celestial Journey?</span></h2>
+                <Link to="/contact" className="inline-block px-12 py-5 bg-white text-[#dd2727] rounded-2xl font-black uppercase tracking-[0.3em] text-xs hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95">
+                  Book a Consultation
                 </Link>
-              ) : (
-                <motion.div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-40 flex items-center justify-center text-white text-lg font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  Learn More
-                </motion.div>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+              </div>
+              
+              {/* Animated Background Sparkles */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 };

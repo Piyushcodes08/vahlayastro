@@ -5,6 +5,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Admin from "../pages/Admin";
+import Header from "../../components/sections/Header/Header";
 const AdminEMIUsers = () => {
   const [emiUsers, setEmiUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,100 +38,107 @@ const AdminEMIUsers = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      {/* Sidebar - Always visible on desktop and mobile */}
-      <div className="w-full md:w-1/6 bg-white shadow-md">
+    <div className="admin-layout min-h-screen flex flex-col">
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <Header />
+      <div className="flex flex-1 relative z-10">
+        {/* Sidebar - Always visible on desktop and mobile */}
         <Admin />
-      </div>
 
-      <div className="w-full md:w-3/4 px-4 sm:px-6 pt-16 md:py-8 mx-auto">
-        <div className="max-w-6xl mx-auto bg-white shadow rounded p-6 border border-red-200">
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden mb-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-200"
-          >
-            Open Menu
-          </button>
+        <main className="flex-1 min-w-0 p-4 md:p-10 pt-20">
+          <div className="max-w-6xl mx-auto space-y-10">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+              <div>
+                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                  EMI Enrolled <span className="text-[#dd2727]">Users</span>
+                </h2>
+                <p className="text-slate-400 text-sm mt-1 font-medium">Monitor active installment plans and user payment history</p>
+              </div>
+            </header>
 
-          <h2 className="text-2xl font-bold mb-4 text-red-600">EMI Enrolled Users</h2>
-
-          {loading ? (
-            <p className="text-red-600">Loading...</p>
-          ) : (
-            <div className="overflow-x-auto">
-              {/* Desktop Table View */}
-              <div className="hidden md:block">
-                <table className="min-w-full bg-white border border-gray-200 text-left">
-                  <thead>
-                    <tr className="bg-red-50">
-                      <th className="px-4 py-2 border-b text-red-600 font-semibold">Email</th>
-                      <th className="px-4 py-2 border-b text-red-600 font-semibold">
-                        Number of Payments
-                      </th>
-                      <th className="px-4 py-2 border-b text-red-600 font-semibold">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {emiUsers.length > 0 ? (
-                      emiUsers.map((user, index) => (
-                        <tr
-                          key={index}
-                          className="hover:bg-red-50 transition-colors duration-200"
-                        >
-                          <td className="px-4 py-2 border-b break-words">{user.email}</td>
-                          <td className="px-4 py-2 border-b">{user.payments.length}</td>
-                          <td className="px-4 py-2 border-b">
-                            <button
-                              onClick={() =>
-                                navigate(`/admin/emailuserlist/${user.email}`)
-                              }
-                              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-200"
-                            >
-                              View Details
-                            </button>
+            {loading ? (
+              <div className="flex justify-center p-20">
+                <div className="w-10 h-10 border-4 border-[#dd2727] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <>
+                <div className="hidden md:block overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+                  <table className="w-full text-left border-collapse bg-white">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-100">
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Email Address</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                          Total Payments
+                        </th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {emiUsers.length > 0 ? (
+                        emiUsers.map((user, index) => (
+                          <tr
+                            key={index}
+                            className="hover:bg-slate-50 transition-all group border-b border-slate-50 last:border-0"
+                          >
+                            <td className="px-6 py-5 text-sm font-medium text-slate-700 break-words">{user.email}</td>
+                            <td className="px-6 py-5 text-sm font-bold text-[#dd2727]">{user.payments.length}</td>
+                            <td className="px-6 py-5 text-right">
+                              <button
+                                onClick={() =>
+                                  navigate(`/admin/emailuserlist/${user.email}`)
+                                }
+                                className="bg-[#dd2727] text-white px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:shadow-lg transition-all"
+                              >
+                                View Profile
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="3" className="text-center py-20 text-slate-400 font-medium italic bg-slate-50/50">
+                            No users found in the cosmic payment database.
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="4" className="text-center py-4 text-red-600">
-                          No users found in the payments database.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-              {/* Mobile Card View */}
-              <div className="block md:hidden">
-                {emiUsers.length > 0 ? (
-                  emiUsers.map((user, index) => (
-                    <div
-                      key={index}
-                      className="bg-red-50 p-4 mb-4 rounded shadow border border-gray-200"
-                    >
-                      <p className="text-lg font-semibold text-red-600 mb-2 break-words">
-                        {user.email}
-                      </p>
-                      <p className="text-gray-700 mb-2">
-                        Number of Payments: {user.payments.length}
-                      </p>
-                      <button
-                        onClick={() => navigate(`/admin/emailuserlist/${user.email}`)}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-200 w-full"
+                {/* Mobile Card View */}
+                <div className="block md:hidden space-y-4">
+                  {emiUsers.length > 0 ? (
+                    emiUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4"
                       >
-                        View Details
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-center text-red-600">No users found in the payments database.</p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+                        <div>
+                          <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">User Account</p>
+                          <p className="text-sm font-bold text-slate-900 break-all">
+                            {user.email}
+                          </p>
+                        </div>
+                        <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl">
+                          <p className="text-xs font-bold text-slate-500 uppercase">Payments</p>
+                          <p className="text-sm font-black text-[#dd2727]">{user.payments.length}</p>
+                        </div>
+                        <button
+                          onClick={() => navigate(`/admin/emailuserlist/${user.email}`)}
+                          className="bg-[#dd2727] text-white py-4 rounded-xl font-bold uppercase tracking-widest text-[10px] w-full shadow-md"
+                        >
+                          Access Details
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center py-12 text-slate-400 italic">No users found.</p>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </main>
       </div>
     </div>
   );

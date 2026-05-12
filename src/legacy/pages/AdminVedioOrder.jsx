@@ -19,13 +19,13 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
     <div className="relative mb-10">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full md:w-80 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between group hover:bg-white/10 transition-all text-white font-bold uppercase tracking-widest text-sm"
+        className="w-full md:w-80 bg-gray-50 border border-slate-200 rounded-2xl px-6 py-4 flex items-center justify-between group hover:bg-slate-100 transition-all text-slate-900 font-bold uppercase tracking-widest text-sm shadow-sm"
       >
         <span>{selectedTitle}</span>
-        <svg className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+        <svg className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
       </button>
       {isOpen && (
-        <ul className="absolute mt-2 w-full md:w-80 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+        <ul className="absolute mt-2 w-full md:w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
           {courses.map((course) => (
             <li
               key={course.id}
@@ -33,7 +33,7 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
                 setSelectedCourse(course.id);
                 setIsOpen(false);
               }}
-              className="px-6 py-4 cursor-pointer hover:bg-white/5 text-sm font-medium transition-colors border-b border-white/5 last:border-0"
+              className="px-6 py-4 cursor-pointer hover:bg-slate-50 text-slate-700 text-sm font-medium transition-colors border-b border-slate-100 last:border-0"
             >
               {course.title}
             </li>
@@ -203,23 +203,23 @@ const AdminVideoManager = () => {
     <>
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen bg-transparent text-white pt-[70px] relative z-10 premium-container">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
         <Aside />
 
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 pt-20">
           <div className="space-y-8">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight uppercase">
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Video <span className="text-[#dd2727]">Sequencing</span>
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Drag and drop lessons to structure your course curriculum</p>
+              <p className="text-slate-400 text-sm mt-1 font-medium">Drag and drop lessons to structure your course curriculum</p>
             </div>
             
             {pendingChanges.length > 0 && (
               <button
                 onClick={handleSaveChanges}
-                className="bg-gradient-to-r from-[#dd2727] to-[#b0a102] px-8 py-4 rounded-2xl font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-xl"
+                className="bg-[#dd2727] text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest hover:shadow-lg hover:shadow-red-500/30 transition-all"
               >
                 Save Changes ({pendingChanges.length})
               </button>
@@ -245,10 +245,10 @@ const AdminVideoManager = () => {
                   Object.keys(videos).map((title) => (
                     <div
                       key={title}
-                      className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8"
+                      className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm"
                     >
                       <h3 className="text-lg font-bold text-[#b0a102] uppercase tracking-widest mb-6 flex items-center gap-3">
-                        <svg className="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 01-2-2m0 0V5a2 2 0 012-2h6.5L21 7v2"/></svg>
+                        <div className="w-1.5 h-6 bg-[#b0a102] rounded-full"></div>
                         {title}
                       </h3>
                       
@@ -267,20 +267,20 @@ const AdminVideoManager = () => {
                                     {...provided.draggableProps}
                                     className="group"
                                   >
-                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 border border-white/5 p-5 rounded-2xl group-hover:bg-white/10 transition-all duration-300 gap-4">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-gray-50 border border-slate-100 p-5 rounded-xl group-hover:bg-slate-100 transition-all duration-300 gap-4">
                                       <div className="flex items-center gap-4 flex-1">
-                                        <div {...provided.dragHandleProps} className="p-2 bg-black/40 rounded-xl text-gray-500 hover:text-[#dd2727] transition-colors cursor-grab active:cursor-grabbing">
+                                        <div {...provided.dragHandleProps} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-[#dd2727] transition-colors cursor-grab active:cursor-grabbing shadow-sm">
                                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"/></svg>
                                         </div>
                                         <div>
-                                          <p className="font-bold text-white tracking-wide">{video.description}</p>
-                                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Order: {video.order + 1}</p>
+                                          <p className="font-bold text-slate-900 tracking-wide">{video.description}</p>
+                                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Order: {video.order + 1}</p>
                                         </div>
                                       </div>
                                       <div className="flex items-center gap-3 w-full md:w-auto">
                                         <button
                                           onClick={() => handleDeleteVideo(video.id, title)}
-                                          className="flex-1 md:flex-none px-6 py-2 bg-red-500/10 text-red-500 border border-red-500/10 rounded-xl hover:bg-red-500 hover:text-white transition-all text-xs font-bold uppercase"
+                                          className="flex-1 md:flex-none px-6 py-2 bg-slate-50 text-red-500 border border-red-100 rounded-lg hover:bg-red-600 hover:text-white transition-all text-xs font-bold uppercase shadow-sm"
                                         >
                                           Delete
                                         </button>
@@ -304,9 +304,9 @@ const AdminVideoManager = () => {
               </div>
             </DragDropContext>
           ) : (
-            <div className="text-center py-20 bg-white/5 border border-white/10 rounded-3xl">
-              <svg className="w-16 h-16 mx-auto mb-6 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <p className="text-gray-500 font-medium">Select a course to manage video sequence</p>
+            <div className="text-center py-20 bg-gray-50 border border-slate-100 rounded-2xl">
+              <svg className="w-16 h-16 mx-auto mb-6 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <p className="text-slate-400 font-medium">Select a course to manage video sequence</p>
             </div>
           )}
         </div>

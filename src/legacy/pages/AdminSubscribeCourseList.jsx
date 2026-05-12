@@ -165,7 +165,7 @@ const AdminEnrolledUsers = () => {
       // 1. Remove from subscribers_CourseID collection
       await deleteDoc(doc(db, `subscribers_${courseId}`, userId));
 
-      // 2. Remove from user's enrolledCourses array
+      // 2. Remove from user's enrolledCourses array in 'users' collection
       const userRef = doc(db, "users", userId);
       const userSnap = await getDoc(userRef);
 
@@ -180,11 +180,32 @@ const AdminEnrolledUsers = () => {
         );
       }
 
+      // 3. Remove from 'subscriptions' collection (used by Student EnrolledCourses page)
+      // Note: userId in subscribers_CourseID is typically the email
+      const subRef = doc(db, "subscriptions", userId);
+      const subSnap = await getDoc(subRef);
+      if (subSnap.exists()) {
+        const subData = subSnap.data();
+        
+        // Remove from freecourses array
+        const freecourses = subData.freecourses || [];
+        const updatedFree = freecourses.filter(id => id !== courseId);
+        
+        // Remove from DETAILS array (paid courses)
+        const details = subData.DETAILS || [];
+        const updatedDetails = details.filter(d => Object.keys(d)[0] !== courseId);
+
+        await setDoc(subRef, {
+          freecourses: updatedFree,
+          DETAILS: updatedDetails
+        }, { merge: true });
+      }
+
       setSubscribers(subscribers.filter((sub) => sub.id !== userId));
-      alert("User removed from course successfully.");
+      alert("User removed from course successfully across all records.");
     } catch (error) {
       console.error("Error removing user from course:", error);
-      alert("Failed to remove user.");
+      alert("Failed to remove user completely. Please check Firebase console.");
     }
   };
 
@@ -197,7 +218,7 @@ const AdminEnrolledUsers = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-6 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 py-10 pt-20 px-6 md:px-10 bg-white">
           <div className="space-y-12">
             {/* Enrollment Form Section */}
             <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden group">

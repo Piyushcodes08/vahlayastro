@@ -107,7 +107,7 @@ const Enrollment = () => {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user.email);
         setFormData((prev) => ({ 
@@ -115,13 +115,38 @@ const Enrollment = () => {
           email: user.email,
           name: user.displayName || prev.name 
         }));
+
+        // Check if user is already enrolled to prevent double-asking
+        try {
+          const userRef = doc(db, "subscriptions", user.email);
+          const docSnap = await getDoc(userRef);
+          
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            
+            // Pre-fill phone if we have it
+            if (userData.phone && !formData.phone) {
+              setFormData(prev => ({ ...prev, phone: userData.phone }));
+            }
+
+            // Check enrollment in DETAILS
+            const isEnrolledPaid = userData.DETAILS && userData.DETAILS.some(d => Object.keys(d)[0] === formData.course);
+
+            if (isEnrolledPaid && formData.course) {
+              console.log("User already enrolled in paid course, redirecting...");
+              navigate(`/course/${formData.course}`);
+            }
+          }
+        } catch (err) {
+          console.error("Error checking enrollment status:", err);
+        }
       } else {
         setCurrentUser(null);
       }
     });
 
     return () => unsubscribeAuth();
-  }, []);
+  }, [formData.course, navigate]);
 
 
   useEffect(() => {

@@ -239,21 +239,29 @@ const AdminEMITracking = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      <Admin />
+    <div className="admin-layout flex flex-col md:flex-row min-h-screen">
+      <Header />
+      <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+      <div className="flex flex-1 relative z-10 admin-fluid-container">
+        <Admin />
 
-      <div className="flex-1 p-6 overflow-auto">
-        <div className="max-w-4xl mx-auto bg-white shadow rounded p-6 border border-red-200">
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden mb-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-200"
-          >
-            Open Menu
-          </button>
-
-          <h2 className="text-2xl font-bold mb-4 text-red-600">
-            Admin EMI Tracking for {email}
-          </h2>
+        <main className="flex-1 min-w-0 p-4 md:p-10 pt-20">
+          <div className="max-w-4xl mx-auto space-y-10">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+              <div className="w-full">
+                <div className="flex items-center gap-4 mb-4">
+                   <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                      {email?.charAt(0).toUpperCase()}
+                   </div>
+                   <div>
+                      <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        EMI <span className="text-[#dd2727]">Tracking</span>
+                      </h2>
+                      <p className="text-slate-400 text-sm font-medium">{email}</p>
+                   </div>
+                </div>
+              </div>
+            </header>
 
           {Object.keys(emiSchedules).map((courseId) => {
             const schedule = emiSchedules[courseId] || [];
@@ -266,64 +274,107 @@ const AdminEMITracking = () => {
             return (
               <div
                 key={courseId}
-                className="mb-6 border border-red-200 shadow-sm rounded p-4"
+                className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-8 mb-8"
               >
-                <h3 className="text-xl font-semibold mb-2 text-red-600">
-                  {emiPlans.find((plan) => plan.courseId === courseId)?.courseName || `Course ID: ${courseId}`}
-                </h3>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6">
+                  <h3 className="text-xl font-bold text-slate-900">
+                    {emiPlans.find((plan) => plan.courseId === courseId)?.courseName || `Course ID: ${courseId}`}
+                  </h3>
+                  <div className="flex gap-4">
+                    <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total</p>
+                       <p className="text-sm font-black text-slate-900">{totalEMIs} EMIs</p>
+                    </div>
+                    <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Paid</p>
+                       <p className="text-sm font-black text-green-600">{paidEMIs}</p>
+                    </div>
+                    <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining</p>
+                       <p className="text-sm font-black text-[#dd2727]">{remainingEMIs}</p>
+                    </div>
+                  </div>
+                </div>
 
-                <p className="mb-4 text-gray-800">
-                  <span className="font-medium">Total EMIs</span>: {totalEMIs},{" "}
-                  <span className="font-medium">Paid</span>: {paidEMIs},{" "}
-                  <span className="font-medium">Remaining</span>: {remainingEMIs}
-                </p>
-
-                <h4 className="text-lg font-bold mb-2 text-red-600">EMI Schedule</h4>
-                <ul>
-                  {schedule.map((emi) => (
-                    <li
-                      key={emi.emiNumber}
-                      className="flex justify-between mb-2 items-center"
-                    >
-                      <div className="text-gray-800">
-                        <span className="font-medium">EMI #{emi.emiNumber}</span> — Due on {emi.date.toLocaleDateString()} — ₹{emi.amount}
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3">
+                    <div className="w-1 h-4 bg-slate-900 rounded-full"></div>
+                    EMI Schedule
+                  </h4>
+                  <div className="space-y-3">
+                    {schedule.map((emi) => (
+                      <div
+                        key={emi.emiNumber}
+                        className="flex justify-between items-center p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:bg-white hover:border-[#dd2727]/20 transition-all"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${emi.status === "paid" ? "bg-green-100 text-green-600" : "bg-slate-200 text-slate-500"}`}>
+                             {emi.emiNumber}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-900">EMI #{emi.emiNumber}</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Due: {emi.date.toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-6">
+                           <p className="text-sm font-black text-slate-900">₹{emi.amount}</p>
+                           {emi.status === "paid" ? (
+                            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-1.5 rounded-full border border-green-100">
+                              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                              <span className="text-[10px] font-black uppercase tracking-widest">Paid</span>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                sendReminder(courseId, emi.emiNumber, emi.date, emi.amount)
+                              }
+                              className="bg-[#dd2727] text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all"
+                            >
+                              Send Reminder
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      {emi.status === "paid" ? (
-                        <span className="bg-red-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-colors duration-200">
-                          Paid
-                        </span>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            sendReminder(courseId, emi.emiNumber, emi.date, emi.amount)
-                          }
-                          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-orange-600 transition-colors duration-200"
-                        >
-                          Send Reminder
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-
-                <h4 className="text-lg font-bold mt-4 mb-2 text-red-600">Paid EMIs</h4>
-                {userPayments.length === 0 ? (
-                  <p className="text-gray-800">No paid EMIs yet.</p>
-                ) : (
-                  <ul className="list-disc list-inside text-gray-800">
-                    {userPayments.map((payment, idx) => (
-                      <li key={payment.id} className="mb-1">
-                        <span className="font-medium">EMI #{idx + 1}</span> — ₹{payment.amount} — Paid on {new Date(payment.timestamp.toDate()).toLocaleDateString()}
-                      </li>
                     ))}
-                  </ul>
-                )}
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-slate-100">
+                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3">
+                    <div className="w-1 h-4 bg-[#b0a102] rounded-full"></div>
+                    Payment History
+                  </h4>
+                  {userPayments.length === 0 ? (
+                    <div className="bg-slate-50 p-6 rounded-2xl text-center">
+                       <p className="text-slate-400 text-sm italic">No cosmic payments recorded yet.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {userPayments.map((payment, idx) => (
+                        <div key={payment.id} className="flex justify-between items-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
+                          <div className="flex items-center gap-4">
+                             <div className="w-8 h-8 bg-[#b0a102]/10 text-[#b0a102] rounded-lg flex items-center justify-center font-bold text-xs">
+                                {idx + 1}
+                             </div>
+                             <div>
+                                <p className="text-sm font-bold text-slate-900">EMI #{idx + 1}</p>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Paid on {new Date(payment.timestamp.toDate()).toLocaleDateString()}</p>
+                             </div>
+                          </div>
+                          <p className="text-sm font-black text-slate-900">₹{payment.amount}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
-      </div>
+      </main>
     </div>
+  </div>
   );
 };
 

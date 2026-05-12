@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { db, storage } from "../../firebaseConfig";
-import { Link } from "react-router-dom";
 import {
     collection,
     getDocs,
     doc,
     setDoc,
-    updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import Aside from "./Aside";
+import SideBar from "./Admin";
+import Header from "../../components/sections/Header/Header";
+import Footer from "../../components/sections/Footer/Footer";
 
 const AdminPortal = () => {
-    const [courses, setCourses] = useState([]); // List of courses
-    const [selectedCourse, setSelectedCourse] = useState(""); // Selected course
-    const [videoTitle, setVideoTitle] = useState(""); // Video title
-    const [selectedVideo, setSelectedVideo] = useState(null); // Selected video file
-    const [videoUploadProgress, setVideoUploadProgress] = useState(0); // Video upload progress
-    const [materialTitle, setMaterialTitle] = useState(""); // Study material title
-    const [selectedMaterial, setSelectedMaterial] = useState(null); // Selected study material
-    const [materialUploadProgress, setMaterialUploadProgress] = useState(0); // Material upload progress
+    const [courses, setCourses] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState("");
+    const [videoTitle, setVideoTitle] = useState("");
+    const [selectedVideo, setSelectedVideo] = useState(null);
+    const [videoUploadProgress, setVideoUploadProgress] = useState(0);
+    const [materialTitle, setMaterialTitle] = useState("");
+    const [selectedMaterial, setSelectedMaterial] = useState(null);
+    const [materialUploadProgress, setMaterialUploadProgress] = useState(0);
 
-    // Fetch courses from Firestore
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -43,42 +42,28 @@ const AdminPortal = () => {
                 console.error("Error fetching courses:", error);
             }
         };
-
         fetchCourses();
     }, []);
 
-    // Handle video upload
     const handleVideoUpload = async () => {
         if (!selectedCourse || !videoTitle || !selectedVideo) {
             alert("Please select a course, enter a video title, and upload a video file.");
             return;
         }
 
-        const storageRef = ref(
-            storage,
-            `videos/${selectedCourse}/${Date.now()}_${selectedVideo.name}`
-        );
+        const storageRef = ref(storage, `videos/${selectedCourse}/${Date.now()}_${selectedVideo.name}`);
         const uploadTask = uploadBytesResumable(storageRef, selectedVideo);
 
-        uploadTask.on(
-            "state_changed",
+        uploadTask.on("state_changed",
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setVideoUploadProgress(progress);
             },
-            (error) => {
-                console.error("Video upload failed:", error);
-            },
+            (error) => { console.error("Video upload failed:", error); },
             async () => {
                 const videoUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-                // Update Firestore
                 const videosRef = doc(db, `videos_${selectedCourse}`, `${Date.now()}`);
-                await setDoc(videosRef, {
-                    title: videoTitle,
-                    url: videoUrl,
-                });
-
+                await setDoc(videosRef, { title: videoTitle, url: videoUrl });
                 setVideoTitle("");
                 setSelectedVideo(null);
                 setVideoUploadProgress(0);
@@ -87,38 +72,25 @@ const AdminPortal = () => {
         );
     };
 
-    // Handle study material upload
     const handleMaterialUpload = async () => {
         if (!selectedCourse || !materialTitle || !selectedMaterial) {
             alert("Please select a course, enter a material title, and upload a material file.");
             return;
         }
 
-        const storageRef = ref(
-            storage,
-            `studyMaterials/${selectedCourse}/${Date.now()}_${selectedMaterial.name}`
-        );
+        const storageRef = ref(storage, `studyMaterials/${selectedCourse}/${Date.now()}_${selectedMaterial.name}`);
         const uploadTask = uploadBytesResumable(storageRef, selectedMaterial);
 
-        uploadTask.on(
-            "state_changed",
+        uploadTask.on("state_changed",
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setMaterialUploadProgress(progress);
             },
-            (error) => {
-                console.error("Material upload failed:", error);
-            },
+            (error) => { console.error("Material upload failed:", error); },
             async () => {
                 const materialUrl = await getDownloadURL(uploadTask.snapshot.ref);
-
-                // Update Firestore
                 const materialsRef = doc(db, `materials_${selectedCourse}`, `${Date.now()}`);
-                await setDoc(materialsRef, {
-                    title: materialTitle,
-                    url: materialUrl,
-                });
-
+                await setDoc(materialsRef, { title: materialTitle, url: materialUrl });
                 setMaterialTitle("");
                 setSelectedMaterial(null);
                 setMaterialUploadProgress(0);
@@ -128,131 +100,157 @@ const AdminPortal = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] text-white">
-            <Aside />
+        <div className="admin-layout">
+            <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
+            <Header />
+            <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container gap-8 pb-20">
+                <SideBar />
 
-            <main className="flex-1 p-4 md:p-8 pt-20">
-                <div className="max-w-4xl mx-auto space-y-10">
-                    <header>
-                        <h2 className="text-3xl font-bold tracking-tight uppercase">
-                            Content <span className="text-[#dd2727]">Uploader</span>
-                        </h2>
-                        <p className="text-gray-400 text-sm mt-1">Upload cosmic videos and study materials</p>
-                    </header>
+                <main className="flex-1 py-8 pt-20">
+                    <div className="space-y-10">
 
-                    {/* Select Course Card */}
-                    <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Select Target Course</label>
-                        <select
-                            value={selectedCourse}
-                            onChange={(e) => setSelectedCourse(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-[#dd2727] outline-none transition-all appearance-none cursor-pointer"
-                        >
-                            <option value="" className="bg-[#1a1a1a]">-- Choose a Course --</option>
-                            {courses.map((course) => (
-                                <option key={course.id} value={course.id} className="bg-[#1a1a1a]">
-                                    {course.title}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Upload Video Card */}
-                        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl flex flex-col">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="bg-[#dd2727]/10 p-3 rounded-xl text-[#dd2727]">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                </div>
-                                <h3 className="text-lg font-bold uppercase tracking-widest">Video <span className="text-[#dd2727]">Module</span></h3>
-                            </div>
-                            
-                            <div className="space-y-4 flex-1">
-                                <input
-                                    type="text"
-                                    placeholder="e.g. Introduction to Kundalini"
-                                    value={videoTitle}
-                                    onChange={(e) => setVideoTitle(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#dd2727] transition-all"
-                                />
-                                <div className="relative group">
-                                    <input
-                                        type="file"
-                                        accept="video/*"
-                                        onChange={(e) => setSelectedVideo(e.target.files[0])}
-                                        className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
-                                    />
-                                </div>
-                            </div>
-
-                            {videoUploadProgress > 0 && (
-                                <div className="mt-6 space-y-2">
-                                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                                        <span>Progress</span>
-                                        <span>{videoUploadProgress.toFixed(0)}%</span>
-                                    </div>
-                                    <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
-                                        <div className="bg-[#dd2727] h-full transition-all duration-300" style={{ width: `${videoUploadProgress}%` }}></div>
-                                    </div>
-                                </div>
-                            )}
-
-                            <button
-                                onClick={handleVideoUpload}
-                                disabled={videoUploadProgress > 0 && videoUploadProgress < 100}
-                                className="w-full bg-gradient-to-r from-[#dd2727] to-[#b0a102] py-4 rounded-xl font-bold uppercase tracking-widest mt-6 hover:shadow-[0_0_20px_rgba(221,39,39,0.3)] transition-all disabled:opacity-50"
-                            >
-                                {videoUploadProgress > 0 && videoUploadProgress < 100 ? "Uploading..." : "Upload Video"}
-                            </button>
+                        {/* Page Header */}
+                        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                            <h4 className="text-[#dd2727] font-black uppercase tracking-[0.4em] text-[10px] mb-2">Admin Panel</h4>
+                            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                                Content <span className="text-[#dd2727]">Upload</span>
+                            </h2>
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-2">Upload videos and study materials to courses</p>
                         </div>
 
-                        {/* Upload Study Material Card */}
-                        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-xl flex flex-col">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="bg-[#b0a102]/10 p-3 rounded-xl text-[#b0a102]">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        {/* Course Selector */}
+                        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Select Course To Upload To:</label>
+                            <div className="relative">
+                                <select
+                                    value={selectedCourse}
+                                    onChange={(e) => setSelectedCourse(e.target.value)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer font-bold"
+                                >
+                                    <option value="">-- Select Course Orbit --</option>
+                                    {courses.map((course) => (
+                                        <option key={course.id} value={course.id}>{course.title}</option>
+                                    ))}
+                                </select>
+                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7"/></svg>
                                 </div>
-                                <h3 className="text-lg font-bold uppercase tracking-widest">Study <span className="text-[#b0a102]">Material</span></h3>
                             </div>
-                            
-                            <div className="space-y-4 flex-1">
-                                <input
-                                    type="text"
-                                    placeholder="e.g. Planet Positions PDF"
-                                    value={materialTitle}
-                                    onChange={(e) => setMaterialTitle(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#b0a102] transition-all"
-                                />
-                                <input
-                                    type="file"
-                                    onChange={(e) => setSelectedMaterial(e.target.files[0])}
-                                    className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-white/5 file:text-gray-300 cursor-pointer"
-                                />
+                        </div>
+
+                        {/* Upload Cards Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+                            {/* Upload Video Card */}
+                            <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
+                                <h2 className="text-xl font-bold text-slate-900 mb-8 uppercase tracking-widest flex items-center gap-3">
+                                    <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
+                                    Upload Video Session
+                                </h2>
+                                <div className="space-y-5">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase mb-2 block ml-1">Transmission Title</label>
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. Introduction to Kundalini"
+                                            value={videoTitle}
+                                            onChange={(e) => setVideoTitle(e.target.value)}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-400"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase mb-2 block ml-1">Source File</label>
+                                        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+                                            <input
+                                                type="file"
+                                                accept="video/*"
+                                                onChange={(e) => setSelectedVideo(e.target.files[0])}
+                                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#dd2727] file:text-white hover:file:bg-red-700 cursor-pointer"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {videoUploadProgress > 0 && (
+                                        <div className="space-y-2">
+                                            <div className="w-full bg-slate-100 rounded-full h-2">
+                                                <div className="bg-[#dd2727] h-full rounded-full transition-all" style={{ width: `${videoUploadProgress}%` }}></div>
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{Math.round(videoUploadProgress)}% Transmitted</p>
+                                        </div>
+                                    )}
+
+                                    <button
+                                        onClick={handleVideoUpload}
+                                        disabled={videoUploadProgress > 0 && videoUploadProgress < 100}
+                                        className="flex-1 w-full bg-[#dd2727] text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:shadow-lg hover:shadow-red-500/30 transition-all disabled:opacity-50"
+                                    >
+                                        {videoUploadProgress > 0 && videoUploadProgress < 100 ? (
+                                            <div className="flex items-center justify-center gap-3">
+                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                <span>Transmitting...</span>
+                                            </div>
+                                        ) : "Upload Transmission"}
+                                    </button>
+                                </div>
                             </div>
 
-                            {materialUploadProgress > 0 && (
-                                <div className="mt-6 space-y-2">
-                                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                                        <span>Progress</span>
-                                        <span>{materialUploadProgress.toFixed(0)}%</span>
+                            {/* Upload Study Material Card */}
+                            <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-xl shadow-slate-200/50 relative overflow-hidden group">
+                                <h2 className="text-xl font-bold text-slate-900 mb-8 uppercase tracking-widest flex items-center gap-3">
+                                    <div className="w-1.5 h-6 bg-[#b0a102] rounded-full"></div>
+                                    Upload Study Material
+                                </h2>
+                                <div className="space-y-5">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase mb-2 block ml-1">Document Title</label>
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. Planet Positions PDF"
+                                            value={materialTitle}
+                                            onChange={(e) => setMaterialTitle(e.target.value)}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none transition-all placeholder:text-gray-400"
+                                        />
                                     </div>
-                                    <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
-                                        <div className="bg-[#b0a102] h-full transition-all duration-300" style={{ width: `${materialUploadProgress}%` }}></div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase mb-2 block ml-1">Source File</label>
+                                        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+                                            <input
+                                                type="file"
+                                                onChange={(e) => setSelectedMaterial(e.target.files[0])}
+                                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#b0a102] file:text-white hover:file:bg-yellow-700 cursor-pointer"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            )}
 
-                            <button
-                                onClick={handleMaterialUpload}
-                                disabled={materialUploadProgress > 0 && materialUploadProgress < 100}
-                                className="w-full border border-[#b0a102]/30 bg-[#b0a102]/10 py-4 rounded-xl font-bold uppercase tracking-widest mt-6 hover:bg-[#b0a102] hover:text-black transition-all disabled:opacity-50"
-                            >
-                                {materialUploadProgress > 0 && materialUploadProgress < 100 ? "Uploading..." : "Upload Material"}
-                            </button>
+                                    {materialUploadProgress > 0 && (
+                                        <div className="space-y-2">
+                                            <div className="w-full bg-slate-100 rounded-full h-2">
+                                                <div className="bg-[#b0a102] h-full rounded-full transition-all" style={{ width: `${materialUploadProgress}%` }}></div>
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{Math.round(materialUploadProgress)}% Archived</p>
+                                        </div>
+                                    )}
+
+                                    <button
+                                        onClick={handleMaterialUpload}
+                                        disabled={materialUploadProgress > 0 && materialUploadProgress < 100}
+                                        className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-[#b0a102] transition-all disabled:opacity-50"
+                                    >
+                                        {materialUploadProgress > 0 && materialUploadProgress < 100 ? (
+                                            <div className="flex items-center justify-center gap-3">
+                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                <span>Archiving...</span>
+                                            </div>
+                                        ) : "Upload Material"}
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
+            <Footer />
         </div>
     );
 };

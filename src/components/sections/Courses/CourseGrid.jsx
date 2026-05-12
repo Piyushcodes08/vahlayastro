@@ -21,50 +21,56 @@ const CourseGrid = () => {
       </div>
     );
   }
+
   return (
-    <section className="course-grid-section py-16">
+    <section className="course-grid-section">
       <div className="section-container">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {coursesData.map((course) => (
-            <div 
-              key={course.id} 
-              className="course-card-simple group relative bg-[#150a0a]/40 backdrop-blur-3xl border border-white/5 rounded-[2rem] overflow-hidden hover:border-[#dd2727]/40 transition-all duration-700 shadow-2xl flex flex-col h-full hover:-translate-y-2"
+            <div
+              key={course.id}
+              className="course-card-simple group relative bg-[#150a0a]/45 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden hover:border-[#dd2727]/45 transition-all duration-700 shadow-2xl flex flex-col h-full hover:-translate-y-2"
             >
-              {/* Image Header - Optimized for Premium Full View */}
-              <div className="relative aspect-[3/2] overflow-hidden bg-[#0a0101]/80">
-                {/* Main Image - Full Fill */}
-                <img 
-                  src={course.imageUrl || course.bgImage} 
-                  alt={course.title} 
-                  className="relative z-10 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              {/* Image Area - No padding, no crop */}
+              <div className="relative bg-[#080101] overflow-hidden">
+                <img
+                  src={course.imageUrl || course.bgImage}
+                  alt={course.title}
+                  className="w-full h-auto block object-contain transition-all duration-1000 group-hover:scale-[1.01]"
+                  loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#150a0a] via-transparent to-transparent opacity-80 z-20"></div>
               </div>
 
-              {/* Premium Content Body */}
-              <div className="p-7 md:p-8 flex flex-col flex-grow relative z-30">
-                <div className="flex items-center gap-2 mb-4">
+              {/* Content Area */}
+              <div className="relative z-20 p-6 bg-gradient-to-b from-[#120606]/95 to-[#090101] flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#dd2727] shadow-[0_0_8px_#dd2727]"></div>
-                  <span className="text-[10px] uppercase tracking-[0.4em] text-[#dd2727] font-bold">Divine Mastery</span>
+
+                  <span className="text-[9px] uppercase tracking-[0.35em] text-[#dd2727] font-bold">
+                    Divine Mastery
+                  </span>
                 </div>
 
-                <h3 className="title-batangas text-xl md:text-2xl mb-4 text-white group-hover:text-[#dd2727] transition-colors duration-300 leading-snug">
+                <h3 className="title-batangas text-lg md:text-xl mb-3 text-white group-hover:text-[#dd2727] transition-colors duration-300 leading-tight">
                   {course.title}
                 </h3>
-                
-                <p className="subtitle-poppins text-white/50 text-[13px] leading-relaxed mb-8 flex-grow line-clamp-3">
+
+                <p className="subtitle-poppins text-white/55 text-[11px] leading-relaxed mb-6 line-clamp-2">
                   {course.description}
                 </p>
 
-                <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                  <Link 
+                <div className="flex items-center justify-between mt-auto">
+                  <Link
                     to={`/courses/${course.type === 'free' ? 'free' : 'paid'}/${course.slug}`}
-                    className="inline-flex items-center gap-2 text-[#dd2727] font-bold uppercase tracking-[0.2em] text-[10px] group/link py-1 hover:text-white transition-colors duration-300"
+                    className="inline-flex items-center gap-2 text-[#dd2727] font-bold uppercase tracking-[0.2em] text-[9px] group/link py-1 hover:text-white transition-colors duration-300"
                   >
-                    Enroll Now
-                    <LuArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1.5" />
+                    Enter Portal
+                    <LuArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1" />
                   </Link>
-                  <div className="w-8 h-[1px] bg-[#dd2727]/20"></div>
+
+                  <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">
+                    Vahlay Astro
+                  </span>
                 </div>
               </div>
             </div>
