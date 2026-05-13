@@ -218,11 +218,11 @@ const AdminEnrolledUsers = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 pt-20 px-6 md:px-10 bg-white">
-          <div className="space-y-12">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+          <div className="space-y-8">
             {/* Enrollment Form Section */}
             <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden group">
-              <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-100">
+              <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-100 pt-[50px]">
                 <h2 className="text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
                   Manual <span className="text-[#dd2727]">Enrollment</span>

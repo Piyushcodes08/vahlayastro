@@ -67,7 +67,7 @@ const AddMeeting = () => {
         duration: parseInt(duration),
         createdAt: new Date().toISOString(),
         ringCentralMeeting: {
-            roomUrl: "https://whereby.com/vahlay-astro", // Maintain compatibility with existing viewer logic
+          roomUrl: "https://whereby.com/vahlay-astro", // Maintain compatibility with existing viewer logic
         }
       };
 
@@ -102,14 +102,14 @@ const AddMeeting = () => {
   return (
     <div className="admin-layout bg-gray-50">
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container pt-20">
+      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container pt-32">
         <SideBar />
-        
-        <main className="flex-1 p-4 md:p-8">
-          <div className="max-w-4xl mx-auto space-y-8">
-            
+
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+          <div className="space-y-8">
+
             {/* Scheduler Form */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 pt-[50px]">
               <div className="flex items-center justify-center gap-3 mb-8">
                 <span className="text-3xl">📅</span>
                 <h2 className="text-2xl font-bold text-[#dd2727]">Schedule RingCentral Meeting</h2>
@@ -143,30 +143,30 @@ const AddMeeting = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
-                        <input
-                            type="datetime-local"
-                            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-[#dd2727]"
-                            onChange={(e) => {
-                                const val = e.target.value; // YYYY-MM-DDTHH:mm
-                                if (val) {
-                                    const [d, t] = val.split('T');
-                                    setSessionData({...sessionData, date: d, time: t});
-                                }
-                            }}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (mins)</label>
-                        <input
-                            type="number"
-                            name="duration"
-                            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-[#dd2727]"
-                            value={sessionData.duration}
-                            onChange={handleInputChange}
-                        />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                    <input
+                      type="datetime-local"
+                      className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-[#dd2727]"
+                      onChange={(e) => {
+                        const val = e.target.value; // YYYY-MM-DDTHH:mm
+                        if (val) {
+                          const [d, t] = val.split('T');
+                          setSessionData({ ...sessionData, date: d, time: t });
+                        }
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (mins)</label>
+                    <input
+                      type="number"
+                      name="duration"
+                      className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-[#dd2727]"
+                      value={sessionData.duration}
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
 
                 <button
@@ -182,7 +182,7 @@ const AddMeeting = () => {
             {/* Scheduled Meetings List */}
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-gray-800">Scheduled Meetings</h3>
-              
+
               {meetings.length === 0 ? (
                 <p className="text-gray-500 italic">No meetings scheduled.</p>
               ) : (
@@ -194,8 +194,8 @@ const AddMeeting = () => {
                           <h4 className="text-lg font-bold text-[#dd2727]">{meeting.subject}</h4>
                           <p className="text-gray-700 font-semibold">{meeting.courseId}</p>
                           <p className="text-gray-500 text-sm flex items-center gap-2">
-                             <span className="text-lg">🕒</span>
-                             {new Date(meeting.startDate).toLocaleString()}
+                            <span className="text-lg">🕒</span>
+                            {new Date(meeting.startDate).toLocaleString()}
                           </p>
                           <div className="flex gap-3 text-sm mt-3">
                             <a
@@ -206,11 +206,11 @@ const AddMeeting = () => {
                             >
                               Join
                             </a>
-                            <button 
-                                onClick={() => copyToClipboard(meeting.ringCentralMeeting?.roomUrl || "")}
-                                className="text-blue-600 hover:underline"
+                            <button
+                              onClick={() => copyToClipboard(meeting.ringCentralMeeting?.roomUrl || "")}
+                              className="text-blue-600 hover:underline"
                             >
-                                Copy URL
+                              Copy URL
                             </button>
                             <button
                               onClick={() => deleteMeeting(meeting.id)}

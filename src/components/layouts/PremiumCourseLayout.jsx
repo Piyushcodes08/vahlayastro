@@ -19,7 +19,7 @@ const PremiumCourseLayout = ({
   title, 
   subtitle, 
   heroImage, 
-  instructorImage = "/assets/hansal sir.jpg",
+  instructorImage = "/src/assets/images/common/team/hansal sir.jpg",
   rating = "4.9",
   reviews = "120+",
   duration = "24 Sessions",
@@ -53,7 +53,7 @@ const PremiumCourseLayout = ({
           <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#b0a102]/10 rounded-full blur-[120px] pointer-events-none"></div>
         </div>
 
-        <div className="relative z-10 premium-container flex flex-col lg:flex-row justify-between items-center gap-16">
+        <div className="relative z-10 premium-container flex flex-col lg:flex-row justify-between items-center gap-16 pt-[50px]">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -303,7 +303,7 @@ const PremiumCourseLayout = ({
           </div>
           <div className="md:w-1/3 relative group">
             <div className="absolute inset-0 bg-white/20 blur-3xl opacity-0 group-hover:opacity-30 transition-opacity"></div>
-            <img src="/assets/hansal sir.jpg" alt="Certificate" className="w-full rounded-2xl shadow-2xl border border-white/20 grayscale group-hover:grayscale-0 transition-all duration-700 rotate-3 group-hover:rotate-0" />
+            <img src="/src/assets/images/common/team/hansal sir.jpg" alt="Certificate" className="w-full rounded-2xl shadow-2xl border border-white/20 grayscale group-hover:grayscale-0 transition-all duration-700 rotate-3 group-hover:rotate-0" />
           </div>
         </div>
       </section>
@@ -362,3 +362,4 @@ const PremiumCourseLayout = ({
 };
 
 export default PremiumCourseLayout;
+

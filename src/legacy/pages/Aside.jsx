@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { 
-    IoIosArrowBack, 
-    IoIosContact, 
+import {
+    IoIosArrowBack,
+    IoIosContact,
     IoIosLogOut
 } from "react-icons/io";
 
@@ -59,7 +59,7 @@ const Aside = () => {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            navigate("/login");
+            navigate("/");
         } catch (error) {
             console.error("Logout failed", error);
         }
@@ -80,22 +80,33 @@ const Aside = () => {
                     onClick={() => setSidebarOpen(true)}
                     className="lg:hidden fixed top-24 left-4 bg-white text-[#dd2727] p-3 rounded-2xl shadow-lg z-[100] border border-[#dd2727]/10"
                 >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
             )}
 
             {sidebarOpen && (
                 <div
                     onClick={() => setSidebarOpen(false)}
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] lg:hidden"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-[2050] lg:hidden"
                 ></div>
             )}
-
+ 
             <aside
                 ref={sidebarRef}
-                className={`fixed lg:sticky top-0 lg:top-14 left-0 w-72 bg-[#dd2727] transition-all duration-300 transform z-[100] flex flex-col h-screen lg:h-[calc(100vh-56px)] overflow-y-auto custom-scrollbar self-start
-                ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+                className={`fixed lg:sticky top-0 lg:top-16 left-0 w-72 bg-[#dd2727] transition-all duration-500 ease-in-out transform z-[2100] flex flex-col h-screen lg:h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar self-start
+                ${sidebarOpen ? "translate-x-0 shadow-[20px_0_60px_rgba(0,0,0,0.5)]" : "-translate-x-full lg:translate-x-0 lg:shadow-none"}`}
             >
+                {/* Close button for mobile */}
+                <div className="lg:hidden flex justify-end p-6 pb-0 pt-16 lg:pt-6">
+                    <button
+                        onClick={() => setSidebarOpen(false)}
+                        className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-lg text-white hover:bg-white/20 transition-all border border-white/10"
+                    >
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Close</span>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
                 {/* Profile Section */}
                 <div className="pt-10 pb-8 flex flex-col items-center flex-shrink-0 text-center">
                     <div className="w-32 h-32 rounded-full border-4 border-white/40 overflow-hidden shadow-2xl mb-4 bg-white/10 flex items-center justify-center transition-transform hover:scale-105 duration-500">
@@ -125,9 +136,9 @@ const Aside = () => {
                                     if (window.innerWidth < 1024) setSidebarOpen(false);
                                 }}
                                 className={`w-full text-center px-4 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300
-                                ${isActive 
-                                    ? "bg-white text-[#dd2727] shadow-xl transform scale-105" 
-                                    : "bg-white/10 text-white hover:bg-white/20 hover:translate-x-1"}`}
+                                ${isActive
+                                        ? "bg-white text-[#dd2727] shadow-xl transform scale-105"
+                                        : "bg-white/10 text-white hover:bg-white/20 hover:translate-x-1"}`}
                             >
                                 {item.title}
                             </button>
@@ -145,14 +156,6 @@ const Aside = () => {
                         Logout Session
                     </button>
                 </div>
-
-                {/* Close button for mobile */}
-                <button
-                    onClick={() => setSidebarOpen(false)}
-                    className="lg:hidden absolute top-6 right-6 text-white hover:scale-110 transition-transform"
-                >
-                    <IoIosArrowBack size={28} />
-                </button>
             </aside>
         </>
     );

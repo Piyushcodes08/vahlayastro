@@ -28,11 +28,11 @@ const Dashboard = () => {
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
+
                     // Fetch metadata for images from correct collections
                     const courseTypes = ["freeCourses", "paidCourses"];
                     const coursesMetadata = {};
-                    
+
                     for (const type of courseTypes) {
                         const coursesSnap = await getDocs(collection(db, type));
                         coursesSnap.forEach(doc => {
@@ -51,7 +51,7 @@ const Dashboard = () => {
 
                     setCourses(enrolled.map(name => ({
                         name,
-                        image: coursesMetadata[name] || "/assets/courses.jpg"
+                        image: coursesMetadata[name] || "/src/assets/images/pages/courses/courses.jpg"
                     })));
                 }
             } catch (err) {
@@ -67,15 +67,15 @@ const Dashboard = () => {
         <div className="admin-layout min-h-screen flex flex-col">
             <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
             <Header />
-            
+
             <div className="flex flex-1 relative z-10">
                 <Aside />
-                
-                <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-10">
+
+                <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-28 md:pt-32">
                     <div className="max-w-7xl mx-auto space-y-10">
-                        
+
                         {/* Welcome Banner */}
-                        <div className="bg-white p-12 rounded-[2.5rem] border border-red-100 shadow-sm relative overflow-hidden group text-center flex flex-col items-center">
+                        <div className="bg-white p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-red-100 shadow-sm relative overflow-hidden group text-center flex flex-col items-center">
                             <div className="relative z-10 w-full">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-12 mb-8">
                                     <div className="text-left">
@@ -89,11 +89,11 @@ const Dashboard = () => {
                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Account Active</span>
                                     </div>
                                 </div>
-                                
+
                                 <p className="text-slate-500 text-lg leading-relaxed mb-10 font-medium max-w-2xl mx-auto">
                                     Your cosmic journey continues. You have enrolled in {courses.length} sacred courses. Review your progress and continue your learning below.
                                 </p>
-                                
+
                                 <div className="flex flex-wrap justify-center gap-6">
                                     <Link to="/enrolledcourse" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl transition-all hover:-translate-y-1">
                                         Resume Learning
@@ -144,16 +144,16 @@ const Dashboard = () => {
                                         <div key={idx} className="group bg-white border border-red-600 rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col cursor-pointer" onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}>
                                             <div className="p-6 bg-[#fffcf8] relative">
                                                 <div className="absolute top-4 left-4 z-20">
-                                                    <img src="/assets/vahlay_astro.png" alt="" className="w-10 h-10 bg-white rounded-full shadow-lg border border-red-50 p-1" />
+                                                    <img src="/src/assets/images/common/logos/vahlay_astro.png" alt="" className="w-10 h-10 bg-white rounded-full shadow-lg border border-red-50 p-1" />
                                                 </div>
                                                 <div className="relative rounded-2xl overflow-hidden border-8 border-orange-100 aspect-[16/10] bg-white">
-                                                    <img 
-                                                        src={course.image} 
-                                                        alt={course.name} 
-                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                                    <img
+                                                        src={course.image}
+                                                        alt={course.name}
+                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                                         onError={(e) => {
                                                             e.target.onerror = null;
-                                                            e.target.src = "/assets/courses.jpg";
+                                                            e.target.src = "/src/assets/images/pages/courses/courses.jpg";
                                                         }}
                                                     />
                                                 </div>
@@ -169,14 +169,15 @@ const Dashboard = () => {
                                 </div>
                             )}
                         </div>
-                        
+
                     </div>
                 </main>
             </div>
-            
+
             <Footer />
         </div>
     );
 }
 
 export default Dashboard
+

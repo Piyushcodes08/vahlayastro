@@ -1,6 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
+import personalImg from "../../assets/images/pages/consulting/Personalized Astrological Guidance.webp";
+import lifePathImg from "../../assets/images/pages/consulting/Life Path and Destiny Consultation.webp";
+import careerImg from "../../assets/images/pages/consulting/Career and Success Consultation.webp";
+import relationshipImg from "../../assets/images/pages/consulting/Relationship Compatibility Reading.webp";
+import remedialImg from "../../assets/images/pages/consulting/Remedial Astrology Consultation.webp";
+import supportImg from "../../assets/images/pages/consulting/Ongoing Support and Guidance.webp";
 
 const Consulting = () => {
   const consult = [
@@ -8,37 +14,37 @@ const Consulting = () => {
       title: "Personalized Astrological Guidance",
       description:
         "Dive deep into your unique astrological chart for clarity on relationships, career, and personal growth.",
-      img: "/assets/Personalized Astrological Guidance.webp",
+      img: personalImg,
     },
     {
       title: "Life Path and Destiny Consultation",
       description:
         "Unlock your life's purpose, navigate challenges, and seize opportunities by exploring your unique astrological blueprint.",
-      img: "/assets/Life Path and Destiny Consultation.webp",
+      img: lifePathImg,
     },
     {
       title: "Career and Success Consultation",
       description:
         "Identify your ideal career path, unlock potential, and align your work with the strengths in your astrological chart.",
-      img: "/assets/Career and Success Consultation.webp",
+      img: careerImg,
     },
     {
       title: "Relationship Compatibility Reading",
       description:
         "Analyze relationship dynamics for better communication and harmony.",
-      img: "/assets/Relationship Compatibility Reading.webp",
+      img: relationshipImg,
     },
     {
       title: "Remedial Astrology Consultation",
       description:
         "Address planetary imbalances with proven astrological remedies.",
-      img: "/assets/Remedial Astrology Consultation.webp",
+      img: remedialImg,
     },
     {
       title: "Ongoing Support and Guidance",
       description:
         "Stay aligned with personalized follow-up sessions and continuous support.",
-      img: "/assets/Ongoing Support and Guidance.webp",
+      img: supportImg,
     },
   ];
 
@@ -161,3 +167,4 @@ const Consulting = () => {
 };
 
 export default Consulting;
+

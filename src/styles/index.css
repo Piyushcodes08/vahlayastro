@@ -20,14 +20,14 @@ html {
 /* Global Fonts */
 @font-face {
   font-family: 'Poppins';
-  src: url('/assets/fonts/Poppins-Medium.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Batangas';
-  src: url('/assets/fonts/Batangas-Bold.otf') format('opentype');
+  src: url('../assets/fonts/Batangas/Batangas-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
@@ -38,30 +38,38 @@ body {
   line-height: 1.6;
   color: #ffffff;
   background-color: #000;
-  background-image: url('/assets/bgimage.webp');
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  position: relative;
 }
 
+/* 
+  High Performance Fixed Background for Mobile & Desktop 
+  Using fixed pseudo-elements is better than background-attachment: fixed
+  which is poorly supported or laggy on mobile devices.
+*/
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 100%);
-  z-index: 0;
+  background-image: url('../assets/images/pages/home/bgimage.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -2;
   pointer-events: none;
+  will-change: transform;
+  /* Hint for browser optimization */
 }
 
-
-/* Mobile: fixed attachment not supported on iOS */
-@media (max-width: 768px) {
-  body {
-    background-attachment: scroll;
-  }
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 h1,
@@ -93,13 +101,16 @@ h6 {
 .section-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 100px 15px; /* Desktop default */
+  padding: 100px 15px;
+  /* Desktop default */
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .section-container {
-    padding: 50px 15px; /* Mobile: 50px top/bottom, 15px left/right */
+    padding: 50px 15px;
+    /* Mobile: 50px top/bottom, 15px left/right */
+    overflow-x: hidden;
   }
 }
 
@@ -115,7 +126,8 @@ section {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 0 !important; /* Let .section-container handle padding or centering */
+  padding: 0 !important;
+  /* Let .section-container handle padding or centering */
 }
 
 .hero-section .section-container {
@@ -137,12 +149,12 @@ section {
 
 /* Premium Background Glows */
 .bg-glow-red {
-  background: radial-gradient(circle at center, rgba(221,39,39,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(221, 39, 39, 0.15) 0%, transparent 70%);
   filter: blur(80px);
 }
 
 .bg-glow-gold {
-  background: radial-gradient(circle at center, rgba(176,161,2,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(176, 161, 2, 0.1) 0%, transparent 70%);
   filter: blur(80px);
 }
 
@@ -165,6 +177,10 @@ section {
 }
 
 @media (max-width: 768px) {
+
+  body{
+    overflow-x: hidden;
+  }
   .premium-container {
     padding-left: 15px;
     padding-right: 15px;
@@ -302,10 +318,6 @@ section {
   background: linear-gradient(180deg, #dd2727 0%, #b91c1c 100%) !important;
   border-right: none !important;
   box-shadow: 10px 0 40px rgba(221, 39, 39, 0.15) !important;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 64px;
-  align-self: flex-start;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

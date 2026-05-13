@@ -117,9 +117,9 @@ const AdminTitleOrder = () => {
       <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
         <Aside />
 
-        <main className="flex-1 p-4 md:p-8 pt-20">
-          <div className="max-w-4xl mx-auto space-y-8">
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+          <div className="space-y-8">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-[50px]">
             <div>
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Title <span className="text-[#dd2727]">Arrangement</span>

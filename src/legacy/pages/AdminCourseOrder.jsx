@@ -114,9 +114,9 @@ const AdminTitleOrder = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 pt-20 pb-10 px-6 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-[50px]">
               <div>
                 <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                   Course <span className="text-[#dd2727]">Hierarchy</span>

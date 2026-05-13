@@ -319,10 +319,10 @@ const AddModule = () => {
       <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container gap-8 pb-20">
         <SideBar />
 
-        <main className="flex-1 py-8 pt-20">
-          <div className="space-y-10">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+          <div className="space-y-8">
             {/* Course Selector */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm pt-[50px]">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Select Course To Manage:</label>
               <div className="relative">
                 <select

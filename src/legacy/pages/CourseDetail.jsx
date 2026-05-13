@@ -208,7 +208,7 @@ const CourseDetail = () => {
           >
             <div className="relative rounded-[2.5rem] overflow-hidden border border-white/20 shadow-[0_0_50px_rgba(221,39,39,0.2)] group transition-all duration-700 hover:shadow-[0_0_80px_rgba(221,39,39,0.4)]">
               <img 
-                src={courseData.imageUrl || "/assets/hansal sir.jpg"} 
+                src={courseData.imageUrl || "/src/assets/images/common/team/hansal sir.jpg"} 
                 alt={courseData.title}
                 className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-1000"
               />
@@ -380,7 +380,7 @@ const CourseDetail = () => {
                </div>
 
                <div className="relative rounded-[3rem] overflow-hidden border border-white/10 group h-[300px]">
-                  <img src="/assets/hansal sir.jpg" alt="Acharya Hansal" className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" />
+                  <img src="/src/assets/images/common/team/hansal sir.jpg" alt="Acharya Hansal" className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                   <div className="absolute bottom-8 left-8 right-8">
                     <p className="text-[10px] uppercase tracking-[0.4em] text-[#dd2727] font-black mb-1">Your Guru</p>
@@ -557,7 +557,7 @@ const CourseDetail = () => {
       <section className="py-32">
         <div className="premium-container">
            <div className="bg-[#dd2727]/50 rounded-[4rem] p-12  text-center relative overflow-hidden shadow-[0_30px_100px_rgba(221,39,39,0.3)]">
-              <div className="absolute top-0 left-0 w-full h-full bg-[url('/assets/cosmic-pattern.png')] opacity-10 mix-blend-overlay"></div>
+              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent opacity-10 mix-blend-overlay"></div>
               <div className="relative z-10 space-y-10">
                  <h2 className="title-batangas text-4xl md:text-6xl text-white">Join the <br /> Sacred Community</h2>
                  <p className="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed">

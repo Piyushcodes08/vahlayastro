@@ -1,7 +1,0 @@
-/* backgroundImage.css */
-.bg-backgroundImage {
-    background-image: url('/assets/1.svg'); /* Replace with actual image path */
-    background-size: cover;
-    background-position: center;
-  }
-  

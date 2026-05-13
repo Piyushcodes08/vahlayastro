@@ -130,7 +130,7 @@ const Home = () => {
   const partners = [
     {
       name: "Vahlay Consulting",
-      logo: "/assets/VahalyConsulting logo.png",
+      logo: "/src/assets/images/common/logos/VahalyConsulting logo.png",
       link: "https://vahlayconsulting.com/",
     },
   ];
@@ -287,7 +287,7 @@ const Home = () => {
       <div
         className="bg-gray-100  mt-0 mb-2 flex items-center justify-center"
         style={{
-          backgroundImage: "url('/assets/Screenshot 2024-11-28 211019.png')",
+          backgroundImage: "url('/src/assets/images/common/elements/Screenshot 2024-11-28 211019.png')",
         }}
       >
         {/* wellcome Section */}
@@ -360,7 +360,7 @@ const Home = () => {
                 <div className="bg-pink-100 p-4 rounded-lg mb-2">
                   <div className="absolute top-0 left-2 m-2  rounded-full shadow-lg flex items-center justify-center">
                     <img
-                      src="/assets/vahlay_astro.png"
+                      src="/src/assets/images/common/logos/vahlay_astro.png"
                       alt="logo"
                       className=" w-14 h-14 bg-white object-contain rounded-full"
                     />
@@ -471,7 +471,7 @@ const Home = () => {
                   <div className="bg-pink-100 p-4 rounded-lg mb-4">
                     <div className="absolute top-0 left-2 m-2   rounded-full shadow-lg flex items-center justify-center">
                       <img
-                        src="/assets/vahlay_astro.png"
+                        src="/src/assets/images/common/logos/vahlay_astro.png"
                         alt="logo"
                         className=" bg-white w-14 h-14 object-contain rounded-full"
                       />
@@ -535,7 +535,7 @@ const Home = () => {
       <div
         className="relative h-auto  bg-red-600 text-white lg:py-16 px-6 flex flex-col items-center text-center |lg:my-40 py-6 m-4"
         style={{
-          backgroundImage: "url('/assets/wheel.png')", // Replace with your actual image path
+          backgroundImage: "url('/src/assets/images/common/elements/wheel.png')", // Replace with your actual image path
           backgroundSize: "1500px", // Ensure the background covers the container
           backgroundPosition: "center", // Center the background image
           backgroundRepeat: "no-repeat", // Prevent repetition
@@ -605,7 +605,7 @@ const Home = () => {
       <div
         className="relative h-auto bg-red-600 text-white lg;py-16 px-6 flex flex-col items-center text-center m-4 "
         style={{
-          backgroundImage: "url('/assets/wheel.png')", // Replace with your actual image path
+          backgroundImage: "url('/src/assets/images/common/elements/wheel.png')", // Replace with your actual image path
           backgroundSize: "1500px", // Ensure the background covers the container
           backgroundPosition: "center", // Center the background image
           backgroundRepeat: "no-repeat", // Prevent repetition
@@ -834,3 +834,4 @@ const Home = () => {
 };
 
 export default Home;
+

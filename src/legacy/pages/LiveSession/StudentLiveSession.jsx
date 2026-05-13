@@ -64,13 +64,13 @@ const StudentLiveSession = () => {
       <Header />
       <div className="flex flex-col md:flex-row min-h-screen relative z-10 premium-container gap-8 pb-20">
         <Aside />
-        <main className="flex-1 p-4 md:p-8 pt-20">
-          <div className="max-w-4xl mx-auto space-y-8">
+        <main className="flex-1 p-4 md:p-8 pt-32">
+          <div className="max-w-4xl mx-auto space-y-8 pt-[50px]">
             <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase tracking-tight">
                 Cosmic <span className="text-[#dd2727]">Live Sessions</span>
               </h2>
-              
+
               <div className="relative group">
                 <select
                   value={selectedCourse}
@@ -85,7 +85,7 @@ const StudentLiveSession = () => {
                   ))}
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                 </div>
               </div>
             </div>
@@ -105,11 +105,11 @@ const StudentLiveSession = () => {
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
                         <span className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                           {session.date}
                         </span>
                         <span className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                           {session.time}
                         </span>
                         <span className="flex items-center gap-2 uppercase tracking-widest text-[10px] text-[#b0a102]">

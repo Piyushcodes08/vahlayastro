@@ -2,19 +2,7 @@ html {
     scroll-behavior: smooth;
 }
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('../../assets/fonts/Poppins-Medium.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'Batangas';
-    src: url('../../assets/fonts/Batangas\ Bold\ 700.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
-}
 
 html,
 body {
@@ -50,7 +38,7 @@ body {
 .hero-content {
     max-width: 1170px;
     margin: 0 auto;
-    padding: 50px 15px;
+    padding: 100px 15px;
     position: relative;
     z-index: 1;
     display: flex;

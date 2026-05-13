@@ -1,86 +1,100 @@
+import ariesIcon from '../assets/images/sections/horoscope/aries (1).png';
+import taurusIcon from '../assets/images/sections/horoscope/taurus (1).png';
+import geminiIcon from '../assets/images/sections/horoscope/gemini (1).png';
+import cancerIcon from '../assets/images/sections/horoscope/cancer.png';
+import leoIcon from '../assets/images/sections/horoscope/leo (1).png';
+import virgoIcon from '../assets/images/sections/horoscope/virgo (1).png';
+import libraIcon from '../assets/images/sections/horoscope/libra (1).png';
+import scorpioIcon from '../assets/images/sections/horoscope/scorpio (1).png';
+import sagittariusIcon from '../assets/images/sections/horoscope/sagittarius.png';
+import capricornIcon from '../assets/images/sections/horoscope/capricorn (1).png';
+import aquariusIcon from '../assets/images/sections/horoscope/aquarius.png';
+import piscesIcon from '../assets/images/sections/horoscope/pisces (1).png';
+
 export const horoscopeData = [
   {
     name: "Aries",
-    title: "Mar 21 - Apr 19",
-    image: "/assets/horoscope/aries (1).png",
-    quote:
-      "A burst of energy brings clarity to your goals today. Take the lead on a new project—your confidence will inspire others to follow.",
+    icon: ariesIcon,
+    element: "Fire",
+    traits: "Bold, energetic, fearless",
+    description: "Aries is the pioneer of the zodiac, driven by passion, courage, and a relentless desire to lead. People born under Aries are natural initiators who thrive in fast-paced environments and love taking on new challenges. Their fiery energy makes them confident, competitive, and action-oriented."
   },
   {
     name: "Taurus",
-    title: "Apr 20 - May 20",
-    image: "/assets/horoscope/taurus (1).png",
-    quote:
-      "Patience is your greatest asset right now. Focus on stability and grounding yourself, and the answers you seek will come naturally.",
+    icon: taurusIcon,
+    element: "Earth",
+    traits: "Stable, loyal, sensual",
+    description: "Taurus represents stability, comfort, and grounded energy. These individuals value security, loyalty, and the pleasures of life, often surrounding themselves with beauty and luxury. Known for their patience and persistence, Taurus people are reliable in all relationships."
   },
   {
     name: "Gemini",
-    title: "May 21 - Jun 20",
-    image: "/assets/horoscope/gemini (1).png",
-    quote:
-      "Your communication skills are highlighted today. It's a great time to network, share your ideas, and collaborate with like-minded people.",
+    icon: geminiIcon,
+    element: "Air",
+    traits: "Curious, adaptable, witty",
+    description: "Gemini is the communicator of the zodiac, full of curiosity and intellectual energy. These individuals are highly adaptable, quick thinkers, and love engaging in conversations. Their dual nature allows them to see multiple perspectives, making them versatile."
   },
   {
     name: "Cancer",
-    title: "Jun 21 - Jul 22",
-    image: "/assets/horoscope/cancer.png",
-    quote:
-      "Listen to your intuition; it's guiding you toward emotional fulfillment. Spend time with loved ones to recharge your spirit.",
+    icon: cancerIcon,
+    element: "Water",
+    traits: "Emotional, protective, intuitive",
+    description: "Cancer is deeply connected to emotions, family, and home. These individuals are nurturing, compassionately, and highly intuitive, often sensing the feelings of others without words. They value emotional security and form strong bonds with loved ones."
   },
   {
     name: "Leo",
-    title: "Jul 23 - Aug 22",
-    image: "/assets/horoscope/leo (1).png",
-    quote:
-      "Your natural charisma is irresistible today. Step into the spotlight and embrace opportunities that allow you to express your creativity.",
+    icon: leoIcon,
+    element: "Fire",
+    traits: "Confident, charismatic, bold",
+    description: "Leo is the natural leader and performer of the zodiac, radiating confidence, warmth, and charisma. These individuals love being in the spotlight and have a strong desire to express themselves creatively. They are generous, passionate, and fiercely loyal."
   },
   {
     name: "Virgo",
-    title: "Aug 23 - Sep 22",
-    image: "/assets/horoscope/virgo (1).png",
-    quote:
-      "Organization and attention to detail will set you free. Tackle those pending tasks, and you'll find a surprising sense of peace.",
+    icon: virgoIcon,
+    element: "Earth",
+    traits: "Analytical, practical, perfectionist",
+    description: "Virgo is detail-oriented, thoughtful, and highly analytical. These individuals strive for perfection and take pride in their ability to organize, improve, and refine everything. They are practical problem-solvers who approach life with logic and precision."
   },
   {
     name: "Libra",
-    title: "Sep 23 - Oct 22",
-    image: "/assets/horoscope/libra (1).png",
-    quote:
-      "Balance is key today. Seek harmony in your relationships and don't be afraid to compromise to maintain a peaceful environment.",
+    icon: libraIcon,
+    element: "Air",
+    traits: "Balanced, charming, diplomatic",
+    description: "Libra seeks harmony, balance, and beauty in all aspects of life. These individuals are naturally charming, social, and skilled at maintaining peace. They value fairness and often act as mediators, bringing people together with their diplomatic nature."
   },
   {
     name: "Scorpio",
-    title: "Oct 23 - Nov 21",
-    image: "/assets/horoscope/scorpio (1).png",
-    quote:
-      "Your passion and determination are at an all-time high. Dive deep into a subject that fascinates you—hidden truths may be revealed.",
+    icon: scorpioIcon,
+    element: "Water",
+    traits: "Intense, mysterious, powerful",
+    description: "Scorpio is known for its depth, intensity, and magnetic presence. These individuals are highly passionate and emotionally powerful, often experiencing life on a profound level. They are determined, strategic, and unafraid of transformation."
   },
   {
     name: "Sagittarius",
-    title: "Nov 22 - Dec 21",
-    image: "/assets/horoscope/sagittarius.png",
-    quote:
-      "Adventure calls today. Embrace spontaneity and explore new horizons, whether through travel, learning, or a bold new idea.",
+    icon: sagittariusIcon,
+    element: "Fire",
+    traits: "Adventurous, optimistic, free-spirited",
+    description: "Sagittarius is the explorer of the zodiac, always seeking knowledge, truth, and new experiences. These individuals are optimistic and driven by a love for freedom. They enjoy exploring different cultures, ideas, and philosophies."
   },
   {
     name: "Capricorn",
-    title: "Dec 22 - Jan 19",
-    image: "/assets/horoscope/capricorn (1).png",
-    quote:
-      "Your disciplined approach is paying off. Keep your eyes on the prize, and don't let temporary setbacks distract you from your goals.",
+    icon: capricornIcon,
+    element: "Earth",
+    traits: "Disciplined, ambitious, responsible",
+    description: "Capricorn is focused, disciplined, and goal-oriented. These individuals are driven by ambition and have a strong sense of responsibility. They are excellent planners who value structure, hard work, and long-term success."
   },
   {
     name: "Aquarius",
-    title: "Jan 20 - Feb 18",
-    image: "/assets/horoscope/aquarius.png",
-    quote:
-      "Your innovative ideas are needed right now. Think outside the box and don't be afraid to challenge the status quo for the greater good.",
+    icon: aquariusIcon,
+    element: "Air",
+    traits: "Innovative, independent, visionary",
+    description: "Aquarius is forward-thinking, unique, and highly independent. These individuals are visionaries who enjoy challenging norms and bringing new ideas. They value individuality and often think outside the box."
   },
   {
     name: "Pisces",
-    title: "Feb 19 - Mar 20",
-    image: "/assets/horoscope/pisces (1).png",
-    quote:
-      "Allow your imagination to flow freely. Artistic pursuits and spiritual exploration will bring you profound joy and inner peace today.",
-  },
+    icon: piscesIcon,
+    element: "Water",
+    traits: "Dreamy, compassionate, artistic",
+    description: "Pisces is deeply intuitive, emotional, and imaginative. These individuals are compassionate souls who connect easily with others on an emotional level. They are often drawn to art, creativity, and spirituality."
+  }
 ];
+

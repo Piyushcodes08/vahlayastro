@@ -6,7 +6,7 @@ const FoundationCourse = () => {
   const courseData = {
     title: "Foundation of Astrology",
     subtitle: "The ultimate beginner's guide to mastering the Panchang, Nakshatras, and the building blocks of Vedic Astrology.",
-    heroImage: "/assets/enrolledpg.webp",
+    heroImage: "/src/assets/images/pages/courses/enrolledpg.webp",
     isFree: false,
     enrollLink: "/enroll/punchange-and-foundation-of-astrology/paid",
     description: "Unlock the cosmic code with our flagship Foundation Course. This program is designed for those who want to transition from curious enthusiasts to skilled practitioners. We cover everything from the five elements of the Panchang (Tithi, Vaar, Nakshatra, Yoga, Karana) to reading basic birth charts. Guided by Acharya Hansal Ji, you'll gain the confidence to predict daily Muhurats and understand planetary influences on your destiny.",
@@ -67,3 +67,4 @@ const FoundationCourse = () => {
 };
 
 export default FoundationCourse;
+

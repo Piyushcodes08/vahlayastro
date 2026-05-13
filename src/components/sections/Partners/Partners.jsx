@@ -1,6 +1,6 @@
 import React from "react";
 import "./Partners.css";
-import vahlayLogo from "../../../assets/img/VahalyConsulting logo.webp";
+import vahlayLogo from "../../../assets/images/common/logos/VahalyConsulting logo.webp";
 
 const Partners = () => {
   return (

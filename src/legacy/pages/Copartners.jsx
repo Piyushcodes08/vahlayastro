@@ -6,21 +6,21 @@ const CoPartners = () => {
     //   name: "Vahlay Astro",
     //   description:
     //     "Vahlay Astro offers personalized astrology insights, expert consultations, and interactive courses to deepen your understanding of the cosmos. Discover advanced tools and resources that bridge ancient wisdom with modern life, empowering your journey of self-awareness and spiritual growth..",
-    //   logo: "/assets/vahlay_astro.png", // Replace with your logo path
+    //   logo: "/src/assets/images/common/logos/vahlay_astro.png", // Replace with your logo path
     //   link: "https://vahlayastro.com/",
     // },
     {
       name: "Lakshya",
       description:
         "Lakshya Samaj Seva Charitable Trust is dedicated to uplifting communities through impactful initiatives in education, healthcare, and social welfare. Join us in making a difference and creating a brighter future for those in need. Together, we can transform lives.",
-      logo: "/assets/Lakshya_logo_withoutbg.png", // Replace with your logo path
+      logo: "/src/assets/images/common/logos/Lakshya_logo_withoutbg.png", // Replace with your logo path
       link: "#",
     },
     {
       name: "Vahlay Consulting",
       description:
         "Vahlay Consulting specializes in empowering businesses with tailored strategies and innovative solutions. Our expert team drives growth, streamlines operations, and fosters success, delivering results that align with your vision and help you achieve your goals effectively.",
-      logo: "/assets/VahalyConsulting logo.webp", // Replace with your logo path
+      logo: "/src/assets/images/common/logos/VahalyConsulting logo.webp", // Replace with your logo path
       link: "https://vahlayconsulting.com/",
     },
   ];
@@ -75,3 +75,5 @@ const CoPartners = () => {
 };
 
 export default CoPartners;
+
+

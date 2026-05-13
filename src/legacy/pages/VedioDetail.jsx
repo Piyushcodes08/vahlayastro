@@ -69,7 +69,7 @@ const VideoDetailsPage = () => {
                     const data = doc.data();
                     const videoUrl = (data.url || data.videoUrl || data.link || "").trim();
                     const ytId = extractYTId(videoUrl);
-                    
+
                     return {
                         id: doc.id,
                         ...data,
@@ -208,14 +208,14 @@ const VideoDetailsPage = () => {
         <div className="min-h-screen flex flex-col bg-[#f0f2f5] text-slate-900">
             <Header />
 
-            <div className="flex flex-1 relative z-10 pt-16">
+            <div className="flex flex-1 relative z-10 pt-32">
                 <Aside />
-                
-                <main className="flex-1 p-4 md:p-8 flex flex-col lg:flex-row gap-6 overflow-y-auto">
-                    
+
+                <main className="flex-1 p-4 md:p-8 flex flex-col lg:flex-row gap-6 overflow-y-auto pt-[50px]">
+
                     {/* Left Column: Video & Info */}
                     <div className="flex-1 lg:w-3/4 space-y-4 pb-20">
-                        
+
                         {/* Video Player Section */}
                         <div className="bg-black aspect-video relative rounded-xl overflow-hidden shadow-sm">
                             {activeVideo?.url ? (
@@ -237,7 +237,7 @@ const VideoDetailsPage = () => {
                                 {activeVideo?.displayTitle}
                             </h1>
                             <div className="flex items-center gap-4">
-                                <button 
+                                <button
                                     onClick={handleLike}
                                     className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-full transition-all group"
                                 >
@@ -264,7 +264,7 @@ const VideoDetailsPage = () => {
                                     onChange={(e) => setNewComment(e.target.value)}
                                 />
                                 <div className="flex justify-end">
-                                    <button 
+                                    <button
                                         type="submit"
                                         className="bg-[#dd2727] text-white px-8 py-2.5 rounded-full text-sm font-bold hover:bg-red-700 transition-all"
                                     >
@@ -307,7 +307,7 @@ const VideoDetailsPage = () => {
                                 {orderedVideos.map((video) => {
                                     const isActive = video.id === videoId;
                                     const isWatched = watchedVideos.includes(video.id);
-                                    
+
                                     return (
                                         <button
                                             key={video.id}

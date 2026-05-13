@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { LuShieldCheck, LuHeart, LuLightbulb, LuTrophy, LuArrowRight } from "react-icons/lu";
 import Header from '../components/sections/Header/Header';
 import Footer from '../components/sections/Footer/Footer';
-import aboutuspg from '../assets/img/Aboutus-pg.webp';
+import aboutuspg from '../assets/images/pages/about/Aboutus-pg.webp';
 
 const AboutPage = () => {
     return (

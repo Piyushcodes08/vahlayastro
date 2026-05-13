@@ -1,121 +1,159 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import './Horoscope.css';
 import { horoscopeData } from "../../../data/horoscopeData";
-import "./Horoscope.css";
+import zodiacWheel from "../../../assets/images/sections/horoscope/new_wheel_s5ozry.png";
 
-const Horoscope = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [screenWidth, setScreenWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
-  );
+export default function Horoscope({ onGetDetails }) {
+    const [rotation, setRotation] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const scrollContainerRef = useRef(null);
+    const lastScrollTime = useRef(0);
+    const COOLDOWN = 300;
 
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
+    const zodiacs = horoscopeData;
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const [isInView, setIsInView] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
 
-  const cardPositions = useMemo(() => {
-    const total = horoscopeData.length;
-    const isMobile = screenWidth < 640;
-    const isTablet = screenWidth >= 640 && screenWidth <= 1080;
+    const activeIndexRef = useRef(activeIndex);
+    const isHoveringRef = useRef(isHovering);
 
-    return horoscopeData.map((_, index) => {
-      if (isMobile) {
-        return {
-          left: "50%",
-          top: "50%",
-          width: "90%",
-          height: "auto",
-          transform: "translate(-50%, -50%) scale(0.92)",
+    // Keep refs in sync with state to avoid re-attaching the event listener
+    useEffect(() => {
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
+
+    useEffect(() => {
+        isHoveringRef.current = isHovering;
+    }, [isHovering]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsInView(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+
+        if (scrollContainerRef.current) {
+            observer.observe(scrollContainerRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        const handleWheel = (e) => {
+            if (!isHoveringRef.current) return;
+
+            const currentIndex = activeIndexRef.current;
+            const isAtEnd = currentIndex === zodiacs.length - 1;
+            const isAtStart = currentIndex === 0;
+
+            if (e.deltaY > 0 && isAtEnd) return;
+            if (e.deltaY < 0 && isAtStart) return;
+
+            e.preventDefault();
+
+            if (Date.now() - lastScrollTime.current < COOLDOWN) return;
+            const delta = Math.abs(e.deltaY);
+            if (delta < 15) return;
+
+            const power = Math.min(Math.max(Math.floor(delta / 100), 1), 4);
+
+            if (e.deltaY > 0) {
+                const nextIndex = Math.min(currentIndex + power, zodiacs.length - 1);
+                if (nextIndex !== currentIndex) {
+                    const actualSteps = nextIndex - currentIndex;
+                    setActiveIndex(nextIndex);
+                    setRotation(prev => prev - (actualSteps * 30));
+                    lastScrollTime.current = Date.now();
+                }
+            } else if (e.deltaY < 0) {
+                const prevIndex = Math.max(currentIndex - power, 0);
+                if (prevIndex !== currentIndex) {
+                    const actualSteps = currentIndex - prevIndex;
+                    setActiveIndex(prevIndex);
+                    setRotation(prev => prev + (actualSteps * 30));
+                    lastScrollTime.current = Date.now();
+                }
+            }
         };
-      }
 
-      // Larger radiusY to avoid overlap with the growing active center card
-      const radiusX = isTablet ? 240 : 390;
-      const radiusY = isTablet ? 195 : 260;
+        window.addEventListener("wheel", handleWheel, { passive: false });
+        return () => window.removeEventListener("wheel", handleWheel);
+    }, [zodiacs.length]);
 
-      const angle = (360 / total) * index - 90;
-      const radian = (angle * Math.PI) / 180;
+    return (
+        <section className={`horoscope-section mx-auto max-w-7xl ${isInView ? "in-view" : ""}`} ref={scrollContainerRef}>
+            <div className='flex flex-col text-center gap-2 pb-12  z-10'>
+                <span className="text-[#dd2727] font-bold tracking-[0.3em] uppercase text-xs mb-2">Vahlay Astro</span>
+                <h2 className="title-batangas text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white">
+                    Explore Your <span className="text-[#dd2727]">Cosmic Destiny</span>
+                </h2>
+                <p className="subtitle-poppins text-lg md:text-xl font-medium text-white/70 max-w-2xl mx-auto">
+                    Navigate through the celestial wheel to uncover your personalized daily horoscope and planetary insights.
+                </p>
+            </div>
 
-      const x = Math.cos(radian) * radiusX;
-      const y = Math.sin(radian) * radiusY;
-
-      return {
-        left: `calc(50% + ${x}px)`,
-        top: `calc(50% + ${y}px)`,
-        width: isTablet ? "60px" : "88px",
-        height: isTablet ? "60px" : "88px",
-        transform: "translate(-50%, -50%)",
-      };
-    });
-  }, [screenWidth]);
-
-  const handlePrev = () => {
-    setActiveIndex((prev) =>
-      prev === 0 ? horoscopeData.length - 1 : prev - 1
-    );
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) =>
-      prev === horoscopeData.length - 1 ? 0 : prev + 1
-    );
-  };
-
-  return (
-    <section className="horoscope-section">
-      {/* Heading stays inside constrained container */}
-      <div className="section-container">
-        <div className="flex flex-col gap-2 mb-12 text-center">
-          <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight">
-            Cosmic Forecast
-          </h2>
-          <p className="subtitle-poppins text-lg text-white/60">
-            Check your daily astrological predictions for cosmic guidance.
-          </p>
-        </div>
-      </div>
-
-      {/* Orbit + active card — full viewport width so left:50% = true center */}
-      <div className="quote-row">
-        {horoscopeData.map((item, index) => {
-          const isActive = activeIndex === index;
-          return (
-            <button
-              type="button"
-              key={item.name}
-              className={`quote-column horoscope-float ${isActive ? "col-active show" : ""}`}
-              style={isActive ? undefined : cardPositions[index]}
-              onClick={() => setActiveIndex(index)}
-              aria-label={`Open ${item.name} horoscope`}
-            >
-              <div className="col-inner">
-                <div className="author-meta">
-                  <div className="image-cover">
-                    <img src={item.image} alt={item.name} />
-                  </div>
-                  <div className="author-info">
-                    <div className="author-name">
-                      <p className="person-name">{item.name}</p>
+            <div className="zodiac-container">
+                {/* Information Panel - Left */}
+                <div className="zodiac-info-panel left">
+                    <div className="zodiac-header" key={`name-${activeIndex}`}>
+                        <div className="zodiac-symbol-bg">
+                            <img
+                                src={zodiacs[activeIndex].icon}
+                                alt={zodiacs[activeIndex].name}
+                                className="zodiac-active-icon-mini"
+                            />
+                        </div>
+                        <h2 className="zodiac-name">{zodiacs[activeIndex].name}</h2>
+                        <span className="zodiac-traits">{zodiacs[activeIndex].traits}</span>
                     </div>
-                    <div className="author-status">
-                      <p className="person-title">{item.title}</p>
-                    </div>
-                  </div>
                 </div>
-                <div className="quote-wrapper">
-                  <div className="box-text-inner">
-                    <p>{item.quote}</p>
-                  </div>
-                </div>
-              </div>
-            </button>
-          );
-        })} 
-      </div>
-    </section>
-  );
-};
 
-export default Horoscope;
+                {/* Central Wheel */}
+                <div
+                    className="zodiac-wheel-wrapper"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                >
+                    <div className="zodiac-wheel-outer" style={{ transform: `rotate(${rotation}deg)` }}>
+                        <img src={zodiacWheel} alt="Zodiac Wheel" className="zodiac-wheel-image" />
+                    </div>
+
+                    <div className="zodiac-pointer">
+                        <div className="pointer-glow"></div>
+                    </div>
+
+                    <div className="zodiac-center-display">
+                        <div className="active-zodiac-card" key={`card-${activeIndex}`}>
+                            <div className="card-inner">
+                                <img
+                                    src={zodiacs[activeIndex].icon}
+                                    alt=""
+                                    className="active-icon-large"
+                                />
+                                <div className="zodiac-glow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Information Panel - Right */}
+                <div className="zodiac-info-panel right" key={`desc-${activeIndex}`}>
+                    <div className="element-badge">
+                        <span className="element-dot"></span>
+                        {zodiacs[activeIndex].element} Element
+                    </div>
+                    <p className="zodiac-description">
+                        {zodiacs[activeIndex].description}
+                    </p>
+                    <button className="read-more-btn" onClick={onGetDetails}>
+                        Get Detailed <span className="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+
+
+        </section>
+    );
+}

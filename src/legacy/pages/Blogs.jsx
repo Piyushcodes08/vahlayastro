@@ -89,7 +89,7 @@ const ArticlesPage = () => {
                     )}
                     <div className="absolute -bottom-6 left-2 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center">
                       <img
-                        src="/assets/vahlay_astro.png"
+                        src="/src/assets/images/common/logos/vahlay_astro.png"
                         alt="logo"
                         className="w-10 h-10 object-contain rounded-full"
                       />
@@ -155,3 +155,4 @@ const ArticlesPage = () => {
 };
 
 export default ArticlesPage;
+

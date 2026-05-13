@@ -120,8 +120,8 @@ const AdminPanel = () => {
         {/* Sidebar - Always visible on desktop and mobile */}
         <Admin />
 
-        <main className="flex-1 min-w-0 p-4 md:p-10 pt-20">
-          <div className="max-w-4xl mx-auto space-y-10">
+        <main className="flex-1 min-w-0 p-4 md:p-10 pt-32">
+          <div className="max-w-4xl mx-auto space-y-10 pt-[50px]">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
               <div>
                 <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">

@@ -6,7 +6,7 @@ const NaradCourse = () => {
   const courseData = {
     title: "Narad Puran Mastery",
     subtitle: "Unlock the secrets of the Narad Puran and master the art of divine communication and cosmic law.",
-    heroImage: "/assets/Narad puranhp.webp",
+    heroImage: "/src/assets/images/pages/courses/Narad puranhp.webp",
     isFree: true,
     enrollLink: "/enrollfree/narad-bhakti-sutra/free",
     description: "The Narad Purana is one of the eighteen Mahapuranas, a sacred genre of Hindu texts. This course provides a deep dive into its teachings on devotion (bhakti), cosmic creation, and the divine laws governing the universe. Led by Acharya Hansal Ji, you will explore how the wisdom of Narada Muni can be applied to achieve mental clarity and spiritual growth in the modern age.",
@@ -65,3 +65,4 @@ const NaradCourse = () => {
 };
 
 export default NaradCourse;
+

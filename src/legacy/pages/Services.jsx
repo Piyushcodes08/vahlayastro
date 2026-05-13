@@ -3,26 +3,29 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Header from "../../components/sections/Header/Header";
 import Footer from "../../components/sections/Footer/Footer";
+import courseImg from "../../assets/images/pages/courses/courses.jpg";
+import consultingImg from "../../assets/images/pages/consulting/consulting.webp";
+import articlesImg from "../../assets/images/pages/blogs/books.webp";
 
 const Services = () => {
   const services = [
     {
       title: "Sacred Courses",
-      img: "/assets/courses.jpg",
+      img: courseImg,
       description: "Dive deep into the ancient knowledge of Astrology through our comprehensive courses designed for modern seekers.",
       link: "/courses",
       icon: "📚"
     },
     {
       title: "Cosmic Consultation",
-      img: "/assets/consulting.webp",
+      img: consultingImg,
       description: "Get personalized guidance and planetary insights through one-on-one sessions with our expert astrologers.",
       link: "/consulting",
       icon: "🧘"
     },
     {
       title: "Celestial Articles",
-      img: "/assets/books.webp",
+      img: articlesImg,
       description: "Explore a vast library of celestial wisdom and planetary insights through our curated spiritual articles.",
       link: "/articles",
       icon: "📜"
@@ -45,7 +48,7 @@ const Services = () => {
   return (
     <div className="min-h-screen flex flex-col relative">
       <Header />
-      
+
       <main className="flex-1 relative z-10">
         {/* Hero Section - Matching Landing Page Style */}
         <section className="relative h-[100dvh] flex items-center overflow-hidden text-center">
@@ -64,12 +67,12 @@ const Services = () => {
                 <span className="text-[#dd2727]">Divine Services</span>
               </h1>
               <p className="text-gray-400 text-lg md:text-xl max-w-3xl leading-relaxed font-medium">
-                We offer a wide range of astrology-based solutions to help you navigate 
+                We offer a wide range of astrology-based solutions to help you navigate
                 life's cosmic path with clarity, purpose, and spiritual wisdom.
               </p>
             </motion.div>
           </div>
-          
+
           {/* Decorative Elements matching landing page */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
         </section>
@@ -92,7 +95,7 @@ const Services = () => {
                 >
                   {/* Glassmorphic Card */}
                   <div className="relative bg-white/5 backdrop-blur-md rounded-[3rem] border border-white/10 overflow-hidden h-full flex flex-col shadow-2xl transition-all duration-500 hover:border-red-600/50 hover:bg-white/10 group-hover:-translate-y-4">
-                    
+
                     {/* Image Area */}
                     <div className="relative h-72 overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent z-10"></div>
@@ -102,31 +105,31 @@ const Services = () => {
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                       />
                       <div className="absolute top-6 left-8 z-20">
-                         <span className="w-12 h-12 flex items-center justify-center bg-[#dd2727] text-2xl rounded-2xl shadow-xl transform -rotate-12 group-hover:rotate-0 transition-transform duration-500">
-                           {service.icon}
-                         </span>
+                        <span className="w-12 h-12 flex items-center justify-center bg-[#dd2727] text-2xl rounded-2xl shadow-xl transform -rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                          {service.icon}
+                        </span>
                       </div>
                       <div className="absolute bottom-6 left-8 z-20">
-                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none mb-1">
+                        <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none mb-1">
                           {service.title.split(' ')[0]} <br />
                           <span className="text-[#dd2727]">{service.title.split(' ')[1]}</span>
                         </h3>
                       </div>
                     </div>
-                    
+
                     {/* Content Area */}
                     <div className="p-10 flex flex-col flex-1">
                       <p className="text-gray-400 leading-relaxed mb-10 font-medium text-lg">
                         {service.description}
                       </p>
-                      
+
                       <div className="mt-auto">
-                        <Link 
+                        <Link
                           to={service.link}
                           className="flex items-center justify-center gap-3 w-full py-5 bg-[#dd2727] text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white hover:text-black transition-all shadow-[0_10px_40px_-10px_rgba(221,39,39,0.5)] active:scale-95"
                         >
                           Continue Path
-                          <svg className="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                          <svg className="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                         </Link>
                       </div>
                     </div>
@@ -155,7 +158,7 @@ const Services = () => {
                   Book a Consultation
                 </Link>
               </div>
-              
+
               {/* Animated Background Sparkles */}
               <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
@@ -171,3 +174,4 @@ const Services = () => {
 };
 
 export default Services;
+

@@ -81,7 +81,7 @@ const HeroSection = () => {
         {/* Hero Banner Section */}
         <div className="relative overflow-hidden bg-white border-b border-red-50">
           <div className="absolute inset-0 opacity-5">
-             <img src="/assets/bgimage.webp" alt="" className="w-full h-full object-cover grayscale" />
+             <img src="/src/assets/images/pages/home/bgimage.webp" alt="" className="w-full h-full object-cover grayscale" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-20 py-24 flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
@@ -125,7 +125,7 @@ const HeroSection = () => {
                 <div className="relative p-10 bg-[#fffcf8]">
                   <div className="absolute top-8 left-8 z-20">
                     <img
-                      src="/assets/vahlay_astro.png"
+                      src="/src/assets/images/common/logos/vahlay_astro.png"
                       alt="logo"
                       className="w-16 h-16 bg-white object-contain rounded-full shadow-xl border border-red-50"
                     />
@@ -173,3 +173,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+

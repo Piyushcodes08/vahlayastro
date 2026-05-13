@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 const ArticleDetailsPage = () => {
     const { id } = useParams();
     const { slugMap, loading } = useArticles();
-    
+
     const [language, setLanguage] = useState("hindi");
     const [expandedArticle, setExpandedArticle] = useState(null);
     const [expandedAccordion, setExpandedAccordion] = useState(null);
@@ -134,29 +134,30 @@ const ArticleDetailsPage = () => {
             {getMetaTags()}
             <Header />
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
-                
+
                 {/* Page Title Header */}
-                <div className="pt-24 md:pt-32 pb-12 px-4 text-center border-b border-white/5 mb-8 bg-black/40 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                    <h1 className="title-batangas text-6xl font-bold tracking-wide text-white uppercase">
-                        <span className="text-[#dd2727]">Astrology</span> Articles & Publications
+                <div className="pt-24 md:pt-36 pb-12 px-4 text-center border-b border-white/5 mb-8 bg-black/40 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                    <h1 className="title-batangas text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wide text-white uppercase leading-tight">
+                        <span className="text-[#dd2727]">Astrology</span> <br className="sm:hidden" /> Articles & Publications
                     </h1>
                     {article && (
-                        <p className="mt-4 text-white/70 subtitle-poppins text-sm md:text-base tracking-wide">
+                        <p className="mt-6 text-white/70 subtitle-poppins text-xs md:text-base tracking-[0.2em] uppercase font-medium">
                             Articles on Astrology By <strong className="text-white">Valay Patel</strong>
                         </p>
                     )}
                 </div>
 
-                <section className="max-w-[1170px] mx-auto px-4 pb-20 flex flex-col lg:flex-row gap-8">
-                    
+                <section className="max-w-[1170px] mx-auto px-0 sm:px-4 pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] gap-8 items-start">
+
                     {/* Left Column: Article Content */}
-                    <article className="lg:w-3/4 bg-white/5 backdrop-blur-md p-6 md:p-10 rounded-[2rem] border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-                        
-                        <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6 gap-2">
+                    <article className="w-full min-w-0 bg-white/5 backdrop-blur-xl p-0 sm:p-8 md:p-10 rounded-none sm:rounded-[3rem] border-x-0 sm:border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden">
+
+                        {/* Article Header Actions */}
+                        <div className="flex justify-between items-center px-6 py-8 sm:px-0 sm:pt-0 sm:pb-8 border-b border-white/10 gap-2">
                             {/* Left: Back to Articles */}
                             <div className="flex-1 flex justify-start">
-                                <Link to="/articles" className="inline-flex items-center bg-[#dd2727] text-white px-3 md:px-5 py-2 text-[10px] md:text-sm font-bold tracking-widest uppercase rounded-full hover:bg-white hover:text-[#dd2727] transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(221,39,39,0.3)]">
-                                    ← <span className="hidden sm:inline ml-2">Back</span>
+                                <Link to="/articles" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-[#dd2727] text-white rounded-full hover:bg-white hover:text-[#dd2727] transition-all duration-300 shadow-[0_0_20px_rgba(221,39,39,0.4)] hover:scale-110">
+                                    <span className="text-xl md:text-2xl font-bold">←</span>
                                 </Link>
                             </div>
 
@@ -164,7 +165,7 @@ const ArticleDetailsPage = () => {
                             <div className="flex-1 flex justify-center">
                                 <button
                                     onClick={toggleLanguage}
-                                    className="bg-[#dd2727] text-white px-3 md:px-5 py-2 text-[10px] md:text-sm font-bold tracking-widest uppercase rounded-full hover:bg-white hover:text-[#dd2727] transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(221,39,39,0.3)]"
+                                    className="bg-[#dd2727] text-white px-6 md:px-10 py-2.5 md:py-3.5 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase rounded-full hover:bg-white hover:text-[#dd2727] transition-all duration-300 shadow-[0_0_25px_rgba(221,39,39,0.4)] hover:scale-105 active:scale-95"
                                 >
                                     {language === "hindi" ? "In English" : "हिंदी में"}
                                 </button>
@@ -174,14 +175,13 @@ const ArticleDetailsPage = () => {
                             <div className="flex-1 flex justify-end relative share-container">
                                 <button
                                     onClick={handleShareClick}
-                                    className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 text-white px-3 md:px-5 py-2 rounded-full transition-colors border border-white/20 text-[10px] md:text-sm"
+                                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 border border-white/20 shadow-xl hover:scale-110"
                                 >
-                                    <RiShareForwardFill className="w-4 h-4 md:w-5 md:h-5" />
-                                    <span className="font-medium tracking-wider uppercase hidden sm:inline">Share</span>
+                                    <RiShareForwardFill className="w-5 h-5 md:w-6 md:h-6" />
                                 </button>
 
                                 {showShareOptions && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-lg rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/20 z-50 overflow-hidden">
+                                    <div className="absolute right-0 mt-4 w-56 bg-black/95 backdrop-blur-2xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] border border-white/20 z-50 overflow-hidden animate-in fade-in zoom-in duration-300">
                                         {[
                                             { icon: RiFacebookFill, color: "text-blue-500", action: shareOnFacebook, text: "Facebook" },
                                             { icon: RiTwitterFill, color: "text-blue-400", action: shareOnTwitter, text: "Twitter" },
@@ -192,10 +192,10 @@ const ArticleDetailsPage = () => {
                                             <button
                                                 key={index}
                                                 onClick={item.action}
-                                                className="w-full px-4 py-3 text-left hover:bg-white/10 flex items-center transition-colors border-b border-white/5 last:border-0"
+                                                className="w-full px-6 py-4 text-left hover:bg-white/10 flex items-center transition-colors border-b border-white/5 last:border-0"
                                             >
-                                                <item.icon className={`${item.color} mr-3 text-lg`} />
-                                                <span className="text-sm tracking-wide text-white/90">{item.text}</span>
+                                                <item.icon className={`${item.color} mr-4 text-xl`} />
+                                                <span className="text-sm font-semibold tracking-wide text-white/90">{item.text}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -203,52 +203,59 @@ const ArticleDetailsPage = () => {
                             </div>
                         </div>
 
-                        <div className="w-full h-64 md:h-[400px] rounded-[1.5rem] overflow-hidden mb-8 border border-white/10 bg-white/5 flex items-center justify-center">
-                            <img src={article.imageUrl || article.img} alt={article.title} className="w-full h-full object-cover" />
+                        {/* Image: Full Width on Mobile, Padded on Desktop */}
+                        <div className="w-full h-64 md:h-[500px] overflow-hidden sm:rounded-[2rem] border-y sm:border border-white/10 bg-white/5 flex items-center justify-center sm:my-10">
+                            <img
+                                src={article.imageUrl || article.img}
+                                alt={article.title}
+                                className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                            />
                         </div>
 
-                        <h1 className="title-batangas text-2xl md:text-3xl lg:text-4xl mb-6 leading-tight text-white">
-                            {language === "hindi" && article.hindi ? article.hindi : article.title}
-                        </h1>
+                        <div className="px-6 sm:px-0">
+                            <h1 className="title-batangas text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight text-white font-black">
+                                {language === "hindi" && article.hindi ? article.hindi : article.title}
+                            </h1>
 
-                        <div className="flex flex-wrap items-center gap-4 mb-8 pb-8 border-b border-white/10">
-                            <span className="text-[#dd2727] font-bold text-lg">Vahlay Astro</span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
-                            <span className="subtitle-poppins text-white/60">{article.data || "Sacred Date"}</span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
-                            <span className="subtitle-poppins text-white/60">{article.author || "By Valay Patel"}</span>
-                        </div>
-
-                        <div className="subtitle-poppins text-white/80 space-y-8 text-lg leading-relaxed">
-                            {article.description && (
-                                <p className="text-xl md:text-2xl font-medium text-white/95 border-l-4 border-[#dd2727] pl-8 py-2 italic mb-8">
-                                    {article.description}
-                                </p>
-                            )}
-                            <div className="whitespace-pre-wrap">
-                                {language === "hindi" && article.dhindi 
-                                    ? article.dhindi 
-                                    : (article.denglish || article.content || "No content available for this article.")}
+                            <div className="flex flex-wrap items-center gap-4 mb-8 pb-8 border-b border-white/10">
+                                <span className="text-[#dd2727] font-bold text-lg">Vahlay Astro</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+                                <span className="subtitle-poppins text-white/60">{article.data || "Sacred Date"}</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+                                <span className="subtitle-poppins text-white/60">{article.author || "By Valay Patel"}</span>
                             </div>
 
-                            {article.referenceLink && (
-                                <div className="mt-8 pt-8 border-t border-white/10">
-                                    <a
-                                        href={article.referenceLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 text-[#dd2727] hover:text-white transition-colors font-medium tracking-wide"
-                                    >
-                                        <span className="bg-[#dd2727]/20 p-2 rounded-full">▶</span> 
-                                        Watch Reference Video
-                                    </a>
+                            <div className="subtitle-poppins text-white/80 space-y-8 text-lg leading-relaxed">
+                                {article.description && (
+                                    <p className="text-xl md:text-2xl font-medium text-white/95 border-l-4 border-[#dd2727] pl-8 py-2 italic mb-8">
+                                        {article.description}
+                                    </p>
+                                )}
+                                <div className="whitespace-pre-wrap">
+                                    {language === "hindi" && article.dhindi
+                                        ? article.dhindi
+                                        : (article.denglish || article.content || "No content available for this article.")}
                                 </div>
-                            )}
-                        </div>          
+
+                                {article.referenceLink && (
+                                    <div className="mt-8 pt-8 border-t border-white/10">
+                                        <a
+                                            href={article.referenceLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 text-[#dd2727] hover:text-white transition-colors font-medium tracking-wide"
+                                        >
+                                            <span className="bg-[#dd2727]/20 p-2 rounded-full">▶</span>
+                                            Watch Reference Video
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </article>
 
                     {/* Right Column: Sidebar (Desktop) */}
-                    <aside className="hidden lg:block w-1/4 bg-white/5 backdrop-blur-md p-6 rounded-[2rem] border border-white/10 shadow-lg h-fit sticky top-10">
+                    <aside className="hidden lg:block w-full min-w-0 bg-white/5 backdrop-blur-md p-6 rounded-[2rem] border border-white/10 shadow-lg h-fit sticky top-10">
                         <h3 className="text-2xl title-batangas text-white mb-6 border-b border-white/10 pb-4">Other Articles</h3>
                         <ul className="space-y-4">
                             {otherArticles.slice(0, 8).map((item) => (
@@ -285,14 +292,14 @@ const ArticleDetailsPage = () => {
                     {/* Mobile Side-drawer */}
                     {isSidebarOpen && (
                         <div className="lg:hidden fixed inset-0 z-50 flex justify-end">
-                            <div 
+                            <div
                                 className="fixed inset-0 bg-black/60 backdrop-blur-sm"
                                 onClick={() => setIsSidebarOpen(false)}
                             />
                             <aside className="relative w-[85%] max-w-sm h-full bg-[#0a0a0a] border-l border-white/10 shadow-2xl overflow-y-auto transform transition-transform p-6 flex flex-col">
                                 <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
                                     <h3 className="text-2xl title-batangas text-white">Other Articles</h3>
-                                    <button 
+                                    <button
                                         onClick={() => setIsSidebarOpen(false)}
                                         className="text-white/60 hover:text-white text-2xl"
                                     >
@@ -340,7 +347,7 @@ const ArticleDetailsPage = () => {
                     <h2 className="title-batangas text-4xl text-white mb-10 text-center">
                         <span className="text-[#dd2727]">Related</span> Celestial Knowledge
                     </h2>
-                    
+
                     <div className="grid grid-cols-1 gap-4 max-w-4xl mx-auto">
                         {otherArticles.slice(0, 5).map((faq, index) => (
                             <div key={faq.id} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
@@ -355,7 +362,7 @@ const ArticleDetailsPage = () => {
                                         ▼
                                     </span>
                                 </button>
-                                
+
                                 {expandedAccordion === index && (
                                     <div className="p-6 pt-0 border-t border-white/5 bg-black/20">
                                         <p className="text-white/70 leading-relaxed mb-6 mt-4">
@@ -379,7 +386,7 @@ const ArticleDetailsPage = () => {
                         ))}
                     </div>
                 </section>
-                
+
             </main>
             <Footer />
         </>

@@ -68,7 +68,7 @@ const EnrollCourse = () => {
         const data = docSnap.data();
         const courseTypes = ["freeCourses", "paidCourses"];
         const coursesMetadata = {};
-        
+
         for (const type of courseTypes) {
           const coursesSnap = await getDocs(collection(db, type));
           coursesSnap.forEach(courseDoc => {
@@ -84,7 +84,7 @@ const EnrollCourse = () => {
           name: courseName,
           type: "Free",
           enrolled: true,
-          image: coursesMetadata[courseName] || "/assets/courses.jpg"
+          image: coursesMetadata[courseName] || "/src/assets/images/pages/courses/courses.jpg"
         })) || [];
 
         const paidCourses = data.DETAILS?.map((courseObj) => {
@@ -116,7 +116,7 @@ const EnrollCourse = () => {
             enrolled: true,
             daysLeft,
             usedDays,
-            image: coursesMetadata[courseName] || "/assets/courses.jpg"
+            image: coursesMetadata[courseName] || "/src/assets/images/pages/courses/courses.jpg"
           };
         }) || [];
 
@@ -126,14 +126,14 @@ const EnrollCourse = () => {
         // Fetch all videos for grouped display
         const allVideosGrouped = {};
         for (const course of allCourses) {
-            const videosRef = collection(db, `videos_${course.name}`);
-            const videosSnapshot = await getDocs(videosRef);
-            if (!videosSnapshot.empty) {
-                allVideosGrouped[course.name] = videosSnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-            }
+          const videosRef = collection(db, `videos_${course.name}`);
+          const videosSnapshot = await getDocs(videosRef);
+          if (!videosSnapshot.empty) {
+            allVideosGrouped[course.name] = videosSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+          }
         }
         setGroupedVideos(allVideosGrouped);
       }
@@ -158,13 +158,13 @@ const EnrollCourse = () => {
   return (
     <div className="admin-layout min-h-screen flex flex-col bg-slate-50">
       <Header />
-      
+
       <div className="flex flex-1 relative z-10">
         <Aside />
-        
-        <main className="flex-1 p-4 md:p-10 pt-10">
+
+        <main className="flex-1 p-4 md:p-10 pt-28 md:pt-32">
           <div className="max-w-7xl mx-auto space-y-12">
-            
+
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 py-12">
               <div>
@@ -192,28 +192,28 @@ const EnrollCourse = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {courses.map((course, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="group bg-white border border-red-600 shadow-lg rounded-[2.5rem] overflow-hidden hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-500 flex flex-col"
                   >
                     {/* Image Container */}
                     <div className="relative p-6 bg-[#fffcf8]">
                       <div className="absolute top-4 left-4 z-20">
                         <img
-                          src="/assets/vahlay_astro.png"
+                          src="/src/assets/images/common/logos/vahlay_astro.png"
                           alt="logo"
                           className="w-12 h-12 bg-white object-contain rounded-full shadow-lg border border-red-100"
                         />
                       </div>
-                      
+
                       <div className="relative rounded-2xl overflow-hidden border-8 border-orange-100 bg-white aspect-[16/10] flex items-center justify-center">
-                        <img 
-                          src={course.image} 
-                          alt={course.name} 
-                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                        <img
+                          src={course.image}
+                          alt={course.name}
+                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/assets/courses.jpg";
+                            e.target.src = "/src/assets/images/pages/courses/courses.jpg";
                           }}
                         />
                         <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
@@ -286,15 +286,15 @@ const EnrollCourse = () => {
                           <div key={module.id} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm group hover:border-red-500 transition-all cursor-pointer" onClick={() => navigate(`/course/${encodeURIComponent(title)}/video/${module.id}`)}>
                             <div className="flex items-center gap-5">
                               <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-[#dd2727] flex-shrink-0 group-hover:bg-[#dd2727] group-hover:text-white transition-colors">
-                                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/></svg>
+                                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>
                               </div>
                               <div className="flex-1 min-w-0">
                                 <h4 className="font-bold text-slate-800 tracking-tight leading-tight mb-1 truncate">
                                   {module.description || module.title || "Sacred Lecture"}
                                 </h4>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-[9px] font-black text-[#dd2727] uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded">Module {module['title-order'] || 0}</span>
-                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lesson {module.order || 0}</span>
+                                  <span className="text-[9px] font-black text-[#dd2727] uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded">Module {module['title-order'] || 0}</span>
+                                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lesson {module.order || 0}</span>
                                 </div>
                               </div>
                             </div>
@@ -315,3 +315,4 @@ const EnrollCourse = () => {
 };
 
 export default EnrollCourse;
+

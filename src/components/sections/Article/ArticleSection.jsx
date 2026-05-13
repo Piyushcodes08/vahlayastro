@@ -108,6 +108,12 @@ const ArticleSection = () => {
     return `translateX(-${percentage}%)`;
   };
 
+  const [openCardId, setOpenCardId] = useState(null);
+
+  const handleCardClick = (id) => {
+    setOpenCardId(prev => prev === id ? null : id);
+  };
+
   // Early returns must happen AFTER all hooks are called!
   if (loading) {
     return (
@@ -145,43 +151,51 @@ const ArticleSection = () => {
               transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none'
             }}
           >
-            {clonedData.map((article, index) => (
-              <div
-                key={`${article.id}-${index}`}
-                className="article-slide"
-                style={{ flex: `0 0 ${100 / visibleItems}%` }}
-              >
-                <div className="article-item">
-                  <div className="article-wrapper">
-                    {/* Inner page content — revealed when cover opens */}
-                    <div className="article-inner">
-                      <h4 className="article-inner-title">{article.title}</h4>
-                      {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
-                      <div className="article-inner-meta">
-                        {article.author && <span className="article-inner-author">By {article.author}</span>}
-                        {article.data && <span className="article-inner-date">{article.data}</span>}
+            {clonedData.map((article, index) => {
+              const uniqueId = `${article.id}-${index}`;
+              const isOpen = openCardId === uniqueId;
+              
+              return (
+                <div
+                  key={uniqueId}
+                  className="article-slide"
+                  style={{ flex: `0 0 ${100 / visibleItems}%` }}
+                >
+                  <div className="article-item">
+                    <div 
+                      className={`article-wrapper ${isOpen ? 'is-open' : ''}`}
+                      onClick={() => handleCardClick(uniqueId)}
+                    >
+                      {/* Inner page content — revealed when cover opens */}
+                      <div className="article-inner">
+                        <h4 className="article-inner-title">{article.title}</h4>
+                        {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
+                        <div className="article-inner-meta">
+                          {article.author && <span className="article-inner-author">By {article.author}</span>}
+                          {article.data && <span className="article-inner-date">{article.data}</span>}
+                        </div>
+                        <Link to={`/articles/${article.id}`} className="article-read-more" onClick={(e) => e.stopPropagation()}>Read More</Link>
                       </div>
-                      <Link to={`/articles/${article.id}`} className="article-read-more">Read More</Link>
-                    </div>
-                    {/* Cover — rotates open on hover */}
-                    <div className="article-cover-container">
-                      <img
-                        src={article.imageUrl || article.img}
-                        alt={article.title}
-                        className="article-cover"
-                        loading="lazy"
-                      />
-                      <div className="article-cover-content">
-                        <h4 className="article-cover-title">{article.title}</h4>
-                        {article.author && <p className="article-cover-author">By {article.author}</p>}
-                        {article.data && <p className="article-cover-date">{article.data}</p>}
+                      {/* Cover — rotates open on hover/click */}
+                      <div className="article-cover-container">
+                        <img
+                          src={article.imageUrl || article.img}
+                          alt={article.title}
+                          className="article-cover"
+                          loading="lazy"
+                        />
+                        <div className="article-cover-content">
+                          <h4 className="article-cover-title">{article.title}</h4>
+                          {article.author && <p className="article-cover-author">By {article.author}</p>}
+                          {article.data && <p className="article-cover-date">{article.data}</p>}
+                        </div>
                       </div>
                     </div>
+                    
                   </div>
-                  
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

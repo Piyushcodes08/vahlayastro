@@ -1,11 +1,12 @@
-import logo from "../../../assets/img/vahlay_astro logo.png";
+import logo from "../../../assets/images/common/logos/vahlay_astro logo.png";
 import { auth, db } from '../../../firebaseConfig';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -14,11 +15,11 @@ const Header = () => {
 
     // Check if we are on admin or dashboard-related pages to keep header always visible/blurred
     const portalPaths = ['/dashboard', '/profile', '/enrolledcourse', '/admin', '/finalize', '/studentlivesession', '/payemi', '/notifications'];
-    
+
     // We treat as portal if it's in portalPaths OR if it's a specific learning course page (but NOT the main course catalog)
-    const isPortal = portalPaths.some(path => location.pathname.startsWith(path)) || 
-                     (location.pathname.startsWith('/course/') && !location.pathname.startsWith('/courses'));
-    
+    const isPortal = portalPaths.some(path => location.pathname.startsWith(path)) ||
+        (location.pathname.startsWith('/course/') && !location.pathname.startsWith('/courses'));
+
     const showBg = scrolled || isPortal;
 
     useEffect(() => {
@@ -76,9 +77,9 @@ const Header = () => {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            alert("Logged out successfully!");
+            navigate("/");
         } catch (error) {
-            console.error("Logout error:", error);
+            console.error("Logout failed", error);
         }
     };
 

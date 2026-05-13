@@ -6,7 +6,7 @@ const BhagavadGitaCourse = () => {
   const courseData = {
     title: "New Edge Bhagavad Gita",
     subtitle: "A modern guide to ancient wisdom. Master the timeless philosophy of the Gita to conquer modern-day challenges.",
-    heroImage: "/assets/New edge Bhadvad Geetahp.webp",
+    heroImage: "/src/assets/images/pages/courses/New edge Bhadvad Geetahp.webp",
     isFree: true,
     enrollLink: "/enrollfree/bhagavad-gita/free",
     description: "The Bhagavad Gita is the ultimate manual for human life. In this 'New Edge' edition, we focus on the practical application of Krishna's teachings in today's high-stress world. Whether you are a student, a professional, or a seeker, this course provides the mental tools for decision-making, emotional stability, and spiritual awakening. Join Acharya Hansal Ji as he decodes the 18 chapters for a 21st-century audience.",
@@ -67,3 +67,4 @@ const BhagavadGitaCourse = () => {
 };
 
 export default BhagavadGitaCourse;
+

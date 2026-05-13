@@ -209,9 +209,9 @@ const AdminArticles = () => {
       <div className="flex flex-1 relative z-10">
         <SideBar />
 
-        <main className="flex-1 min-w-0 pt-16 pb-20 px-6 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-20 px-4 md:px-10 bg-white">
           <div className="space-y-12">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center pt-[50px]">
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Manage <span className="text-[#dd2727]">Articles</span>
               </h2>

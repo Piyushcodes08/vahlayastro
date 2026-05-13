@@ -124,11 +124,11 @@ const EMIDetails = () => {
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(221,39,39,0.2)] p-8 w-full max-w-md relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#dd2727] to-[#b0a102]"></div>
-          
+
           <h3 className="text-2xl font-bold mb-2 text-white">
             Complete <span className="text-[#dd2727]">Payment</span>
           </h3>
-          
+
           <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5">
             <p className="text-gray-300 mb-1 font-medium">
               Course: <span className="text-white">{paymentModal.courseId}</span>
@@ -169,89 +169,89 @@ const EMIDetails = () => {
             </button>
             {usdAmount ? (
               <div className="mt-2 relative z-10 paypal-button-container-dark">
-              <PayPalScriptProvider
-                options={{
-                  "client-id": PAYPAL_CLIENT_ID,
-                  components: "buttons",
-                  currency: "USD",
-                }}
-              >
-                <PayPalButtons
-                  style={{ layout: "vertical" }}
-                  createOrder={(data, actions) => {
-                    return actions.order.create({
-                      purchase_units: [
-                        {
-                          amount: {
-                            currency_code: "USD",
-                            value: usdAmount, // Dynamically set
+                <PayPalScriptProvider
+                  options={{
+                    "client-id": PAYPAL_CLIENT_ID,
+                    components: "buttons",
+                    currency: "USD",
+                  }}
+                >
+                  <PayPalButtons
+                    style={{ layout: "vertical" }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [
+                          {
+                            amount: {
+                              currency_code: "USD",
+                              value: usdAmount, // Dynamically set
+                            },
                           },
-                        },
-                      ],
-                    });
-                  }}
-                  onApprove={async (data, actions) => {
-                    try {
-                      const details = await actions.order.capture();
-                      const paymentId = details.id;
-
-                      const userDetails = {
-                        email: userEmail, // Replace with user's email
-                        name: formData.fullName || "NA", // Replace with user's name
-                      };
-
-                      const backendResponse = await fetch(
-                        "https://backend-7e8f.onrender.com/api/final/paypal/success",
-                        {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            paymentId,
-                            userDetails,
-                            amount: paymentModal.amount,
-                            courseId: paymentModal.courseId,
-                          }),
-                        }
-                      );
-
-                      if (!backendResponse.ok) {
-                        const errorData = await backendResponse.json();
-                        alert(`Error: ${errorData.error}`);
-                        return;
-                      }
-
-                      // Add payment to Firestore
-                      await addDoc(collection(db, "payments"), {
-                        userId: userEmail,
-                        courseId: paymentModal.courseId,
-                        emiNumber: paymentModal.emiNumber,
-                        amount: paymentModal.amount,
-                        paymentId,
-                        status: "paid",
-                        timestamp: new Date(),
+                        ],
                       });
+                    }}
+                    onApprove={async (data, actions) => {
+                      try {
+                        const details = await actions.order.capture();
+                        const paymentId = details.id;
 
+                        const userDetails = {
+                          email: userEmail, // Replace with user's email
+                          name: formData.fullName || "NA", // Replace with user's name
+                        };
+
+                        const backendResponse = await fetch(
+                          "https://backend-7e8f.onrender.com/api/final/paypal/success",
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              paymentId,
+                              userDetails,
+                              amount: paymentModal.amount,
+                              courseId: paymentModal.courseId,
+                            }),
+                          }
+                        );
+
+                        if (!backendResponse.ok) {
+                          const errorData = await backendResponse.json();
+                          alert(`Error: ${errorData.error}`);
+                          return;
+                        }
+
+                        // Add payment to Firestore
+                        await addDoc(collection(db, "payments"), {
+                          userId: userEmail,
+                          courseId: paymentModal.courseId,
+                          emiNumber: paymentModal.emiNumber,
+                          amount: paymentModal.amount,
+                          paymentId,
+                          status: "paid",
+                          timestamp: new Date(),
+                        });
+
+                        alert(
+                          `Payment for EMI #${paymentModal.emiNumber} successful via PayPal!`
+                        );
+                        closePaymentModal();
+                      } catch (error) {
+                        alert(
+                          "An error occurred during payment. Please try again."
+                        );
+                      }
+                    }}
+                    onError={(err) => {
                       alert(
-                        `Payment for EMI #${paymentModal.emiNumber} successful via PayPal!`
+                        "An error occurred during the PayPal payment process."
                       );
-                      closePaymentModal();
-                    } catch (error) {
-                      alert(
-                        "An error occurred during payment. Please try again."
-                      );
-                    }
-                  }}
-                  onError={(err) => {
-                    alert(
-                      "An error occurred during the PayPal payment process."
-                    );
-                  }}
-                />
-              </PayPalScriptProvider>
+                    }}
+                  />
+                </PayPalScriptProvider>
               </div>
             ) : (
               <div className="flex justify-center items-center p-4">
-                 <div className="w-6 h-6 border-2 border-[#dd2727] border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-[#dd2727] border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
             <button
@@ -494,13 +494,13 @@ const EMIDetails = () => {
     <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      
+
       <div className="flex flex-1 relative z-10">
         <Aside />
-        
-        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-20">
-          <div className="max-w-7xl mx-auto space-y-10">
-            
+
+        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-32">
+          <div className="max-w-7xl mx-auto space-y-10 pt-[50px]">
+
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
               <div>
@@ -549,8 +549,8 @@ const EMIDetails = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Remaining</p>
-                             <h4 className="text-2xl font-black text-slate-900">₹{totalUnpaid.toLocaleString("en-IN")}</h4>
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Remaining</p>
+                            <h4 className="text-2xl font-black text-slate-900">₹{totalUnpaid.toLocaleString("en-IN")}</h4>
                           </div>
                         </div>
                       </div>
@@ -573,7 +573,7 @@ const EMIDetails = () => {
                                   </span>
                                 </div>
                               </div>
-                              
+
                               <div className="flex items-center gap-8 w-full md:w-auto mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-slate-200/50">
                                 <span className="text-xl font-black text-slate-900 min-w-[100px] text-right">
                                   ₹{Number(emi.amount).toLocaleString("en-IN")}

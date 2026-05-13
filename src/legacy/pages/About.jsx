@@ -32,7 +32,7 @@ const partners = [
   
   {
     name: "Vahlay Consulting",
-    logo: "/assets/VahalyConsulting logo.png",
+    logo: "/src/assets/images/common/logos/VahalyConsulting logo.png",
     link: "https://vahlayconsulting.com/",
   },
  
@@ -293,3 +293,4 @@ const About = () => {
 };
 
 export default About;
+

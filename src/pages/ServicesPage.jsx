@@ -4,6 +4,15 @@ import Header from '../components/sections/Header/Header';
 import Footer from '../components/sections/Footer/Footer';
 import CourseSection from '../components/sections/Courses/CourseSection';
 import ArticleSection from '../components/sections/Article/ArticleSection';
+import foundationImg from '../assets/images/pages/courses/foundation.webp';
+import selfImg from '../assets/images/pages/courses/self.webp';
+import about1 from '../assets/images/pages/about/about-1.webp';
+import about2 from '../assets/images/pages/about/about-2.webp';
+import about3 from '../assets/images/pages/about/about-3.webp';
+import about4 from '../assets/images/pages/about/about-4.webp';
+import coursesPortalImg from '../assets/images/pages/courses/courses.webp';
+import consultingPortalImg from '../assets/images/pages/consulting/consulting.webp';
+import articlesPortalImg from '../assets/images/pages/blogs/books.webp';
 
 const ServicesPage = () => {
     return (
@@ -71,32 +80,32 @@ const ServicesPage = () => {
                                 {
                                     title: "Personalized Guidance",
                                     desc: "Deep astrological analysis for clarity on relationships, career, and personal growth.",
-                                    img: "/src/assets/img/foundation.webp"
+                                    img: foundationImg
                                 },
                                 {
                                     title: "Destiny Consultation",
                                     desc: "Navigate life's challenges and seize cosmic opportunities via your unique blueprint.",
-                                    img: "/src/assets/img/self.webp"
+                                    img: selfImg
                                 },
                                 {
                                     title: "Career & Success",
                                     desc: "Identify your ideal path and align your professional work with planetary strengths.",
-                                    img: "/src/assets/img/about-1.webp"
+                                    img: about1
                                 },
                                 {
                                     title: "Relationship Compatibility",
                                     desc: "Analyze connection dynamics for better communication and spiritual harmony.",
-                                    img: "/src/assets/img/about-2.webp"
+                                    img: about2
                                 },
                                 {
                                     title: "Remedial Astrology",
                                     desc: "Address planetary imbalances with proven Vedic remedies tailored to your chart.",
-                                    img: "/src/assets/img/about-3.webp"
+                                    img: about3
                                 },
                                 {
                                     title: "Ongoing Support",
                                     desc: "Stay aligned with personalized follow-ups and continuous spiritual guidance.",
-                                    img: "/src/assets/img/about-4.webp"
+                                    img: about4
                                 }
                             ].map((srv, i) => (
                                 <Link 
@@ -135,9 +144,9 @@ const ServicesPage = () => {
 
                             <div className="grid md:grid-cols-3 gap-8">
                                 {[
-                                    { title: "Courses", img: "/src/assets/img/courses.webp", link: "/courses", desc: "Learn the secrets of the cosmos." },
-                                    { title: "Consultation", img: "/src/assets/img/consulting.webp", link: "/contact", desc: "Get personalized expert guidance." },
-                                    { title: "Articles", img: "/src/assets/img/books.webp", link: "/articles", desc: "Read profound spiritual wisdom." }
+                                    { title: "Courses", img: coursesPortalImg, link: "/courses", desc: "Learn the secrets of the cosmos." },
+                                    { title: "Consultation", img: consultingPortalImg, link: "/contact", desc: "Get personalized expert guidance." },
+                                    { title: "Articles", img: articlesPortalImg, link: "/articles", desc: "Read profound spiritual wisdom." }
                                 ].map((item, idx) => (
                                     <Link
                                         key={idx}

@@ -79,29 +79,31 @@ const AdminSidebar = () => {
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-[2050] lg:hidden"
         ></div>
       )}
 
       {/* Sidebar - Premium Theme */}
       <aside
         ref={sidebarRef}
-        className={`bg-gradient-to-b from-[#dd2727] to-[#b91c1c] h-[calc(100vh-56px)] md:w-64 w-[85%] sticky top-14 left-0 transition-all duration-500 ease-in-out z-[95] overflow-y-auto scrollbar-hide self-start ${isOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 shadow-[10px_0_40px_rgba(221,39,39,0.15)]`}
+        className={`bg-gradient-to-b from-[#dd2727] to-[#b91c1c] h-screen lg:h-[calc(100vh-64px)] md:w-64 w-[300px] fixed lg:sticky top-0 lg:top-16 left-0 transition-all duration-500 ease-in-out z-[2100] overflow-y-auto scrollbar-hide self-start ${
+          isOpen ? "translate-x-0 shadow-[20px_0_60px_rgba(0,0,0,0.5)]" : "-translate-x-full lg:translate-x-0 lg:shadow-[10px_0_40px_rgba(221,39,39,0.15)]"
+        }`}
       >
         <div className="pt-8 px-4 space-y-10 pb-12">
           {/* Header Section */}
-          <div className="flex justify-between items-center px-2">
+          <div className="flex justify-between items-center px-2 pt-16 lg:pt-0">
             <div className="space-y-1">
               <h2 className="text-xl font-black text-white tracking-tighter">VAHLAY <span className="text-white/40 font-light">ADMIN</span></h2>
               <p className="text-[8px] text-white/60 font-bold uppercase tracking-[0.4em] leading-none">Management Console</p>
             </div>
-
+ 
             <button
-              className="lg:hidden p-2 text-white/70 hover:text-white transition-colors"
+              className="lg:hidden flex items-center gap-2 px-3 py-1 bg-white/10 rounded-lg text-white hover:bg-white/20 transition-all border border-white/10"
               onClick={() => setIsOpen(false)}
             >
-              <IoIosArrowBack size={24} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Close</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
 

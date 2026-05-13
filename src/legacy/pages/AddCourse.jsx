@@ -156,12 +156,12 @@ const AddCourse = () => {
     <div className="admin-layout">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen pt-[70px] relative z-10 admin-fluid-container gap-10 pb-20">
+      <div className="flex flex-col md:flex-row min-h-screen pt-32 relative z-10 admin-fluid-container gap-10 pb-20">
         <SideBar />
 
-        <main className="flex-1 py-8 pt-20">
-          <div className="space-y-12">
-            <div className="flex justify-between items-center">
+        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+          <div className="space-y-8">
+            <div className="flex justify-between items-center pt-[50px]">
                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Course <span className="text-[#dd2727]">Management</span>
               </h2>
