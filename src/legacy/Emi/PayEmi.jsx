@@ -460,7 +460,6 @@ const UserEmi = () => {
                         </div>
                         <div className="text-right">
                           <p className="text-xl font-bold text-white">₹{plan.amount}</p>
-                          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">per month</p>
                         </div>
                       </div>
                       {selectedPlan?.id === plan.id && (

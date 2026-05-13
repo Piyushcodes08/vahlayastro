@@ -72,93 +72,107 @@ const Aside = () => {
         { title: "Payments", path: "/finalize" },
     ];
 
-    return (
-        <>
-            {/* Mobile Toggle Button */}
-            {!sidebarOpen && (
-                <button
-                    onClick={() => setSidebarOpen(true)}
-                    className="lg:hidden fixed top-24 left-4 bg-white text-[#dd2727] p-3 rounded-2xl shadow-lg z-[100] border border-[#dd2727]/10"
-                >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                </button>
-            )}
+  return (
+    <>
+      {/* Mobile Toggle Button - Sleek Premium Red Floating Button */}
+      {!sidebarOpen && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="lg:hidden fixed top-24 left-6 w-14 h-14 bg-[#dd2727] text-white rounded-2xl shadow-[0_10px_30px_rgba(221,39,39,0.3)] z-[100] border border-white/10 flex items-center justify-center transform hover:scale-110 active:scale-95 transition-all duration-300 group"
+        >
+          <div className="flex flex-col gap-1.5 items-center justify-center">
+            <span className="w-6 h-0.5 bg-white rounded-full transition-all group-hover:w-4" />
+            <span className="w-6 h-0.5 bg-white rounded-full" />
+            <span className="w-4 h-0.5 bg-white rounded-full transition-all group-hover:w-6" />
+          </div>
+        </button>
+      )}
 
-            {sidebarOpen && (
-                <div
-                    onClick={() => setSidebarOpen(false)}
-                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-[2050] lg:hidden"
-                ></div>
-            )}
- 
-            <aside
-                ref={sidebarRef}
-                className={`fixed lg:sticky top-0 lg:top-16 left-0 w-72 bg-[#dd2727] transition-all duration-500 ease-in-out transform z-[2100] flex flex-col h-screen lg:h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar self-start
-                ${sidebarOpen ? "translate-x-0 shadow-[20px_0_60px_rgba(0,0,0,0.5)]" : "-translate-x-full lg:translate-x-0 lg:shadow-none"}`}
+      {/* Mobile Overlay - Darker Glassmorphism */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-[2050] lg:hidden animate-in fade-in duration-500"
+        ></div>
+      )}
+
+      <aside
+        ref={sidebarRef}
+        className={`fixed lg:sticky top-0 lg:top-16 left-0 w-72 bg-[#dd2727] transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) transform z-[2100] flex flex-col h-screen lg:h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar self-start border-r border-white/10
+        ${sidebarOpen ? "translate-x-0 shadow-[40px_0_100px_rgba(0,0,0,0.6)]" : "-translate-x-full lg:translate-x-0 lg:shadow-none"}`}
+      >
+        {/* Close Button for Mobile - Elegant Top Bar */}
+        <div className="lg:hidden flex items-center justify-between p-6 pb-0 pt-10">
+            <span className="text-white/40 text-[9px] font-black uppercase tracking-[0.4em]">Student Portal</span>
+            <button
+                onClick={() => setSidebarOpen(false)}
+                className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all border border-white/10 group"
             >
-                {/* Close button for mobile */}
-                <div className="lg:hidden flex justify-end p-6 pb-0 pt-16 lg:pt-6">
-                    <button
-                        onClick={() => setSidebarOpen(false)}
-                        className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-lg text-white hover:bg-white/20 transition-all border border-white/10"
-                    >
-                        <span className="text-[10px] font-bold uppercase tracking-widest">Close</span>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                </div>
+                <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
 
-                {/* Profile Section */}
-                <div className="pt-10 pb-8 flex flex-col items-center flex-shrink-0 text-center">
-                    <div className="w-32 h-32 rounded-full border-4 border-white/40 overflow-hidden shadow-2xl mb-4 bg-white/10 flex items-center justify-center transition-transform hover:scale-105 duration-500">
-                        {formData.profilePic ? (
-                            <img
-                                src={formData.profilePic}
-                                alt="Profile"
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <IoIosContact size={80} className="text-white/40" />
-                        )}
-                    </div>
-                    <h2 className="text-white text-xl font-black tracking-tight uppercase px-4">{formData.fullName}</h2>
-                    <p className="text-[8px] text-white/40 uppercase tracking-[0.3em] mt-1 font-bold">Sacred Seeker</p>
-                </div>
+        {/* Profile Section - Premium Centered Look */}
+        <div className="pt-12 pb-10 flex flex-col items-center flex-shrink-0 text-center">
+          <div className="relative group">
+            <div className="absolute -inset-2 bg-white/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+            <div className="relative w-32 h-32 rounded-full border-4 border-white/30 overflow-hidden shadow-2xl mb-6 bg-white/5 flex items-center justify-center transition-all duration-700 hover:border-white/60">
+              {formData.profilePic ? (
+                <img
+                  src={formData.profilePic}
+                  alt="Profile"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+              ) : (
+                <IoIosContact size={80} className="text-white/20" />
+              )}
+            </div>
+          </div>
+          <h2 className="text-white text-2xl font-black tracking-tight uppercase px-4 leading-tight">{formData.fullName}</h2>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-1 h-1 rounded-full bg-white animate-pulse"></div>
+            <p className="text-[9px] text-white/50 uppercase tracking-[0.4em] font-black">Sacred Seeker</p>
+          </div>
+        </div>
 
-                {/* Navigation Menu */}
-                <nav className="flex-1 px-8 space-y-4 pb-10">
-                    {menuItems.map((item, index) => {
-                        const isActive = location.pathname === item.path;
-                        return (
-                            <button
-                                key={index}
-                                onClick={() => {
-                                    navigate(item.path);
-                                    if (window.innerWidth < 1024) setSidebarOpen(false);
-                                }}
-                                className={`w-full text-center px-4 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300
-                                ${isActive
-                                        ? "bg-white text-[#dd2727] shadow-xl transform scale-105"
-                                        : "bg-white/10 text-white hover:bg-white/20 hover:translate-x-1"}`}
-                            >
-                                {item.title}
-                            </button>
-                        );
-                    })}
-                </nav>
+        {/* Navigation Menu - Clean & Classic */}
+        <nav className="flex-1 px-8 space-y-4 pb-12 mt-6">
+          {menuItems.map((item, index) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <button
+                key={index}
+                onClick={() => {
+                  navigate(item.path);
+                  if (window.innerWidth < 1024) setSidebarOpen(false);
+                }}
+                className={`w-full group relative overflow-hidden px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.25em] transition-all duration-500
+                ${isActive
+                  ? "bg-white text-[#dd2727] shadow-2xl transform scale-[1.02]"
+                  : "bg-white/5 text-white/80 hover:bg-white/10 hover:text-white hover:translate-x-1"}`}
+              >
+                <span className="relative z-10">{item.title}</span>
+                {!isActive && (
+                    <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 opacity-5"></div>
+                )}
+              </button>
+            );
+          })}
+        </nav>
 
-                {/* Logout Section */}
-                <div className="p-8 border-t border-white/10 mt-auto flex-shrink-0">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-black text-white bg-black/20 hover:bg-black/40 transition-all uppercase tracking-[0.3em] text-[9px]"
-                    >
-                        <IoIosLogOut size={16} />
-                        Logout Session
-                    </button>
-                </div>
-            </aside>
-        </>
-    );
+        {/* Logout Section - Fixed at Bottom */}
+        <div className="p-8 border-t border-white/10 bg-black/10 mt-auto flex-shrink-0">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-4 px-6 py-4 rounded-xl font-black text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all uppercase tracking-[0.3em] text-[9px] group"
+          >
+            <IoIosLogOut size={18} className="group-hover:translate-x-1 transition-transform" />
+            Logout Session
+          </button>
+        </div>
+      </aside>
+    </>
+  );
 };
 
 export default Aside;

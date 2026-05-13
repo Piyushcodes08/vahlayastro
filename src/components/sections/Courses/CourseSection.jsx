@@ -24,10 +24,10 @@ const CourseSection = () => {
       <div className="section-container">
         {/* Section Header */}
         <div className="flex flex-col gap-2 mb-12 text-center">
-          <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight">
+          <h2 className="title-batangas text-2xl sm:text-3xl md:text-5xl font-bold uppercase tracking-tight">
             Our Sacred Courses
           </h2>
-          <p className="subtitle-poppins text-lg text-white/60">
+          <p className="subtitle-poppins text-sm sm:text-base lg:text-lg text-white/60">
             Master ancient wisdom for modern living with our expertly crafted courses.
           </p>
         </div>

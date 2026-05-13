@@ -136,7 +136,7 @@ const ArticleDetailsPage = () => {
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
 
                 {/* Page Title Header */}
-                <div className="pt-24 md:pt-36 pb-12 px-4 text-center border-b border-white/5 mb-8 bg-black/40 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <div className="pt-24 md:pt-36 pb-12 px-[15px] text-center border-b border-white/5 mb-8 bg-black/40 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                     <h1 className="title-batangas text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wide text-white uppercase leading-tight">
                         <span className="text-[#dd2727]">Astrology</span> <br className="sm:hidden" /> Articles & Publications
                     </h1>
@@ -147,7 +147,7 @@ const ArticleDetailsPage = () => {
                     )}
                 </div>
 
-                <section className="max-w-[1170px] mx-auto px-0 sm:px-4 pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] gap-8 items-start">
+                <section className="max-w-[1170px] mx-auto px-0 sm:px-[15px] pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] gap-8 items-start">
 
                     {/* Left Column: Article Content */}
                     <article className="w-full min-w-0 bg-white/5 backdrop-blur-xl p-0 sm:p-8 md:p-10 rounded-none sm:rounded-[3rem] border-x-0 sm:border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden">
@@ -343,7 +343,7 @@ const ArticleDetailsPage = () => {
                 </section>
 
                 {/* Related Articles Accordion */}
-                <section className="max-w-[1170px] mx-auto px-4 pb-32">
+                <section className="max-w-[1170px] mx-auto px-[15px] pb-32">
                     <h2 className="title-batangas text-4xl text-white mb-10 text-center">
                         <span className="text-[#dd2727]">Related</span> Celestial Knowledge
                     </h2>

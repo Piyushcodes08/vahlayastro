@@ -1,10 +1,22 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebookF, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { footerData } from '../../../data/layout/footer';
 import "./Footer.css";
 
 const Footer = () => {
-  const year = new Date().getFullYear();
+  const { brand, quickLinks, supportLinks, contact, social, copyright } = footerData;
+
+  const getSocialIcon = (name) => {
+    switch (name) {
+      case 'Facebook': return <FaFacebookF size={18} />;
+      case 'Instagram': return <FaInstagram size={18} />;
+      case 'Twitter': return <FaXTwitter size={18} />;
+      case 'YouTube': return <FaYoutube size={18} />;
+      default: return null;
+    }
+  };
 
   return (
     <footer className="footer-section">
@@ -12,16 +24,12 @@ const Footer = () => {
         <div className="footer-grid">
           {/* Column 1: About */}
           <div className="footer-col">
-            <h3 className="title-batangas footer-brand">Vahlay Astro</h3>
+            <h3 className="title-batangas footer-brand">{brand.name}</h3>
             <p className="subtitle-poppins footer-desc">
-              <strong>Vahlay Astro</strong>, your trusted partner in unlocking the mysteries of the
-              cosmos. We offer tailored solutions for personal growth, success, and
-              happiness.
+              {brand.description}
             </p>
             <p className="subtitle-poppins footer-mission">
-              Our mission is to help you achieve a deeper understanding of the
-              cosmic world, offering guidance for life decisions and insights into your
-              future.
+              {brand.mission}
             </p>
           </div>
 
@@ -29,12 +37,9 @@ const Footer = () => {
           <div className="footer-col">
             <h3 className="title-batangas footer-col-title">Quick Links</h3>
             <ul className="footer-links">
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/services">Services</Link></li>
-              <li><Link to="/consulting">Consulting</Link></li>
-              <li><Link to="/courses">Courses</Link></li>
-              <li><Link to="/articles">Articles</Link></li>
+              {quickLinks.map((link, idx) => (
+                <li key={idx}><Link to={link.path}>{link.name}</Link></li>
+              ))}
             </ul>
           </div>
 
@@ -42,11 +47,9 @@ const Footer = () => {
           <div className="footer-col">
             <h3 className="title-batangas footer-col-title">Support</h3>
             <ul className="footer-links">
-              <li><Link to="/appointment">Appointment</Link></li>
-              <li><Link to="/testimonials">Testimonials</Link></li>
-              <li><Link to="/faq">FAQ</Link></li>
-              <li><Link to="/privacy-policy">Privacy Policy</Link></li>
-              <li><Link to="/terms">Terms & Conditions</Link></li>
+              {supportLinks.map((link, idx) => (
+                <li key={idx}><Link to={link.path}>{link.name}</Link></li>
+              ))}
             </ul>
           </div>
 
@@ -54,36 +57,68 @@ const Footer = () => {
           <div className="footer-col">
             <h3 className="title-batangas footer-col-title">Contact Details</h3>
             <div className="footer-contact-info">
-              <a href="mailto:contact@vahlayastro.com" className="footer-contact-link">
-                <p className="subtitle-poppins"><strong>Email:</strong> contact@vahlayastro.com</p>
+              <a href={`mailto:${contact.email}`} className="footer-contact-link">
+                <p className="subtitle-poppins"><strong>Email:</strong> {contact.email}</p>
               </a>
-              <a href="tel:+917949217538" className="footer-contact-link">
-                <p className="subtitle-poppins"><strong>LandLine:</strong> +91 79 4921 7538</p>
+              <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="footer-contact-link">
+                <p className="subtitle-poppins"><strong>LandLine:</strong> {contact.phone}</p>
               </a>
               
               <h4 className="title-batangas location-title">Locations</h4>
               <a 
-                href="https://www.google.com/maps/search/?api=1&query=C+515,+Dev+Aurum+Commercial+Complex,+Prahlad+Nagar,+Ahmedabad,+Gujarat+380015" 
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer-contact-link"
               >
                 <p className="subtitle-poppins footer-address">
-                  C 515, Dev Aurum Commercial Complex, Prahlad Nagar,
-                  Ahmedabad, Gujarat 380015
+                  {contact.address}
                 </p>
               </a>
 
-              <div className="footer-map-container">
-                <iframe
-                  title="Google Maps"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9263433602513!2d72.50841267593256!3d23.01081511617478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9b3806c9e011%3A0xa1939886026a090!2sDev%20Aurum%20Commercial%20Complex!5e0!3m2!1sen!2sin!4v1714327600000!5m2!1sen!2sin"
-                  width="100%"
-                  height="130"
-                  style={{ border: 0, borderRadius: "12px" }}
-                  allowFullScreen=""
-                  loading="lazy"
-                ></iframe>
+              {/* Premium Map Card */}
+              <div className="footer-map-wrapper">
+                {/* Header label */}
+                <div className="footer-map-header">
+                  <span className="footer-map-pin-dot" />
+                  <span className="footer-map-label">Find Us Here</span>
+                </div>
+
+                {/* Map Frame */}
+                <div className="footer-map-container">
+                  {/* Glow border layer */}
+                  <div className="footer-map-glow" />
+
+                  <iframe
+                    title="Vahlay Astro Location"
+                    src={contact.mapUrl}
+                    width="100%"
+                    height="180"
+                    style={{ border: 0, display: 'block' }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+
+                  {/* Bottom overlay ribbon */}
+                  <div className="footer-map-ribbon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#dd2727" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <span>{contact.address}</span>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-map-cta"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                  View on Google Maps
+                </a>
               </div>
             </div>
           </div>
@@ -92,25 +127,17 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="footer-social-icons">
-             <a href="#" className="social-icon" aria-label="Follow us on Facebook">
-               <FaFacebookF size={18} />
-             </a>
-             <a href="#" className="social-icon" aria-label="Follow us on X (Twitter)">
-               <FaXTwitter size={18} />
-             </a>
-             <a href="#" className="social-icon" aria-label="Follow us on Instagram">
-               <FaInstagram size={18} />
-             </a>
-             <a href="#" className="social-icon" aria-label="Subscribe to our YouTube channel">
-               <FaYoutube size={18} />
-             </a>
+             {social.map((item, idx) => (
+               <a key={idx} href={item.url} className="social-icon" aria-label={`Follow us on ${item.name}`}>
+                 {getSocialIcon(item.name)}
+               </a>
+             ))}
           </div>
           <p className="footer-copyright">
-            © {year} Vahlay Astro. All rights reserved.
+            {copyright}
           </p>
         </div>
       </div>
-
     </footer>
   );
 };

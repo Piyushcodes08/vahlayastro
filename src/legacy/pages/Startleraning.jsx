@@ -575,11 +575,11 @@ const PersonalCourse = () => {
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
 
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 admin-fluid-container bg-gray-50/50 p-4 md:p-10 pt-32">
-          <div className="max-w-7xl mx-auto pt-[50px]">
+        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+          <div className="max-w-7xl mx-auto pt-8">
 
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8 mb-10">

@@ -1,15 +1,15 @@
-import ariesIcon from '../assets/images/sections/horoscope/aries (1).png';
-import taurusIcon from '../assets/images/sections/horoscope/taurus (1).png';
-import geminiIcon from '../assets/images/sections/horoscope/gemini (1).png';
-import cancerIcon from '../assets/images/sections/horoscope/cancer.png';
-import leoIcon from '../assets/images/sections/horoscope/leo (1).png';
-import virgoIcon from '../assets/images/sections/horoscope/virgo (1).png';
-import libraIcon from '../assets/images/sections/horoscope/libra (1).png';
-import scorpioIcon from '../assets/images/sections/horoscope/scorpio (1).png';
-import sagittariusIcon from '../assets/images/sections/horoscope/sagittarius.png';
-import capricornIcon from '../assets/images/sections/horoscope/capricorn (1).png';
-import aquariusIcon from '../assets/images/sections/horoscope/aquarius.png';
-import piscesIcon from '../assets/images/sections/horoscope/pisces (1).png';
+import ariesIcon from '../../assets/images/sections/horoscope/aries (1).png';
+import taurusIcon from '../../assets/images/sections/horoscope/taurus (1).png';
+import geminiIcon from '../../assets/images/sections/horoscope/gemini (1).png';
+import cancerIcon from '../../assets/images/sections/horoscope/cancer.png';
+import leoIcon from '../../assets/images/sections/horoscope/leo (1).png';
+import virgoIcon from '../../assets/images/sections/horoscope/virgo (1).png';
+import libraIcon from '../../assets/images/sections/horoscope/libra (1).png';
+import scorpioIcon from '../../assets/images/sections/horoscope/scorpio (1).png';
+import sagittariusIcon from '../../assets/images/sections/horoscope/sagittarius.png';
+import capricornIcon from '../../assets/images/sections/horoscope/capricorn (1).png';
+import aquariusIcon from '../../assets/images/sections/horoscope/aquarius.png';
+import piscesIcon from '../../assets/images/sections/horoscope/pisces (1).png';
 
 export const horoscopeData = [
   {
@@ -97,4 +97,3 @@ export const horoscopeData = [
     description: "Pisces is deeply intuitive, emotional, and imaginative. These individuals are compassionate souls who connect easily with others on an emotional level. They are often drawn to art, creativity, and spirituality."
   }
 ];
-

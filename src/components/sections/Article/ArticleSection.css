@@ -1,20 +1,21 @@
 .article-section {
   width: 100%;
   background: radial-gradient(ellipse at center, rgba(221, 39, 39, 0.04) 0%, transparent 70%);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
 
 /* Redundant .article-container styles removed in favor of global .section-container */
 
-/* Slider Container */
+/* Slider Container — breaks out of the constrained section-container to span full viewport */
 .article-slider-container {
-  width: 100%;
-  overflow: visible;
   position: relative;
-
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: 20px;
+  padding: 20px 0 30px;
 }
 
 .article-track {
@@ -24,7 +25,7 @@
 }
 
 .article-slide {
-  padding: 0 1.5rem;
+  padding: 0 15px;
   display: flex;
   justify-content: center;
   transition: opacity 0.3s ease;
@@ -76,8 +77,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid #ccc; /* Proper grey border for the book cover */
-  border-left: 4px solid #aaa; /* Thicker left border for the spine */
+  border: 1px solid #ccc;
+  /* Proper grey border for the book cover */
+  border-left: 4px solid #aaa;
+  /* Thicker left border for the spine */
 }
 
 /* Spine crease effect */
@@ -88,7 +91,7 @@
   left: 0;
   bottom: 0;
   width: 15px;
-  background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.3) 30%, transparent 100%);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.3) 30%, transparent 100%);
   z-index: 10;
   pointer-events: none;
 }
@@ -103,14 +106,16 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-  transition: none; /* Transition handled by parent */
-  border-bottom: 1px solid #ccc; /* Separator between image and text */
+  transition: none;
+  /* Transition handled by parent */
+  border-bottom: 1px solid #ccc;
+  /* Separator between image and text */
 }
 
 /* Cover Content - Takes remaining space */
 .article-cover-content {
   flex: 1;
-  padding: 1rem;
+  padding: 1rem 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -161,7 +166,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: 1rem 15px;
   background: #fdf2d0;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -327,6 +332,7 @@
   .article-slide {
     padding: 0 0.5rem;
   }
+
   .article-wrapper {
     width: 240px;
     height: 330px;

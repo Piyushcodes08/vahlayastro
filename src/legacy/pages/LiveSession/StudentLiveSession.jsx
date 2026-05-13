@@ -62,10 +62,10 @@ const StudentLiveSession = () => {
     <div className="student-layout">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen relative z-10 premium-container gap-8 pb-20">
+      <div className="flex flex-col md:flex-row min-h-screen pt-16 relative z-10 premium-container gap-0">
         <Aside />
-        <main className="flex-1 p-4 md:p-8 pt-32">
-          <div className="max-w-4xl mx-auto space-y-8 pt-[50px]">
+        <main className="flex-1 p-4 md:p-8 py-10">
+          <div className="max-w-4xl mx-auto space-y-8 pt-8">
             <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-[0_0_30px_rgba(221,39,39,0.1)]">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase tracking-tight">
                 Cosmic <span className="text-[#dd2727]">Live Sessions</span>

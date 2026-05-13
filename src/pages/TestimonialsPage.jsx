@@ -18,7 +18,7 @@ const TestimonialsPage = () => {
 
                 <section className="hero-banner">
                     <div className="section-container">
-                        <div className="relative w-full text-center px-4">
+                        <div className="relative w-full text-center px-[15px]">
                             <h1 className="title-batangas text-6xl mb-6 text-white">Client Success Stories</h1>
                             <p className="subtitle-poppins text-lg text-white/80 max-w-2xl mx-auto">
                                 Read about the transformative experiences our clients have had through our astrological guidance.

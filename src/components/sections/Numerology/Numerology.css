@@ -306,7 +306,7 @@
   .numerology-form-card,
   .numerology-intro-card,
   .loshu-wrapper {
-    padding: 24px;
+    padding: 24px 15px !important;
     border-radius: 16px;
   }
 

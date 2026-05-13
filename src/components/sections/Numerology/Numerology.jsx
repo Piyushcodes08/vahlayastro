@@ -1,18 +1,10 @@
 import React, { useMemo, useState } from "react";
 import Button from "../../ui/Button/Button";
+import { homeData } from "../../../data/pages/home";
 import "./Numerology.css";
 
-const meanings = {
-  1: "Leadership, independence, confidence, and individuality.",
-  2: "Sensitivity, emotions, cooperation, and diplomacy.",
-  3: "Creativity, expression, communication, and optimism.",
-  4: "Discipline, stability, hard work, and practicality.",
-  5: "Freedom, adaptability, curiosity, and movement.",
-  6: "Responsibility, care, family, and harmony.",
-  7: "Knowledge, spirituality, analysis, and introspection.",
-  8: "Power, ambition, authority, and material success.",
-  9: "Compassion, humanity, wisdom, and completion.",
-};
+const { numerology: numerologyData } = homeData;
+const { meanings } = numerologyData;
 
 const reduceToSingleDigit = (num) => {
   let value = Number(num);
@@ -175,10 +167,10 @@ const Numerology = () => {
       <div className="section-container">
         <div className='flex flex-col text-center gap-1 pb-8 mx-auto max-w-3xl'>
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight leading-tight">
-            Decode Your Cosmic Numbers
+            {numerologyData.title}
           </h2>
           <p className="subtitle-poppins text-lg md:text-xl font-medium">
-            Unlock your Mulank, Bhagyank, Kua Number, and Lo Shu Grid to reveal your true nature, destiny, and life energy.
+            {numerologyData.subtitle}
           </p>
         </div>
 

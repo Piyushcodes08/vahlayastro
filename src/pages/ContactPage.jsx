@@ -67,7 +67,7 @@ const ContactPage = () => {
 
                 <section>
                     <div className="section-container">
-                        <div className="grid md:grid-cols-2 gap-12 items-center bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-10 md:p-20 shadow-2xl">
+                        <div className="grid md:grid-cols-2 gap-12 items-center bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] py-10 md:py-20 px-[15px] shadow-2xl">
                             <div>
                                 <h2 className="title-batangas text-4xl md:text-5xl mb-8 text-white">Need immediate <span className="text-[#dd2727]">assistance?</span></h2>
                                 <p className="subtitle-poppins text-white/80 mb-6 leading-relaxed text-lg">
@@ -79,9 +79,9 @@ const ContactPage = () => {
                             </div>
                             <div className="space-y-6">
                                 <a
-                                    href="tel:+917949217538"
-                                    className="flex items-center gap-6 bg-white/5 backdrop-blur-lg p-8 rounded-[2.5rem] border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group"
-                                >
+                                     href="tel:+917949217538"
+                                     className="flex flex-col sm:flex-row items-center gap-6 bg-white/5 backdrop-blur-lg py-8 px-[15px] rounded-[2.5rem] border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group text-center sm:text-left"
+                                 >
                                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#dd2727]/40 to-orange-500/20 border border-[#dd2727]/30 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(221,39,39,0.3)] group-hover:scale-110 transition-transform duration-500">
                                         <IoCallOutline />
                                     </div>
@@ -92,9 +92,9 @@ const ContactPage = () => {
                                 </a>
 
                                 <a
-                                    href="mailto:contact@vahlayastro.com"
-                                    className="flex items-center gap-6 bg-white/5 backdrop-blur-lg p-8 rounded-[2.5rem] border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group"
-                                >
+                                     href="mailto:contact@vahlayastro.com"
+                                     className="flex flex-col sm:flex-row items-center gap-6 bg-white/5 backdrop-blur-lg py-8 px-[15px] rounded-[2.5rem] border border-white/10 hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 group text-center sm:text-left"
+                                 >
                                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#dd2727]/40 to-orange-500/20 border border-[#dd2727]/30 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(221,39,39,0.3)] group-hover:scale-110 transition-transform duration-500">
                                         <IoMailOutline />
                                     </div>

@@ -495,36 +495,42 @@ const EMIDetails = () => {
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
 
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-32">
-          <div className="max-w-7xl mx-auto space-y-10 pt-[50px]">
+        <main className="flex-1 min-w-0 py-6 px-[15px] bg-white overflow-x-hidden">
+          <div className="max-w-7xl mx-auto space-y-10 pt-16 md:pt-6">
 
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200 pb-8 md:pb-12 pt-6">
               <div>
-                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-2">Financial Overview</h4>
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[8px] md:text-[10px] mb-1 md:mb-2">Financial Overview</h4>
+                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">
                   EMI <span className="text-[#dd2727]">Details</span>
                 </h1>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Active for: <span className="text-slate-600">{userEmail}</span></p>
+                <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active for: <span className="text-slate-600 lowercase">{userEmail}</span>
+                </p>
               </div>
             </div>
 
             {Object.keys(emiSchedules).length === 0 ? (
-              <div className="admin-card p-20 text-center bg-white">
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-10 md:p-20 text-center border border-slate-100 shadow-sm">
                 <div className="text-4xl mb-6">💳</div>
                 <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tight">No Active EMI Plans</h3>
-                <p className="text-slate-500 font-medium mb-8 max-w-md mx-auto">
+                <p className="text-slate-500 font-medium mb-10 max-w-md mx-auto text-sm leading-relaxed">
                   You are not currently enrolled in any EMI plans. Check our premium courses for flexible payment options.
                 </p>
-                <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">
+                <Link 
+                  to="/courses" 
+                  className="inline-block bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:shadow-xl transition-all hover:-translate-y-1 active:scale-95"
+                >
                   Browse Premium Courses
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-10">
+              <div className="grid grid-cols-1 gap-10 pb-20">
                 {Object.keys(emiSchedules).map((courseId) => {
                   const schedule = emiSchedules[courseId] || [];
                   const unpaidEMIs = schedule.filter(emi => emi.status === "unpaid");
@@ -533,60 +539,62 @@ const EMIDetails = () => {
                   const progress = (paidEMIs.length / schedule.length) * 100;
 
                   return (
-                    <div key={courseId} className="admin-card overflow-hidden bg-white">
-                      <div className="bg-slate-50 border-b border-slate-100 p-8">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                          <div>
-                            <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase">
+                    <div key={courseId} className="bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+                      <div className="bg-slate-50/50 border-b border-slate-100 p-6 md:p-10">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                          <div className="flex-1">
+                            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-4 uppercase leading-tight">
                               Course: <span className="text-[#dd2727]">{courseId}</span>
                             </h3>
-                            <div className="flex items-center gap-4">
-                              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Progress</span>
-                              <div className="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#dd2727]" style={{ width: `${progress}%` }}></div>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Payment Progress</span>
+                              <div className="flex items-center gap-4 flex-1 max-w-xs">
+                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden flex-1 shadow-inner">
+                                    <div className="h-full bg-[#dd2727] transition-all duration-1000 shadow-[0_0_10px_rgba(221,39,39,0.3)]" style={{ width: `${progress}%` }}></div>
+                                </div>
+                                <span className="text-[10px] font-black text-slate-900">{Math.round(progress)}%</span>
                               </div>
-                              <span className="text-[10px] font-bold text-slate-900">{Math.round(progress)}%</span>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Remaining</p>
-                            <h4 className="text-2xl font-black text-slate-900">₹{totalUnpaid.toLocaleString("en-IN")}</h4>
+                          <div className="text-left md:text-right bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Total Remaining</p>
+                            <h4 className="text-xl md:text-2xl font-black text-slate-900 tracking-tighter">₹{totalUnpaid.toLocaleString("en-IN")}</h4>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-8">
+                      <div className="p-4 md:p-10">
                         <div className="grid grid-cols-1 gap-4">
                           {schedule.map((emi, idx) => (
                             <div
                               key={idx}
-                              className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 bg-slate-50/50 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group"
+                              className="flex flex-col md:flex-row justify-between items-start md:items-center p-5 md:p-6 bg-slate-50/30 border border-slate-50 rounded-[1.5rem] hover:bg-slate-50 transition-all duration-300 group"
                             >
-                              <div className="flex items-center gap-6">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-xs ${emi.status === 'paid' ? 'bg-green-100 text-green-600' : 'bg-slate-200 text-slate-500'}`}>
+                              <div className="flex items-center gap-5">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-[10px] shadow-sm transition-transform group-hover:scale-105 ${emi.status === 'paid' ? 'bg-emerald-50 text-emerald-500 border border-emerald-100' : 'bg-white text-slate-400 border border-slate-100'}`}>
                                   {emi.emiNumber.toString().padStart(2, '0')}
                                 </div>
                                 <div className="flex flex-col">
-                                  <span className="text-slate-900 font-bold text-lg tracking-tight">EMI Payment</span>
-                                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                  <span className="text-slate-900 font-black text-base md:text-lg tracking-tight uppercase">EMI Payment</span>
+                                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5">
                                     Due: <span className="text-slate-600">{emi.date.toLocaleDateString("en-IN")}</span>
                                   </span>
                                 </div>
                               </div>
 
-                              <div className="flex items-center gap-8 w-full md:w-auto mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-slate-200/50">
-                                <span className="text-xl font-black text-slate-900 min-w-[100px] text-right">
+                              <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-slate-100">
+                                <span className="text-lg md:text-xl font-black text-slate-900 tracking-tighter">
                                   ₹{Number(emi.amount).toLocaleString("en-IN")}
                                 </span>
                                 {emi.status === "paid" ? (
-                                  <div className="flex items-center gap-2 text-green-600 bg-green-50 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border border-green-100">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                  <div className="flex items-center gap-2 text-emerald-500 bg-emerald-50 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border border-emerald-100">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                                     Paid
                                   </div>
                                 ) : (
                                   <button
                                     onClick={() => openPaymentModal(courseId, emi.emiNumber, emi.amount)}
-                                    className="bg-slate-900 text-white px-8 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-[#dd2727] transition-all shadow-lg shadow-slate-200"
+                                    className="bg-slate-900 text-white px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-[#dd2727] transition-all shadow-lg hover:-translate-y-1 active:scale-95"
                                   >
                                     Pay Now
                                   </button>

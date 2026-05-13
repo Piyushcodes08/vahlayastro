@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { useParams, Link } from "react-router-dom";
 import Admin from "../pages/Admin"
+import Header from "../../components/sections/Header/Header"
 
 
 
@@ -84,16 +85,39 @@ const AdminEMITracking = () => {
     Object.keys(paymentsByCourse).forEach((courseId) => {
       const userPayments = paymentsByCourse[courseId] || [];
 
-      const plan = emiPlans.find(
-        (p) =>
-          p.courseId === courseId &&
-          Number(p.amount) === Number(userPayments[0]?.amount)
-      );
+      // Prefer planId-based lookup (most reliable)
+      const firstPaymentWithPlanId = userPayments.find(p => p.planId);
+      let plan = null;
 
-      if (!plan) return;
+      if (firstPaymentWithPlanId?.planId) {
+        // Use direct planId match — most reliable
+        plan = emiPlans.find(p => p.id === firstPaymentWithPlanId.planId);
+      }
+
+      // Fallback: match by courseId + amount
+      if (!plan) {
+        plan = emiPlans.find(
+          (p) =>
+            p.courseId === courseId &&
+            Number(p.amount) === Number(userPayments[0]?.amount)
+        );
+      }
+
+      // Fallback 2: match by amount alone across all plans
+      if (!plan) {
+        plan = emiPlans.find(
+          (p) => Number(p.amount) === Number(userPayments[0]?.amount)
+        );
+      }
+
+      if (!plan) {
+        // No plan found — still store payments so they show in payment history
+        updatedSchedules[courseId] = { payments: userPayments, schedule: [], plan: null };
+        return;
+      }
 
       const totalEMIs = parseInt(plan.duration || 0, 10);
-      const sortedPayments = userPayments.sort((a, b) => {
+      const sortedPayments = [...userPayments].sort((a, b) => {
         const aDate = a.timestamp?.toDate?.() || new Date(a.timestamp);
         const bDate = b.timestamp?.toDate?.() || new Date(b.timestamp);
         return aDate - bDate;
@@ -117,7 +141,7 @@ const AdminEMITracking = () => {
         });
       }
 
-      updatedSchedules[courseId] = schedule;
+      updatedSchedules[courseId] = { payments: sortedPayments, schedule, plan };
     });
 
     setEmiSchedules(updatedSchedules);
@@ -232,22 +256,29 @@ const AdminEMITracking = () => {
 
   // ====================== RENDER ======================
 
-  if (loading) return <p>Loading...</p>;
-  if (!email) return <p>No user email provided in the route.</p>;
-  if (Object.keys(paymentsByCourse).length === 0) {
-    return <p>No payments found for {email}.</p>;
-  }
-
   return (
-    <div className="admin-layout flex flex-col md:flex-row min-h-screen">
+    <div className="admin-layout flex flex-col min-h-screen">
       <Header />
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
-      <div className="flex flex-1 relative z-10 admin-fluid-container">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Admin />
 
-        <main className="flex-1 min-w-0 p-4 md:p-10 pt-20">
-          <div className="max-w-4xl mx-auto space-y-10">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+        <main className="flex-1 min-w-0 p-4 md:p-10 py-10 bg-white admin-fluid-container">
+          {loading ? (
+            <div className="flex justify-center p-20">
+              <div className="w-10 h-10 border-4 border-[#dd2727] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : !email ? (
+            <div className="max-w-4xl mx-auto p-10 text-center bg-slate-50 rounded-2xl border border-slate-100">
+               <p className="text-slate-400 font-medium italic">No user email provided in the route.</p>
+            </div>
+          ) : Object.keys(paymentsByCourse).length === 0 ? (
+            <div className="max-w-4xl mx-auto p-10 text-center bg-slate-50 rounded-2xl border border-slate-100">
+               <p className="text-slate-400 font-medium italic">No payment records found for <span className="text-[#dd2727] font-bold">{email}</span> in the cosmic database.</p>
+            </div>
+          ) : (
+            <div className="max-w-4xl mx-auto space-y-10 pt-8">
+              <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
               <div className="w-full">
                 <div className="flex items-center gap-4 mb-4">
                    <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
@@ -264,12 +295,15 @@ const AdminEMITracking = () => {
             </header>
 
           {Object.keys(emiSchedules).map((courseId) => {
-            const schedule = emiSchedules[courseId] || [];
-            const userPayments = paymentsByCourse[courseId] || [];
+            const entry = emiSchedules[courseId] || {};
+            const schedule = entry.schedule || [];
+            const userPayments = entry.payments || paymentsByCourse[courseId] || [];
+            const plan = entry.plan;
 
             const paidEMIs = userPayments.length;
             const totalEMIs = schedule.length;
             const remainingEMIs = totalEMIs - paidEMIs;
+            const courseName = plan?.courseId || courseId;
 
             return (
               <div
@@ -277,9 +311,10 @@ const AdminEMITracking = () => {
                 className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-8 mb-8"
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6">
-                  <h3 className="text-xl font-bold text-slate-900">
-                    {emiPlans.find((plan) => plan.courseId === courseId)?.courseName || `Course ID: ${courseId}`}
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">{courseName}</h3>
+                    {plan && <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">{plan.duration} month plan &bull; ₹{plan.amount}/installment</p>}
+                  </div>
                   <div className="flex gap-4">
                     <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total</p>
@@ -289,57 +324,70 @@ const AdminEMITracking = () => {
                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Paid</p>
                        <p className="text-sm font-black text-green-600">{paidEMIs}</p>
                     </div>
-                    <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining</p>
-                       <p className="text-sm font-black text-[#dd2727]">{remainingEMIs}</p>
+                    {totalEMIs > 0 && (
+                      <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining</p>
+                         <p className="text-sm font-black text-[#dd2727]">{remainingEMIs}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* EMI Schedule — only if a plan was matched */}
+                {schedule.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3">
+                      <div className="w-1 h-4 bg-slate-900 rounded-full"></div>
+                      EMI Schedule
+                    </h4>
+                    <div className="space-y-3">
+                      {schedule.map((emi) => (
+                        <div
+                          key={emi.emiNumber}
+                          className="flex justify-between items-center p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:bg-white hover:border-[#dd2727]/20 transition-all"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${emi.status === "paid" ? "bg-green-100 text-green-600" : "bg-slate-200 text-slate-500"}`}>
+                               {emi.emiNumber}
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-slate-900">EMI #{emi.emiNumber}</p>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Due: {emi.date.toLocaleDateString()}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-6">
+                             <p className="text-sm font-black text-slate-900">₹{emi.amount}</p>
+                             {emi.status === "paid" ? (
+                              <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-1.5 rounded-full border border-green-100">
+                                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                                <span className="text-[10px] font-black uppercase tracking-widest">Paid</span>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() =>
+                                  sendReminder(courseId, emi.emiNumber, emi.date, emi.amount)
+                                }
+                                className="bg-[#dd2727] text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all"
+                              >
+                                Send Reminder
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3">
-                    <div className="w-1 h-4 bg-slate-900 rounded-full"></div>
-                    EMI Schedule
-                  </h4>
-                  <div className="space-y-3">
-                    {schedule.map((emi) => (
-                      <div
-                        key={emi.emiNumber}
-                        className="flex justify-between items-center p-4 bg-slate-50 border border-slate-100 rounded-2xl group hover:bg-white hover:border-[#dd2727]/20 transition-all"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${emi.status === "paid" ? "bg-green-100 text-green-600" : "bg-slate-200 text-slate-500"}`}>
-                             {emi.emiNumber}
-                          </div>
-                          <div>
-                            <p className="text-sm font-bold text-slate-900">EMI #{emi.emiNumber}</p>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Due: {emi.date.toLocaleDateString()}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-6">
-                           <p className="text-sm font-black text-slate-900">₹{emi.amount}</p>
-                           {emi.status === "paid" ? (
-                            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-1.5 rounded-full border border-green-100">
-                              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
-                              <span className="text-[10px] font-black uppercase tracking-widest">Paid</span>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                sendReminder(courseId, emi.emiNumber, emi.date, emi.amount)
-                              }
-                              className="bg-[#dd2727] text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all"
-                            >
-                              Send Reminder
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                {/* No plan matched — show info */}
+                {!plan && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5">
+                    <p className="text-yellow-700 text-sm font-bold">⚠️ No matching EMI plan found for this course. Payments are shown below for reference.</p>
                   </div>
-                </div>
+                )}
 
+                {/* Payment History */}
                 <div className="pt-6 border-t border-slate-100">
                   <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3">
                     <div className="w-1 h-4 bg-[#b0a102] rounded-full"></div>
@@ -347,32 +395,45 @@ const AdminEMITracking = () => {
                   </h4>
                   {userPayments.length === 0 ? (
                     <div className="bg-slate-50 p-6 rounded-2xl text-center">
-                       <p className="text-slate-400 text-sm italic">No cosmic payments recorded yet.</p>
+                       <p className="text-slate-400 text-sm italic">No payments recorded yet.</p>
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {userPayments.map((payment, idx) => (
-                        <div key={payment.id} className="flex justify-between items-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                          <div className="flex items-center gap-4">
-                             <div className="w-8 h-8 bg-[#b0a102]/10 text-[#b0a102] rounded-lg flex items-center justify-center font-bold text-xs">
-                                {idx + 1}
-                             </div>
-                             <div>
-                                <p className="text-sm font-bold text-slate-900">EMI #{idx + 1}</p>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Paid on {new Date(payment.timestamp.toDate()).toLocaleDateString()}</p>
-                             </div>
+                      {userPayments.map((payment, idx) => {
+                        const paidDate = payment.timestamp?.toDate
+                          ? payment.timestamp.toDate()
+                          : payment.timestamp
+                          ? new Date(payment.timestamp)
+                          : null;
+                        return (
+                          <div key={payment.id} className="flex justify-between items-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                               <div className="w-8 h-8 bg-[#b0a102]/10 text-[#b0a102] rounded-lg flex items-center justify-center font-bold text-xs">
+                                  {idx + 1}
+                               </div>
+                               <div>
+                                  <p className="text-sm font-bold text-slate-900">EMI #{idx + 1}</p>
+                                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                    {paidDate ? `Paid on ${paidDate.toLocaleDateString()}` : 'Date unavailable'}
+                                  </p>
+                                  {payment.transactionId && (
+                                    <p className="text-[9px] text-slate-300 mt-0.5 font-mono">{payment.transactionId}</p>
+                                  )}
+                               </div>
+                            </div>
+                            <p className="text-sm font-black text-slate-900">₹{payment.amount}</p>
                           </div>
-                          <p className="text-sm font-black text-slate-900">₹{payment.amount}</p>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               </div>
             );
           })}
-        </div>
-      </main>
+            </div>
+          )}
+        </main>
     </div>
   </div>
   );

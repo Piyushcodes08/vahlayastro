@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import './Horoscope.css';
-import { horoscopeData } from "../../../data/horoscopeData";
+import { horoscopeData } from "../../../data/common/horoscope";
 import zodiacWheel from "../../../assets/images/sections/horoscope/new_wheel_s5ozry.png";
 
 export default function Horoscope({ onGetDetails }) {

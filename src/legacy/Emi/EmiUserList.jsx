@@ -41,12 +41,12 @@ const AdminEMIUsers = () => {
     <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         {/* Sidebar - Always visible on desktop and mobile */}
         <Admin />
 
-        <main className="flex-1 min-w-0 p-4 md:p-10 pt-32">
-          <div className="max-w-6xl mx-auto space-y-10 pt-[50px]">
+        <main className="flex-1 min-w-0 p-4 md:p-10 py-10 bg-white">
+          <div className="max-w-6xl mx-auto space-y-10 pt-8">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
               <div>
                 <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -89,7 +89,7 @@ const AdminEMIUsers = () => {
                                 }
                                 className="bg-[#dd2727] text-white px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:shadow-lg transition-all"
                               >
-                                View Profile
+                                View Details
                               </button>
                             </td>
                           </tr>
@@ -127,7 +127,7 @@ const AdminEMIUsers = () => {
                           onClick={() => navigate(`/admin/emailuserlist/${user.email}`)}
                           className="bg-[#dd2727] text-white py-4 rounded-xl font-bold uppercase tracking-widest text-[10px] w-full shadow-md"
                         >
-                          Access Details
+                          View Details
                         </button>
                       </div>
                     ))

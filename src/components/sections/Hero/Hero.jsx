@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/Button/Button';
-import { heroData } from '../../../data/heroData';
+import { homeData } from '../../../data/pages/home';
 import './Hero.css';
 
 const Hero = () => {
     const navigate = useNavigate();
-
-    const { title, intro, description, buttonText } = heroData;
+    const { hero } = homeData;
+    const { title, intro, description, buttonText } = hero;
 
     return (
         <section className="hero">
@@ -18,7 +18,7 @@ const Hero = () => {
                 <h1 id="hero-title">
                     {title}
                 </h1>
-                <p className="subtitle !pb-5">
+                <p className="subtitle pb-5!">
                     {description}
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">

@@ -1,6 +1,6 @@
-import foundationImg from '../assets/images/pages/courses/foundation.webp';
-import geetaImg from '../assets/images/pages/courses/geeta.webp';
-import naradImg from '../assets/images/pages/courses/narad.webp';
+import foundationImg from '../../assets/images/pages/courses/foundation.webp';
+import geetaImg from '../../assets/images/pages/courses/geeta.webp';
+import naradImg from '../../assets/images/pages/courses/narad.webp';
 
 export const articlesData = [
   {

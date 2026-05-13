@@ -64,112 +64,95 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="admin-layout min-h-screen flex flex-col">
+        <div className="admin-layout min-h-screen flex flex-col bg-slate-50">
             <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
             <Header />
 
-            <div className="flex flex-1 relative z-10">
+            <div className="flex flex-1 relative z-10 pt-16 gap-0">
                 <Aside />
 
-                <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-28 md:pt-32">
-                    <div className="max-w-7xl mx-auto space-y-10">
+                <main className="flex-1 min-w-0 py-6 px-[15px] bg-white overflow-x-hidden">
+                    <div className="max-w-7xl mx-auto space-y-10 pt-6">
 
-                        {/* Welcome Banner */}
-                        <div className="bg-white p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-red-100 shadow-sm relative overflow-hidden group text-center flex flex-col items-center">
+                        {/* Welcome Banner - Premium Responsive Card */}
+                        <div className="bg-slate-50 p-6 md:p-16 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden text-center flex flex-col items-center">
                             <div className="relative z-10 w-full">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-12 mb-8">
-                                    <div className="text-left">
-                                        <h4 className="text-[#dd2727] font-black uppercase tracking-[0.4em] text-[10px] mb-2">Student Dashboard</h4>
-                                        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-                                            Welcome Back, <span className="text-[#dd2727]">{user?.displayName?.split(' ')[0] || 'Seeker'}</span>
-                                        </h2>
-                                    </div>
-                                    <div className="hidden md:flex items-center gap-3 px-6 py-3 bg-slate-50 rounded-[2rem] border border-slate-100">
-                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Account Active</span>
+                                <div className="flex flex-col items-center justify-center mb-6 md:mb-10">
+                                    <h4 className="text-[#dd2727] font-black uppercase tracking-[0.4em] text-[8px] md:text-[10px] mb-3 md:mb-4">Cosmic Journey</h4>
+                                    <h2 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+                                        Welcome Back, <br className="hidden md:block" />
+                                        <span className="text-[#dd2727]">{user?.displayName?.split(' ')[0] || 'Seeker'}</span>
+                                    </h2>
+                                    <div className="mt-6 md:mt-8 flex items-center gap-3 px-5 py-2 bg-white rounded-full border border-slate-200 shadow-sm">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                                        <span className="text-[8px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">Celestial Connection Active</span>
                                     </div>
                                 </div>
 
-                                <p className="text-slate-500 text-lg leading-relaxed mb-10 font-medium max-w-2xl mx-auto">
-                                    Your cosmic journey continues. You have enrolled in {courses.length} sacred courses. Review your progress and continue your learning below.
+                                <p className="text-slate-500 text-sm md:text-lg leading-relaxed mb-10 md:mb-12 font-medium max-w-2xl mx-auto px-4">
+                                    Your path to enlightenment continues. Review your progress and continue your learning below.
                                 </p>
 
-                                <div className="flex flex-wrap justify-center gap-6">
-                                    <Link to="/enrolledcourse" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl transition-all hover:-translate-y-1">
+                                <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 px-6">
+                                    <Link to="/enrolledcourse" className="w-full sm:w-auto bg-[#dd2727] text-white px-10 py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] hover:shadow-2xl transition-all hover:-translate-y-1 hover:bg-[#b91d1d]">
                                         Resume Learning
                                     </Link>
-                                    <Link to="/courses" className="bg-slate-900 text-white px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl transition-all hover:-translate-y-1">
-                                        Explore More
+                                    <Link to="/courses" className="w-full sm:w-auto bg-white text-slate-900 border border-slate-200 px-10 py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] hover:shadow-xl transition-all hover:-translate-y-1">
+                                        Explore Courses
                                     </Link>
                                 </div>
                             </div>
-                            {/* Decorative element */}
-                            <div className="absolute top-0 right-0 w-80 h-80 bg-[#dd2727]/5 rounded-full -mr-20 -mt-20 blur-3xl opacity-50 group-hover:opacity-100 transition-all duration-700"></div>
                         </div>
 
-                        {/* Stats Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {[
-                                { label: "Enrolled Courses", value: courses.length.toString().padStart(2, '0') },
-                                { label: "Learning Hours", value: "12" },
-                                { label: "Active Path", value: "Cosmic" },
-                            ].map((stat, idx) => (
-                                <div key={idx} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm text-center flex flex-col items-center justify-center hover:border-red-100 transition-all group">
-                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4 group-hover:text-red-600 transition-colors">{stat.label}</h4>
-                                    <div className="text-4xl font-black text-slate-900 tracking-tighter">{stat.value}</div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Recent Courses Preview */}
+                        {/* Recent Courses Section */}
                         <div className="space-y-8">
-                            <div className="flex items-center gap-4">
-                                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Recent <span className="text-[#dd2727]">Enrolled</span></h2>
-                                <div className="flex-1 h-px bg-slate-200"></div>
+                            <div className="flex items-center justify-between px-2">
+                                <div>
+                                    <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-1">Continue Path</h4>
+                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Recent Enrollments</h3>
+                                </div>
+                                <Link to="/enrolledcourse" className="text-[9px] md:text-[10px] font-black text-slate-400 hover:text-[#dd2727] uppercase tracking-widest transition-colors flex items-center gap-2 group">
+                                    View All <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </Link>
                             </div>
 
-                            {loading ? (
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    {[1, 2, 3].map(i => <div key={i} className="h-64 bg-slate-100 animate-pulse rounded-[2rem]" />)}
-                                </div>
-                            ) : courses.length === 0 ? (
-                                <div className="bg-white p-20 rounded-[2.5rem] border-2 border-dashed border-slate-100 text-center flex flex-col items-center">
-                                    <div className="text-4xl mb-6">🔭</div>
-                                    <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-8">No sacred courses found in your journey yet.</p>
-                                    <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">Browse Catalog</Link>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    {courses.map((course, idx) => (
-                                        <div key={idx} className="group bg-white border border-red-600 rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col cursor-pointer" onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}>
-                                            <div className="p-6 bg-[#fffcf8] relative">
-                                                <div className="absolute top-4 left-4 z-20">
-                                                    <img src="/src/assets/images/common/logos/vahlay_astro.png" alt="" className="w-10 h-10 bg-white rounded-full shadow-lg border border-red-50 p-1" />
-                                                </div>
-                                                <div className="relative rounded-2xl overflow-hidden border-8 border-orange-100 aspect-[16/10] bg-white">
-                                                    <img
-                                                        src={course.image}
-                                                        alt={course.name}
-                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.target.src = "/src/assets/images/pages/courses/courses.jpg";
-                                                        }}
-                                                    />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                                {loading ? (
+                                    [1, 2, 3].map(i => <div key={i} className="h-64 md:h-80 bg-slate-50 rounded-[2rem] animate-pulse border border-slate-100"></div>)
+                                ) : courses.length > 0 ? (
+                                    courses.map((course, idx) => (
+                                        <Link
+                                            to={`/course/${encodeURIComponent(course.name)}`}
+                                            key={idx}
+                                            className="group bg-white border border-slate-200 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-500 flex flex-col border-b-4 hover:border-[#dd2727]"
+                                        >
+                                            <div className="aspect-[16/10] overflow-hidden relative">
+                                                <img
+                                                    src={course.image}
+                                                    alt={course.name}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = "/src/assets/images/pages/courses/courses.jpg"; }}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                                                    <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">Continue Journey →</span>
                                                 </div>
                                             </div>
-                                            <div className="p-6 flex-1 flex flex-col items-center text-center">
-                                                <h3 className="text-lg font-black text-red-600 uppercase tracking-tight mb-4 leading-tight truncate w-full">{course.name}</h3>
-                                                <button className="mt-auto text-[9px] font-black text-white bg-slate-900 px-6 py-2.5 rounded-lg uppercase tracking-widest hover:bg-[#dd2727] transition-all">
-                                                    Continue Path
-                                                </button>
+                                            <div className="p-6 md:p-8">
+                                                <h4 className="text-xs md:text-sm font-black text-slate-900 uppercase tracking-tight line-clamp-2 group-hover:text-[#dd2727] transition-colors leading-relaxed">
+                                                    {course.name}
+                                                </h4>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center py-16 md:py-24 bg-slate-50 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 border-dashed">
+                                        <div className="text-4xl mb-6 opacity-40">🔭</div>
+                                        <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No sacred paths found yet.</p>
+                                        <Link to="/courses" className="mt-8 inline-block bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">Start Journey</Link>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-
                     </div>
                 </main>
             </div>
@@ -179,5 +162,5 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard
+export default Dashboard;
 

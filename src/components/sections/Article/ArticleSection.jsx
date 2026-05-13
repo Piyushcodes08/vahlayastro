@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import SliderHeader from '../../ui/Slider/SliderHeader';
 import SliderControls from '../../ui/Slider/SliderControls';
+import { articlesData as rawArticles } from "../../../data/pages/articles";
 import { useArticles } from '../../../context/ArticlesContext';
 import './ArticleSection.css';
 
@@ -46,9 +47,10 @@ const ArticleSection = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) setVisibleItems(1);
-      else if (window.innerWidth < 1024) setVisibleItems(2);
-      else if (window.innerWidth < 1280) setVisibleItems(3);
-      else setVisibleItems(3);
+      else if (window.innerWidth < 768) setVisibleItems(2);
+      else if (window.innerWidth < 1024) setVisibleItems(3);
+      else if (window.innerWidth < 1440) setVisibleItems(4);
+      else setVisibleItems(5);
     };
 
     handleResize();
@@ -118,7 +120,7 @@ const ArticleSection = () => {
   if (loading) {
     return (
       <div className="py-20 flex items-center justify-center">
-        <div className="text-[#dd2727] text-xl font-bold animate-pulse uppercase tracking-[0.3em]">
+        <div className="text-brand-red text-xl font-bold animate-pulse uppercase tracking-[0.3em]">
           Reading Scrolls...
         </div>
       </div>
@@ -172,7 +174,11 @@ const ArticleSection = () => {
                         {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
                         <div className="article-inner-meta">
                           {article.author && <span className="article-inner-author">By {article.author}</span>}
-                          {article.data && <span className="article-inner-date">{article.data}</span>}
+                          {(article.data || article.createdAt) && (
+                            <span className="article-inner-date">
+                              {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                            </span>
+                          )}
                         </div>
                         <Link to={`/articles/${article.id}`} className="article-read-more" onClick={(e) => e.stopPropagation()}>Read More</Link>
                       </div>
@@ -187,7 +193,11 @@ const ArticleSection = () => {
                         <div className="article-cover-content">
                           <h4 className="article-cover-title">{article.title}</h4>
                           {article.author && <p className="article-cover-author">By {article.author}</p>}
-                          {article.data && <p className="article-cover-date">{article.data}</p>}
+                          {(article.data || article.createdAt) && (
+                            <p className="article-cover-date">
+                              {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>

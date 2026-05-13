@@ -1,8 +1,8 @@
-import narad from '../assets/images/pages/courses/narad.webp';
-import geeta from '../assets/images/pages/courses/geeta.webp';
-import foundation from '../assets/images/pages/courses/foundation.webp';
-import Aboutus from '../assets/images/pages/about/Aboutus-pg.webp';
-import self from '../assets/images/pages/courses/basics.webp';
+import narad from '../../assets/images/pages/courses/narad.webp';
+import geeta from '../../assets/images/pages/courses/geeta.webp';
+import foundation from '../../assets/images/pages/courses/foundation.webp';
+import Aboutus from '../../assets/images/pages/about/Aboutus-pg.webp';
+import self from '../../assets/images/pages/courses/basics.webp';
 
 export const coursesData = [
   {

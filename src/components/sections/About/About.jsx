@@ -1,11 +1,11 @@
 import React from "react";
 import Button from "../../ui/Button/Button";
 import { Link } from "react-router-dom";
-import { aboutData } from "../../../data/aboutData";
+import { aboutData } from "../../../data/pages/about";
 import "./About.css";
 
 const About = () => {
-  const { intro, title, images, paragraphs, buttonText } = aboutData;
+  const { title, images, paragraphs, buttonText } = aboutData.sectionData;
 
   return (
     <section className="about-section">
@@ -23,12 +23,6 @@ const About = () => {
 
           <div className="about-content-right">
             <div className="about-text-content">
-              {intro && (
-                <div className="about-intro-wrapper">
-                  <span className="about-intro-line"></span>
-                  <span className="about-intro">{intro}</span>
-                </div>
-              )}
               <h2 className="about-title">{title}</h2>
 
               <div className="about-desc-wrapper">

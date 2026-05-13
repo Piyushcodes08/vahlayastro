@@ -29,10 +29,8 @@ const AdminArticles = () => {
     title: "",
     hindi: "",
     author: "",
-    type: "Career",
     rawDate: "",
     data: "",
-    description: "",
     dhindi: "",
     denglish: "",
     referenceLink: "",
@@ -64,8 +62,8 @@ const AdminArticles = () => {
 
       // Sort by date (latest first)
       articlesData.sort((a, b) => {
-        const dateA = new Date(a.timestamp?.seconds * 1000 || a.data || 0);
-        const dateB = new Date(b.timestamp?.seconds * 1000 || b.data || 0);
+        const dateA = new Date(a.createdAt?.seconds * 1000 || a.rawDate || a.data || 0);
+        const dateB = new Date(b.createdAt?.seconds * 1000 || b.rawDate || b.data || 0);
         return dateB - dateA;
       });
 
@@ -90,8 +88,8 @@ const AdminArticles = () => {
   const handleSaveArticle = async () => {
     const { title, author, type, rawDate, data, denglish, dhindi, description, referenceLink, image, imageUrl, sTitle, sDesc, sKeywords, hindi } = formState;
 
-    if (!title || !author || !type) {
-      showAlert("Please fill in Title, Author, and Category.", "error");
+    if (!title || !author) {
+      showAlert("Please fill in Title and Author.", "error");
       return;
     }
 
@@ -105,13 +103,10 @@ const AdminArticles = () => {
         finalImageUrl = await getDownloadURL(imageRef);
       }
 
-      // Format date: if rawDate is provided (YYYY-MM-DD), format it; else keep existing data string
-      let formattedDate = data;
-      if (rawDate) {
-        const dateObj = new Date(rawDate);
-        const options = { month: "long", day: "numeric", year: "numeric" };
-        formattedDate = dateObj.toLocaleDateString("en-US", options);
-      }
+      // Format date: use rawDate if provided, otherwise use current date
+      let dateObj = rawDate ? new Date(rawDate) : new Date();
+      const options = { month: "long", day: "numeric", year: "numeric" };
+      let formattedDate = dateObj.toLocaleDateString("en-US", options);
 
       // Handle keywords as array
       const keywordArray = typeof sKeywords === 'string'
@@ -122,10 +117,8 @@ const AdminArticles = () => {
         title,
         hindi,
         author,
-        type,
         data: formattedDate,
         rawDate: rawDate || "",
-        description,
         dhindi,
         denglish,
         referenceLink,
@@ -174,10 +167,8 @@ const AdminArticles = () => {
       title: "",
       hindi: "",
       author: "",
-      type: "Career",
       rawDate: "",
       data: "",
-      description: "",
       dhindi: "",
       denglish: "",
       referenceLink: "",
@@ -206,12 +197,12 @@ const AdminArticles = () => {
       <Header />
 
       {/* Main Wrapper using Sticky Sidebar Logic */}
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-20 px-4 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
           <div className="space-y-12">
-            <div className="flex justify-between items-center pt-[50px]">
+            <div className="flex justify-between items-center pt-8">
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Manage <span className="text-[#dd2727]">Articles</span>
               </h2>
@@ -249,18 +240,7 @@ const AdminArticles = () => {
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Author</label>
                     <input type="text" name="author" value={formState.author} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Category</label>
-                    <select name="type" value={formState.type} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none appearance-none cursor-pointer">
-                      <option>Career</option>
-                      <option>Health</option>
-                      <option>Marriage</option>
-                      <option>Money</option>
-                      <option>Love</option>
-                      <option>Education</option>
-                      <option>Property</option>
-                    </select>
-                  </div>
+
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Publish Date</label>
                     <input type="date" name="rawDate" value={formState.rawDate} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none" />
@@ -280,10 +260,7 @@ const AdminArticles = () => {
                     <p className="text-[10px] text-slate-400 font-medium">This is the body text displayed on the article detail page.</p>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Short Description (English)</label>
-                    <textarea name="description" value={formState.description} onChange={handleInputChange} placeholder="A brief intro shown on the article card..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-28 resize-none placeholder:text-gray-300" />
-                  </div>
+
                   <div className="space-y-2 md:col-span-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">English Body (denglish)</label>
                     <textarea name="denglish" value={formState.denglish} onChange={handleInputChange} placeholder="Full article content in English..." className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 text-gray-900 focus:ring-2 focus:ring-[#dd2727] outline-none h-48 resize-none placeholder:text-gray-300" />
@@ -354,8 +331,10 @@ const AdminArticles = () => {
                           <svg className="w-10 h-10 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         </div>
                       )}
-                      {article.data && (
-                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">{article.data}</div>
+                      {(article.data || article.createdAt) && (
+                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">
+                          {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                        </div>
                       )}
                     </div>
 
@@ -377,7 +356,6 @@ const AdminArticles = () => {
                             setFormState({ 
                               ...article, 
                               sKeywords: keywordsString,
-                              type: article.type || "Career", // Default to Career if missing
                               image: null 
                             });
                             setFormVisible(true);

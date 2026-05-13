@@ -132,28 +132,28 @@ const Profile = () => {
   }
 
   return (
-    <div className="admin-layout min-h-screen flex flex-col">
+    <div className="admin-layout min-h-screen flex flex-col bg-slate-50">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
 
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 admin-fluid-container bg-gray-50/50 backdrop-blur-sm p-4 md:p-10 pt-32">
-          <div className="max-w-4xl mx-auto space-y-10 pt-[50px]">
+        <main className="flex-1 min-w-0 py-6 px-[15px] bg-white overflow-x-hidden">
+          <div className="max-w-4xl mx-auto space-y-10 pt-6">
 
-            {/* Page Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 py-12">
+            {/* Page Header - Responsive Scaling */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-200 pb-8 md:pb-12 pt-6">
               <div>
-                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[10px] mb-2">Account Settings</h4>
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                <h4 className="text-[#dd2727] font-black uppercase tracking-[0.3em] text-[8px] md:text-[10px] mb-1 md:mb-2">Account Settings</h4>
+                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">
                   Student <span className="text-[#dd2727]">Profile</span>
                 </h1>
               </div>
               {!isEditing && user && (
                 <button
                   onClick={handleEdit}
-                  className="bg-[#dd2727] text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:shadow-xl transition-all hover:-translate-y-0.5 self-start md:self-center"
+                  className="w-full sm:w-auto bg-[#dd2727] text-white px-8 py-3.5 rounded-xl font-bold uppercase tracking-widest text-[9px] md:text-[10px] hover:shadow-xl transition-all hover:-translate-y-0.5"
                 >
                   Edit Profile
                 </button>
@@ -161,17 +161,17 @@ const Profile = () => {
             </div>
 
             {user ? (
-              <div className="admin-card overflow-hidden">
+              <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
                 {isEditing ? (
-                  <form className="p-6 md:p-8 space-y-6">
+                  <form className="p-5 md:p-10 space-y-8">
                     {/* Profile Picture Upload */}
-                    <div className="flex flex-col items-center pb-10 border-b border-slate-100">
-                      <div className="relative group mb-6">
+                    <div className="flex flex-col items-center pb-8 border-b border-slate-50">
+                      <div className="relative group mb-4">
                         <div className="absolute -inset-1 bg-slate-200 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
                         <img
                           src={imageFile ? URL.createObjectURL(imageFile) : (formData.profilePic || '/src/assets/images/common/logos/vahlay_astro.png')}
                           alt="Profile Preview"
-                          className="relative w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl bg-slate-50"
+                          className="relative w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-xl bg-slate-50"
                         />
                         <label className="absolute bottom-0 right-0 bg-[#dd2727] text-white p-2.5 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform border-2 border-white">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -182,116 +182,113 @@ const Profile = () => {
                           />
                         </label>
                       </div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Update Photo</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Update Photo</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      {/* Full Name */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
                         <input
                           type="text"
                           name="fullName"
                           value={formData.fullName}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-900 font-medium focus:ring-2 focus:ring-[#dd2727]/20 focus:border-[#dd2727] outline-none transition-all"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-slate-900 font-medium focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] outline-none transition-all"
                           placeholder="Enter your full name"
                         />
                       </div>
 
-                      {/* Father's Name */}
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Father's Name</label>
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Father's Name</label>
                         <input
                           type="text"
                           name="fathersName"
                           value={formData.fathersName}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-900 font-medium focus:ring-2 focus:ring-[#dd2727]/20 focus:border-[#dd2727] outline-none transition-all"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-slate-900 font-medium focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] outline-none transition-all"
                         />
                       </div>
 
-                      {/* Mother's Name */}
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Mother's Name</label>
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Mother's Name</label>
                         <input
                           type="text"
                           name="mothersName"
                           value={formData.mothersName}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-900 font-medium focus:ring-2 focus:ring-[#dd2727]/20 focus:border-[#dd2727] outline-none transition-all"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-slate-900 font-medium focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] outline-none transition-all"
                         />
                       </div>
 
-                      {/* Date of Birth */}
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Date of Birth</label>
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Date of Birth</label>
                         <input
                           type="date"
                           name="dob"
                           value={formData.dob !== "NA" ? formData.dob : ""}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-900 font-medium focus:ring-2 focus:ring-[#dd2727]/20 focus:border-[#dd2727] outline-none transition-all"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-slate-900 font-medium focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] outline-none transition-all"
                         />
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-4 pt-8 border-t border-slate-100">
+                    <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-slate-50">
                       <button
                         type="button"
                         onClick={handleSave}
-                        className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all hover:-translate-y-0.5"
+                        className="w-full sm:w-auto bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all hover:-translate-y-0.5"
                       >
                         Save Profile
                       </button>
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="bg-slate-100 text-slate-600 px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-all"
+                        className="w-full sm:w-auto bg-slate-100 text-slate-600 px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-all"
                       >
-                        Discard Changes
+                        Discard
                       </button>
                     </div>
                   </form>
                 ) : (
-                  <div className="p-6 md:p-8">
-                    <div className="flex flex-col items-center mb-6">
+                  <div className="p-6 md:p-12">
+                    <div className="flex flex-col items-center mb-10">
                       <div className="relative group mb-6">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-[#dd2727] to-[#f43f5e] rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#dd2727] to-[#f43f5e] rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                         <img
                           src={formData.profilePic || '/src/assets/images/common/logos/vahlay_astro.png'}
                           alt="Profile"
-                          className="relative w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl bg-slate-50"
+                          className="relative w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-2xl bg-slate-50"
+                          onError={(e) => { e.target.onerror = null; e.target.src = "/src/assets/images/common/logos/vahlay_astro.png"; }}
                         />
                       </div>
-                      <h3 className="text-2xl font-black text-slate-900 mb-1">{formData.fullName}</h3>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{formData.email}</p>
+                      <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-1 uppercase tracking-tight">{formData.fullName}</h3>
+                      <p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{formData.email}</p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-100 pt-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-50 pt-10">
                       {[
                         { label: "Full Name", value: formData.fullName },
                         { label: "Father's Name", value: formData.fathersName },
                         { label: "Mother's Name", value: formData.mothersName },
                         { label: "Date of Birth", value: formData.dob }
                       ].map((info, idx) => (
-                        <div key={idx} className="space-y-1.5 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{info.label}</span>
-                          <p className="text-slate-800 font-bold tracking-tight">{info.value}</p>
+                        <div key={idx} className="space-y-1.5 p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                          <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{info.label}</span>
+                          <p className="text-slate-800 font-bold tracking-tight text-sm md:text-base">{info.value}</p>
                         </div>
                       ))}
-                      <div className="space-y-1.5 p-4 bg-slate-50 rounded-2xl border border-slate-100 sm:col-span-2">
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Email Address</span>
-                        <p className="text-slate-800 font-bold tracking-tight break-all">{formData.email}</p>
+                      <div className="space-y-1.5 p-5 bg-slate-50 rounded-2xl border border-slate-100 sm:col-span-2">
+                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Email Address</span>
+                        <p className="text-slate-800 font-bold tracking-tight break-all text-sm md:text-base">{formData.email}</p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="admin-card p-20 text-center">
+              <div className="bg-white rounded-3xl p-12 md:p-20 text-center border border-slate-100 shadow-sm">
                 <div className="text-4xl mb-6">🔒</div>
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-xs mb-8">Please log in to view your sacred profile.</p>
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mb-8">Please log in to view your sacred profile.</p>
                 <Link to="/login" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">Secure Login</Link>
               </div>
             )}

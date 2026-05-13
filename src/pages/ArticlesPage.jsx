@@ -113,7 +113,11 @@ const ArticlesPage = () => {
                                                         {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
                                                         <div className="article-inner-meta">
                                                             {article.author && <span className="article-inner-author">By {article.author}</span>}
-                                                            {article.data && <span className="article-inner-date">{article.data}</span>}
+                                                            {(article.data || article.createdAt) && (
+                                                                <span className="article-inner-date">
+                                                                    {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         <Link to={`/articles/${article.id || index}`} className="article-read-more">Read More</Link>
                                                     </div>
@@ -128,7 +132,11 @@ const ArticlesPage = () => {
                                                         <div className="article-cover-content">
                                                             <h4 className="article-cover-title">{article.title}</h4>
                                                             {article.author && <p className="article-cover-author">By {article.author}</p>}
-                                                            {article.data && <p className="article-cover-date">{article.data}</p>}
+                                                            {(article.data || article.createdAt) && (
+                                                                <p className="article-cover-date">
+                                                                    {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                                                                </p>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -153,7 +161,7 @@ const ArticlesPage = () => {
                             <aside className="lg:col-span-3 space-y-12">
 
                                 {/* Search Widget */}
-                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 shadow-2xl">
+                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] py-8 px-[15px] shadow-2xl">
                                     <h4 className="title-batangas text-2xl mb-8 text-white border-b border-white/10 pb-4">Search Wisdom</h4>
                                     <div className="relative">
                                         <input
@@ -170,7 +178,7 @@ const ArticlesPage = () => {
                                 </div>
 
                                 {/* Sacred Wisdom (Dynamic Articles List) */}
-                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl">
+                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] py-10 px-[15px] shadow-2xl">
                                     <h4 className="title-batangas text-2xl mb-8 text-white border-b border-white/10 pb-4">Sacred Wisdom</h4>
                                     <ul className="space-y-6 subtitle-poppins text-base">
                                         {articlesData.map((article, i) => (
@@ -187,7 +195,7 @@ const ArticlesPage = () => {
                                 {/* Premium CTA Sidebar Banner */}
                                 <div className="relative rounded-[2.5rem] overflow-hidden group shadow-[0_25px_60px_rgba(221,39,39,0.4)] transition-all duration-700 hover:-translate-y-2">
                                     <div className="absolute inset-0 bg-gradient-to-br from-[#dd2727] via-[#dd2727] to-[#801313] opacity-100"></div>
-                                    <div className="relative z-10 p-12 text-center">
+                                    <div className="relative z-10 py-12 px-[15px] text-center">
                                         <h4 className="title-batangas text-4xl mb-6 !text-white leading-tight drop-shadow-2xl">
                                             Unlock Your <br /> Destiny
                                         </h4>
@@ -212,7 +220,7 @@ const ArticlesPage = () => {
                         <div className="absolute bottom-0 right-[10%] w-[700px] h-[700px] bg-glow-red opacity-20"></div>
                     </div>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-2xl border border-[#dd2727]/30 rounded-[4rem] p-16 md:p-24 text-center max-w-5xl mx-auto shadow-[0_30px_100px_rgba(221,39,39,0.15)] relative overflow-hidden group">
+                        <div className="bg-white/5 backdrop-blur-2xl border border-[#dd2727]/30 rounded-[4rem] py-16 md:py-24 px-[15px] text-center max-w-5xl mx-auto shadow-[0_30px_100px_rgba(221,39,39,0.15)] relative overflow-hidden group">
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-40 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <div className="inline-block mb-8 px-8 py-2 rounded-full border border-white/10 bg-white/5">

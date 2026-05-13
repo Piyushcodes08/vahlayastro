@@ -30,19 +30,20 @@ const AdminEnrolledUsers = () => {
       .toISOString()
       .split("T")[0],
   });
-  const [successMessage, setSuccessMessage] = useState("");
+   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
   useEffect(() => {
-    if (selectedCourse) {
-      fetchSubscribers(selectedCourse);
-    } else {
-      setSubscribers([]);
-    }
+    setCurrentPage(1); // Reset to first page when course filter changes
+    fetchSubscribers(selectedCourse);
   }, [selectedCourse]);
 
   const fetchCourses = async () => {
@@ -70,16 +71,65 @@ const AdminEnrolledUsers = () => {
   };
 
   const fetchSubscribers = async (courseId) => {
+    setLoading(true);
     try {
-      const subscribersRef = collection(db, `subscribers_${courseId}`);
-      const subscriberSnapshot = await getDocs(subscribersRef);
-      const subscriberList = subscriberSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setSubscribers(subscriberList);
+      const subscriptionsRef = collection(db, "subscriptions");
+      const snapshot = await getDocs(subscriptionsRef);
+      const allSubs = [];
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const email = docSnap.id;
+        
+        // Check if user is enrolled in the selected course or all courses
+        let isEnrolled = false;
+        let enrolledAs = "";
+
+        // Check free courses
+        if (data.freecourses && Array.isArray(data.freecourses)) {
+          if (!courseId || data.freecourses.includes(courseId)) {
+            isEnrolled = true;
+            enrolledAs = "free";
+          }
+        }
+
+        // Check paid courses (DETAILS can be array or object)
+        if (data.DETAILS) {
+          const details = data.DETAILS;
+          if (Array.isArray(details)) {
+            details.forEach(courseObj => {
+              if (!courseId || Object.keys(courseObj).includes(courseId)) {
+                isEnrolled = true;
+                enrolledAs = "paid";
+              }
+            });
+          } else if (typeof details === 'object') {
+            Object.values(details).forEach(courseObj => {
+              if (!courseId || Object.keys(courseObj).includes(courseId)) {
+                isEnrolled = true;
+                enrolledAs = enrolledAs === "free" ? "both" : "paid";
+              }
+            });
+          }
+        }
+
+        if (isEnrolled) {
+          allSubs.push({
+            id: email,
+            name: data.name || "Anonymous",
+            userId: email,
+            phone: data.phone || "N/A",
+            courseType: enrolledAs,
+            ...data
+          });
+        }
+      });
+
+      setSubscribers(allSubs);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching subscribers:", error);
+      setLoading(false);
     }
   };
 
@@ -89,64 +139,115 @@ const AdminEnrolledUsers = () => {
     setSuccessMessage("");
 
     try {
-      const collectionName =
-        newSubscriber.courseType === "paid"
-          ? `subscribers_${newSubscriber.course}`
-          : `subscribers_${newSubscriber.course}`;
-
-      // Check if user is already enrolled in this course
-      const docRef = doc(db, collectionName, newSubscriber.userId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setErrorMessage("User is already enrolled in this course.");
-        return;
-      }
-
-      // Add to course subscribers collection
+      // 1. Check if user exists in subscriptions or users
+      const subRef = doc(db, "subscriptions", newSubscriber.userId);
+      const subSnap = await getDoc(subRef);
+      
       const enrollmentData = {
         name: newSubscriber.name,
         phone: newSubscriber.phone || "",
-        ...(newSubscriber.courseType === "paid" && {
-          subscriptionDate: newSubscriber.subscriptionDate,
-          expiryDate: newSubscriber.expiryDate,
-        }),
+        email: newSubscriber.userId,
       };
 
-      await setDoc(docRef, enrollmentData);
+      if (subSnap.exists()) {
+        const subData = subSnap.data();
+        
+        // Check for double enrollment
+        if (newSubscriber.courseType === "free") {
+          const freecourses = subData.freecourses || [];
+          if (freecourses.includes(newSubscriber.course)) {
+            setErrorMessage("User is already enrolled in this free course.");
+            return;
+          }
+          await updateDoc(subRef, {
+            freecourses: [...freecourses, newSubscriber.course],
+            name: newSubscriber.name, // Keep name/phone updated
+            phone: newSubscriber.phone || subData.phone
+          });
+        } else {
+          // Paid course
+          let details = subData.DETAILS || [];
+          let alreadyEnrolled = false;
+          
+          if (Array.isArray(details)) {
+            alreadyEnrolled = details.some(d => Object.keys(d)[0] === newSubscriber.course);
+          } else if (typeof details === 'object') {
+            alreadyEnrolled = Object.values(details).some(d => Object.keys(d)[0] === newSubscriber.course);
+          }
 
-      // Add course ID to user's enrolledCourses array
-      const userRef = doc(db, "users", newSubscriber.userId);
-      const userSnap = await getDoc(userRef);
+          if (alreadyEnrolled) {
+            setErrorMessage("User is already enrolled in this paid course.");
+            return;
+          }
 
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        const enrolledCourses = userData.enrolledCourses || [];
-        if (!enrolledCourses.includes(newSubscriber.course)) {
-          await setDoc(
-            userRef,
-            { enrolledCourses: [...enrolledCourses, newSubscriber.course] },
-            { merge: true }
-          );
+          const newCourseEntry = {
+            [newSubscriber.course]: {
+              subscriptionDate: newSubscriber.subscriptionDate,
+              expiryDate: newSubscriber.expiryDate,
+              status: "active"
+            }
+          };
+
+          if (Array.isArray(details)) {
+            await updateDoc(subRef, {
+              DETAILS: [...details, newCourseEntry],
+              name: newSubscriber.name,
+              phone: newSubscriber.phone || subData.phone
+            });
+          } else {
+            // It's an object, let's keep it as is or convert?
+            // Safer to just add a new key if it's that weird object-with-index-keys format
+            const nextIndex = Object.keys(details).length;
+            await updateDoc(subRef, {
+              [`DETAILS.${nextIndex}`]: newCourseEntry,
+              name: newSubscriber.name,
+              phone: newSubscriber.phone || subData.phone
+            });
+          }
         }
+      } else {
+        // Create new subscription doc
+        const newDoc = {
+          name: newSubscriber.name,
+          email: newSubscriber.userId,
+          phone: newSubscriber.phone || "",
+        };
+
+        if (newSubscriber.courseType === "free") {
+          newDoc.freecourses = [newSubscriber.course];
+        } else {
+          newDoc.DETAILS = [{
+            [newSubscriber.course]: {
+              subscriptionDate: newSubscriber.subscriptionDate,
+              expiryDate: newSubscriber.expiryDate,
+              status: "active"
+            }
+          }];
+        }
+        await setDoc(subRef, newDoc);
       }
 
-      setSuccessMessage("User enrolled successfully!");
+      // 2. Also keep legacy subscribers_* collection for backward compatibility if needed
+      const legacyRef = doc(db, `subscribers_${newSubscriber.course}`, newSubscriber.userId);
+      await setDoc(legacyRef, {
+        name: newSubscriber.name,
+        phone: newSubscriber.phone || "",
+        courseType: newSubscriber.courseType,
+        subscriptionDate: newSubscriber.subscriptionDate || null,
+        expiryDate: newSubscriber.expiryDate || null
+      });
+
+      setSuccessMessage("User enrolled successfully across all cosmic records!");
       setNewSubscriber({
         name: "",
         userId: "",
         course: "",
         courseType: "paid",
         subscriptionDate: new Date().toISOString().split("T")[0],
-        expiryDate: new Date(
-          new Date().setFullYear(new Date().getFullYear() + 1)
-        )
-          .toISOString()
-          .split("T")[0],
+        expiryDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
       });
-      if (selectedCourse === newSubscriber.course) {
-        fetchSubscribers(selectedCourse);
-      }
+      
+      fetchSubscribers(selectedCourse);
     } catch (error) {
       console.error("Error during enrollment:", error);
       setErrorMessage("Failed to enroll user. Please try again.");
@@ -162,67 +263,73 @@ const AdminEnrolledUsers = () => {
       return;
 
     try {
-      // 1. Remove from subscribers_CourseID collection
+      // 1. Remove from legacy subscribers_CourseID collection
       await deleteDoc(doc(db, `subscribers_${courseId}`, userId));
 
-      // 2. Remove from user's enrolledCourses array in 'users' collection
-      const userRef = doc(db, "users", userId);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        const enrolledCourses = userData.enrolledCourses || [];
-        const updatedCourses = enrolledCourses.filter((id) => id !== courseId);
-        await setDoc(
-          userRef,
-          { enrolledCourses: updatedCourses },
-          { merge: true }
-        );
-      }
-
-      // 3. Remove from 'subscriptions' collection (used by Student EnrolledCourses page)
-      // Note: userId in subscribers_CourseID is typically the email
+      // 2. Remove from 'subscriptions' collection (main source of truth)
       const subRef = doc(db, "subscriptions", userId);
       const subSnap = await getDoc(subRef);
+      
       if (subSnap.exists()) {
         const subData = subSnap.data();
         
-        // Remove from freecourses array
+        // Handle freecourses
         const freecourses = subData.freecourses || [];
         const updatedFree = freecourses.filter(id => id !== courseId);
         
-        // Remove from DETAILS array (paid courses)
-        const details = subData.DETAILS || [];
-        const updatedDetails = details.filter(d => Object.keys(d)[0] !== courseId);
+        // Handle DETAILS (Paid courses) - handles both array and object formats
+        let updatedDetails;
+        const details = subData.DETAILS;
+        
+        if (Array.isArray(details)) {
+          updatedDetails = details.filter(d => Object.keys(d)[0] !== courseId);
+        } else if (typeof details === 'object' && details !== null) {
+          // If it's the indexed object format, filter keys
+          updatedDetails = {};
+          let newIdx = 0;
+          Object.values(details).forEach(courseObj => {
+            if (Object.keys(courseObj)[0] !== courseId) {
+              updatedDetails[newIdx] = courseObj;
+              newIdx++;
+            }
+          });
+        }
 
-        await setDoc(subRef, {
+        await updateDoc(subRef, {
           freecourses: updatedFree,
-          DETAILS: updatedDetails
-        }, { merge: true });
+          DETAILS: updatedDetails || []
+        });
       }
 
+      // 3. Update local state
       setSubscribers(subscribers.filter((sub) => sub.id !== userId));
-      alert("User removed from course successfully across all records.");
+      alert("User removed from course successfully across all celestial records.");
     } catch (error) {
       console.error("Error removing user from course:", error);
-      alert("Failed to remove user completely. Please check Firebase console.");
+      alert("Failed to remove user completely. Please check Firebase connection.");
     }
   };
 
-  const filteredSubscribers = subscribers;
+  // Pagination Calculations
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentSubscribers = subscribers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(subscribers.length / itemsPerPage);
+
+  const filteredSubscribers = subscribers; // Kept for reference but we use currentSubscribers for render
 
   return (
     <div className="admin-layout flex flex-col min-h-screen">
       <Header />
       
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
           <div className="space-y-8">
             {/* Enrollment Form Section */}
             <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden group">
-              <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-100 pt-[50px]">
+              <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-100 pt-8">
                 <h2 className="text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
                   Manual <span className="text-[#dd2727]">Enrollment</span>
@@ -382,8 +489,8 @@ const AdminEnrolledUsers = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-50 bg-white">
-                    {filteredSubscribers.length > 0 ? (
-                      filteredSubscribers.map((sub) => (
+                    {currentSubscribers.length > 0 ? (
+                      currentSubscribers.map((sub) => (
                         <tr key={sub.id} className="hover:bg-slate-50 transition-colors group">
                           <td className="px-6 py-4 text-sm font-medium text-slate-900">{sub.name || "N/A"}</td>
                           <td className="px-6 py-4 text-sm text-slate-500">{sub.id}</td>
@@ -418,8 +525,8 @@ const AdminEnrolledUsers = () => {
 
               {/* Mobile Cards */}
               <div className="md:hidden space-y-4">
-                {filteredSubscribers.length > 0 ? (
-                  filteredSubscribers.map((sub) => (
+                {currentSubscribers.length > 0 ? (
+                  currentSubscribers.map((sub) => (
                     <div key={sub.id} className="bg-white border border-slate-100 rounded-2xl p-4 space-y-3">
                       <div className="flex justify-between items-start">
                         <div>
@@ -450,6 +557,57 @@ const AdminEnrolledUsers = () => {
                   <p className="text-center py-8 text-slate-400 italic">No subscribers found.</p>
                 )}
               </div>
+
+              {/* Pagination UI */}
+              {subscribers.length > itemsPerPage && (
+                <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 px-2 pt-6 border-t border-slate-50">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
+                    Showing <span className="text-slate-900">{indexOfFirstItem + 1}</span> to <span className="text-slate-900">{Math.min(indexOfLastItem, subscribers.length)}</span> of <span className="text-slate-900">{subscribers.length}</span> entries
+                  </p>
+                  
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className={`p-3 rounded-2xl border transition-all ${
+                        currentPage === 1 
+                          ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" 
+                          : "bg-white text-slate-600 border-slate-200 hover:border-[#dd2727] hover:text-[#dd2727] hover:shadow-lg shadow-sm"
+                      }`}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      {[...Array(totalPages)].map((_, i) => (
+                        <button
+                          key={i + 1}
+                          onClick={() => setCurrentPage(i + 1)}
+                          className={`w-11 h-11 rounded-2xl text-xs font-black transition-all ${
+                            currentPage === i + 1
+                              ? "bg-[#dd2727] text-white shadow-[0_8px_20px_rgba(221,39,39,0.3)] scale-110"
+                              : "bg-white text-slate-400 border border-slate-200 hover:border-[#dd2727]/30 hover:text-slate-900"
+                          }`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className={`p-3 rounded-2xl border transition-all ${
+                        currentPage === totalPages 
+                          ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" 
+                          : "bg-white text-slate-600 border-slate-200 hover:border-[#dd2727] hover:text-[#dd2727] hover:shadow-lg shadow-sm"
+                      }`}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </main>

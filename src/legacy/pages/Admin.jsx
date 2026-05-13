@@ -86,7 +86,7 @@ const AdminSidebar = () => {
       {/* Sidebar - Premium Theme */}
       <aside
         ref={sidebarRef}
-        className={`bg-gradient-to-b from-[#dd2727] to-[#b91c1c] h-screen lg:h-[calc(100vh-64px)] md:w-64 w-[300px] fixed lg:sticky top-0 lg:top-16 left-0 transition-all duration-500 ease-in-out z-[2100] overflow-y-auto scrollbar-hide self-start ${
+        className={`bg-linear-to-b from-[#dd2727] to-[#b91c1c] h-screen lg:h-[calc(100vh-64px)] md:w-64 w-[300px] fixed lg:sticky top-0 lg:top-16 left-0 transition-all duration-500 ease-in-out z-[2100] overflow-y-auto scrollbar-hide self-start ${
           isOpen ? "translate-x-0 shadow-[20px_0_60px_rgba(0,0,0,0.5)]" : "-translate-x-full lg:translate-x-0 lg:shadow-[10px_0_40px_rgba(221,39,39,0.15)]"
         }`}
       >
@@ -110,7 +110,7 @@ const AdminSidebar = () => {
           <nav className="space-y-8">
             {menuGroups.map((group, gIdx) => (
               <div key={gIdx} className="space-y-3">
-                <h3 className="px-5 text-[9px] font-black text-white/30 uppercase tracking-[0.25em]">{group.group}</h3>
+                <h3 className="px-5 text-[9px] font-black text-white/40 uppercase tracking-[0.25em]">{group.group}</h3>
                 <div className="space-y-1">
                   {group.items.map((item, index) => {
                     const isActive = location.pathname === item.path;
@@ -121,8 +121,8 @@ const AdminSidebar = () => {
                         onClick={() => window.innerWidth < 1024 && setIsOpen(false)}
                         className={`flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
                           isActive 
-                          ? "bg-white/15 backdrop-blur-md text-white shadow-lg border border-white/10" 
-                          : "text-white/60 hover:text-white hover:bg-white/5"
+                          ? "bg-white text-[#dd2727] shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white" 
+                          : "text-white/70 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         <span className={`transition-transform duration-500 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -132,7 +132,7 @@ const AdminSidebar = () => {
                           {item.title}
                         </span>
                         {isActive && (
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full shadow-[0_0_15px_#fff]"></div>
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#dd2727] rounded-r-full"></div>
                         )}
                       </Link>
                     );

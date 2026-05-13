@@ -205,19 +205,19 @@ const VideoDetailsPage = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#f0f2f5] text-slate-900">
+        <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
             <Header />
 
-            <div className="flex flex-1 relative z-10 pt-32">
+            <div className="flex flex-1 relative z-10 pt-16 gap-0">
                 <Aside />
 
-                <main className="flex-1 p-4 md:p-8 flex flex-col lg:flex-row gap-6 overflow-y-auto pt-[50px]">
+                <main className="flex-1 min-w-0 p-4 md:p-10 flex flex-col lg:flex-row gap-8 overflow-x-hidden pt-8">
 
                     {/* Left Column: Video & Info */}
-                    <div className="flex-1 lg:w-3/4 space-y-4 pb-20">
+                    <div className="flex-1 lg:w-3/4 space-y-6 pb-20">
 
-                        {/* Video Player Section */}
-                        <div className="bg-black aspect-video relative rounded-xl overflow-hidden shadow-sm">
+                        {/* Video Player Section - Responsive aspect ratio */}
+                        <div className="bg-black aspect-video relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
                             {activeVideo?.url ? (
                                 <div className="w-full h-full">
                                     {activeVideo.url.includes('youtube.com') || activeVideo.url.includes('youtu.be') || activeVideo.url.includes('vimeo.com') || activeVideo.url.includes('drive.google.com') ? (
@@ -227,83 +227,98 @@ const VideoDetailsPage = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="flex items-center justify-center h-full bg-slate-900 text-white/50 text-xs uppercase tracking-widest">Video Unavailable</div>
+                                <div className="flex items-center justify-center h-full bg-slate-900 text-white/30 text-[10px] uppercase tracking-[0.4em] font-black">Video Connection Offline</div>
                             )}
                         </div>
 
                         {/* Video Title and Likes Card */}
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <h1 className="text-xl md:text-2xl font-bold text-slate-800 leading-tight mb-4">
-                                {activeVideo?.displayTitle}
-                            </h1>
-                            <div className="flex items-center gap-4">
+                        <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-100">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                                <div className="flex-1">
+                                    <h1 className="text-xl md:text-3xl font-black text-slate-900 leading-tight mb-4 uppercase tracking-tight">
+                                        {activeVideo?.displayTitle}
+                                    </h1>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-4 py-1.5 rounded-full border border-slate-100">
+                                            Module {activeVideo?.titleOrder} • Lesson {activeVideo?.order}
+                                        </div>
+                                        {watchedVideos.includes(videoId) && (
+                                            <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100">
+                                                Completed Path
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                                 <button
                                     onClick={handleLike}
-                                    className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-full transition-all group"
+                                    className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 px-6 py-3 rounded-2xl transition-all group self-start"
                                 >
-                                    <span className={`text-xl ${userLiked ? 'text-red-500' : 'text-slate-400'} group-hover:scale-110 transition-transform`}>❤</span>
-                                    <span className="text-sm font-bold text-slate-600">{likes}</span>
+                                    <span className={`text-xl ${userLiked ? 'text-red-500' : 'text-slate-300'} group-hover:scale-110 transition-transform`}>❤</span>
+                                    <span className="text-xs font-black text-slate-600 uppercase tracking-widest">{likes} Soul Likes</span>
                                 </button>
-                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
-                                    Module {activeVideo?.titleOrder} • Lesson {activeVideo?.order}
-                                </div>
                             </div>
                         </div>
 
                         {/* Comments Section */}
-                        <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
-                            <div className="flex items-center gap-3 mb-6">
-                                <h2 className="text-lg font-bold text-slate-800">Comments ({comments.length})</h2>
+                        <div className="bg-white p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-sm border border-slate-100">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-1.5 h-6 bg-[#dd2727] rounded-full"></div>
+                                <h2 className="text-lg font-black text-slate-900 uppercase tracking-tight">Disciple Discussions ({comments.length})</h2>
                             </div>
 
-                            <form onSubmit={handleCommentSubmit} className="space-y-4 mb-8">
+                            <form onSubmit={handleCommentSubmit} className="space-y-4 mb-10">
                                 <textarea
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-red-500 transition-all resize-none h-20 placeholder:text-slate-400"
-                                    placeholder="Add a public comment..."
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-[#dd2727]/5 focus:border-[#dd2727] transition-all resize-none h-24 placeholder:text-slate-400 font-medium"
+                                    placeholder="Share your enlightenment..."
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
                                 />
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-[#dd2727] text-white px-8 py-2.5 rounded-full text-sm font-bold hover:bg-red-700 transition-all"
+                                        className="bg-[#dd2727] text-white px-10 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all"
                                     >
-                                        Comment
+                                        Post Comment
                                     </button>
                                 </div>
                             </form>
 
-                            <div className="space-y-6">
+                            <div className="space-y-8">
                                 {comments.map((comment) => (
-                                    <div key={comment.id} className="flex gap-4 items-start">
-                                        <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 flex-shrink-0">
+                                    <div key={comment.id} className="flex gap-5 items-start">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#dd2727]/5 border border-[#dd2727]/10 flex items-center justify-center font-black text-[#dd2727] flex-shrink-0 text-lg">
                                             {comment.userName.charAt(0).toUpperCase()}
                                         </div>
-                                        <div className="flex-1 space-y-1">
-                                            <div className="flex items-center gap-3">
-                                                <p className="text-xs font-bold text-slate-900">{comment.userName}</p>
-                                                <p className="text-[10px] text-slate-400 uppercase tracking-tighter">
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex flex-wrap items-center gap-3 mb-1">
+                                                <p className="text-xs font-black text-slate-900 uppercase tracking-tight">{comment.userName}</p>
+                                                <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest">
                                                     {comment.timestamp?.toDate().toLocaleDateString()}
                                                 </p>
                                             </div>
-                                            <p className="text-sm text-slate-600 leading-relaxed">{comment.comment}</p>
+                                            <p className="text-sm text-slate-600 leading-relaxed font-medium">{comment.comment}</p>
                                         </div>
                                     </div>
                                 ))}
                                 {comments.length === 0 && (
-                                    <p className="text-center py-10 text-slate-400 text-xs font-bold italic uppercase tracking-widest">No comments yet.</p>
+                                    <div className="text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                        <p className="text-slate-400 text-[10px] font-black italic uppercase tracking-[0.3em]">No discourse found yet in this lesson.</p>
+                                    </div>
                                 )}
                             </div>
                         </div>
                     </div>
 
                     {/* Right Column: Playlist */}
-                    <aside className="lg:w-1/4 space-y-6">
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden sticky top-20">
-                            <div className="p-4 border-b border-slate-100 bg-slate-50">
-                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Course Sequence</h3>
+                    <aside className="lg:w-1/4 space-y-8">
+                        <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 overflow-hidden sticky top-24">
+                            <div className="p-5 border-b border-slate-50 bg-slate-50/50 flex items-center justify-between">
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Course Sequence</h3>
+                                <div className="px-2 py-0.5 bg-white rounded-full border border-slate-100 text-[8px] font-black text-slate-400">
+                                    {orderedVideos.length} LESSONS
+                                </div>
                             </div>
-                            <div className="max-h-[60vh] overflow-y-auto">
+                            <div className="max-h-[50vh] lg:max-h-[65vh] overflow-y-auto custom-scrollbar">
                                 {orderedVideos.map((video) => {
                                     const isActive = video.id === videoId;
                                     const isWatched = watchedVideos.includes(video.id);
@@ -312,21 +327,26 @@ const VideoDetailsPage = () => {
                                         <button
                                             key={video.id}
                                             onClick={() => handleVideoSelect(video)}
-                                            className={`w-full group flex items-center gap-4 p-4 transition-all text-left border-b border-slate-50 ${isActive ? 'bg-red-50 border-l-4 border-l-[#dd2727]' : 'hover:bg-slate-50'}`}
+                                            className={`w-full group flex items-center gap-4 p-4 transition-all text-left border-b border-slate-50/50 ${isActive ? 'bg-red-50 border-l-4 border-l-[#dd2727]' : 'hover:bg-slate-50'}`}
                                         >
-                                            <div className="relative w-16 aspect-video bg-slate-200 rounded overflow-hidden flex-shrink-0">
-                                                <img src={video.thumbnail} alt="" className={`w-full h-full object-cover ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
+                                            <div className="relative w-20 aspect-video bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+                                                <img 
+                                                    src={video.thumbnail} 
+                                                    alt="" 
+                                                    className={`w-full h-full object-cover transition-all duration-500 ${isActive ? 'scale-110' : 'opacity-70 group-hover:opacity-100'}`} 
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?w=200"; }}
+                                                />
                                                 {isWatched && (
-                                                    <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
-                                                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">✓</div>
+                                                    <div className="absolute inset-0 bg-emerald-500/10 flex items-center justify-center backdrop-blur-[1px]">
+                                                        <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-lg">✓</div>
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className={`text-[10px] font-black uppercase tracking-tighter mb-1 ${isActive ? 'text-[#dd2727]' : 'text-slate-400'}`}>
+                                                <p className={`text-[8px] font-black uppercase tracking-widest mb-1 ${isActive ? 'text-[#dd2727]' : 'text-slate-400'}`}>
                                                     M{video.titleOrder} • L{video.order}
                                                 </p>
-                                                <h5 className={`text-xs font-bold truncate ${isActive ? 'text-[#dd2727]' : 'text-slate-700'}`}>
+                                                <h5 className={`text-[11px] font-black uppercase tracking-tight leading-tight line-clamp-2 ${isActive ? 'text-[#dd2727]' : 'text-slate-700'}`}>
                                                     {video.displayTitle}
                                                 </h5>
                                             </div>
@@ -336,14 +356,17 @@ const VideoDetailsPage = () => {
                             </div>
                         </div>
 
-                        {/* Ads */}
+                        {/* Ads - Premium Styling */}
                         {ads.length > 0 && (
                             <div className="space-y-4">
-                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Sponsored</p>
+                                <div className="flex items-center gap-3 ml-2">
+                                    <div className="w-1 h-3 bg-slate-200 rounded-full"></div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Sponsored Path</p>
+                                </div>
                                 {ads.map((ad, index) => (
                                     <a key={index} href={ad.link} target="_blank" rel="noopener noreferrer" className="block group">
-                                        <div className="rounded-xl overflow-hidden border border-slate-200 bg-white group-hover:border-red-300 transition-all shadow-sm">
-                                            <img src={ad.imageUrl} alt="" className="w-full aspect-video object-cover" />
+                                        <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white group-hover:border-[#dd2727]/30 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 duration-500">
+                                            <img src={ad.imageUrl} alt="" className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-1000" />
                                         </div>
                                     </a>
                                 ))}

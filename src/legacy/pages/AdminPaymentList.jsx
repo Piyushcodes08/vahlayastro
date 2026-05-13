@@ -4,7 +4,6 @@ import { db } from "../../firebaseConfig";
 import Admin from "./Admin";
 import Header from "../../components/sections/Header/Header";
 
-import Aside from "./Aside";
 
 const PaymentsList = () => {
   const [payments, setPayments] = useState([]);
@@ -48,15 +47,15 @@ const PaymentsList = () => {
   }, []);
 
   return (
-    <>
+    <div className="admin-layout flex flex-col min-h-screen">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container">
-        <Aside />
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
+        <Admin />
 
-        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
           <div className="space-y-8">
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-[50px]">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-8">
             <div>
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Payment <span className="text-[#dd2727]">Transactions</span>
@@ -103,7 +102,7 @@ const PaymentsList = () => {
                           <p className="font-bold text-slate-900 group-hover:text-[#dd2727] transition-colors">{payment.courseId}</p>
                           <p className="text-[10px] text-slate-400 font-mono mt-1 uppercase">ID: {payment.paymentId}</p>
                         </td>
-                        <td className="px-6 py-5 text-sm text-slate-500 font-mono">{payment.userId?.substring(0, 8)}...</td>
+                        <td className="px-6 py-5 text-sm text-slate-500">{payment.userId}</td>
                         <td className="px-6 py-5 font-bold text-[#b0a102]">₹{payment.amount}</td>
                         <td className="px-6 py-5">
                           <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${payment.status === 'success' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
@@ -119,9 +118,9 @@ const PaymentsList = () => {
             )}
           </div>
         </div>
-      </main>
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 

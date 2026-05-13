@@ -24,7 +24,7 @@ const CourseDropdown = ({ courses, selectedCourse, setSelectedCourse }) => {
     <div className="relative mb-8 w-full max-w-xl mx-auto">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-gray-50 border border-slate-200 rounded-2xl px-6 py-4 flex items-center justify-between group hover:bg-slate-100 transition-all text-slate-900 font-bold uppercase tracking-widest text-sm shadow-sm"
+        className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 flex items-center justify-between group hover:bg-slate-50 transition-all text-slate-900 font-bold uppercase tracking-widest text-sm shadow-sm"
       >
         <span>{selectedTitle}</span>
         <svg className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
@@ -116,12 +116,12 @@ const AdminPanel = () => {
     <div className="admin-layout min-h-screen flex flex-col">
       <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
       <Header />
-      <div className="flex flex-1 relative z-10">
+      <div className="flex flex-1 relative z-10 pt-16 gap-0">
         {/* Sidebar - Always visible on desktop and mobile */}
         <Admin />
 
-        <main className="flex-1 min-w-0 p-4 md:p-10 pt-32">
-          <div className="max-w-4xl mx-auto space-y-10 pt-[50px]">
+        <main className="flex-1 min-w-0 p-4 md:p-10 py-10 bg-white">
+          <div className="max-w-4xl mx-auto space-y-10 pt-8">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
               <div>
                 <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -198,7 +198,7 @@ const AdminPanel = () => {
                     <p className="text-lg font-extrabold text-slate-900 group-hover:text-[#b0a102] transition-colors">
                       {plan.duration} Months
                     </p>
-                    <p className="text-sm font-bold text-slate-500 mt-1">₹{plan.amount} / per month</p>
+                    <p className="text-sm font-bold text-slate-500 mt-1">₹{plan.amount}</p>
                   </div>
                   <button
                     onClick={() => deleteEmiPlan(plan.id)}

@@ -102,14 +102,15 @@ const AddMeeting = () => {
   return (
     <div className="admin-layout bg-gray-50">
       <Header />
-      <div className="flex flex-col md:flex-row min-h-screen relative z-10 admin-fluid-container pt-32">
+      <div className="flex flex-col md:flex-row min-h-screen pt-16 relative z-10 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 pt-28 md:pt-32 pb-10 px-4 md:px-10 bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white admin-fluid-container">
           <div className="space-y-8">
 
             {/* Scheduler Form */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 pt-[50px]">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 pt-8 relative overflow-hidden mt-8">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#dd2727]/5 rounded-full blur-3xl"></div>
               <div className="flex items-center justify-center gap-3 mb-8">
                 <span className="text-3xl">📅</span>
                 <h2 className="text-2xl font-bold text-[#dd2727]">Schedule RingCentral Meeting</h2>

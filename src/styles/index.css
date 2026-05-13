@@ -101,15 +101,17 @@ h6 {
 .section-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 100px 15px;
-  /* Desktop default */
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 100px;
+  padding-bottom: 100px;
   width: 100%;
 }
 
 @media (max-width: 768px) {
   .section-container {
-    padding: 50px 15px;
-    /* Mobile: 50px top/bottom, 15px left/right */
+    padding-top: 50px;
+    padding-bottom: 50px;
     overflow-x: hidden;
   }
 }
@@ -127,7 +129,6 @@ section {
   align-items: center;
   text-align: center;
   padding: 0 !important;
-  /* Let .section-container handle padding or centering */
 }
 
 .hero-section .section-container {
@@ -171,19 +172,14 @@ section {
   max-width: var(--container-max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 15px;
+  padding-right: 15px;
   width: 100%;
 }
 
 @media (max-width: 768px) {
-
-  body{
+  body {
     overflow-x: hidden;
-  }
-  .premium-container {
-    padding-left: 15px;
-    padding-right: 15px;
   }
 }
 
@@ -327,6 +323,8 @@ section {
   border-radius: 24px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.02), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
   transition: all 0.3s ease;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 }
 
 .admin-layout .admin-card:hover {

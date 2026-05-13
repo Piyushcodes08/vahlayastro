@@ -2,17 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/sections/Header/Header';
 import Footer from '../components/sections/Footer/Footer';
-import CourseSection from '../components/sections/Courses/CourseSection';
-import ArticleSection from '../components/sections/Article/ArticleSection';
-import foundationImg from '../assets/images/pages/courses/foundation.webp';
-import selfImg from '../assets/images/pages/courses/self.webp';
-import about1 from '../assets/images/pages/about/about-1.webp';
-import about2 from '../assets/images/pages/about/about-2.webp';
-import about3 from '../assets/images/pages/about/about-3.webp';
-import about4 from '../assets/images/pages/about/about-4.webp';
-import coursesPortalImg from '../assets/images/pages/courses/courses.webp';
-import consultingPortalImg from '../assets/images/pages/consulting/consulting.webp';
-import articlesPortalImg from '../assets/images/pages/blogs/books.webp';
+import { servicesData } from '../data/pages/services';
+
+const { hero, offerings, portals, cta } = servicesData;
 
 const ServicesPage = () => {
     return (
@@ -21,7 +13,6 @@ const ServicesPage = () => {
             <main className="min-h-screen relative z-10 text-white overflow-hidden bg-transparent">
                 {/* ── Services Hero Banner ─────────────────────────────────── */}
                 <section className="hero-section">
-                    {/* Background Glows */}
                     <div className="bg-glow-container">
                         <div className="absolute top-[20%] left-[10%] w-[600px] h-[600px] bg-glow-red opacity-50"></div>
                         <div className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-glow-gold opacity-30"></div>
@@ -31,17 +22,16 @@ const ServicesPage = () => {
                         <div className="relative z-10 max-w-4xl mx-auto text-center">
                             <span className="inline-block px-8 py-2 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5 mb-6">
                                 <span className="text-[#dd2727] text-sm font-bold uppercase tracking-[0.3em]">
-                                    Our Sacred Services
+                                    {hero.pill}
                                 </span>
                             </span>
 
                             <h1 className="title-batangas text-5xl md:text-7xl mb-8 leading-[1.1] text-white">
-                                Premium <br /> <span className="text-[#dd2727]">Astrological</span> Guidance
+                                {hero.title} <br /> <span className="text-[#dd2727]">{hero.titleHighlight}</span> {hero.titleSuffix}
                             </h1>
 
                             <p className="subtitle-poppins text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-                                Personalized astrological guidance, spiritual counseling, and cosmic remedies 
-                                tailored for your life's journey toward prosperity and enlightenment.
+                                {hero.subtitle}
                             </p>
 
                             <div className="flex flex-wrap gap-4 justify-center">
@@ -49,13 +39,13 @@ const ServicesPage = () => {
                                     to="/appointment"
                                     className="inline-block bg-[#dd2727] text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#dd2727] hover:-translate-y-1 shadow-[0_10px_30px_rgba(221,39,39,0.3)]"
                                 >
-                                    Book Session
+                                    {hero.primaryButtonText}
                                 </Link>
                                 <a
                                     href="#all-services"
                                     className="inline-block bg-white/5 backdrop-blur-md border border-white/15 text-white px-10 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-500 hover:bg-white hover:text-[#000] hover:-translate-y-1"
                                 >
-                                    Explore More
+                                    {hero.secondaryButtonText}
                                 </a>
                             </div>
                         </div>
@@ -67,47 +57,15 @@ const ServicesPage = () => {
                     <div className="section-container">
                         <div className="text-center mb-16">
                             <h2 className="title-batangas text-4xl md:text-6xl mb-6 text-white">
-                                Explore Our <span className="text-[#dd2727]">Offerings</span>
+                                {offerings.title} <span className="text-[#dd2727]">{offerings.titleHighlight}</span>
                             </h2>
                             <p className="subtitle-poppins text-white/70 max-w-2xl mx-auto text-lg leading-relaxed">
-                                We provide a comprehensive range of cosmic sciences to help you unlock deeper 
-                                insights into your personality, destiny, and life purpose.
+                                {offerings.subtitle}
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {[
-                                {
-                                    title: "Personalized Guidance",
-                                    desc: "Deep astrological analysis for clarity on relationships, career, and personal growth.",
-                                    img: foundationImg
-                                },
-                                {
-                                    title: "Destiny Consultation",
-                                    desc: "Navigate life's challenges and seize cosmic opportunities via your unique blueprint.",
-                                    img: selfImg
-                                },
-                                {
-                                    title: "Career & Success",
-                                    desc: "Identify your ideal path and align your professional work with planetary strengths.",
-                                    img: about1
-                                },
-                                {
-                                    title: "Relationship Compatibility",
-                                    desc: "Analyze connection dynamics for better communication and spiritual harmony.",
-                                    img: about2
-                                },
-                                {
-                                    title: "Remedial Astrology",
-                                    desc: "Address planetary imbalances with proven Vedic remedies tailored to your chart.",
-                                    img: about3
-                                },
-                                {
-                                    title: "Ongoing Support",
-                                    desc: "Stay aligned with personalized follow-ups and continuous spiritual guidance.",
-                                    img: about4
-                                }
-                            ].map((srv, i) => (
+                            {offerings.items.map((srv, i) => (
                                 <Link 
                                     to="/appointment" 
                                     key={i} 
@@ -139,15 +97,13 @@ const ServicesPage = () => {
                     <div className="section-container">
                         <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-12 md:p-20 shadow-2xl">
                             <div className="text-center mb-16">
-                                <h2 className="title-batangas text-4xl md:text-5xl text-white">Our Main <span className="text-[#dd2727]">Portals</span></h2>
+                                <h2 className="title-batangas text-4xl md:text-5xl text-white">
+                                    {portals.title} <span className="text-[#dd2727]">{portals.titleHighlight}</span>
+                                </h2>
                             </div>
 
                             <div className="grid md:grid-cols-3 gap-8">
-                                {[
-                                    { title: "Courses", img: coursesPortalImg, link: "/courses", desc: "Learn the secrets of the cosmos." },
-                                    { title: "Consultation", img: consultingPortalImg, link: "/contact", desc: "Get personalized expert guidance." },
-                                    { title: "Articles", img: articlesPortalImg, link: "/articles", desc: "Read profound spiritual wisdom." }
-                                ].map((item, idx) => (
+                                {portals.items.map((item, idx) => (
                                     <Link
                                         key={idx}
                                         to={item.link}
@@ -181,16 +137,16 @@ const ServicesPage = () => {
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-30 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white leading-tight">
-                                    Ready to Begin Your <br /> <span className="text-[#dd2727]">Transformation?</span>
+                                    {cta.title} <br /> <span className="text-[#dd2727]">{cta.titleHighlight}</span>
                                 </h2>
                                 <p className="subtitle-poppins text-white/90 text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
-                                    Book a one-on-one session with our expert astrologers and transform your life today.
+                                    {cta.subtitle}
                                 </p>
                                 <Link 
                                     to="/appointment" 
                                     className="inline-block bg-[#dd2727] text-white px-14 py-5 rounded-full font-bold uppercase tracking-[0.2em] transition-all duration-500 hover:bg-white hover:text-[#dd2727] hover:-translate-y-2 shadow-[0_15px_50px_rgba(221,39,39,0.4)]"
                                 >
-                                    Schedule Now
+                                    {cta.buttonText}
                                 </Link>
                             </div>
                         </div>
@@ -201,6 +157,5 @@ const ServicesPage = () => {
         </>
     );
 };
-
 
 export default ServicesPage;

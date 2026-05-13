@@ -3,7 +3,12 @@ import { IoLocationOutline, IoCallOutline, IoTimeOutline } from "react-icons/io5
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import ReCAPTCHA from "react-google-recaptcha";
+import { homeData } from "../../../data/pages/home";
+import { footerData } from "../../../data/layout/footer";
 import "./Contact.css";
+
+const { contact: contactContent } = homeData;
+const { contact: contactInfo } = footerData;
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
@@ -50,21 +55,19 @@ const Contact = () => {
     <section className="contact-section" id="contact">
       <div className="section-container">
         <div className="contact-header">
-          <p className="contact-label">Contact Us</p>
+          <p className="contact-label">{contactContent.label}</p>
           <h2 className="title-batangas text-4xl md:text-5xl font-bold uppercase tracking-tight leading-tight">
-            Get in Touch
+            {contactContent.title}
           </h2>
           <p className="subtitle-poppins text-lg md:text-xl font-medium">
-            Connect with Vahlay Astro for consultation, guidance, and appointment support.
+            {contactContent.subtitle}
           </p>
         </div>
 
         <div className="contact-grid">
           <div className="contact-info">
             <p className="contact-desc subtitle-poppins">
-              Have questions about astrology consultation, remedies, courses, or
-              appointments? Send us your details and our team will connect with
-              you shortly.
+              {contactContent.description}
             </p>
 
             <ul className="contact-list">
@@ -75,13 +78,12 @@ const Contact = () => {
                 <div className="contact-text-group">
                   <h3 className="title-batangas">Our Address</h3>
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=C+515,+Dev+Aurum+Commercial+Complex,+Prahlad+Nagar,+Ahmedabad,+Gujarat+380015"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="contact-link"
                   >
-                    <p className="subtitle-poppins">C 515, Dev Aurum Commercial Complex,</p>
-                    <p className="subtitle-poppins">Prahlad Nagar, Ahmedabad, Gujarat 380015</p>
+                    <p className="subtitle-poppins">{contactInfo.address}</p>
                   </a>
                 </div>
               </li>
@@ -92,11 +94,11 @@ const Contact = () => {
                 </div>
                 <div className="contact-text-group">
                   <h3 className="title-batangas">Contact</h3>
-                  <a href="tel:+917949217538" className="contact-link">
-                    <p className="subtitle-poppins">LandLine: +91 79 4921 7538</p>
+                  <a href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} className="contact-link">
+                    <p className="subtitle-poppins">LandLine: {contactInfo.phone}</p>
                   </a>
-                  <a href="mailto:contact@vahlayastro.com" className="contact-link">
-                    <p className="subtitle-poppins">Email: contact@vahlayastro.com</p>
+                  <a href={`mailto:${contactInfo.email}`} className="contact-link">
+                    <p className="subtitle-poppins">Email: {contactInfo.email}</p>
                   </a>
                 </div>
               </li>
@@ -107,15 +109,15 @@ const Contact = () => {
                 </div>
                 <div className="contact-text-group">
                   <h3 className="title-batangas">Working Hours</h3>
-                  <p className="subtitle-poppins">Monday - Saturday: 10:00 AM - 7:00 PM</p>
-                  <p className="subtitle-poppins">Sunday: By Appointment</p>
+                  <p className="subtitle-poppins">{contactContent.workingHours.weekdays}</p>
+                  <p className="subtitle-poppins">{contactContent.workingHours.sunday}</p>
                 </div>
               </li>
             </ul>
           </div>
 
           <div className="contact-card">
-            <h2 className="title-batangas">Ready to Get Started?</h2>
+            <h2 className="title-batangas">{contactContent.formTitle}</h2>
 
             <form className="contact-form" onSubmit={handleSubmit}>
               <div className="input-group">
