@@ -68,3 +68,4 @@ const InquiryHandler = ({ formData }) => {
 };
 
 export default InquiryHandler;
+

@@ -200,7 +200,7 @@ const AdminArticles = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white">
           <div className="space-y-12">
             <div className="flex justify-between items-center pt-8">
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -382,3 +382,4 @@ const AdminArticles = () => {
 };
 
 export default AdminArticles;
+

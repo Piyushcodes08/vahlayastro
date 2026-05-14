@@ -159,7 +159,7 @@ const AddCourse = () => {
       <div className="flex flex-col md:flex-row min-h-screen pt-16 relative z-10 admin-fluid-container gap-0 pb-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white">
           <div className="space-y-8">
             <div className="flex justify-between items-center pt-8">
                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -356,3 +356,4 @@ const AddCourse = () => {
 };
 
 export default AddCourse;
+

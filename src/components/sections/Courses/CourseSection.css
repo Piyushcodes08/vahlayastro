@@ -113,7 +113,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 2.5rem;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
 }
 
 .project-card[active] .project-card__title {

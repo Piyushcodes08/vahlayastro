@@ -78,3 +78,4 @@ const PaymentGuide = () => {
 };
 
 export default PaymentGuide;
+

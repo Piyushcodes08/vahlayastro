@@ -22,3 +22,4 @@ const VideoSearchBar = ({ onSearch }) => {
 };
 
 export default VideoSearchBar;
+

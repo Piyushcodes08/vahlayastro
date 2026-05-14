@@ -139,7 +139,7 @@ const Profile = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 min-w-0 py-6 px-[15px] bg-white overflow-x-hidden">
+        <main className="flex-1 min-w-0 py-6 px-[15px] md:px-[50px] bg-white overflow-x-hidden">
           <div className="max-w-4xl mx-auto space-y-10 pt-6">
 
             {/* Page Header - Responsive Scaling */}
@@ -302,4 +302,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
 

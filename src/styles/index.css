@@ -137,14 +137,12 @@ section {
   justify-content: center;
   align-items: center;
   flex: 1;
+  padding-top: 180px !important;
 }
 
 @media (min-width: 1024px) {
   section:not(.no-full-height):not(.hero-section) {
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: block;
   }
 }
 
@@ -325,6 +323,13 @@ section {
   transition: all 0.3s ease;
   padding-left: 15px !important;
   padding-right: 15px !important;
+}
+
+@media (min-width: 768px) {
+  .admin-layout .admin-card {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+  }
 }
 
 .admin-layout .admin-card:hover {

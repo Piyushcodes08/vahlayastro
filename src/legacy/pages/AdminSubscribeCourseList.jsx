@@ -325,7 +325,7 @@ const AdminEnrolledUsers = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white">
           <div className="space-y-8">
             {/* Enrollment Form Section */}
             <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden group">
@@ -618,3 +618,4 @@ const AdminEnrolledUsers = () => {
 };
 
 export default AdminEnrolledUsers;
+

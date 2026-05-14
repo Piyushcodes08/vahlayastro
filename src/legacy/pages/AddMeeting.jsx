@@ -105,7 +105,7 @@ const AddMeeting = () => {
       <div className="flex flex-col md:flex-row min-h-screen pt-16 relative z-10 gap-0">
         <SideBar />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white admin-fluid-container">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white admin-fluid-container">
           <div className="space-y-8">
 
             {/* Scheduler Form */}
@@ -239,3 +239,4 @@ const AddMeeting = () => {
 };
 
 export default AddMeeting;
+

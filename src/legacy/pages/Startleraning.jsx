@@ -578,7 +578,7 @@ const PersonalCourse = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white">
           <div className="max-w-7xl mx-auto pt-8">
 
             {/* Page Header */}
@@ -877,3 +877,4 @@ const PersonalCourse = () => {
 };
 
 export default PersonalCourse;
+

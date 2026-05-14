@@ -14,3 +14,4 @@ const JitsiIframe= ({ roomName }) => {
 };
 
 export default JitsiIframe;
+

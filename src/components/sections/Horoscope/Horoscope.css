@@ -2,19 +2,22 @@
    VAHLAY ASTRO — Zodiac Animation Section
    ══════════════════════════════════════════ */
 
-.zodiac-section {
+.horoscope-section {
     position: relative;
     min-height: 100vh;
-    padding: 120px 60px;
-    /* background: radial-gradient(circle at center, #0a0520 0%, #000 100%); */
-
+    padding: 120px 15px; /* Mobile horizontal padding */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+}
+
+@media (min-width: 768px) {
+    .horoscope-section {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
 }
 
 .zodiac-top-decoration {
@@ -387,7 +390,7 @@
         height: 320px;
     }
 
-    .zodiac-section {
+    .horoscope-section {
         padding: 80px 15px !important;
     }
 

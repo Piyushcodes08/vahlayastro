@@ -106,7 +106,7 @@ const ConsultingPage = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="bg-[#0d0606] border border-[#fdfcf0]/10 rounded-xl py-8 px-[15px] text-center shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:border-brand-red/30 transition-all duration-500 group"
+                                    className="bg-[#0d0606] border border-[#fdfcf0]/10 rounded-xl py-8 px-[15px] md:px-[50px] text-center shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:border-brand-red/30 transition-all duration-500 group"
                                 >
                                     <div className="title-batangas text-3xl md:text-4xl font-black text-brand-red mb-1 group-hover:scale-105 transition-transform duration-500">
                                         {s.num}
@@ -186,7 +186,7 @@ const ConsultingPage = () => {
                 {/* ── Process Section ─────────────────────────────────────── */}
                 <section className="no-full-height py-20">
                     <div className="section-container">
-                        <div className="bg-[#0d0606] border border-white/5 rounded-3xl py-12 md:py-24 px-[15px] relative overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.5)]">
+                        <div className="bg-[#0d0606] border border-white/5 rounded-3xl py-12 md:py-24 px-[15px] md:px-[50px] relative overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.5)]">
                             <div className="relative z-10 text-center mb-20">
                                 <h2 className="title-batangas text-4xl md:text-6xl text-white mb-6 tracking-tight uppercase leading-none font-black">
                                     {process.title} <span className="text-brand-red">{process.titleHighlight}</span>
@@ -244,7 +244,7 @@ const ConsultingPage = () => {
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: i * 0.1 }}
-                                        className="bg-[#0d0606] border border-[#fdfcf0]/10 rounded-2xl py-10 px-[15px] flex flex-col hover:border-brand-red/30 transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.4)] group relative"
+                                        className="bg-[#0d0606] border border-[#fdfcf0]/10 rounded-2xl py-10 px-[15px] md:px-[50px] flex flex-col hover:border-brand-red/30 transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.4)] group relative"
                                     >
                                         <div className="text-6xl mb-8 text-brand-red/10 group-hover:text-brand-red/20 transition-all font-serif italic">"</div>
                                         <p className="subtitle-poppins text-white/70 italic leading-relaxed flex-1 text-base mb-12 font-medium">
@@ -308,7 +308,7 @@ const ConsultingPage = () => {
                 {/* ── Final CTA Section ───────────────────────────────────── */}
                 <section className="pb-32">
                     <div className="section-container">
-                        <div className="rounded-3xl py-16 md:py-32 px-[15px] text-center bg-linear-to-br from-brand-red/10 via-[#0d0606] to-black border border-white/5 relative overflow-hidden group shadow-[0_30px_100px_rgba(0,0,0,0.7)]">
+                        <div className="rounded-3xl py-16 md:py-32 px-[15px] md:px-[50px] text-center bg-linear-to-br from-brand-red/10 via-[#0d0606] to-black border border-white/5 relative overflow-hidden group shadow-[0_30px_100px_rgba(0,0,0,0.7)]">
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl text-white mb-8 leading-[0.9] tracking-tighter uppercase font-black">
                                     {cta.title} <br /> <span className="text-brand-red">{cta.titleHighlight}</span>
@@ -341,3 +341,4 @@ const ConsultingPage = () => {
 };
 
 export default ConsultingPage;
+

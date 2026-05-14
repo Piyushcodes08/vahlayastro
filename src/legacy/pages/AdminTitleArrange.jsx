@@ -117,7 +117,7 @@ const AdminTitleOrder = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <AdminSidebar />
 
-        <main className="flex-1 min-w-0 py-10 px-[15px] bg-white">
+        <main className="flex-1 min-w-0 py-10 px-[15px] md:px-[50px] bg-white">
           <div className="space-y-8">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-8">
             <div>
@@ -231,3 +231,4 @@ const AdminTitleOrder = () => {
 };
 
 export default AdminTitleOrder;
+

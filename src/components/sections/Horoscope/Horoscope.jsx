@@ -83,7 +83,7 @@ export default function Horoscope({ onGetDetails }) {
     }, [zodiacs.length]);
 
     return (
-        <section className={`horoscope-section mx-auto max-w-7xl ${isInView ? "in-view" : ""}`} ref={scrollContainerRef}>
+        <section className={`horoscope-section mx-auto max-w-[1170px] ${isInView ? "in-view" : ""}`} ref={scrollContainerRef}>
             <div className='flex flex-col text-center gap-2 pb-12  z-10'>
                 <span className="text-[#dd2727] font-bold tracking-[0.3em] uppercase text-xs mb-2">Vahlay Astro</span>
                 <h2 className="title-batangas text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white">

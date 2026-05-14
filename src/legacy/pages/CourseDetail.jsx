@@ -136,13 +136,13 @@ const CourseDetail = () => {
       : 'Secure Your Seat';
 
   return (
-    <div className="min-h-screen text-white selection:bg-[#dd2727]/80 font-poppins bg-transparent">
+    <div className="text-white selection:bg-[#dd2727]/80 font-poppins bg-transparent">
       <Header />
       <div id="top-sentinel" className="h-0 w-full pt-[80px]"></div>
       {getMetaTags()}
 
       {/* Premium Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-10 pb-20 overflow-hidden">
+      <section className="relative flex items-center pt-10 pb-20 overflow-hidden">
         {/* Dynamic Background */}
         {/* Dynamic Background Removed to show GlobalBackground */}
 
@@ -554,13 +554,13 @@ const CourseDetail = () => {
       </section>
 
       {/* Community Section */}
-      <section className="py-32">
+      <section className="py-20">
         <div className="premium-container">
-           <div className="bg-[#dd2727]/50 rounded-[4rem] p-12  text-center relative overflow-hidden shadow-[0_30px_100px_rgba(221,39,39,0.3)]">
+           <div className="bg-[#dd2727]/50 rounded-[3rem] p-10 md:p-16 text-center relative overflow-hidden shadow-[0_20px_60px_rgba(221,39,39,0.2)]">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent opacity-10 mix-blend-overlay"></div>
               <div className="relative z-10 space-y-10">
-                 <h2 className="title-batangas text-4xl md:text-6xl text-white">Join the <br /> Sacred Community</h2>
-                 <p className="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed">
+                 <h2 className="title-batangas text-3xl md:text-5xl text-white">Join the <br /> Sacred Community</h2>
+                 <p className="text-white/80 text-base max-w-xl mx-auto leading-relaxed">
                    Connect with like-minded souls on the same spiritual path. Share insights, participate in live discussions, and grow together in our exclusive student portal.
                  </p>
                  <div className="flex flex-wrap justify-center gap-12 pt-8">
@@ -570,7 +570,7 @@ const CourseDetail = () => {
                       { l: "Success Stories", v: "1,200+" }
                     ].map((s, i) => (
                       <div key={i} className="text-center">
-                         <p className="text-4xl md:text-5xl font-black text-white mb-2">{s.v}</p>
+                         <p className="text-3xl md:text-4xl font-black text-white mb-2">{s.v}</p>
                          <p className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-black">{s.l}</p>
                       </div>
                     ))}
@@ -593,3 +593,4 @@ const CourseDetail = () => {
 };
 
 export default CourseDetail;
+

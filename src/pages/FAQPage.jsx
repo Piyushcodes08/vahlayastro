@@ -34,7 +34,7 @@ const FAQPage = () => {
                     </div>
 
                     <div className="section-container">
-                        <div className="relative z-10 w-full flex flex-col items-center justify-center text-center px-[15px]">
+                        <div className="relative z-10 w-full flex flex-col items-center justify-center text-center px-[15px] md:px-[50px]">
                             <span className="inline-block px-8 py-2 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5 mb-6">
                                 <span className="text-[#dd2727] text-sm font-bold uppercase tracking-[0.3em]">
                                     Cosmic Inquiries
@@ -70,3 +70,4 @@ const FAQPage = () => {
 };
 
 export default FAQPage;
+

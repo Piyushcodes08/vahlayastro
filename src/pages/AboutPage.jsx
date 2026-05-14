@@ -73,7 +73,7 @@ const AboutPage = () => {
                             </div>
 
                             <div className="space-y-8">
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] hover:border-[#dd2727]/30 transition-all duration-500">
+                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:border-[#dd2727]/30 transition-all duration-500">
                                     <h2 className="title-batangas text-4xl md:text-5xl mb-6 text-white">
                                         {whoWeAre.title}
                                     </h2>
@@ -82,7 +82,7 @@ const AboutPage = () => {
                                     </p>
                                 </div>
 
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] hover:border-[#dd2727]/30 transition-all duration-500">
+                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:border-[#dd2727]/30 transition-all duration-500">
                                     <h2 className="title-batangas text-4xl md:text-5xl mb-6 text-[#dd2727]">
                                         {whoWeAre.philosophyTitle}
                                     </h2>
@@ -101,7 +101,7 @@ const AboutPage = () => {
                         <div className="absolute top-[50%] right-0 w-[600px] h-[600px] bg-glow-red opacity-20"></div>
                     </div>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] py-10 md:py-20 px-[15px] shadow-2xl relative z-10">
+                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] py-10 md:py-20 px-[15px] md:px-[50px] shadow-2xl relative z-10">
                             <h2 className="title-batangas text-4xl md:text-6xl mb-14 text-white">
                                 {services.title} <span className="text-[#dd2727]">{services.titleHighlight}</span> {services.titleSuffix}
                             </h2>
@@ -111,7 +111,7 @@ const AboutPage = () => {
                                     <Link
                                         key={idx}
                                         to={srv.link}
-                                        className="bg-[#150a0a]/80 backdrop-blur-lg border border-white/10 rounded-[2rem] py-10 px-[15px] hover:scale-[1.05] hover:border-[#dd2727]/40 shadow-xl hover:shadow-[0_20px_50px_rgba(221,39,39,0.25)] transition-all duration-500 block text-center group flex flex-col items-center justify-between min-h-[300px]"
+                                        className="bg-[#150a0a]/80 backdrop-blur-lg border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:scale-[1.05] hover:border-[#dd2727]/40 shadow-xl hover:shadow-[0_20px_50px_rgba(221,39,39,0.25)] transition-all duration-500 block text-center group flex flex-col items-center justify-between min-h-[300px]"
                                     >
                                         <div className="w-full">
                                             <h3 className="title-batangas text-3xl mb-4 text-[#dd2727] group-hover:scale-110 transition-transform duration-300">
@@ -139,7 +139,7 @@ const AboutPage = () => {
                             {ambition.items.map((item, idx) => (
                                 <div
                                     key={idx}
-                                    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] py-12 px-[15px] text-center shadow-[0_15px_50px_rgba(0,0,0,0.3)] hover:border-[#dd2727]/30 transition-all duration-500"
+                                    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] py-12 px-[15px] md:px-[50px] text-center shadow-[0_15px_50px_rgba(0,0,0,0.3)] hover:border-[#dd2727]/30 transition-all duration-500"
                                 >
                                     <h3 className="title-batangas text-4xl mb-6 text-[#dd2727]">
                                         {item.title}
@@ -156,7 +156,7 @@ const AboutPage = () => {
                 {/* 4. Core Values */}
                 <section>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] py-12 md:py-20 px-[15px]">
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] py-12 md:py-20 px-[15px] md:px-[50px]">
                             <h2 className="title-batangas text-4xl md:text-6xl text-center mb-16 text-white">
                                 {values.title} <span className="text-[#dd2727]">{values.titleHighlight}</span>
                             </h2>
@@ -165,7 +165,7 @@ const AboutPage = () => {
                                 {values.items.map((val, idx) => (
                                     <div
                                         key={idx}
-                                        className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-[2rem] py-10 px-[15px] text-center hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 flex flex-col items-center group"
+                                        className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-[2rem] py-10 px-[15px] md:px-[50px] text-center hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 flex flex-col items-center group"
                                     >
                                         <div className="text-6xl mb-8 text-white group-hover:scale-110 group-hover:text-[#dd2727] transition-all duration-500">
                                             {getIcon(val.iconType)}
@@ -186,7 +186,7 @@ const AboutPage = () => {
                 {/* 5. CTA */}
                 <section>
                     <div className="section-container">
-                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-[3rem] py-16 md:py-24 px-[15px] text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
+                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-[3rem] py-16 md:py-24 px-[15px] md:px-[50px] text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-40 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white">
@@ -215,3 +215,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+
