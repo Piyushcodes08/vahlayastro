@@ -89,7 +89,7 @@ const PremiumCourseLayout = ({
                 <div className="flex -space-x-3">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="w-10 h-10 rounded-full border-2 border-[#0a0101] bg-gray-800 overflow-hidden">
-                      <img src={`https://i.pravatar.cc/100?u=${i + title}`} alt="" />
+                      <img src={`https://i.pravatar.cc/100?u=${i + title}`} alt="" loading="lazy" />
                     </div>
                   ))}
                 </div>
@@ -197,7 +197,7 @@ const PremiumCourseLayout = ({
               </div>
 
               <div className="relative rounded-[3rem] overflow-hidden border border-white/10 aspect-video group">
-                <img src={instructorImage} alt="Instructor" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <img src={instructorImage} alt="Instructor" loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6">
                   <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-red mb-1">Guided By</p>
@@ -303,7 +303,7 @@ const PremiumCourseLayout = ({
           </div>
           <div className="md:w-1/3 relative group">
             <div className="absolute inset-0 bg-white/20 blur-3xl opacity-0 group-hover:opacity-30 transition-opacity"></div>
-            <img src="/src/assets/images/common/team/hansal sir.jpg" alt="Certificate" className="w-full rounded-2xl shadow-2xl border border-white/20 grayscale group-hover:grayscale-0 transition-all duration-700 rotate-3 group-hover:rotate-0" />
+            <img src="/src/assets/images/common/team/hansal sir.jpg" alt="Certificate" loading="lazy" className="w-full rounded-2xl shadow-2xl border border-white/20 grayscale group-hover:grayscale-0 transition-all duration-700 rotate-3 group-hover:rotate-0" />
           </div>
         </div>
       </section>

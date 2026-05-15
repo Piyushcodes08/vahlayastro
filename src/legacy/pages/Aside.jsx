@@ -98,7 +98,7 @@ const Aside = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed lg:sticky top-0 lg:top-16 left-0 w-72 bg-[#dd2727] transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) transform z-[2100] flex flex-col h-screen lg:h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar self-start border-r border-white/10
+        className={`fixed lg:sticky top-0 lg:top-16 left-0 w-72 bg-[#dd2727] transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) transform z-[2100] flex flex-col h-screen lg:h-[calc(100vh-64px)] overflow-hidden self-start border-r border-white/10
         ${sidebarOpen ? "translate-x-0 shadow-[40px_0_100px_rgba(0,0,0,0.6)]" : "-translate-x-full lg:translate-x-0 lg:shadow-none"}`}
       >
         {/* Close Button for Mobile - Elegant Top Bar */}
@@ -136,7 +136,7 @@ const Aside = () => {
         </div>
 
         {/* Navigation Menu - Clean & Classic */}
-        <nav className="flex-1 px-8 space-y-4 pb-12 mt-6">
+        <nav className="flex-1 overflow-y-auto custom-scrollbar px-8 space-y-4 pb-12 mt-6">
           {menuItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             return (

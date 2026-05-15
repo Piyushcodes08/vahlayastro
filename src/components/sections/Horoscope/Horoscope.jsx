@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import "./Horoscope.css";
 import { horoscopeData } from "../../../data/common/horoscope";
 import zodiacWheel from "../../../assets/images/sections/horoscope/new_wheel_s5ozry.png";
@@ -85,7 +85,7 @@ export default function Horoscope({ onGetDetails }) {
     ? currentZodiac.traits.split(", ").slice(0, 3)
     : [];
 
-  const dateRanges = {
+  const dateRanges = useMemo(() => ({
     Aries: "March 21 - April 19",
     Taurus: "April 20 - May 20",
     Gemini: "May 21 - June 20",
@@ -98,55 +98,26 @@ export default function Horoscope({ onGetDetails }) {
     Capricorn: "December 22 - January 19",
     Aquarius: "January 20 - February 18",
     Pisces: "February 19 - March 20",
-  };
+  }), []);
 
-  const zodiacOrderText = [
-    "FIRST",
-    "SECOND",
-    "THIRD",
-    "FOURTH",
-    "FIFTH",
-    "SIXTH",
-    "SEVENTH",
-    "EIGHTH",
-    "NINTH",
-    "TENTH",
-    "ELEVENTH",
-    "TWELFTH",
-  ];
+  const zodiacOrderText = useMemo(() => [
+    "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH", "SIXTH",
+    "SEVENTH", "EIGHTH", "NINTH", "TENTH", "ELEVENTH", "TWELFTH",
+  ], []);
 
-  const featureItems = [
-    {
-      icon: "🎯",
-      title: "PIONEER MINDSET",
-      desc: "Always first. Always ahead.",
-    },
-    {
-      icon: "⚡",
-      title: "FEARLESS SPIRIT",
-      desc: "No fear. Only determination.",
-    },
-    {
-      icon: "🔥",
-      title: "BOUNDLESS ENERGY",
-      desc: "Driven by passion and purpose.",
-    },
-    {
-      icon: "🚩",
-      title: "NATURAL LEADER",
-      desc: "Born to inspire and lead.",
-    },
-  ];
+  const featureItems = useMemo(() => [
+    { icon: "🎯", title: "PIONEER MINDSET", desc: "Always first. Always ahead." },
+    { icon: "⚡", title: "FEARLESS SPIRIT", desc: "No fear. Only determination." },
+    { icon: "🔥", title: "BOUNDLESS ENERGY", desc: "Driven by passion and purpose." },
+    { icon: "🚩", title: "NATURAL LEADER", desc: "Born to inspire and lead." },
+  ], []);
 
-  const handleWheelClick = () => {
-    // Only enable click-to-change on responsive viewports (mobile/tablet)
+  const handleWheelClick = useCallback(() => {
     if (window.innerWidth >= 1180) return;
-
     const nextIndex = (activeIndex + 1) % zodiacs.length;
     setActiveIndex(nextIndex);
-    // Rotate counter-clockwise by 30 degrees (1 sign step)
     setRotation((prev) => prev - 30);
-  };
+  }, [activeIndex, zodiacs.length]);
 
   return (
     <section
@@ -286,23 +257,6 @@ export default function Horoscope({ onGetDetails }) {
           </div>
         </div>
 
-        <div className="zodiac-bottom-features">
-          {featureItems.map((item, index) => (
-            <div className="feature-fragment" key={item.title}>
-              <div className="feature-item">
-                <span className="f-icon">{item.icon}</span>
-                <div className="f-text">
-                  <span className="f-title">{item.title}</span>
-                  <span className="f-desc">{item.desc}</span>
-                </div>
-              </div>
-
-              {index !== featureItems.length - 1 && (
-                <div className="feature-divider"></div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

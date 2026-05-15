@@ -68,6 +68,7 @@ const AboutPage = () => {
                                 <img
                                     src={whoWeAre.image}
                                     alt={whoWeAre.title}
+                                    loading="lazy"
                                     className="w-full h-full object-cover rounded-lg"
                                 />
                             </div>

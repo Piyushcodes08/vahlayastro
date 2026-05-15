@@ -1,14 +1,22 @@
+import { lazy, Suspense } from 'react';
 import Hero from '../components/sections/Hero/Hero';
-import About from '../components/sections/About/About';
-import CourseSection from '../components/sections/Courses/CourseSection';
 import Header from '../components/sections/Header/Header';
-import ArticleSection from '../components/sections/Article/ArticleSection';
-import Numerology from '../components/sections/Numerology/Numerology';
-import Testimonials from '../components/sections/Testimonials/Testimonials';
-import Partners from '../components/sections/Partners/Partners';
-import Contact from '../components/sections/Contact/Contact';
-import Footer from '../components/sections/Footer/Footer';
-import Horoscope from '../components/sections/Horoscope/Horoscope';
+import CourseSection from '../components/sections/Courses/CourseSection';
+
+// Below-fold sections — lazy loaded
+const ArticleSection = lazy(() => import('../components/sections/Article/ArticleSection'));
+const About          = lazy(() => import('../components/sections/About/About'));
+const Horoscope      = lazy(() => import('../components/sections/Horoscope/Horoscope'));
+const Numerology     = lazy(() => import('../components/sections/Numerology/Numerology'));
+const Testimonials   = lazy(() => import('../components/sections/Testimonials/Testimonials'));
+const Partners       = lazy(() => import('../components/sections/Partners/Partners'));
+const Contact        = lazy(() => import('../components/sections/Contact/Contact'));
+const Footer         = lazy(() => import('../components/sections/Footer/Footer'));
+
+// Minimal section placeholder while loading
+const SectionPlaceholder = () => (
+  <div style={{ minHeight: '200px' }} />
+);
 
 const Home = () => {
     return (
@@ -16,23 +24,40 @@ const Home = () => {
             {/* Sentinel for Header IntersectionObserver */}
             <div id="top-sentinel" className="absolute top-0 left-0 w-full h-px pointer-events-none z-[-1]" />
 
+            {/* Critical above-fold — eager */}
             <Header />
             <main>
                 <Hero />
                 <CourseSection />
-                <ArticleSection />
-                <About />
-                <Horoscope />
-                <Numerology />
-                
-                <Testimonials />
-                <Partners />
-                <Contact />
+
+                {/* Below-fold — lazy loaded */}
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <ArticleSection />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <About />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <Horoscope />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <Numerology />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <Testimonials />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <Partners />
+                </Suspense>
+                <Suspense fallback={<SectionPlaceholder />}>
+                    <Contact />
+                </Suspense>
             </main>
-            <Footer />
+            <Suspense fallback={null}>
+                <Footer />
+            </Suspense>
         </>
     );
 };
 
 export default Home;
-
