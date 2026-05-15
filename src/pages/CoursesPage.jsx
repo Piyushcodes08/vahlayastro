@@ -54,7 +54,7 @@ const CoursesPage = () => {
                         <div className="absolute bottom-0 left-[20%] w-[600px] h-[600px] bg-glow-red opacity-30"></div>
                     </div>
                     <div className="section-container">
-                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-[3rem] py-16 md:py-24 px-[15px] md:px-[50px] text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
+                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-xl py-16 md:py-24 px-[15px] md:px-[50px] text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-40 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white">Ready to start learning?</h2>

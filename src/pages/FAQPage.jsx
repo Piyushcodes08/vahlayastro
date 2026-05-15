@@ -55,7 +55,7 @@ const FAQPage = () => {
                     <div className="section-container">
                         <div className="max-w-4xl mx-auto space-y-6">
                             {faqs.map((faq, index) => (
-                                <div key={index} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-[#dd2727]/40 shadow-[0_10px_40px_rgba(0,0,0,0.25)] transition-all duration-500">
+                                <div key={index} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-8 hover:bg-white/10 hover:border-[#dd2727]/40 shadow-[0_10px_40px_rgba(0,0,0,0.25)] transition-all duration-500 text-center">
                                     <h3 className="title-batangas text-2xl md:text-3xl mb-4 text-[#dd2727]">{faq.question}</h3>
                                     <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">{faq.answer}</p>
                                 </div>

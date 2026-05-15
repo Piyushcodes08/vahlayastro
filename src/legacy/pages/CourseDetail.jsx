@@ -142,93 +142,108 @@ const CourseDetail = () => {
       {getMetaTags()}
 
       {/* Premium Hero Section */}
-      <section className="relative flex items-center pt-10 pb-20 overflow-hidden">
-        {/* Dynamic Background */}
-        {/* Dynamic Background Removed to show GlobalBackground */}
+      <section className="relative min-h-[80vh] flex items-center pt-24 pb-12 overflow-hidden hero-section">
+        {/* Background Glows */}
+        <div className="bg-glow-container">
+          <div className="absolute top-[20%] right-[10%] w-[600px] h-[600px] bg-glow-red opacity-40"></div>
+          <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] bg-glow-gold opacity-10"></div>
+        </div>
 
-        <div className="relative z-10 premium-container flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-20">
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-10 text-center lg:text-left lg:flex-1"
-          >
+        <div className="relative z-10 section-container !pt-0 !pb-0">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-20">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col gap-6 text-center lg:text-left lg:flex-1 py-[50px]"
+            >
+              {/* Red Pill Label */}
+              <div className="inline-block px-6 py-1.5 rounded-full border border-[#dd2727]/30 bg-[#dd2727]/5 mb-2">
+                <span className="text-[#dd2727] text-[10px] font-black uppercase tracking-[0.4em]">
+                  {courseData.type === 'free' ? 'Sacred Wisdom' : 'Divine Mastery'}
+                </span>
+              </div>
 
-            <h1 className="title-batangas text-5xl md:text-7xl leading-[0.95] tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-[0_0_30px_rgba(221,39,39,0.2)]">
-              {courseData.title}
-            </h1>
+              <h1 className="title-batangas text-4xl md:text-7xl leading-[1.1] tracking-tight text-white drop-shadow-2xl">
+                {courseData.title}
+              </h1>
 
-            <p className="text-xl md:text-2xl text-white/50 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
-              {courseData.Subtitle || "Embark on a journey to master ancient cosmic wisdom and transform your life path."}
-            </p>
+              <p className="subtitle-poppins text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+                {courseData.Subtitle || "Embark on a journey to master ancient cosmic wisdom and transform your life path."}
+              </p>
 
-            {/* Social Proof / Avatar Stack */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-               <div className="flex -space-x-3 overflow-hidden">
-                  {[1,2,3,4].map(i => (
-                    <img 
-                      key={i}
-                      className="inline-block h-10 w-10 rounded-full ring-2 ring-black" 
-                      src={`https://i.pravatar.cc/100?img=${i+10}`} 
-                      alt="" 
-                    />
-                  ))}
-                  <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white/10 ring-2 ring-black backdrop-blur-md text-[10px] font-bold text-white/60">
-                    +1k
-                  </div>
-               </div>
-               <div className="text-sm font-medium text-white/40 tracking-wide">
-                  <span className="text-white font-bold">1,200+</span> students already enrolled
-               </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8 pt-8">
-               <Link to={enrollUrl} className="group/btn relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#dd2727] to-orange-500 rounded-full blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200"></div>
-                  <button className="relative px-10 py-4 bg-white text-black rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-black hover:text-white transition-all duration-300">
-                    {isEnrolled ? 'Open Course' : 'Join the Journey'}
-                  </button>
-               </Link>
-              
-               <button 
-                 onClick={shareArticle}
-                 className="flex items-center gap-3 text-white/40 hover:text-white transition-all text-[11px] uppercase tracking-[0.3em] font-black group/share"
-               >
-                 <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover/share:border-[#dd2727] group-hover/share:text-[#dd2727] transition-all">
-                    <RiShareForwardFill className="text-lg" />
+              {/* Social Proof / Avatar Stack */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                 <div className="flex -space-x-3 overflow-hidden">
+                    {[1,2,3,4].map(i => (
+                      <img 
+                        key={i}
+                        className="inline-block h-10 w-10 rounded-full ring-2 ring-black object-cover" 
+                        src={`https://i.pravatar.cc/100?img=${i+10}`} 
+                        alt="Student" 
+                      />
+                    ))}
+                    <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white/10 ring-2 ring-black backdrop-blur-md text-[10px] font-black text-white/60">
+                      +1k
+                    </div>
                  </div>
-                 Share
-               </button>
-            </div>
-          </motion.div>
+                 <div className="text-[11px] font-black text-white/30 uppercase tracking-[0.2em]">
+                    <span className="text-white">1,200+</span> Souls Aligned
+                 </div>
+              </div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative lg:w-[45%] w-full max-w-[600px] flex flex-col gap-6"
-          >
-            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/20 shadow-[0_0_50px_rgba(221,39,39,0.2)] group transition-all duration-700 hover:shadow-[0_0_80px_rgba(221,39,39,0.4)]">
-              <img 
-                src={courseData.imageUrl || "/src/assets/images/common/team/hansal sir.jpg"} 
-                alt={courseData.title}
-                className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-1000"
-              />
-            </div>
-            
-            <div className="w-full">
-               <Link to={enrollUrl}>
-                  <button className="w-full py-5 rounded-2xl bg-[#dd2727] text-white font-black uppercase tracking-[0.3em] text-xs shadow-2xl hover:bg-white hover:text-[#dd2727] transition-all duration-500 transform hover:-translate-y-1">
-                    {enrollText}
-                  </button>
-               </Link>
-            </div>
-          </motion.div>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
+                 <Link to={enrollUrl} className="group/btn relative">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#dd2727] to-orange-500 rounded-full blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200"></div>
+                    <button className="relative px-12 py-5 bg-white text-black rounded-full font-black uppercase tracking-[0.2em] text-[11px] hover:bg-black hover:text-white transition-all duration-500">
+                      {isEnrolled ? 'Open Course' : 'Join the Journey'}
+                    </button>
+                 </Link>
+                
+                 <button 
+                   onClick={shareArticle}
+                   className="flex items-center gap-3 text-white/40 hover:text-white transition-all text-[11px] uppercase tracking-[0.3em] font-black group/share"
+                 >
+                   <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover/share:border-[#dd2727] group-hover/share:text-[#dd2727] transition-all bg-white/5">
+                      <RiShareForwardFill className="text-xl" />
+                   </div>
+                   Share Wisdom
+                 </button>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+              className="relative lg:w-[45%] w-full max-w-[550px] flex flex-col gap-8"
+            >
+              <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(221,39,39,0.2)] group transition-all duration-700 hover:shadow-[0_0_80px_rgba(221,39,39,0.4)] hover:border-white/20">
+                <img 
+                  src={courseData.imageUrl || "/src/assets/images/common/team/hansal sir.jpg"} 
+                  alt={courseData.title}
+                  className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+              
+              <div className="w-full group">
+                 <Link to={enrollUrl}>
+                    <button className="w-full py-6 rounded-lg bg-[#dd2727] text-white font-black uppercase tracking-[0.3em] text-xs shadow-2xl hover:bg-white hover:text-[#dd2727] transition-all duration-500 transform hover:-translate-y-1 relative overflow-hidden">
+                      <span className="relative z-10">{enrollText}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                    </button>
+                 </Link>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Stats Grid */}
       <section className="relative z-20 -mt-16">
         <div className="premium-container">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-black/40 backdrop-blur-2xl border border-white/10 rounded-xl p-8 shadow-2xl relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
             {[
               { icon: <FaClock />, label: "Duration", val: courseData.duration || "24 Sessions" },
@@ -236,7 +251,7 @@ const CourseDetail = () => {
               { icon: <FaBookOpen />, label: "Format", val: "Online Portal" },
               { icon: <FaCertificate />, label: "Certification", val: "Verified ID" }
             ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/[0.03] transition-colors group relative z-10">
+              <div key={i} className="flex items-center gap-4 p-4 rounded-lg hover:bg-white/[0.03] transition-colors group relative z-10">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#dd2727] text-xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(221,39,39,0.2)]">
                   {stat.icon}
                 </div>
@@ -251,7 +266,7 @@ const CourseDetail = () => {
       </section>
 
       {/* Course Highlights / Highlights Bar */}
-      <section className="py-20 overflow-hidden">
+      <section className="py-[50px] overflow-hidden">
         <div className="flex whitespace-nowrap animate-marquee gap-20">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-20 items-center z-10">
@@ -265,10 +280,10 @@ const CourseDetail = () => {
       </section>
 
       {/* Main Content Grid */}
-      <section className="py-32">
-        <div className="premium-container flex flex-col lg:flex-row gap-24">
+      <section className="py-[50px]">
+        <div className="premium-container flex flex-col lg:flex-row gap-12 lg:gap-24">
           <div className="flex-1 space-y-16">
-            <div className="space-y-8">
+            <div className="space-y-8 text-center lg:text-left">
               <h2 className="title-batangas text-4xl md:text-5xl">Curriculum of <br /><span className="text-[#dd2727]">Divine Wisdom</span></h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {(courseData.description || "Divine knowledge awaits your arrival.").split(".").map((item, index) =>
@@ -276,7 +291,7 @@ const CourseDetail = () => {
                     <motion.div 
                       key={index}
                       whileHover={{ x: 10 }}
-                      className="flex items-start gap-4 p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:border-[#dd2727]/30 transition-all"
+                      className="flex items-start gap-4 p-6 rounded-lg bg-white/[0.03] border border-white/5 hover:border-[#dd2727]/30 transition-all"
                     >
                       <FaCheckCircle className="text-[#dd2727] mt-1 shrink-0" />
                       <p className="text-white/80 leading-relaxed font-medium">{item.trim()}</p>
@@ -289,9 +304,9 @@ const CourseDetail = () => {
             {/* Learning Journey (Experimental Layout) */}
             <div className="space-y-16 relative">
                <div className="absolute top-0 -right-20 w-64 h-64 bg-[#dd2727]/5 rounded-full blur-[80px] pointer-events-none"></div>
-               <div className="flex items-center gap-6">
-                  <div className="w-12 h-[1px] bg-[#dd2727]"></div>
-                  <h3 className="title-batangas text-4xl">Your Cosmic <span className="text-[#dd2727]">Evolution</span></h3>
+               <div className="flex items-center justify-center lg:justify-start gap-6">
+                  <div className="w-12 h-[1px] bg-[#dd2727] hidden lg:block"></div>
+                  <h3 className="title-batangas text-4xl text-center lg:text-left">Your Cosmic <span className="text-[#dd2727]">Evolution</span></h3>
                </div>
                <div className="grid grid-cols-1 gap-12 relative pl-8">
                  <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-[#dd2727] via-white/10 to-transparent"></div>
@@ -324,7 +339,7 @@ const CourseDetail = () => {
 
             {/* Sacred Modules (Refined Bento Grid) */}
             <div className="space-y-12">
-              <div className="flex items-end justify-between border-b border-white/5 pb-8">
+              <div className="flex flex-col lg:flex-row items-center lg:items-end justify-center lg:justify-between border-b border-white/5 pb-8 gap-4 text-center lg:text-left">
                  <h3 className="title-batangas text-4xl md:text-5xl">Sacred <br /><span className="text-[#dd2727]">Modules</span></h3>
                  <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] hidden md:block">The Curriculum of Stars</p>
               </div>
@@ -335,10 +350,10 @@ const CourseDetail = () => {
                   { t: "The Art of Predictions", i: "👁", c: "Synthesizing charts to see the unfolding destiny." },
                   { t: "Spiritual Growth & Ethics", i: "☯", c: "The responsibilities of a cosmic guide." }
                 ].map((mod, i) => (
-                   <div key={i} className="p-10 rounded-[2.5rem] bg-white/[0.03] backdrop-blur-xl border border-white/10 flex flex-col justify-between group hover:bg-white/[0.08] transition-all duration-500 shadow-2xl hover:-translate-y-2 relative overflow-hidden">
+                   <div key={i} className="p-10 rounded-xl bg-white/[0.03] backdrop-blur-xl border border-white/10 flex flex-col items-center lg:items-start text-center lg:text-left justify-between group hover:bg-white/[0.08] transition-all duration-500 shadow-2xl hover:-translate-y-2 relative overflow-hidden">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#dd2727]/20 to-transparent rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform"></div>
-                      <div className="relative z-10">
-                        <div className="text-3xl mb-8 group-hover:scale-125 transition-transform origin-left">{mod.i}</div>
+                      <div className="relative z-10 w-full">
+                        <div className="text-3xl mb-8 group-hover:scale-125 transition-transform origin-center lg:origin-left">{mod.i}</div>
                         <h4 className="font-bold tracking-wide text-2xl leading-tight mb-4">{mod.t}</h4>
                         <p className="text-white/40 text-sm leading-relaxed mb-8">{mod.c}</p>
                       </div>
@@ -355,7 +370,7 @@ const CourseDetail = () => {
 
           <aside className="lg:w-[450px]">
             <div className="sticky top-32 space-y-8">
-                <div className="p-10 rounded-[3rem] bg-black/40 border border-white/10 backdrop-blur-2xl relative overflow-hidden shadow-2xl group">
+                <div className="p-10 rounded-xl bg-black/40 border border-white/10 backdrop-blur-2xl relative overflow-hidden shadow-2xl group">
                    <div className="absolute inset-0 bg-gradient-to-br from-[#dd2727]/5 to-transparent pointer-events-none"></div>
                   <h3 className="title-batangas text-2xl mb-8">What's Included</h3>
                   <ul className="space-y-6">
@@ -373,13 +388,13 @@ const CourseDetail = () => {
                     ))}
                   </ul>
                   <Link to={enrollUrl}>
-                    <button className="w-full mt-12 py-5 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] text-xs hover:bg-[#dd2727] hover:text-white transition-all duration-500">
+                    <button className="w-full mt-12 py-5 rounded-lg bg-white text-black font-black uppercase tracking-[0.2em] text-xs hover:bg-[#dd2727] hover:text-white transition-all duration-500">
                       Join the Batch
                     </button>
                   </Link>
                </div>
 
-               <div className="relative rounded-[3rem] overflow-hidden border border-white/10 group h-[300px]">
+               <div className="relative rounded-xl overflow-hidden border border-white/10 group h-[300px]">
                   <img src="/src/assets/images/common/team/hansal sir.jpg" alt="Acharya Hansal" className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                   <div className="absolute bottom-8 left-8 right-8">
@@ -393,7 +408,7 @@ const CourseDetail = () => {
       </section>
 
       {/* Who this is for? */}
-      <section className="py-32 relative overflow-hidden">
+      <section className="py-[50px] relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#dd2727]/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="premium-container relative z-10">
           <div className="text-center mb-20">
@@ -409,10 +424,10 @@ const CourseDetail = () => {
                <motion.div 
                  key={i} 
                  whileHover={{ y: -12 }}
-                 className="p-12 rounded-[3.5rem] bg-black/40 backdrop-blur-2xl border border-white/10 text-center hover:bg-white/[0.05] hover:border-[#dd2727]/30 transition-all duration-500 group shadow-2xl relative overflow-hidden"
+                 className="p-12 rounded-xl bg-black/40 backdrop-blur-2xl border border-white/10 text-center hover:bg-white/[0.05] hover:border-[#dd2727]/30 transition-all duration-500 group shadow-2xl relative overflow-hidden"
                >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#dd2727]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="w-24 h-24 rounded-[2rem] bg-white/[0.03] border border-white/5 flex items-center justify-center text-[#dd2727] text-4xl mx-auto mb-10 group-hover:scale-110 group-hover:bg-[#dd2727]/10 transition-all duration-500 shadow-inner">
+                  <div className="w-24 h-24 rounded-lg bg-white/[0.03] border border-white/5 flex items-center justify-center text-[#dd2727] text-4xl mx-auto mb-10 group-hover:scale-110 group-hover:bg-[#dd2727]/10 transition-all duration-500 shadow-inner">
                      {item.i}
                   </div>
                   <h4 className="title-batangas text-3xl mb-6 group-hover:text-[#dd2727] transition-colors">{item.t}</h4>
@@ -424,8 +439,8 @@ const CourseDetail = () => {
       </section>
 
       {/* Certification Section */}
-      <section className="py-32">
-        <div className="premium-container flex flex-col md:flex-row items-center gap-20 bg-black/40 backdrop-blur-2xl rounded-[4rem] border border-white/10 p-12 md:p-24 overflow-hidden relative shadow-2xl">
+      <section className="py-[50px]">
+        <div className="premium-container flex flex-col md:flex-row items-center gap-20 bg-black/40 backdrop-blur-2xl rounded-2xl border border-white/10 p-12 md:p-24 overflow-hidden relative shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
           <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#dd2727]/10 rounded-full blur-[100px]"></div>
           <div className="flex-1 space-y-8 relative z-10 text-center md:text-left">
@@ -445,7 +460,7 @@ const CourseDetail = () => {
              </ul>
           </div>
           <div className="flex-1 relative z-10 w-full max-w-[500px]">
-             <div className="aspect-[1.4/1] bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 md:p-8 relative transform rotate-3 hover:rotate-0 transition-transform duration-700">
+             <div className="aspect-[1.4/1] bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-4 md:p-8 relative transform rotate-3 hover:rotate-0 transition-transform duration-700">
                 <div className="w-full h-full border border-[#dd2727]/20 rounded flex flex-col items-center justify-center gap-4 text-center p-8">
                    <div className="w-16 h-16 rounded-full bg-[#dd2727]/10 flex items-center justify-center text-3xl">𓁿</div>
                    <h3 className="title-batangas text-xl">Certificate of Completion</h3>
@@ -464,7 +479,7 @@ const CourseDetail = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-32 bg-transparent relative overflow-hidden">
+      <section className="py-[50px] bg-transparent relative overflow-hidden">
         <div className="absolute top-1/2 left-0 w-64 h-64 bg-[#dd2727]/5 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
@@ -475,7 +490,7 @@ const CourseDetail = () => {
             {defaultFaqs.map((faq, i) => (
               <div 
                 key={i} 
-                className={`rounded-[2rem] transition-all duration-500 border ${
+                className={`rounded-lg transition-all duration-500 border ${
                   activeFaq === i 
                     ? 'bg-white/[0.08] border-[#dd2727]/30 shadow-[0_20px_50px_rgba(0,0,0,0.3)]' 
                     : 'bg-black/40 border-white/10 hover:border-white/20'
@@ -513,7 +528,7 @@ const CourseDetail = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-32 bg-transparent relative overflow-hidden">
+      <section className="py-[50px] bg-transparent relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#dd2727]/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="premium-container relative z-10">
           <div className="text-center mb-20">
@@ -529,7 +544,7 @@ const CourseDetail = () => {
               <motion.div 
                 key={i}
                 whileHover={{ y: -10 }}
-                className="p-10 rounded-[3rem] bg-black/40 backdrop-blur-2xl border border-white/10 hover:border-[#dd2727]/30 transition-all duration-500 group relative flex flex-col justify-between shadow-2xl"
+                className="p-10 rounded-xl bg-black/40 backdrop-blur-2xl border border-white/10 hover:border-[#dd2727]/30 transition-all duration-500 group relative flex flex-col justify-between shadow-2xl"
               >
                 <div className="absolute top-10 right-10 text-6xl text-[#dd2727]/10 group-hover:text-[#dd2727]/20 transition-colors pointer-events-none font-serif">“</div>
                 
@@ -554,9 +569,9 @@ const CourseDetail = () => {
       </section>
 
       {/* Community Section */}
-      <section className="py-20">
+      <section className="py-[50px]">
         <div className="premium-container">
-           <div className="bg-[#dd2727]/50 rounded-[3rem] p-10 md:p-16 text-center relative overflow-hidden shadow-[0_20px_60px_rgba(221,39,39,0.2)]">
+           <div className="bg-[#dd2727]/50 rounded-xl p-10 md:p-16 text-center relative overflow-hidden shadow-[0_20px_60px_rgba(221,39,39,0.2)]">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent opacity-10 mix-blend-overlay"></div>
               <div className="relative z-10 space-y-10">
                  <h2 className="title-batangas text-3xl md:text-5xl text-white">Join the <br /> Sacred Community</h2>

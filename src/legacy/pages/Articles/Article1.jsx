@@ -154,7 +154,7 @@ const ArticlePage = () => {
       {getMetaTags()}
 
       {/* Header */}
-      <div className="bg-red-600 text-white py-12 px-4 md:px-20 text-center">
+      <div className="bg-red-600 text-white py-12 px-4 md:px-10 text-center">
         <h1 className="text-xl md:text-4xl font-extrabold tracking-wide">
           Astrology Articles & Publications
         </h1>
@@ -164,7 +164,7 @@ const ArticlePage = () => {
       {/* Main Content */}
       <div className="container mx-auto py-8 px-4 flex flex-col lg:flex-row gap-8">
         {/* Article Content */}
-        <div className="lg:w-3/4 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <div className="lg:w-3/4 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
           <div className="flex justify-between items-center mb-6">
             <button
               onClick={toggleLanguage}

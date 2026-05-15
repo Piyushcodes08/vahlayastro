@@ -44,7 +44,7 @@
   position: relative;
   flex: 1 0 var(--closed);
   height: 28rem;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
   transition: flex-basis var(--speed), transform var(--speed), box-shadow var(--speed);
@@ -140,7 +140,7 @@
 .project-card__thumb {
   width: 260px;
   height: 340px;
-  border-radius: 2rem;
+  border-radius: 1.25rem;
   object-fit: cover;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
   border: 5px solid rgba(255, 255, 255, 0.2);
@@ -180,7 +180,7 @@
   display: flex;
   gap: 1rem;
   justify-content: center;
-  padding: 40px 0;
+  padding-top: 20px;
 }
 
 .dot {
@@ -220,7 +220,7 @@
     width: 100%;
     flex: 0 0 80px;
     height: 80px;
-    border-radius: 1.5rem;
+    border-radius: 1rem;
   }
   .project-card[active] {
     flex: 0 0 450px;
@@ -240,13 +240,17 @@
     text-align: center !important;
     margin-bottom: 12px;
   }
+  .project-card[active] .project-card__title {
+    font-size: 2rem !important;
+    margin-bottom: 20px;
+  }
   .project-card__active-layout {
     justify-content: center;
   }
   .project-card__thumb {
     width: 220px;
     height: 220px;
-    border-radius: 2rem;
+    border-radius: 1.25rem;
   }
   .project-card__btn-circle {
     width: 80px;

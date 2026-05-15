@@ -443,21 +443,21 @@ const Enrollment = () => {
       <Header />
       <div id="top-sentinel" className="h-0 w-full pt-[70px]"></div>
       
-      <div className="min-h-screen flex flex-col justify-center items-center py-16 px-4 relative z-10">
-        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl w-full max-w-lg shadow-[0_0_40px_rgba(221,39,39,0.2)]">
+      <div className="min-h-screen flex flex-col justify-center items-center py-[50px] px-4 relative z-10">
+        <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-xl w-full max-w-lg shadow-[0_0_40px_rgba(221,39,39,0.2)]">
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">Enroll in a <span className="text-[#dd2727]">Course</span></h1>
           <p className="text-center mb-8 text-gray-300">
             Join our course and explore the wonders of astrology.
           </p>
 
           {errorMessage && (
-            <div className="bg-red-500/20 border border-red-500/50 text-red-200 p-4 rounded-xl mb-6 text-center backdrop-blur-sm">
+            <div className="bg-red-500/20 border border-red-500/50 text-red-200 p-4 rounded-lg mb-6 text-center backdrop-blur-sm">
               {errorMessage}
             </div>
           )}
 
           {successMessage && (
-            <div className="bg-green-500/20 border border-green-500/50 text-green-200 p-4 rounded-xl mb-6 text-center backdrop-blur-sm">
+            <div className="bg-green-500/20 border border-green-500/50 text-green-200 p-4 rounded-lg mb-6 text-center backdrop-blur-sm">
               {successMessage}
             </div>
           )}
@@ -473,7 +473,7 @@ const Enrollment = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your name"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
               />
             </div>
 
@@ -485,13 +485,13 @@ const Enrollment = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
               />
             </div>
 
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Country Code</label>
-              <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 mb-4">
+              <div className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 mb-4">
                 <PhoneInput selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
               </div>
               <label className="text-sm font-medium text-gray-300 mb-2 uppercase tracking-wider">Phone Number</label>
@@ -501,7 +501,7 @@ const Enrollment = () => {
                 value={formData.phone}
                 onChange={handlePhoneChange}
                 placeholder="Enter Phone Number"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#dd2727] focus:border-transparent transition-all"
                 required
               />
             </div>
@@ -531,7 +531,7 @@ const Enrollment = () => {
                     : "Loading..."
                 }
                 readOnly
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-400 cursor-not-allowed"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-gray-400 cursor-not-allowed"
               />
             </div>
 
@@ -549,7 +549,7 @@ const Enrollment = () => {
 
             <button
               type="submit"
-              className="w-full py-4 mt-4 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_20px_rgba(221,39,39,0.5)] transform hover:scale-[1.02] transition-all duration-300"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-[#dd2727] to-[#b0a102] text-white font-bold uppercase tracking-[0.2em] rounded-lg hover:shadow-[0_0_20px_rgba(221,39,39,0.5)] transform hover:scale-[1.02] transition-all duration-300"
             >
               Proceed to Payment
             </button>
@@ -562,7 +562,7 @@ const Enrollment = () => {
                 <button
                   onClick={handleRazorpay}
                   disabled={isLoading}
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] transform hover:scale-[1.02] transition-all duration-300 flex justify-center items-center"
+                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold uppercase tracking-wider rounded-lg hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] transform hover:scale-[1.02] transition-all duration-300 flex justify-center items-center"
                 >
                   {isLoading ? (
                     <>
@@ -674,7 +674,7 @@ const Enrollment = () => {
                         alert("An error occurred while initializing PayPal. Please try again.");
                       }
                     }}
-                    className="w-full py-4 bg-[#0079C1] text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(0,121,193,0.5)] transform hover:scale-[1.02] transition-all duration-300"
+                    className="w-full py-4 bg-[#0079C1] text-white font-bold uppercase tracking-wider rounded-lg hover:shadow-[0_0_20px_rgba(0,121,193,0.5)] transform hover:scale-[1.02] transition-all duration-300"
                   >
                     Pay with PayPal
                   </button>
@@ -690,7 +690,7 @@ const Enrollment = () => {
                     }}
                     className="block mt-4"
                   >
-                    <button className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transform hover:scale-[1.02] transition-all duration-300">
+                    <button className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold uppercase tracking-wider rounded-lg hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transform hover:scale-[1.02] transition-all duration-300">
                       Pay with Installment
                     </button>
                   </Link>
@@ -700,7 +700,7 @@ const Enrollment = () => {
           )}
         </div>
         
-        <div className="w-full max-w-5xl mt-12 bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(221,39,39,0.2)]">
+        <div className="w-full max-w-5xl mt-12 bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(221,39,39,0.2)]">
           <PaymentGuide />
         </div>
       </div>

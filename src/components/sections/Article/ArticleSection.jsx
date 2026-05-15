@@ -184,12 +184,14 @@ const ArticleSection = () => {
                       </div>
                       {/* Cover — rotates open on hover/click */}
                       <div className="article-cover-container">
-                        <img
-                          src={article.imageUrl || article.img}
-                          alt={article.title}
-                          className="article-cover"
-                          loading="lazy"
-                        />
+                        <div className="w-full aspect-video overflow-hidden">
+                          <img
+                            src={article.imageUrl || article.img}
+                            alt={article.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
                         <div className="article-cover-content">
                           <h4 className="article-cover-title">{article.title}</h4>
                           {article.author && <p className="article-cover-author">By {article.author}</p>}

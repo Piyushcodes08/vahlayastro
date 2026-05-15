@@ -10,7 +10,7 @@
 .testimonial-slider-container {
     width: 100%;
     position: relative;
-    padding: 40px 0;
+    padding: 0;
     margin-top: 20px;
     cursor: grab;
     overflow: hidden;
@@ -140,6 +140,6 @@
     min-height: auto;
   }
   .testimonial-slider-container {
-    padding: 20px 0;
+    padding: 0;
   }
 }

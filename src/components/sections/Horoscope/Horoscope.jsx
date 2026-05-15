@@ -83,77 +83,77 @@ export default function Horoscope({ onGetDetails }) {
     }, [zodiacs.length]);
 
     return (
-        <section className={`horoscope-section mx-auto max-w-[1170px] ${isInView ? "in-view" : ""}`} ref={scrollContainerRef}>
-            <div className='flex flex-col text-center gap-2 pb-12  z-10'>
-                <span className="text-[#dd2727] font-bold tracking-[0.3em] uppercase text-xs mb-2">Vahlay Astro</span>
-                <h2 className="title-batangas text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white">
-                    Explore Your <span className="text-[#dd2727]">Cosmic Destiny</span>
-                </h2>
-                <p className="subtitle-poppins text-lg md:text-xl font-medium text-white/70 max-w-2xl mx-auto">
-                    Navigate through the celestial wheel to uncover your personalized daily horoscope and planetary insights.
-                </p>
-            </div>
-
-            <div className="zodiac-container">
-                {/* Information Panel - Left */}
-                <div className="zodiac-info-panel left">
-                    <div className="zodiac-header" key={`name-${activeIndex}`}>
-                        <div className="zodiac-symbol-bg">
-                            <img
-                                src={zodiacs[activeIndex].icon}
-                                alt={zodiacs[activeIndex].name}
-                                className="zodiac-active-icon-mini"
-                            />
-                        </div>
-                        <h2 className="zodiac-name">{zodiacs[activeIndex].name}</h2>
-                        <span className="zodiac-traits">{zodiacs[activeIndex].traits}</span>
-                    </div>
+        <section className={`horoscope-section ${isInView ? "in-view" : ""}`} ref={scrollContainerRef}>
+            <div className="section-container">
+                <div className='flex flex-col text-center gap-2 pb-12  z-10'>
+                    <span className="text-[#dd2727] font-bold tracking-[0.3em] uppercase text-xs mb-2">Vahlay Astro</span>
+                    <h2 className="title-batangas text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white">
+                        Explore Your <span className="text-[#dd2727]">Cosmic Destiny</span>
+                    </h2>
+                    <p className="subtitle-poppins text-lg md:text-xl font-medium text-white/70 max-w-2xl mx-auto">
+                        Navigate through the celestial wheel to uncover your personalized daily horoscope and planetary insights.
+                    </p>
                 </div>
 
-                {/* Central Wheel */}
-                <div
-                    className="zodiac-wheel-wrapper"
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
-                >
-                    <div className="zodiac-wheel-outer" style={{ transform: `rotate(${rotation}deg)` }}>
-                        <img src={zodiacWheel} alt="Zodiac Wheel" className="zodiac-wheel-image" />
-                    </div>
-
-                    <div className="zodiac-pointer">
-                        <div className="pointer-glow"></div>
-                    </div>
-
-                    <div className="zodiac-center-display">
-                        <div className="active-zodiac-card" key={`card-${activeIndex}`}>
-                            <div className="card-inner">
+                <div className="zodiac-container">
+                    {/* Information Panel - Left */}
+                    <div className="zodiac-info-panel left">
+                        <div className="zodiac-header" key={`name-${activeIndex}`}>
+                            <div className="zodiac-symbol-bg">
                                 <img
                                     src={zodiacs[activeIndex].icon}
-                                    alt=""
-                                    className="active-icon-large"
+                                    alt={zodiacs[activeIndex].name}
+                                    className="zodiac-active-icon-mini"
                                 />
-                                <div className="zodiac-glow"></div>
+                            </div>
+                            <h2 className="zodiac-name">{zodiacs[activeIndex].name}</h2>
+                            <span className="zodiac-traits">{zodiacs[activeIndex].traits}</span>
+                        </div>
+                    </div>
+
+                    {/* Central Wheel */}
+                    <div
+                        className="zodiac-wheel-wrapper"
+                        onMouseEnter={() => setIsHovering(true)}
+                        onMouseLeave={() => setIsHovering(false)}
+                    >
+                        <div className="zodiac-wheel-outer" style={{ transform: `rotate(${rotation}deg)` }}>
+                            <img src={zodiacWheel} alt="Zodiac Wheel" className="zodiac-wheel-image" />
+                        </div>
+
+                        <div className="zodiac-pointer">
+                            <div className="pointer-glow"></div>
+                        </div>
+
+                        <div className="zodiac-center-display">
+                            <div className="active-zodiac-card" key={`card-${activeIndex}`}>
+                                <div className="card-inner">
+                                    <img
+                                        src={zodiacs[activeIndex].icon}
+                                        alt=""
+                                        className="active-icon-large"
+                                    />
+                                    <div className="zodiac-glow"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Information Panel - Right */}
-                <div className="zodiac-info-panel right" key={`desc-${activeIndex}`}>
-                    <div className="element-badge">
-                        <span className="element-dot"></span>
-                        {zodiacs[activeIndex].element} Element
+                    {/* Information Panel - Right */}
+                    <div className="zodiac-info-panel right" key={`desc-${activeIndex}`}>
+                        <div className="element-badge">
+                            <span className="element-dot"></span>
+                            {zodiacs[activeIndex].element} Element
+                        </div>
+                        <p className="zodiac-description">
+                            {zodiacs[activeIndex].description}
+                        </p>
+                        <button className="read-more-btn" onClick={onGetDetails}>
+                            Get Detailed <span className="arrow">→</span>
+                        </button>
                     </div>
-                    <p className="zodiac-description">
-                        {zodiacs[activeIndex].description}
-                    </p>
-                    <button className="read-more-btn" onClick={onGetDetails}>
-                        Get Detailed <span className="arrow">→</span>
-                    </button>
                 </div>
             </div>
-
-
         </section>
     );
 }

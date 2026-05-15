@@ -41,7 +41,7 @@ const AboutPage = () => {
                             </div>
 
                             {/* Bold White Title */}
-                            <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-6 leading-[1.1]">
+                            <h1 className="title-batangas text-4xl sm:text-5xl md:text-7xl text-white font-black mb-6 leading-[1.1]">
                                 {hero.title} <br /> <span className="text-[#dd2727]">{hero.titleHighlight}</span>
                             </h1>
 
@@ -61,34 +61,28 @@ const AboutPage = () => {
                 </section>
 
                 {/* 1. Who We Are */}
-                <section>
+                <section className="no-full-height">
                     <div className="section-container">
-                        <div className="grid md:grid-cols-2 gap-12 items-center">
-                            <div className="rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)] flex items-center justify-center p-2">
+                        <div className="grid md:grid-cols-2 gap-8 items-center">
+                            <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)] flex items-center justify-center p-1.5 max-w-md">
                                 <img
                                     src={whoWeAre.image}
                                     alt={whoWeAre.title}
-                                    className="w-full h-full rounded-[2rem] object-cover"
+                                    className="w-full h-full object-cover rounded-lg"
                                 />
                             </div>
 
                             <div className="space-y-8">
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:border-[#dd2727]/30 transition-all duration-500">
-                                    <h2 className="title-batangas text-4xl md:text-5xl mb-6 text-white">
-                                        {whoWeAre.title}
-                                    </h2>
-                                    <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">
-                                        {whoWeAre.description}
-                                    </p>
+                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 md:p-10 shadow-2xl relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#dd2727]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                    <h2 className="title-batangas text-3xl md:text-4xl mb-4 text-white relative z-10">{whoWeAre.title}</h2>
+                                    <p className="subtitle-poppins text-base text-white/70 leading-relaxed relative z-10">{whoWeAre.description}</p>
                                 </div>
 
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:border-[#dd2727]/30 transition-all duration-500">
-                                    <h2 className="title-batangas text-4xl md:text-5xl mb-6 text-[#dd2727]">
-                                        {whoWeAre.philosophyTitle}
-                                    </h2>
-                                    <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">
-                                        {whoWeAre.philosophyDescription}
-                                    </p>
+                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 md:p-10 shadow-2xl relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#dd2727]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                    <h2 className="title-batangas text-3xl md:text-4xl mb-4 text-white relative z-10">{whoWeAre.philosophyTitle}</h2>
+                                    <p className="subtitle-poppins text-base text-white/70 leading-relaxed relative z-10">{whoWeAre.philosophyDescription}</p>
                                 </div>
                             </div>
                         </div>
@@ -101,8 +95,8 @@ const AboutPage = () => {
                         <div className="absolute top-[50%] right-0 w-[600px] h-[600px] bg-glow-red opacity-20"></div>
                     </div>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] py-10 md:py-20 px-[15px] md:px-[50px] shadow-2xl relative z-10">
-                            <h2 className="title-batangas text-4xl md:text-6xl mb-14 text-white">
+                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl px-[15px] md:px-[50px] py-8 md:py-16 shadow-2xl relative z-10">
+                            <h2 className="title-batangas text-3xl md:text-6xl mb-8 text-white">
                                 {services.title} <span className="text-[#dd2727]">{services.titleHighlight}</span> {services.titleSuffix}
                             </h2>
 
@@ -111,7 +105,7 @@ const AboutPage = () => {
                                     <Link
                                         key={idx}
                                         to={srv.link}
-                                        className="bg-[#150a0a]/80 backdrop-blur-lg border border-white/10 rounded-[2rem] py-10 px-[15px] md:px-[50px] hover:scale-[1.05] hover:border-[#dd2727]/40 shadow-xl hover:shadow-[0_20px_50px_rgba(221,39,39,0.25)] transition-all duration-500 block text-center group flex flex-col items-center justify-between min-h-[300px]"
+                                        className="bg-[#150a0a]/80 backdrop-blur-lg border border-white/10 rounded-md py-6 px-[15px] md:px-[50px] hover:scale-[1.05] hover:border-[#dd2727]/40 shadow-xl hover:shadow-[0_20px_50px_rgba(221,39,39,0.25)] transition-all duration-500 block text-center group flex flex-col items-center justify-between min-h-[260px]"
                                     >
                                         <div className="w-full">
                                             <h3 className="title-batangas text-3xl mb-4 text-[#dd2727] group-hover:scale-110 transition-transform duration-300">
@@ -139,9 +133,9 @@ const AboutPage = () => {
                             {ambition.items.map((item, idx) => (
                                 <div
                                     key={idx}
-                                    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] py-12 px-[15px] md:px-[50px] text-center shadow-[0_15px_50px_rgba(0,0,0,0.3)] hover:border-[#dd2727]/30 transition-all duration-500"
+                                    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg px-[15px] md:px-[50px] py-8 md:py-12 text-center shadow-[0_15px_50px_rgba(0,0,0,0.3)] hover:border-[#dd2727]/30 transition-all duration-500"
                                 >
-                                    <h3 className="title-batangas text-4xl mb-6 text-[#dd2727]">
+                                    <h3 className="title-batangas text-3xl mb-4 text-[#dd2727]">
                                         {item.title}
                                     </h3>
                                     <p className="subtitle-poppins text-white/80 leading-relaxed text-lg">
@@ -156,8 +150,8 @@ const AboutPage = () => {
                 {/* 4. Core Values */}
                 <section>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] py-12 md:py-20 px-[15px] md:px-[50px]">
-                            <h2 className="title-batangas text-4xl md:text-6xl text-center mb-16 text-white">
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl px-[15px] md:px-[50px] py-10 md:py-16">
+                            <h2 className="title-batangas text-3xl md:text-6xl text-center mb-10 text-white">
                                 {values.title} <span className="text-[#dd2727]">{values.titleHighlight}</span>
                             </h2>
 
@@ -165,7 +159,7 @@ const AboutPage = () => {
                                 {values.items.map((val, idx) => (
                                     <div
                                         key={idx}
-                                        className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-[2rem] py-10 px-[15px] md:px-[50px] text-center hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 flex flex-col items-center group"
+                                        className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-md px-[15px] md:px-[50px] py-[15px] text-center hover:border-[#dd2727]/60 hover:bg-white/10 transition-all duration-500 flex flex-col items-center group"
                                     >
                                         <div className="text-6xl mb-8 text-white group-hover:scale-110 group-hover:text-[#dd2727] transition-all duration-500">
                                             {getIcon(val.iconType)}
@@ -186,7 +180,7 @@ const AboutPage = () => {
                 {/* 5. CTA */}
                 <section>
                     <div className="section-container">
-                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-[3rem] py-16 md:py-24 px-[15px] md:px-[50px] text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
+                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black border border-[#dd2727]/30 rounded-xl px-[15px] md:px-[50px] py-10 md:py-16 text-center shadow-[0_30px_100px_rgba(221,39,39,0.25)] relative overflow-hidden group">
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-40 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white">
@@ -198,7 +192,7 @@ const AboutPage = () => {
                                 </p>
 
                                 <Link
-                                    to="/consulting"
+                                    to="/services"
                                     className="inline-block bg-[#dd2727] text-white px-14 py-5 rounded-full font-bold uppercase tracking-[0.2em] transition-all duration-500 hover:bg-white hover:text-[#dd2727] hover:-translate-y-2 shadow-[0_10px_40px_rgba(221,39,39,0.4)]"
                                 >
                                     {cta.buttonText}

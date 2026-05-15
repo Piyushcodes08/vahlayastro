@@ -31,7 +31,7 @@ const TestimonialsPage = () => {
 
                 <section>
                     <div className="section-container">
-                        <div className="bg-gradient-to-r from-[#dd2727]/90 to-orange-500/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-16 max-w-4xl mx-auto shadow-[0_15px_60px_rgba(221,39,39,0.35)] text-center">
+                        <div className="bg-gradient-to-r from-[#dd2727]/90 to-orange-500/80 backdrop-blur-xl border border-white/10 rounded-xl p-8 md:p-16 max-w-4xl mx-auto shadow-[0_15px_60px_rgba(221,39,39,0.35)] text-center">
                             <h2 className="title-batangas text-4xl mb-6 text-white">Become Our Next Success Story</h2>
                             <p className="subtitle-poppins text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed text-base md:text-lg">
                                 Every journey of a thousand miles begins with a single step. Let the stars illuminate your path and help you discover your true potential.

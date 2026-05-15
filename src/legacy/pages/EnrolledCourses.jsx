@@ -158,7 +158,7 @@ const EnrollCourse = () => {
       <div className="flex flex-1 relative z-10 pt-16 gap-0">
         <Aside />
 
-        <main className="flex-1 min-w-0 py-6 px-[15px] md:px-[50px] bg-white overflow-x-hidden">
+        <main className="flex-1 min-w-0 py-[50px] px-[15px] md:px-[50px] bg-white overflow-x-hidden">
           <div className="max-w-7xl mx-auto space-y-10 pt-6">
 
             {/* Page Header */}
@@ -171,25 +171,25 @@ const EnrollCourse = () => {
               </div>
               <Link
                 to="/courses"
-                className="w-full sm:w-auto text-center bg-slate-900 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-[#dd2727] transition-all"
+                className="w-full sm:w-auto text-center bg-slate-900 text-white px-6 py-3 rounded-lg font-bold uppercase tracking-widest text-[10px] hover:bg-[#dd2727] transition-all"
               >
                 Browse Catalog
               </Link>
             </div>
 
             {courses.length === 0 ? (
-              <div className="bg-slate-50 p-12 text-center rounded-[2.5rem] border border-slate-100">
+              <div className="bg-slate-50 p-12 text-center rounded-xl border border-slate-100">
                 <div className="text-4xl mb-6 opacity-40">🔭</div>
                 <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tight">No Cosmic Paths Yet</h3>
                 <p className="text-slate-500 font-medium mb-8 max-w-md mx-auto leading-relaxed">
                   You are not enrolled in any courses yet. Start your cosmic journey by exploring our sacred teachings.
                 </p>
-                <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">
+                <Link to="/courses" className="bg-[#dd2727] text-white px-10 py-4 rounded-lg font-black uppercase tracking-widest text-[10px] hover:shadow-xl transition-all">
                   Browse Catalog
                 </Link>
               </div>
             ) : (
-              <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
 
                 {/* Desktop Table Header — hidden on mobile */}
                 <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-5 bg-slate-50/50 border-b border-slate-100">
@@ -206,7 +206,7 @@ const EnrollCourse = () => {
 
                       {/* Mobile Card */}
                       <div className="md:hidden p-4 flex items-start gap-4 hover:bg-slate-50/50 transition-all group">
-                        <div className="w-20 h-16 rounded-xl overflow-hidden flex-shrink-0 shadow border border-slate-100">
+                        <div className="w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow border border-slate-100">
                           <img
                             src={course.image}
                             alt={course.name}
@@ -233,7 +233,7 @@ const EnrollCourse = () => {
                           </div>
                           <button
                             onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}
-                            className="mt-3 w-full py-2.5 bg-slate-900 text-white rounded-xl font-black uppercase tracking-[0.15em] text-[10px] hover:bg-[#dd2727] transition-all"
+                            className="mt-3 w-full py-2.5 bg-slate-900 text-white rounded-lg font-black uppercase tracking-[0.15em] text-[10px] hover:bg-[#dd2727] transition-all"
                           >
                             Continue
                           </button>
@@ -243,7 +243,7 @@ const EnrollCourse = () => {
                       {/* Desktop Row */}
                       <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-7 items-center hover:bg-slate-50/30 transition-all group">
                         <div className="col-span-5 flex items-center gap-5">
-                          <div className="w-20 h-14 rounded-2xl overflow-hidden flex-shrink-0 shadow border border-slate-100">
+                          <div className="w-20 h-14 rounded-xl overflow-hidden flex-shrink-0 shadow border border-slate-100">
                             <img
                               src={course.image}
                               alt={course.name}
@@ -278,7 +278,7 @@ const EnrollCourse = () => {
                         <div className="col-span-2 flex justify-end">
                           <button
                             onClick={() => navigate(`/course/${encodeURIComponent(course.name)}`)}
-                            className="px-8 py-3 bg-slate-900 text-white rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#dd2727] transition-all shadow-lg hover:shadow-xl"
+                            className="px-8 py-3 bg-slate-900 text-white rounded-lg font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#dd2727] transition-all shadow-lg hover:shadow-xl"
                           >
                             Continue
                           </button>
@@ -304,7 +304,7 @@ const EnrollCourse = () => {
               </div>
 
               {Object.entries(groupedVideos).length === 0 ? (
-                <div className="bg-slate-50 p-12 text-center rounded-[2.5rem] border border-dashed border-slate-200">
+                <div className="bg-slate-50 p-12 text-center rounded-xl border border-dashed border-slate-200">
                   <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No recorded sessions found in the archive yet.</p>
                 </div>
               ) : (
@@ -319,11 +319,11 @@ const EnrollCourse = () => {
                         {modules.map((module) => (
                           <div
                             key={module.id}
-                            className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-100 shadow-sm group hover:border-[#dd2727] hover:shadow-xl transition-all cursor-pointer flex items-center justify-between gap-4"
+                            className="bg-white p-4 sm:p-6 rounded-xl border border-slate-100 shadow-sm group hover:border-[#dd2727] hover:shadow-xl transition-all cursor-pointer flex items-center justify-between gap-4"
                             onClick={() => navigate(`/course/${encodeURIComponent(title)}/video/${module.id}`)}
                           >
                             <div className="flex items-center gap-4 min-w-0">
-                              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#dd2727] group-hover:text-white transition-all duration-500 flex-shrink-0">
+                              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#dd2727] group-hover:text-white transition-all duration-500 flex-shrink-0">
                                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                 </svg>

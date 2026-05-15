@@ -3,7 +3,6 @@
   width: 100%;
   background: transparent;
   color: white !important;
-
 }
 
 .numerology-section::before {
@@ -16,7 +15,6 @@
   transform: scale(1.1);
   z-index: -1;
 }
-/* Redundant .numerology-container styles removed in favor of global .section-container */
 
 .numerology-form-card,
 .numerology-intro-card,
@@ -28,46 +26,47 @@
   -webkit-backdrop-filter: blur(12px);
   border-radius: 24px;
   margin-bottom: 30px;
-  /* Reduced from 40px */
 }
 
 .numerology-form-card {
   padding: 30px;
-  /* Reduced from 40px */
   text-align: center;
 }
 
 .numerology-form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  align-items: center;
 }
 
 .numerology-input {
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 12px;
+  min-height: 56px;
+  padding: 16px 18px;
+  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   outline: none;
   background: rgba(255, 255, 255, 0.08);
   color: white;
   font-size: 16px;
   font-family: 'Poppins', sans-serif;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .numerology-input:focus {
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  border-color: rgba(244, 210, 124, 0.75);
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 0 0 3px rgba(244, 210, 124, 0.14);
 }
 
 .numerology-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .numerology-input option {
-  background: rgba(255, 255, 255, 0.08);
-  color: #dd2727;
+  background: #1b1111;
+  color: #ffffff;
 }
 
 .numerology-error {
@@ -79,7 +78,6 @@
 
 .numerology-intro-card {
   padding: 30px;
-  /* Reduced from 40px */
 }
 
 .numerology-intro-card h3 {
@@ -92,7 +90,7 @@
 
 .numerology-mini-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
@@ -101,7 +99,7 @@
   border-radius: 16px;
   padding: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .numerology-mini-item:hover {
@@ -132,7 +130,7 @@
 
 .numerology-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
@@ -142,7 +140,6 @@
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   padding: 24px;
-  /* Reduced from 30px */
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -176,7 +173,7 @@
 .numerology-card span {
   display: block;
   color: #f4d27c;
-  font-size: 14px;
+  font-size: 13px;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;
@@ -200,7 +197,6 @@
 
 .loshu-wrapper {
   padding: 30px;
-  /* Reduced from 40px */
 }
 
 .loshu-header {
@@ -240,7 +236,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .loshu-box:hover {
@@ -293,16 +289,31 @@
   margin: 0;
 }
 
-/* Removed redundant media query padding overrides */
+@media (max-width: 1200px) {
+  .numerology-form-grid,
+  .numerology-mini-grid,
+  .numerology-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
+  .numerology-name-input {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 992px) {
+  .numerology-form-grid,
   .numerology-mini-grid,
   .numerology-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .numerology-name-input {
+    grid-column: span 2;
+  }
+}
 
 @media (max-width: 768px) {
-
   .numerology-form-card,
   .numerology-intro-card,
   .loshu-wrapper {
@@ -318,6 +329,10 @@
     gap: 16px;
   }
 
+  .numerology-name-input {
+    grid-column: span 1;
+  }
+
   .numerology-card h3 {
     font-size: 2.5rem;
   }
@@ -328,5 +343,9 @@
 
   .loshu-box {
     padding: 10px;
+  }
+
+  .loshu-box p {
+    font-size: 1.35rem;
   }
 }

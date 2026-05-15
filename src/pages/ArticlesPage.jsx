@@ -8,6 +8,7 @@ import '../components/sections/Article/ArticleSection.css';
 const ArticlesPage = () => {
     const { slugMap, loading } = useArticles();
     const [searchQuery, setSearchQuery] = useState('');
+    const [openCardId, setOpenCardId] = useState(null);
 
     const articlesData = useMemo(() => {
         return Object.values(slugMap).sort((a, b) => {
@@ -32,6 +33,12 @@ const ArticlesPage = () => {
         });
     }, [slugMap]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const articlesPerPage = 8;
+
+    const [sidebarPage, setSidebarPage] = useState(1);
+    const sidebarArticlesPerPage = 10;
+
     // Filter articles based on search query
     const filteredArticles = useMemo(() => {
         if (!searchQuery.trim()) return articlesData;
@@ -42,6 +49,29 @@ const ArticlesPage = () => {
             article.description?.toLowerCase().includes(query)
         );
     }, [searchQuery, articlesData]);
+
+    // Reset pagination when search query changes
+    React.useEffect(() => {
+        setCurrentPage(1);
+        setSidebarPage(1);
+    }, [searchQuery]);
+
+    // Main Pagination Logic
+    const indexOfLastArticle = currentPage * articlesPerPage;
+    const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+    const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+    const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+
+    // Sidebar Pagination Logic
+    const indexOfLastSidebar = sidebarPage * sidebarArticlesPerPage;
+    const indexOfFirstSidebar = indexOfLastSidebar - sidebarArticlesPerPage;
+    const sidebarArticles = filteredArticles.slice(indexOfFirstSidebar, indexOfLastSidebar);
+    const totalSidebarPages = Math.ceil(filteredArticles.length / sidebarArticlesPerPage);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     if (loading) {
         return (
@@ -75,7 +105,7 @@ const ArticlesPage = () => {
                             </div>
 
                             {/* Bold White Title */}
-                            <h1 className="title-batangas text-5xl md:text-7xl text-white font-black mb-8 leading-[1.1] tracking-tight">
+                            <h1 className="title-batangas text-4xl sm:text-5xl md:text-7xl text-white font-black mb-8 leading-[1.1] tracking-tight">
                                 Cosmic Insights <br /> & <span className="text-[#dd2727]">Sacred Wisdom</span>
                             </h1>
 
@@ -98,55 +128,98 @@ const ArticlesPage = () => {
                 {/* Main Content Area with Sidebar */}
                 <section>
                     <div className="section-container">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
                             {/* Article Grid (Main Content) */}
-                            <div className="lg:col-span-9">
-                                {filteredArticles.length > 0 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
-                                        {filteredArticles.map((article, index) => (
-                                            <div className="article-item" key={article.id || index}>
-                                                <div className="article-wrapper">
-                                                    {/* Inner page content — revealed when cover opens */}
-                                                    <div className="article-inner">
-                                                        <h4 className="article-inner-title">{article.title}</h4>
-                                                        {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
-                                                        <div className="article-inner-meta">
-                                                            {article.author && <span className="article-inner-author">By {article.author}</span>}
-                                                            {(article.data || article.createdAt) && (
-                                                                <span className="article-inner-date">
-                                                                    {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
-                                                                </span>
-                                                            )}
+                            <div className="w-full lg:flex-1 min-w-0">
+                                {currentArticles.length > 0 ? (
+                                    <>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-16 gap-x-8">
+                                            {currentArticles.map((article, index) => {
+                                                const uniqueId = article.id || index;
+                                                const isOpen = openCardId === uniqueId;
+
+                                                return (
+                                                    <div key={uniqueId} className="flex flex-col items-center">
+                                                        <div
+                                                            className={`article-wrapper ${isOpen ? 'is-open' : ''}`}
+                                                            onClick={() => setOpenCardId(prev => prev === uniqueId ? null : uniqueId)}
+                                                        >
+                                                            {/* Inner page content — revealed when cover opens */}
+                                                            <div className="article-inner">
+                                                                <h4 className="article-inner-title">{article.title}</h4>
+                                                                {article.hindi && <h5 className="article-inner-hindi-title">{article.hindi}</h5>}
+                                                                <div className="article-inner-meta">
+                                                                    {article.author && <span className="article-inner-author">By {article.author}</span>}
+                                                                    {(article.data || article.createdAt) && (
+                                                                        <span className="article-inner-date">
+                                                                            {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <Link to={`/articles/${article.id || index}`} className="article-read-more" onClick={(e) => e.stopPropagation()}>Read More</Link>
+                                                            </div>
+                                                            {/* Cover — rotates open on hover/click */}
+                                                            <div className="article-cover-container">
+                                                                <div className="w-full aspect-video overflow-hidden">
+                                                                    <img
+                                                                        src={article.imageUrl || article.img}
+                                                                        alt={article.title}
+                                                                        className="w-full h-full object-cover"
+                                                                        loading="lazy"
+                                                                    />
+                                                                </div>
+                                                                <div className="article-cover-content">
+                                                                    <h4 className="article-cover-title">{article.title}</h4>
+                                                                    {article.author && <p className="article-cover-author">By {article.author}</p>}
+                                                                    {(article.data || article.createdAt) && (
+                                                                        <p className="article-cover-date">
+                                                                            {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <Link to={`/articles/${article.id || index}`} className="article-read-more">Read More</Link>
                                                     </div>
-                                                    {/* Cover — rotates open on hover */}
-                                                    <div className="article-cover-container">
-                                                        <div className="w-full aspect-video overflow-hidden">
-                                                            <img
-                                                                src={article.imageUrl || article.img}
-                                                                alt={article.title}
-                                                                className="w-full h-full object-cover"
-                                                                loading="lazy"
-                                                            />
-                                                        </div>
-                                                        <div className="article-cover-content">
-                                                            <h4 className="article-cover-title">{article.title}</h4>
-                                                            {article.author && <p className="article-cover-author">By {article.author}</p>}
-                                                            {(article.data || article.createdAt) && (
-                                                                <p className="article-cover-date">
-                                                                    {article.data || (article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "")}
-                                                                </p>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Pagination Controls */}
+                                        {totalPages > 1 && (
+                                            <div className="mt-20 flex justify-center items-center gap-4">
+                                                <button
+                                                    onClick={() => paginate(currentPage - 1)}
+                                                    disabled={currentPage === 1}
+                                                    className={`w-12 h-12 rounded-full border border-white/10 flex items-center justify-center transition-all ${currentPage === 1 ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white/10 hover:border-[#dd2727]'}`}
+                                                >
+                                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                                                </button>
+                                                
+                                                <div className="flex gap-2">
+                                                    {[...Array(totalPages)].map((_, i) => (
+                                                        <button
+                                                            key={i + 1}
+                                                            onClick={() => paginate(i + 1)}
+                                                            className={`w-12 h-12 rounded-full font-bold transition-all ${currentPage === i + 1 ? 'bg-[#dd2727] text-white shadow-[0_0_20px_rgba(221,39,39,0.5)]' : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'}`}
+                                                        >
+                                                            {i + 1}
+                                                        </button>
+                                                    ))}
                                                 </div>
+
+                                                <button
+                                                    onClick={() => paginate(currentPage + 1)}
+                                                    disabled={currentPage === totalPages}
+                                                    className={`w-12 h-12 rounded-full border border-white/10 flex items-center justify-center transition-all ${currentPage === totalPages ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white/10 hover:border-[#dd2727]'}`}
+                                                >
+                                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                                </button>
                                             </div>
-                                        ))}
-                                    </div>
+                                        )}
+                                    </>
                                 ) : (
-                                    <div className="text-center py-24 bg-white/5 border border-white/10 rounded-[3rem] backdrop-blur-2xl">
+                                    <div className="text-center py-24 bg-white/5 border border-white/10 rounded-lg backdrop-blur-2xl">
                                         <h3 className="title-batangas text-4xl mb-6 text-white">No Wisdom Found</h3>
                                         <p className="subtitle-poppins text-white/60 text-lg">Try searching with different celestial keywords.</p>
                                         <button
@@ -160,10 +233,10 @@ const ArticlesPage = () => {
                             </div>
 
                             {/* Sidebar */}
-                            <aside className="lg:col-span-3 space-y-12">
+                            <aside className="w-full lg:w-1/3 xl:w-[30%] shrink-0 space-y-12">
 
                                 {/* Search Widget */}
-                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] py-8 px-[15px] md:px-[50px] shadow-2xl">
+                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-lg p-5 shadow-2xl">
                                     <h4 className="title-batangas text-2xl mb-8 text-white border-b border-white/10 pb-4">Search Wisdom</h4>
                                     <div className="relative">
                                         <input
@@ -180,10 +253,10 @@ const ArticlesPage = () => {
                                 </div>
 
                                 {/* Sacred Wisdom (Dynamic Articles List) */}
-                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] py-10 px-[15px] md:px-[50px] shadow-2xl">
+                                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-lg p-5 shadow-2xl">
                                     <h4 className="title-batangas text-2xl mb-8 text-white border-b border-white/10 pb-4">Sacred Wisdom</h4>
                                     <ul className="space-y-6 subtitle-poppins text-base">
-                                        {articlesData.map((article, i) => (
+                                        {sidebarArticles.map((article, i) => (
                                             <li key={article.id || i} className="group">
                                                 <Link to={`/articles/${article.id}`} className="flex gap-4 text-white/60 hover:text-[#dd2727] transition-all duration-300">
                                                     <span className="text-[#dd2727] font-black text-xl group-hover:scale-125 transition-transform">•</span>
@@ -192,12 +265,37 @@ const ArticlesPage = () => {
                                             </li>
                                         ))}
                                     </ul>
+
+                                    {/* Sidebar Pagination */}
+                                    {totalSidebarPages > 1 && (
+                                        <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                                            <span className="text-white/40 text-xs font-medium uppercase tracking-wider">
+                                                Page {sidebarPage} of {totalSidebarPages}
+                                            </span>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => setSidebarPage(prev => Math.max(prev - 1, 1))}
+                                                    disabled={sidebarPage === 1}
+                                                    className={`p-2 rounded-lg border border-white/10 transition-all ${sidebarPage === 1 ? 'opacity-20 cursor-not-allowed' : 'hover:bg-[#dd2727] hover:border-[#dd2727] text-white'}`}
+                                                >
+                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                                                </button>
+                                                <button
+                                                    onClick={() => setSidebarPage(prev => Math.min(prev + 1, totalSidebarPages))}
+                                                    disabled={sidebarPage === totalSidebarPages}
+                                                    className={`p-2 rounded-lg border border-white/10 transition-all ${sidebarPage === totalSidebarPages ? 'opacity-20 cursor-not-allowed' : 'hover:bg-[#dd2727] hover:border-[#dd2727] text-white'}`}
+                                                >
+                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Premium CTA Sidebar Banner */}
-                                <div className="relative rounded-[2.5rem] overflow-hidden group shadow-[0_25px_60px_rgba(221,39,39,0.4)] transition-all duration-700 hover:-translate-y-2">
+                                <div className="relative rounded-lg overflow-hidden group shadow-[0_25px_60px_rgba(221,39,39,0.4)] transition-all duration-700 hover:-translate-y-2">
                                     <div className="absolute inset-0 bg-gradient-to-br from-[#dd2727] via-[#dd2727] to-[#801313] opacity-100"></div>
-                                    <div className="relative z-10 py-12 px-[15px] md:px-[50px] text-center">
+                                    <div className="relative z-10 py-12 px-[15px] md:px-10 text-center">
                                         <h4 className="title-batangas text-4xl mb-6 !text-white leading-tight drop-shadow-2xl">
                                             Unlock Your <br /> Destiny
                                         </h4>
@@ -217,31 +315,35 @@ const ArticlesPage = () => {
                 </section>
 
                 {/* Newsletter Section */}
-                <section>
-                    <div className="bg-glow-container">
-                        <div className="absolute bottom-0 right-[10%] w-[700px] h-[700px] bg-glow-red opacity-20"></div>
-                    </div>
+                <section className="py-[50px] no-full-height">
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-2xl border border-[#dd2727]/30 rounded-[4rem] py-16 md:py-24 px-[15px] md:px-[50px] text-center max-w-5xl mx-auto shadow-[0_30px_100px_rgba(221,39,39,0.15)] relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-40 transition-opacity duration-1000"></div>
-                            <div className="relative z-10">
-                                <div className="inline-block mb-8 px-8 py-2 rounded-full border border-white/10 bg-white/5">
-                                    <span className="text-white/60 text-xs font-bold uppercase tracking-[0.4em]">Stay Connected</span>
+                        <div className="relative bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-8 md:p-16 overflow-hidden group shadow-[0_30px_100px_rgba(0,0,0,0.6)]">
+                            {/* Decorative Glow */}
+                            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#dd2727]/10 blur-[150px] -z-10 group-hover:bg-[#dd2727]/20 transition-all duration-1000"></div>
+                            
+                            <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+                                <div className="inline-block px-6 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl">
+                                    <span className="text-white text-[10px] font-bold uppercase tracking-[0.4em]">Stay Connected</span>
                                 </div>
-                                <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white">Never Miss a <span className="text-[#dd2727]">Cosmic Update</span></h2>
-                                <p className="subtitle-poppins text-white/80 mb-12 max-w-2xl mx-auto text-xl leading-relaxed">
+                                
+                                <h2 className="title-batangas text-4xl md:text-6xl text-white leading-tight drop-shadow-2xl font-black uppercase">
+                                    Never Miss a <br /> <span className="text-[#dd2727]">Cosmic Update</span>
+                                </h2>
+                                
+                                <p className="subtitle-poppins text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
                                     Subscribe to our newsletter to receive the latest astrological insights and exclusive offers directly in your inbox.
                                 </p>
-                                <form className="flex flex-col md:flex-row gap-6 justify-center max-w-2xl mx-auto" onSubmit={(e) => e.preventDefault()}>
+                                
+                                <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto pt-4">
                                     <input
                                         type="email"
                                         placeholder="Enter your email address"
-                                        className="px-10 py-6 rounded-full bg-white/5 border border-white/15 text-white placeholder-white/30 focus:outline-none focus:border-[#dd2727]/50 flex-grow subtitle-poppins text-lg transition-all"
+                                        className="flex-1 bg-white/5 border border-white/10 rounded-full px-8 py-4 text-white placeholder-white/30 focus:outline-none focus:border-[#dd2727]/50 subtitle-poppins text-sm transition-all"
                                     />
-                                    <button className="px-14 py-6 rounded-full font-bold uppercase tracking-[0.2em] transition-all duration-500 bg-white text-black hover:bg-[#dd2727] hover:text-white shadow-2xl hover:-translate-y-1">
+                                    <button className="bg-white text-black px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#dd2727] hover:text-white transition-all duration-500 shadow-2xl">
                                         Subscribe
                                     </button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

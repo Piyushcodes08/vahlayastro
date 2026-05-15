@@ -95,7 +95,7 @@ const ServicesPage = () => {
                 {/* ── Key Portals ──────────────────────────────────────────── */}
                 <section>
                     <div className="section-container">
-                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-12 md:p-20 shadow-2xl">
+                        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] px-[15px] md:px-[50px] shadow-2xl">
                             <div className="text-center mb-16">
                                 <h2 className="title-batangas text-4xl md:text-5xl text-white">
                                     {portals.title} <span className="text-[#dd2727]">{portals.titleHighlight}</span>
@@ -133,7 +133,7 @@ const ServicesPage = () => {
                 {/* ── Final CTA ───────────────────────────────────────────── */}
                 <section className="no-full-height">
                     <div className="section-container">
-                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black/60 border border-[#dd2727]/30 rounded-[3rem] p-16 md:p-24 text-center shadow-2xl relative overflow-hidden group">
+                        <div className="bg-gradient-to-br from-[#dd2727]/20 to-black/60 border border-[#dd2727]/30 rounded-[3rem] px-[15px] md:px-[50px] text-center shadow-2xl relative overflow-hidden group">
                             <div className="absolute inset-0 bg-glow-red opacity-0 group-hover:opacity-30 transition-opacity duration-1000"></div>
                             <div className="relative z-10">
                                 <h2 className="title-batangas text-4xl md:text-7xl mb-8 text-white leading-tight">

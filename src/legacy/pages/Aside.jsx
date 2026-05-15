@@ -78,7 +78,7 @@ const Aside = () => {
       {!sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="lg:hidden fixed top-24 left-6 w-14 h-14 bg-[#dd2727] text-white rounded-2xl shadow-[0_10px_30px_rgba(221,39,39,0.3)] z-[100] border border-white/10 flex items-center justify-center transform hover:scale-110 active:scale-95 transition-all duration-300 group"
+          className="lg:hidden fixed top-24 left-6 w-14 h-14 bg-[#dd2727] text-white rounded-xl shadow-[0_10px_30px_rgba(221,39,39,0.3)] z-[100] border border-white/10 flex items-center justify-center transform hover:scale-110 active:scale-95 transition-all duration-300 group"
         >
           <div className="flex flex-col gap-1.5 items-center justify-center">
             <span className="w-6 h-0.5 bg-white rounded-full transition-all group-hover:w-4" />
@@ -106,7 +106,7 @@ const Aside = () => {
             <span className="text-white/40 text-[9px] font-black uppercase tracking-[0.4em]">Student Portal</span>
             <button
                 onClick={() => setSidebarOpen(false)}
-                className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all border border-white/10 group"
+                className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-lg text-white hover:bg-white/20 transition-all border border-white/10 group"
             >
                 <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -146,7 +146,7 @@ const Aside = () => {
                   navigate(item.path);
                   if (window.innerWidth < 1024) setSidebarOpen(false);
                 }}
-                className={`w-full group relative overflow-hidden px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.25em] transition-all duration-500
+                className={`w-full group relative overflow-hidden px-6 py-4 rounded-lg font-black text-[10px] uppercase tracking-[0.25em] transition-all duration-500
                 ${isActive
                   ? "bg-white text-[#dd2727] shadow-2xl transform scale-[1.02]"
                   : "bg-white/5 text-white/80 hover:bg-white/10 hover:text-white hover:translate-x-1"}`}
@@ -164,7 +164,7 @@ const Aside = () => {
         <div className="p-8 border-t border-white/10 bg-black/10 mt-auto flex-shrink-0">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-4 px-6 py-4 rounded-xl font-black text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all uppercase tracking-[0.3em] text-[9px] group"
+            className="w-full flex items-center justify-center gap-4 px-6 py-4 rounded-lg font-black text-white bg-white/5 hover:bg-white/10 border border-white/5 transition-all uppercase tracking-[0.3em] text-[9px] group"
           >
             <IoIosLogOut size={18} className="group-hover:translate-x-1 transition-transform" />
             Logout Session

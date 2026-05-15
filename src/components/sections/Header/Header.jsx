@@ -108,7 +108,7 @@ const Header = () => {
                     />
                 </div>
 
-                <nav className="mx-auto grid items-center transition-all duration-500 relative max-w-container-max-width px-6 md:px-[50px] py-0 h-full w-full"
+                <nav className="mx-auto grid items-center transition-all duration-500 relative max-w-container-max-width px-[15px] md:px-[50px] py-0 h-full w-full"
                     style={{ gridTemplateColumns: 'auto 1fr auto' }}
                 >
                     {/* Col 1 — Logo (Left) */}

@@ -29,7 +29,7 @@ const CourseGrid = () => {
           {coursesData.map((course) => (
             <div
               key={course.id}
-              className="course-card-simple group relative bg-[#150a0a]/45 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden hover:border-brand-red/45 transition-all duration-700 shadow-2xl flex flex-col h-full hover:-translate-y-2"
+              className="course-card-simple group relative bg-[#150a0a]/45 backdrop-blur-3xl border border-white/10 rounded-lg overflow-hidden hover:border-brand-red/45 transition-all duration-700 shadow-2xl flex flex-col h-full hover:-translate-y-2"
             >
               {/* Image Area - No padding, no crop */}
               <div className="relative bg-[#080101] overflow-hidden">

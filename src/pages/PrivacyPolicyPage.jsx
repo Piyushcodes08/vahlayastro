@@ -33,7 +33,7 @@ const PrivacyPolicyPage = () => {
 
                 <section>
                     <div className="section-container">
-                        <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 md:p-16 shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+                        <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-10 md:p-16 shadow-[0_20px_80px_rgba(0,0,0,0.35)] text-center">
                             <div className="subtitle-poppins text-white/80 space-y-8 text-lg">
                                 <p className="text-white/50 border-b border-white/10 pb-6">Last updated: April 2026</p>
 
